@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ChronosFix Repair Cockpit</title>
+    <meta
+      name="description"
+      content="ChronosFix 修复驾驶舱：用时间线、反事实实验、缺陷基因、补丁竞赛和证据护照展示软件研发全流程协同。"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">AsoulAI · GOAI 新智基座 · 方向三</p>
+          <h1 id="page-title">Repair Cockpit 修复驾驶舱</h1>
+          <p class="lede">
+            把 ChronosFix 的“软件故障时间机器”变成可视化演示：从故障证据进入，到反事实根因证明、缺陷基因竞赛、证据护照审批，再到 Skill 自进化沉淀。
+          </p>
+        </div>
+        <aside class="hero-card" aria-label="当前事故摘要">
+          <span class="status-dot"></span>
+          <p class="incident-label">AsoulAI · INC-2026-0816-001</p>
+          <h2>订单创建接口高失败率</h2>
+          <p>主因已证明：连接池缩容造成服务容量不足。</p>
+        </aside>
+      </section>
+
+      <nav class="jump-nav" aria-label="演示导航">
+        <a href="#timeline">时间线</a>
+        <a href="#universes">平行宇宙</a>
+        <a href="#genome">缺陷基因</a>
+        <a href="#tournament">补丁竞赛</a>
+        <a href="#passport">证据护照</a>
+        <a href="#skill-forge">Skill 工坊</a>
+      </nav>
+
+      <section class="metric-grid" aria-label="核心运行指标">
+        <article>
+          <strong id="metric-failure">48.72%</strong>
+          <span>基线失败率</span>
+        </article>
+        <article>
+          <strong id="metric-p99">606.96ms</strong>
+          <span>基线 P99</span>
+        </article>
+        <article>
+          <strong id="metric-variants">8</strong>
+          <span>缺陷基因变体</span>
+        </article>
+        <article>
+          <strong id="metric-claims">12</strong>
+          <span>证据护照声明</span>
+        </article>
+        <article>
+          <strong id="metric-trace">15</strong>
+          <span>Trace Span</span>
+        </article>
+      </section>
+
+      <section class="cockpit-grid">
+        <aside class="panel timeline-panel" id="timeline">
+          <div class="section-title">
+            <p>01 · Evidence Timeline</p>
+            <h2>故障时间线</h2>
+          </div>
+          <div class="timeline" id="timeline-list"></div>
+        </aside>
+
+        <section class="main-stack">
+          <section class="panel universe-panel" id="universes">
+            <div class="section-title">
+              <p>02 · Counterfactual Universes</p>
+              <h2>平行宇宙实验室</h2>
+            </div>
+            <div class="universe-tabs" id="experiment-tabs"></div>
+            <div class="universe-detail" id="experiment-detail"></div>
+          </section>
+
+          <section class="panel genome-panel" id="genome">
+            <div class="section-title">
+              <p>03 · Fault Genome Lab</p>
+              <h2>缺陷基因实验室</h2>
+            </div>
+            <div class="filter-row" aria-label="缺陷风险过滤">
+              <button class="filter active" data-risk="all" type="button">全部</button>
+              <button class="filter" data-risk="known" type="button">已知复现</button>
+              <button class="filter" data-risk="medium" type="button">中风险</button>
+              <button class="filter" data-risk="high" type="button">高风险</button>
+            </div>
+            <div class="genome-grid" id="genome-grid"></div>
+          </section>
+
+          <section class="panel tournament-panel" id="tournament">
+            <div class="section-title">
+              <p>04 · Patch Tournament</p>
+              <h2>补丁竞赛</h2>
+            </div>
+            <div class="patch-board">
+              <div class="patch-ranking" id="patch-ranking"></div>
+              <article class="patch-detail" id="patch-detail"></article>
+            </div>
+          </section>
+        </section>
+
+        <aside class="side-stack">
+          <section class="panel passport-panel" id="passport">
+            <div class="section-title">
+              <p>05 · Evidence Passport</p>
+              <h2>证据护照</h2>
+            </div>
+            <div class="passport" id="passport-list"></div>
+          </section>
+
+          <section class="panel skill-panel" id="skill-forge">
+            <div class="section-title">
+              <p>06 · Skill Forge</p>
+              <h2>Skill 自进化工坊</h2>
+            </div>
+            <div class="skill-list" id="skill-list"></div>
+          </section>
+        </aside>
+      </section>
+
+      <section class="panel demo-script">
+        <div>
+          <p class="eyebrow">评审演示动线</p>
+          <h2>60 秒讲清楚这个创意</h2>
+        </div>
+        <ol>
+          <li>先看时间线：说明代码、依赖、配置、流量在同一窗口内变化，不能靠猜。</li>
+          <li>点开平行宇宙：展示只有恢复连接池后失败率归零，因此主因被证明。</li>
+          <li>切到缺陷基因：说明补丁要修一类问题，而不是只过原始样例。</li>
+          <li>看补丁竞赛和证据护照：证明发布前有验证、风险、审批和回滚证据。</li>
+          <li>最后看 Skill 工坊：事故经验自动沉淀成可复用能力。</li>
+        </ol>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
