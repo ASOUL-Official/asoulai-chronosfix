@@ -9,9 +9,10 @@ from uuid import NAMESPACE_URL, uuid5
 
 
 class TraceRecorder:
-    def __init__(self, incident_id: str) -> None:
+    def __init__(self, incident_id: str, timestamp: str | None = None) -> None:
         self.incident_id = incident_id
         self.trace_id = uuid5(NAMESPACE_URL, f"chronosfix:{incident_id}").hex
+        self.timestamp = timestamp
         self._counter = 0
         self.records: list[dict[str, Any]] = []
 
@@ -21,7 +22,7 @@ class TraceRecorder:
         if is_dataclass(payload):
             payload = asdict(payload)
         record = {
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": self.timestamp or datetime.now(timezone.utc).isoformat(),
             "trace_id": self.trace_id,
             "span_id": span_id,
             "incident_id": self.incident_id,
@@ -39,4 +40,3 @@ class TraceRecorder:
             "".join(json.dumps(item, ensure_ascii=False) + "\n" for item in self.records),
             encoding="utf-8",
         )
-

@@ -30,6 +30,7 @@ ChronosFix 是面向 GOAI 新智基座 Agent Infra「方向三：软件研发全
 - `repair-cockpit`：可直接打开的 Repair Cockpit 修复驾驶舱，用交互页面展示时间线、平行宇宙、缺陷基因、补丁竞赛、证据护照和 Skill 自进化。
 - `docs`：Agent Identity、Skill 工程体系、架构、安全审计、开源合规和赛题要求映射。
 - `submission`：初赛作品简介、PPT 大纲与提交清单。
+- `LICENSE`：Apache-2.0 开源协议。
 
 ## 快速运行
 
