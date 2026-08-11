@@ -16,6 +16,8 @@ concurrency:
 
 jobs:
   deploy:
+    env:
+      NODE_OPTIONS: --use-system-ca
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
