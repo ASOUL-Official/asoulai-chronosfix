@@ -6,6 +6,31 @@ ChronosFix 是面向 GOAI 新智基座 Agent Infra「方向三：软件研发全
 
 一句话：ChronosFix 让研发团队在事故发生后，自动重建时间线，在多个平行版本里撤销代码、配置、依赖等可疑变更，用反事实实验证明真正根因，再让补丁带着证据护照进入发布审批；更进一步，它把每次事故沉淀成可复用、可审计、可分发的“研发质量资产”。
 
+## 评审快速使用
+
+如果从 GitHub 首页进入，建议按下面顺序查看：
+
+1. **在线 Demo**：打开 [ChronosFix Repair Cockpit](https://asoul-official.github.io/asoulai-chronosfix/)，直接查看时间线、反事实实验、官方 Baseline 对照、补丁竞赛、证据护照和商业价值飞轮。
+2. **初赛方案 PPT**：查看 [`submission/ChronosFix_初赛方案.pptx`](submission/ChronosFix_初赛方案.pptx)，完整了解作品主线、官方参考 Baseline、创新点、Demo 结果和商业化设计。
+3. **500 字作品简介**：查看 [`submission/work-intro-500.txt`](submission/work-intro-500.txt)，可直接用于官方提交入口。
+4. **官方 Baseline 对照**：查看 [`docs/official-baseline.md`](docs/official-baseline.md)，说明本方案如何对齐官方 OpsPilot Zero 示例，并在方向三上增强。
+5. **可验证输出**：查看 [`evidence/proof-report.md`](evidence/proof-report.md)、[`evidence/proof-bundle.json`](evidence/proof-bundle.json) 和 [`evidence/trace.jsonl`](evidence/trace.jsonl)。
+
+本地复现只需要 Python 标准库：
+
+```powershell
+git clone https://github.com/ASOUL-Official/asoulai-chronosfix.git
+cd asoulai-chronosfix
+python -m unittest discover -s tests -p "test_*.py" -q
+python demo.py --approve --output evidence
+```
+
+如果只想看可视化演示，也可以直接打开：
+
+```text
+repair-cockpit/index.html
+```
+
 ## 官方参考 Baseline
 
 官方规范文件未提供必须继承的代码仓库型 baseline，但在 Agent Infra 赛道说明中给出了作品示例 Demo：**OpsPilot Zero——面向千行百业云上与自建 IDC 业务故障的零人工运维多 Agent 排查与自愈系统**。ChronosFix 将它作为官方参考 Baseline：对齐其 AgentTeams、7 职能 Agent、Skill 工程化、MCP/适配器、Incident State、AgentLoop Trace、安全审计和初赛 Mock Demo 边界；同时把场景从运维故障自愈迁移到方向三的软件研发全流程协同，并新增反事实根因证明、缺陷基因实验室、证据护照和研发质量资产飞轮。
