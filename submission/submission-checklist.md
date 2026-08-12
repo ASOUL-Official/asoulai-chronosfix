@@ -10,6 +10,7 @@
 - [x] 可运行 Demo：`demo.py`
 - [x] 可交互 Repair Cockpit：`repair-cockpit/index.html`
 - [x] 赛题要求映射：`docs/requirements-matrix.md`
+- [x] 官方参考 Baseline 对照：`docs/official-baseline.md`
 - [x] AgentTeams 编排草案：`agentteams/chronosfix-team.yaml`
 
 ## 方案完整度材料
@@ -18,6 +19,7 @@
 - [x] Skill 工程体系：`docs/skill-specs.md`
 - [x] 创新层设计：`docs/innovation-layer.md`
 - [x] 商业价值与产业化设计：`docs/business-value.md`
+- [x] 官方 OpsPilot Zero 参考基线对齐与增强说明：`docs/official-baseline.md`
 - [x] 架构说明：`docs/architecture.md`
 - [x] 安全与审计：`docs/safety-and-audit.md`
 - [x] 开源合规计划：`docs/open-source-compliance.md`

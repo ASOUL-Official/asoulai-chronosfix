@@ -6,6 +6,12 @@ ChronosFix 是面向 GOAI 新智基座 Agent Infra「方向三：软件研发全
 
 一句话：ChronosFix 让研发团队在事故发生后，自动重建时间线，在多个平行版本里撤销代码、配置、依赖等可疑变更，用反事实实验证明真正根因，再让补丁带着证据护照进入发布审批；更进一步，它把每次事故沉淀成可复用、可审计、可分发的“研发质量资产”。
 
+## 官方参考 Baseline
+
+官方规范文件未提供必须继承的代码仓库型 baseline，但在 Agent Infra 赛道说明中给出了作品示例 Demo：**OpsPilot Zero——面向千行百业云上与自建 IDC 业务故障的零人工运维多 Agent 排查与自愈系统**。ChronosFix 将它作为官方参考 Baseline：对齐其 AgentTeams、7 职能 Agent、Skill 工程化、MCP/适配器、Incident State、AgentLoop Trace、安全审计和初赛 Mock Demo 边界；同时把场景从运维故障自愈迁移到方向三的软件研发全流程协同，并新增反事实根因证明、缺陷基因实验室、证据护照和研发质量资产飞轮。
+
+详细对照见 `docs/official-baseline.md`。
+
 ## 核心创意
 
 1. **故障时间机器**
@@ -41,7 +47,7 @@ ChronosFix 的商业命题是：把线上事故处理从“专家临场救火”
 - `tests/test_pipeline.py`：自动化测试，覆盖根因证明、故障变体、补丁选择、证据护照、Skill 沉淀和人工审批门禁。
 - `evidence`：Demo 输出，包括 `trace.jsonl`、`proof-bundle.json` 和 `proof-report.md`。
 - `repair-cockpit`：可直接打开的 Repair Cockpit 修复驾驶舱，用交互页面展示时间线、平行宇宙、缺陷基因、补丁竞赛、证据护照和 Skill 自进化。
-- `docs`：Agent Identity、Skill 工程体系、架构、安全审计、开源合规、商业化设计和赛题要求映射。
+- `docs`：官方参考 Baseline 对照、Agent Identity、Skill 工程体系、架构、安全审计、开源合规、商业化设计和赛题要求映射。
 - `submission`：初赛作品简介、PPT 大纲与提交清单。
 - `LICENSE`：Apache-2.0 开源协议。
 

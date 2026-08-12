@@ -2,6 +2,7 @@
 
 | 赛题要求 | ChronosFix 对应设计 | 初赛证据 |
 |---|---|---|
+| 对齐官方参考 Baseline | 官方未提供代码仓库型 baseline；本方案以 OpsPilot Zero 示例为参考基线，对齐 AgentTeams、7 职能 Agent、Skill、MCP/适配器、Trace、审计和 Mock Demo 边界 | `docs/official-baseline.md` |
 | 真实企业场景 | 软件研发全流程中的线上故障定位、根因验证、补丁生成、发布审批、回滚与复盘 | `scenarios/checkout-timeout/scenario.json` |
 | 商业价值与行业复制 | 将事故复盘沉淀为故障基因包、证据护照模板和可复用 Skill，可服务研发组织、云厂商、DevOps 平台和高审计行业 | `docs/business-value.md` |
 | 至少 3 个不同职能 Agent | 7 个 Agent：Commander、Timeline、Hypothesis、Universe、Patch、Verifier、Auditor | `docs/agent-identity.md` |

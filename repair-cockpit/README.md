@@ -16,6 +16,7 @@ repair-cockpit/index.html
 
 ## 展示内容
 
+- 官方参考 Baseline：说明 ChronosFix 如何对齐 OpsPilot Zero 示例，并在软件研发全流程协同方向上增强。
 - 故障时间线：展示代码、依赖、配置、流量、告警如何在同一窗口内变化。
 - 平行宇宙实验室：点击 CODE / DEPENDENCY / POOL 查看反事实实验结果。
 - 缺陷基因实验室：按风险过滤 8 个同源故障变体。
