@@ -181,7 +181,7 @@ h2 {
 
 .metric-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 14px;
   margin-bottom: 22px;
 }
@@ -588,6 +588,82 @@ h2 {
   font-size: 12px;
 }
 
+.business-panel {
+  margin-top: 18px;
+}
+
+.business-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.business-grid article {
+  min-height: 184px;
+  padding: 20px;
+  border: 1px solid rgba(34, 211, 238, 0.18);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 85% 8%, rgba(34, 211, 238, 0.16), transparent 7rem),
+    rgba(255, 255, 255, 0.04);
+}
+
+.business-grid span {
+  display: inline-flex;
+  margin-bottom: 14px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  color: var(--cyan);
+  background: rgba(34, 211, 238, 0.1);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.business-grid strong {
+  display: block;
+  margin-bottom: 12px;
+  color: #f8fafc;
+  font-size: 20px;
+  letter-spacing: -0.03em;
+}
+
+.business-grid p {
+  margin-bottom: 0;
+  color: #cbd5e1;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.flywheel {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.flywheel div {
+  position: relative;
+  padding: 18px 12px;
+  border: 1px solid rgba(251, 146, 60, 0.35);
+  border-radius: 999px;
+  color: #fff7ed;
+  background: rgba(251, 146, 60, 0.12);
+  font-size: 15px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.flywheel div:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  right: -15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--cyan);
+  font-size: 18px;
+}
+
 .demo-script {
   display: grid;
   grid-template-columns: 320px 1fr;
@@ -610,8 +686,14 @@ h2 {
   }
 
   .metric-grid,
-  .genome-grid {
+  .genome-grid,
+  .business-grid,
+  .flywheel {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .flywheel div::after {
+    display: none;
   }
 }
 
@@ -622,6 +704,8 @@ h2 {
 
   .metric-grid,
   .genome-grid,
+  .business-grid,
+  .flywheel,
   .universe-detail,
   .patch-board {
     grid-template-columns: 1fr;

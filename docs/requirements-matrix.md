@@ -3,6 +3,7 @@
 | 赛题要求 | ChronosFix 对应设计 | 初赛证据 |
 |---|---|---|
 | 真实企业场景 | 软件研发全流程中的线上故障定位、根因验证、补丁生成、发布审批、回滚与复盘 | `scenarios/checkout-timeout/scenario.json` |
+| 商业价值与行业复制 | 将事故复盘沉淀为故障基因包、证据护照模板和可复用 Skill，可服务研发组织、云厂商、DevOps 平台和高审计行业 | `docs/business-value.md` |
 | 至少 3 个不同职能 Agent | 7 个 Agent：Commander、Timeline、Hypothesis、Universe、Patch、Verifier、Auditor | `docs/agent-identity.md` |
 | AgentTeams 为协同基座 | Manager-Workers、共享 Incident State、透明协作房间、人类审批、Worker Skill 分工 | `agentteams/chronosfix-team.yaml` |
 | 多 Agent 闭环 | 证据输入、任务拆解、上下文传递、工具调用、反事实实验、补丁竞赛、风险审批、证据沉淀、Skill 沉淀 | `evidence/trace.jsonl` |
@@ -21,12 +22,13 @@
 | 缺陷基因实验室 | 补丁只修单个样例，容易回归 | 从一个事故繁殖出 8 个同源变体，逼补丁通过对抗测试 | `FaultGenome`、补丁竞赛结果 |
 | 证据护照 | 自动修复缺少发布可信度 | 补丁必须携带需求、因果、验证、风险、回滚、缺口声明 | `EvidencePassport`、`proof-report.md` |
 | Skill 自进化工坊 | 事故经验复盘后沉睡在文档里 | 自动蒸馏成下次可复用 Skill 候选，形成组织记忆 | `SkillForge`、Skill 候选清单 |
+| 研发质量资产交易所 | 事故处理通常只是一次性成本 | 将故障基因、证据护照和 Skill 变成可复用、可分发、可商业化资产 | `docs/business-value.md`、Repair Cockpit 商业飞轮 |
 
 ## 评分维度覆盖
 
 | 评分维度 | 权重 | ChronosFix 设计重点 |
 |---|---:|---|
-| 场景价值与行业可复制性 | 25% | 面向所有拥有线上服务、代码仓库、CI 和配置中心的研发组织，可复制到微服务、移动端、数据平台和基础设施项目 |
+| 场景价值与行业可复制性 | 25% | 面向所有拥有线上服务、代码仓库、CI 和配置中心的研发组织，可复制到微服务、移动端、数据平台和基础设施项目；商业上可作为 SaaS、私有化、云市场插件和 Skill/故障基因市场 |
 | 多 Agent 协同与自主闭环能力 | 25% | 多假设竞争、反事实实验、故障基因繁殖、补丁竞赛和审批门禁天然需要多 Agent 协作 |
 | Skill 工程体系与生态复用 | 25% | 每个能力沉淀为可复用 Skill；事故结束后再生成 Skill 候选，形成“用一次，强一次”的自进化机制 |
 | 工程落地、运行验证与安全可审计 | 20% | Demo 已可运行，输出 Trace、指标、证据护照、证明报告和审批事件 |

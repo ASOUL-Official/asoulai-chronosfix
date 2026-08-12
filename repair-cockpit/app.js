@@ -5,6 +5,7 @@ const data = {
     faultVariants: 8,
     evidenceClaims: 12,
     traceSpans: 15,
+    qualityAssets: 3,
   },
   timeline: [
     ["09:40", "代码提交", "为订单请求增加关联日志", "git:a91c7e"],
@@ -290,6 +291,7 @@ function hydrateMetrics() {
   document.querySelector("#metric-variants").textContent = data.metrics.faultVariants;
   document.querySelector("#metric-claims").textContent = data.metrics.evidenceClaims;
   document.querySelector("#metric-trace").textContent = data.metrics.traceSpans;
+  document.querySelector("#metric-assets").textContent = data.metrics.qualityAssets;
 }
 
 hydrateMetrics();

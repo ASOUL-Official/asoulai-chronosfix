@@ -17,6 +17,7 @@
 - [x] Agent 身份与分工：`docs/agent-identity.md`
 - [x] Skill 工程体系：`docs/skill-specs.md`
 - [x] 创新层设计：`docs/innovation-layer.md`
+- [x] 商业价值与产业化设计：`docs/business-value.md`
 - [x] 架构说明：`docs/architecture.md`
 - [x] 安全与审计：`docs/safety-and-audit.md`
 - [x] 开源合规计划：`docs/open-source-compliance.md`
@@ -41,6 +42,7 @@
 - [x] 3 个 Skill 候选沉淀。
 - [x] 15 段 Trace Span。
 - [x] 1 个可交互修复驾驶舱。
+- [x] 1 条研发质量资产商业飞轮。
 - [x] 中风险补丁人工审批门禁。
 
 ## 复赛增强路线
