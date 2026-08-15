@@ -6,11 +6,12 @@
 
 - [x] 500 字以内作品简介：`submission/work-intro-500.txt`
 - [x] 评审入口说明：`提交入口说明.md`
-- [x] 初赛 PPT：`submission/ChronosFix_初赛方案.pptx`
+- [x] 初赛 PPT（官方内容框架对齐版，19 页）：`submission/ChronosFix_初赛方案.pptx`
 - [x] 可运行 Demo：`demo.py`
 - [x] 可交互 Repair Cockpit：`repair-cockpit/index.html`
 - [x] 赛题要求映射：`docs/requirements-matrix.md`
 - [x] 官方参考 Baseline 对照：`docs/official-baseline.md`
+- [x] 原创性与命名边界说明：`docs/originality-check.md`
 - [x] AgentTeams 编排草案：`agentteams/chronosfix-team.yaml`
 
 ## 方案完整度材料
@@ -23,6 +24,7 @@
 - [x] 架构说明：`docs/architecture.md`
 - [x] 安全与审计：`docs/safety-and-audit.md`
 - [x] 开源合规计划：`docs/open-source-compliance.md`
+- [x] 避免 GitHub 泛 Chronos 项目混淆的 A-CFX 命名边界：`docs/originality-check.md`
 
 ## 可验证产物
 
