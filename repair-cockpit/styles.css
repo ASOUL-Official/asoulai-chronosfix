@@ -131,9 +131,9 @@ p {
 h1 {
   margin-bottom: 8px;
   max-width: none;
-  font-size: clamp(36px, 5.15vw, 72px);
+  font-size: clamp(32px, 3.1vw, 50px);
   line-height: 0.94;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.065em;
   white-space: nowrap;
 }
 
@@ -835,7 +835,7 @@ h2 {
   line-height: 1.9;
 }
 
-@media (max-width: 1180px) {
+@media (max-width: 1320px) {
   .hero,
   .cockpit-grid,
   .demo-script {
@@ -877,7 +877,7 @@ h2 {
   }
 
   h1 {
-    font-size: clamp(25px, 7.2vw, 48px);
+    font-size: clamp(20px, 5.7vw, 34px);
   }
 
   .brand-lockup {
