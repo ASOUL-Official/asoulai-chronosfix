@@ -1,0 +1,35 @@
+{
+  "incident_id": "INC-2026-0825-004",
+  "title": "恢复窗口流量尖峰击穿低连接池配置",
+  "baseline": {
+    "traffic_rps": 180.0,
+    "pool_size": 14,
+    "dependency_latency_factor": 1.4,
+    "code_version": "d09aa7",
+    "adaptive_min_pool": false
+  },
+  "events": [
+    {"timestamp": "2026-08-25T13:02:00+08:00", "kind": "commit", "source": "git:d09aa7", "summary": "调整订单恢复任务日志级别", "details": {"files": ["recovery/job.py"], "author": "demo"}},
+    {"timestamp": "2026-08-25T13:10:00+08:00", "kind": "dependency", "source": "lockfile:inventory-client@4.4", "summary": "库存客户端响应时间轻微上升", "details": {"from": "4.3", "to": "4.4", "latency_factor": 1.4}},
+    {"timestamp": "2026-08-25T13:18:00+08:00", "kind": "configuration", "source": "config:db.pool.maxSize", "summary": "恢复窗口前连接池从 28 下调到 14", "details": {"from": 28, "to": 14, "change_ticket": "CHG-9055"}},
+    {"timestamp": "2026-08-25T13:25:00+08:00", "kind": "traffic", "source": "metric:checkout.rps", "summary": "恢复任务重放订单造成 180 RPS 尖峰", "details": {"previous_rps": 90, "current_rps": 180}},
+    {"timestamp": "2026-08-25T13:26:00+08:00", "kind": "incident", "source": "alert:recovery-spike", "summary": "恢复窗口订单创建失败率升高", "details": {"route": "/api/order/create", "severity": "SEV-2"}}
+  ],
+  "hypotheses": [
+    {"id": "H-CODE", "title": "恢复任务日志级别调整导致性能回退", "owner": "hypothesis-scientist-code", "intervention": {"code_version": "pre-d09aa7"}, "rationale": "代码变更需要撤销验证。"},
+    {"id": "H-DEPENDENCY", "title": "库存客户端响应时间上升放大容量压力", "owner": "hypothesis-scientist-dependency", "intervention": {"dependency_latency_factor": 1.0}, "rationale": "依赖变慢会放大连接占用。"},
+    {"id": "H-POOL", "title": "恢复窗口连接池容量不足", "owner": "hypothesis-scientist-config", "intervention": {"pool_size": 28}, "rationale": "恢复重放流量与连接池下调共同出现。"}
+  ],
+  "mutations": [
+    {"name": "nominal-recovery", "changes": {"traffic_rps": 180.0, "dependency_latency_factor": 1.4}},
+    {"name": "larger-replay", "changes": {"traffic_rps": 205.0, "dependency_latency_factor": 1.4}},
+    {"name": "slow-inventory", "changes": {"traffic_rps": 180.0, "dependency_latency_factor": 1.65}},
+    {"name": "larger-replay-slow-inventory", "changes": {"traffic_rps": 205.0, "dependency_latency_factor": 1.65}}
+  ],
+  "patch_candidates": [
+    {"id": "P-ROLLBACK-CODE", "title": "回滚恢复任务日志级别调整", "changes": {"code_version": "pre-d09aa7"}, "risk": 0.12, "cost": 0.20, "rollback": "重新部署 d09aa7"},
+    {"id": "P-PIN-DEPENDENCY", "title": "将库存客户端回退至 4.3", "changes": {"dependency_latency_factor": 1.0}, "risk": 0.30, "cost": 0.35, "rollback": "恢复 inventory-client 4.4 锁文件"},
+    {"id": "P-RESTORE-POOL", "title": "恢复连接池 24 并增加恢复窗口容量门禁", "changes": {"pool_size": 24}, "risk": 0.30, "cost": 0.15, "rollback": "恢复 db.pool.maxSize=14 配置快照"},
+    {"id": "P-ADAPTIVE-GUARD", "title": "启用自适应连接池下限保护", "changes": {"pool_size": 24, "adaptive_min_pool": true}, "risk": 0.55, "cost": 0.45, "rollback": "关闭 adaptive_min_pool 并恢复配置快照"}
+  ]
+}

@@ -41,6 +41,8 @@ A-CFX 的核心判断是：企业不是缺少一个会生成补丁的 Agent，�
 5. **原创性与命名边界**：查看 [`docs/originality-check.md`](docs/originality-check.md)，说明 A-CFX 如何避免与 GitHub 泛 Chronos / debugging-first 类项目混淆。
 6. **可验证输出**：查看 [`evidence/proof-report.md`](evidence/proof-report.md)、[`evidence/proof-bundle.json`](evidence/proof-bundle.json)、[`evidence/trace.jsonl`](evidence/trace.jsonl) 和 [`evidence/github-pr.md`](evidence/github-pr.md)。
 7. **复赛工程材料**：查看 [`docs/proof-carrying-change.md`](docs/proof-carrying-change.md)、[`docs/semifinal-guide-matrix.md`](docs/semifinal-guide-matrix.md)、[`docs/official-infra-mapping.md`](docs/official-infra-mapping.md)、[`docs/interface-schema.md`](docs/interface-schema.md)、[`docs/deployment-and-verification.md`](docs/deployment-and-verification.md)、[`docs/github-issue-pr-flow.md`](docs/github-issue-pr-flow.md)。
+8. **扩展评测与实测方案**：查看 [`docs/evaluation-corpus.md`](docs/evaluation-corpus.md)、[`docs/measurement-plan.md`](docs/measurement-plan.md) 与 `scenarios/*/scenario.json`，当前包含 7 个可运行事故样例。
+9. **决赛增强路线**：查看 [`docs/agentteams-runtime-integration.md`](docs/agentteams-runtime-integration.md) 与 [`docs/production-deployment-strategy.md`](docs/production-deployment-strategy.md)，说明真实 AgentTeams runtime 和官方组件部署策略。
 
 本地复现只需要 Python 标准库：
 
@@ -99,6 +101,7 @@ A-CFX 的商业命题是：把线上事故处理从“专家临场救火”升�
 
 - `demo.py`：可运行的反事实故障分析 Demo。
 - `scenarios/checkout-timeout/scenario.json`：订单接口故障样例，包含 Git、依赖、配置、流量与告警证据。
+- `scenarios/*/scenario.json`：7 个故障回放样例，覆盖配置漂移、依赖变慢、恢复尖峰、下游抖动、缓存回灌和 timeout 放大。
 - `src/chronosfix`：多 Agent 编排内核与可复用 Skill 实现。
 - `agentteams/chronosfix-team.yaml`：AgentTeams 编排草案。
 - `agentteams/run_chronosfix_team.py`：可执行 AgentTeams 风格入口，输出 Manager/Worker、上下文传递和状态追踪证据。
@@ -146,6 +149,7 @@ start repair-cockpit\index.html
 - 平行实验：3 组。
 - 补丁候选：4 个。
 - 对抗变体：8 个。
+- 故障回放评测集：7 个场景。
 - 选中补丁平均失败率：1.15%。
 - 选中补丁最差失败率：6.25%。
 - 审批策略：中高风险补丁必须人工确认，审批后才允许交付。

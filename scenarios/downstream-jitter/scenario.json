@@ -1,0 +1,35 @@
+{
+  "incident_id": "INC-2026-0825-005",
+  "title": "下游抖动叠加连接池缩容导致长尾失败",
+  "baseline": {
+    "traffic_rps": 130.0,
+    "pool_size": 9,
+    "dependency_latency_factor": 1.6,
+    "code_version": "e41b99",
+    "adaptive_min_pool": false
+  },
+  "events": [
+    {"timestamp": "2026-08-25T14:05:00+08:00", "kind": "commit", "source": "git:e41b99", "summary": "订单侧增加下游超时标签", "details": {"files": ["checkout/downstream.py"], "author": "demo"}},
+    {"timestamp": "2026-08-25T14:12:00+08:00", "kind": "dependency", "source": "lockfile:coupon-client@1.9", "summary": "优惠券服务出现间歇性延迟抖动", "details": {"from": "1.8", "to": "1.9", "latency_factor": 1.6}},
+    {"timestamp": "2026-08-25T14:20:00+08:00", "kind": "configuration", "source": "config:db.pool.maxSize", "summary": "连接池从 24 下调到 9", "details": {"from": 24, "to": 9, "change_ticket": "CHG-9072"}},
+    {"timestamp": "2026-08-25T14:27:00+08:00", "kind": "traffic", "source": "metric:checkout.rps", "summary": "优惠券活动流量升至 130 RPS", "details": {"previous_rps": 65, "current_rps": 130}},
+    {"timestamp": "2026-08-25T14:28:00+08:00", "kind": "incident", "source": "alert:downstream-jitter", "summary": "订单接口 P99 与失败率在下游抖动期间升高", "details": {"route": "/api/order/create", "severity": "SEV-2"}}
+  ],
+  "hypotheses": [
+    {"id": "H-CODE", "title": "下游超时标签代码导致性能回退", "owner": "hypothesis-scientist-code", "intervention": {"code_version": "pre-e41b99"}, "rationale": "先验证代码标签变更是否造成额外成本。"},
+    {"id": "H-DEPENDENCY", "title": "优惠券服务抖动放大请求占用时间", "owner": "hypothesis-scientist-dependency", "intervention": {"dependency_latency_factor": 1.0}, "rationale": "下游抖动会缓解但不一定修复根因。"},
+    {"id": "H-POOL", "title": "连接池缩容导致下游抖动时容量不足", "owner": "hypothesis-scientist-config", "intervention": {"pool_size": 24}, "rationale": "连接池下调让系统无法吸收抖动。"}
+  ],
+  "mutations": [
+    {"name": "nominal-jitter", "changes": {"traffic_rps": 130.0, "dependency_latency_factor": 1.6}},
+    {"name": "traffic-jitter", "changes": {"traffic_rps": 155.0, "dependency_latency_factor": 1.6}},
+    {"name": "severe-jitter", "changes": {"traffic_rps": 130.0, "dependency_latency_factor": 1.85}},
+    {"name": "traffic-severe-jitter", "changes": {"traffic_rps": 155.0, "dependency_latency_factor": 1.85}}
+  ],
+  "patch_candidates": [
+    {"id": "P-ROLLBACK-CODE", "title": "回滚下游超时标签变更", "changes": {"code_version": "pre-e41b99"}, "risk": 0.12, "cost": 0.18, "rollback": "重新部署 e41b99"},
+    {"id": "P-PIN-DEPENDENCY", "title": "将优惠券客户端回退至 1.8", "changes": {"dependency_latency_factor": 1.0}, "risk": 0.30, "cost": 0.35, "rollback": "恢复 coupon-client 1.9 锁文件"},
+    {"id": "P-RESTORE-POOL", "title": "恢复连接池 24 并增加下游抖动容量门禁", "changes": {"pool_size": 24}, "risk": 0.30, "cost": 0.15, "rollback": "恢复 db.pool.maxSize=9 配置快照"},
+    {"id": "P-ADAPTIVE-GUARD", "title": "启用自适应连接池下限保护", "changes": {"pool_size": 24, "adaptive_min_pool": true}, "risk": 0.55, "cost": 0.45, "rollback": "关闭 adaptive_min_pool 并恢复配置快照"}
+  ]
+}

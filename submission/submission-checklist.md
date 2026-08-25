@@ -19,6 +19,9 @@
 - [x] 最新参赛指南要求映射：`docs/semifinal-guide-matrix.md`
 - [x] 官方推荐 Agent Infra 映射：`docs/official-infra-mapping.md`
 - [x] 带证明的软件变更基础设施底层逻辑：`docs/proof-carrying-change.md`
+- [x] 真实 AgentTeams runtime 接入判断：`docs/agentteams-runtime-integration.md`
+- [x] 官方组件分阶段部署策略：`docs/production-deployment-strategy.md`
+- [x] 决赛实测方案：`docs/measurement-plan.md`
 - [x] 接口 Schema、数据流与等价 MCP 契约：`docs/interface-schema.md`
 - [x] 部署、运行与验证说明：`docs/deployment-and-verification.md`
 - [x] GitHub Issue / PR 模拟链路：`docs/github-issue-pr-flow.md`
@@ -35,6 +38,7 @@
 ## 可验证产物
 
 - [x] 故障场景数据：`scenarios/checkout-timeout/scenario.json`
+- [x] 扩展故障回放评测集：`docs/evaluation-corpus.md`、`scenarios/*/scenario.json`
 - [x] 自动化测试：`tests/test_pipeline.py`
 - [x] Trace：`evidence/trace.jsonl`
 - [x] 结构化日志：`evidence/run-log.jsonl`
@@ -56,6 +60,7 @@
 - [x] 3 个根因假设。
 - [x] 3 组反事实平行实验。
 - [x] 8 个缺陷基因变体。
+- [x] 7 个可运行事故场景。
 - [x] 4 个补丁候选竞赛。
 - [x] 1 个证据护照。
 - [x] 3 个 Skill 候选沉淀。

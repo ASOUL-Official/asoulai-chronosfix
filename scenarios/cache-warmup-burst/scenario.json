@@ -1,0 +1,35 @@
+{
+  "incident_id": "INC-2026-0825-006",
+  "title": "缓存预热后流量回灌暴露连接池容量缺口",
+  "baseline": {
+    "traffic_rps": 150.0,
+    "pool_size": 11,
+    "dependency_latency_factor": 1.4,
+    "code_version": "f63c10",
+    "adaptive_min_pool": false
+  },
+  "events": [
+    {"timestamp": "2026-08-25T15:00:00+08:00", "kind": "commit", "source": "git:f63c10", "summary": "缓存预热任务增加批量日志", "details": {"files": ["cache/warmup.py"], "author": "demo"}},
+    {"timestamp": "2026-08-25T15:09:00+08:00", "kind": "dependency", "source": "lockfile:cache-client@5.2", "summary": "缓存客户端预热阶段平均耗时增加", "details": {"from": "5.1", "to": "5.2", "latency_factor": 1.4}},
+    {"timestamp": "2026-08-25T15:16:00+08:00", "kind": "configuration", "source": "config:db.pool.maxSize", "summary": "连接池从 24 下调到 11", "details": {"from": 24, "to": 11, "change_ticket": "CHG-9088"}},
+    {"timestamp": "2026-08-25T15:24:00+08:00", "kind": "traffic", "source": "metric:checkout.rps", "summary": "缓存恢复后请求回灌到 150 RPS", "details": {"previous_rps": 70, "current_rps": 150}},
+    {"timestamp": "2026-08-25T15:25:00+08:00", "kind": "incident", "source": "alert:cache-warmup-burst", "summary": "缓存预热完成后订单创建失败率升高", "details": {"route": "/api/order/create", "severity": "SEV-2"}}
+  ],
+  "hypotheses": [
+    {"id": "H-CODE", "title": "缓存预热批量日志导致性能回退", "owner": "hypothesis-scientist-code", "intervention": {"code_version": "pre-f63c10"}, "rationale": "代码变更需要在隔离版本中撤销验证。"},
+    {"id": "H-DEPENDENCY", "title": "缓存客户端预热耗时放大连接占用", "owner": "hypothesis-scientist-dependency", "intervention": {"dependency_latency_factor": 1.0}, "rationale": "缓存客户端耗时会放大容量压力。"},
+    {"id": "H-POOL", "title": "连接池容量不足无法承接缓存回灌流量", "owner": "hypothesis-scientist-config", "intervention": {"pool_size": 24}, "rationale": "连接池下调后无法承接恢复流量。"}
+  ],
+  "mutations": [
+    {"name": "nominal-warmup", "changes": {"traffic_rps": 150.0, "dependency_latency_factor": 1.4}},
+    {"name": "larger-backfill", "changes": {"traffic_rps": 175.0, "dependency_latency_factor": 1.4}},
+    {"name": "warmup-tail", "changes": {"traffic_rps": 150.0, "dependency_latency_factor": 1.65}},
+    {"name": "larger-backfill-tail", "changes": {"traffic_rps": 175.0, "dependency_latency_factor": 1.65}}
+  ],
+  "patch_candidates": [
+    {"id": "P-ROLLBACK-CODE", "title": "回滚缓存预热批量日志", "changes": {"code_version": "pre-f63c10"}, "risk": 0.12, "cost": 0.18, "rollback": "重新部署 f63c10"},
+    {"id": "P-PIN-DEPENDENCY", "title": "将缓存客户端回退至 5.1", "changes": {"dependency_latency_factor": 1.0}, "risk": 0.30, "cost": 0.35, "rollback": "恢复 cache-client 5.2 锁文件"},
+    {"id": "P-RESTORE-POOL", "title": "恢复连接池 24 并增加缓存回灌门禁", "changes": {"pool_size": 24}, "risk": 0.30, "cost": 0.15, "rollback": "恢复 db.pool.maxSize=11 配置快照"},
+    {"id": "P-ADAPTIVE-GUARD", "title": "启用自适应连接池下限保护", "changes": {"pool_size": 24, "adaptive_min_pool": true}, "risk": 0.55, "cost": 0.45, "rollback": "关闭 adaptive_min_pool 并恢复配置快照"}
+  ]
+}

@@ -54,6 +54,25 @@ class PipelineTests(unittest.TestCase):
             result = run_pipeline(scenario, Path(temp_dir), approved=False)
             self.assertEqual(result["state"].approval, "blocked-awaiting-human")
 
+    def test_all_scenario_corpus_runs_end_to_end(self):
+        scenarios = sorted((ROOT / "scenarios").glob("*/scenario.json"))
+        self.assertGreaterEqual(len(scenarios), 7)
+        for scenario in scenarios:
+            with self.subTest(scenario=scenario.parent.name):
+                with tempfile.TemporaryDirectory() as temp_dir:
+                    result = run_pipeline(scenario, Path(temp_dir), approved=True)
+                    state = result["state"]
+                    primary = [item for item in state.experiments if item.classification == "primary-cause"]
+                    self.assertGreaterEqual(len(primary), 1)
+                    self.assertEqual(state.approval, "approved")
+                    self.assertIsNotNone(state.evidence_passport)
+                    self.assertGreaterEqual(result["metrics"]["trace_spans"], 16)
+                    self.assertTrue((Path(temp_dir) / "proof-bundle.json").exists())
+                    self.assertTrue((Path(temp_dir) / "proof-report.md").exists())
+                    self.assertTrue((Path(temp_dir) / "github-issue.md").exists())
+                    self.assertTrue((Path(temp_dir) / "github-pr.md").exists())
+                    self.assertTrue((Path(temp_dir) / "github-pr-checks.json").exists())
+
 
 if __name__ == "__main__":
     unittest.main()

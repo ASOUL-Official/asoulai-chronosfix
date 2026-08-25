@@ -1,0 +1,35 @@
+{
+  "incident_id": "INC-2026-0825-003",
+  "title": "支付客户端重试耗时上升放大连接池容量风险",
+  "baseline": {
+    "traffic_rps": 140.0,
+    "pool_size": 10,
+    "dependency_latency_factor": 1.7,
+    "code_version": "c18f20",
+    "adaptive_min_pool": false
+  },
+  "events": [
+    {"timestamp": "2026-08-25T11:10:00+08:00", "kind": "commit", "source": "git:c18f20", "summary": "新增支付回调日志采样", "details": {"files": ["payment/callback.py"], "author": "demo"}},
+    {"timestamp": "2026-08-25T11:20:00+08:00", "kind": "dependency", "source": "lockfile:payment-client@3.0", "summary": "支付客户端重试退避策略导致平均耗时增加", "details": {"from": "2.7", "to": "3.0", "latency_factor": 1.7}},
+    {"timestamp": "2026-08-25T11:31:00+08:00", "kind": "configuration", "source": "config:db.pool.maxSize", "summary": "成本优化把连接池从 24 下调到 10", "details": {"from": 24, "to": 10, "change_ticket": "CHG-9021"}},
+    {"timestamp": "2026-08-25T11:40:00+08:00", "kind": "traffic", "source": "metric:checkout.rps", "summary": "支付活动流量升至 140 RPS", "details": {"previous_rps": 74, "current_rps": 140}},
+    {"timestamp": "2026-08-25T11:42:00+08:00", "kind": "incident", "source": "alert:payment-callback-slow", "summary": "订单创建等待支付回调导致失败率升高", "details": {"route": "/api/order/create", "severity": "SEV-2"}}
+  ],
+  "hypotheses": [
+    {"id": "H-CODE", "title": "支付回调日志采样引入性能回退", "owner": "hypothesis-scientist-code", "intervention": {"code_version": "pre-c18f20"}, "rationale": "代码变更靠近事故窗口，需要反事实证伪。"},
+    {"id": "H-DEPENDENCY", "title": "支付客户端升级放大请求占用时间", "owner": "hypothesis-scientist-dependency", "intervention": {"dependency_latency_factor": 1.0}, "rationale": "依赖升级会缓解失败率，但如果连接池仍不足，则不是唯一主因。"},
+    {"id": "H-POOL", "title": "连接池容量低于支付高峰需求", "owner": "hypothesis-scientist-config", "intervention": {"pool_size": 24}, "rationale": "连接池下调和支付耗时上升叠加导致容量不足。"}
+  ],
+  "mutations": [
+    {"name": "nominal-payment", "changes": {"traffic_rps": 140.0, "dependency_latency_factor": 1.7}},
+    {"name": "traffic-campaign", "changes": {"traffic_rps": 165.0, "dependency_latency_factor": 1.7}},
+    {"name": "retry-tail", "changes": {"traffic_rps": 140.0, "dependency_latency_factor": 1.9}},
+    {"name": "campaign-retry-tail", "changes": {"traffic_rps": 165.0, "dependency_latency_factor": 1.9}}
+  ],
+  "patch_candidates": [
+    {"id": "P-ROLLBACK-CODE", "title": "回滚支付回调日志采样", "changes": {"code_version": "pre-c18f20"}, "risk": 0.12, "cost": 0.20, "rollback": "重新部署 c18f20"},
+    {"id": "P-PIN-DEPENDENCY", "title": "将支付客户端回退至 2.7", "changes": {"dependency_latency_factor": 1.0}, "risk": 0.32, "cost": 0.38, "rollback": "恢复 payment-client 3.0 锁文件"},
+    {"id": "P-RESTORE-POOL", "title": "恢复连接池 24 并增加支付高峰容量门禁", "changes": {"pool_size": 24}, "risk": 0.30, "cost": 0.15, "rollback": "恢复 db.pool.maxSize=10 配置快照"},
+    {"id": "P-ADAPTIVE-GUARD", "title": "启用自适应连接池下限保护", "changes": {"pool_size": 24, "adaptive_min_pool": true}, "risk": 0.55, "cost": 0.45, "rollback": "关闭 adaptive_min_pool 并恢复配置快照"}
+  ]
+}

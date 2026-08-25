@@ -20,9 +20,11 @@
 | 日志 / Trace / 指标 | Trace 记录 Agent/Skill 调用；Log 记录事件与权限范围；Metrics 记录根因、补丁、变体、成功率和耗时 | `evidence/trace.jsonl`、`evidence/run-log.jsonl`、`evidence/engineering-metrics.json` |
 | GitHub Issue / PR 链路 | 事故进入 Issue，选中补丁形成 PR 草案，并附带 diff、checks、RiskGate 状态和审计事件 | `docs/github-issue-pr-flow.md`、`evidence/github-issue.md`、`evidence/github-pr.md` |
 | 评测结果 | 自动化测试覆盖主因证明、审批阻断、补丁选择、Skill 沉淀 | `tests/test_pipeline.py`、`evidence/evaluation-report.md` |
+| 扩展评测集 | 7 个事故样例覆盖配置漂移、依赖变慢、恢复尖峰、下游抖动、缓存回灌和 timeout 放大 | `docs/evaluation-corpus.md`、`scenarios/*/scenario.json` |
 | 自动化验证证据 | 一键运行单元测试与 AgentTeams 风格 Demo | `docs/deployment-and-verification.md` |
 | Skill 工程实现 | 9 个核心 Skill，具备输入、输出、安全边界、复用价值和版本演进策略 | `docs/skill-specs.md` |
 | 工具 / MCP / RAG / 可观测集成 | 当前使用等价契约与本地证据；复赛说明迁移到 MCP、云 Skills、Nacos、Higress、PolarDB、RocketMQ、AgentLoop 的接口 | `docs/official-infra-mapping.md`、`docs/interface-schema.md` |
+| 真实 Runtime / 部署计划 | 说明真实 AgentTeams runtime 可接入但不建议复赛前强接；官方组件采用分阶段部署 | `docs/agentteams-runtime-integration.md`、`docs/production-deployment-strategy.md` |
 | 接口 Schema / 数据流 | 定义 Incident、Trace、Tool Adapter、Skill、Evidence Passport、EventBus Schema | `docs/interface-schema.md` |
 | 部署配置 | Python 标准库可复现；在线 Demo 通过 GitHub Pages 发布；复赛提供 AgentTeams 风格入口 | `README.md`、`docs/deployment-and-verification.md` |
 | 失败处理 | RiskGate 无审批时阻断；工具契约定义 timeout/retry/idempotency/degrade | `tests/test_pipeline.py`、`docs/interface-schema.md` |
