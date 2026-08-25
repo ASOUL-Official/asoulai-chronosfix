@@ -41,8 +41,9 @@ A-CFX 的核心判断是：企业不是缺少一个会生成补丁的 Agent，�
 5. **原创性与命名边界**：查看 [`docs/originality-check.md`](docs/originality-check.md)，说明 A-CFX 如何避免与 GitHub 泛 Chronos / debugging-first 类项目混淆。
 6. **可验证输出**：查看 [`evidence/proof-report.md`](evidence/proof-report.md)、[`evidence/proof-bundle.json`](evidence/proof-bundle.json)、[`evidence/trace.jsonl`](evidence/trace.jsonl) 和 [`evidence/github-pr.md`](evidence/github-pr.md)。
 7. **复赛工程材料**：查看 [`docs/proof-carrying-change.md`](docs/proof-carrying-change.md)、[`docs/semifinal-guide-matrix.md`](docs/semifinal-guide-matrix.md)、[`docs/official-infra-mapping.md`](docs/official-infra-mapping.md)、[`docs/interface-schema.md`](docs/interface-schema.md)、[`docs/deployment-and-verification.md`](docs/deployment-and-verification.md)、[`docs/github-issue-pr-flow.md`](docs/github-issue-pr-flow.md)。
-8. **扩展评测与实测方案**：查看 [`docs/evaluation-corpus.md`](docs/evaluation-corpus.md)、[`docs/measurement-plan.md`](docs/measurement-plan.md) 与 `scenarios/*/scenario.json`，当前包含 7 个可运行事故样例。
-9. **决赛增强路线**：查看 [`docs/agentteams-runtime-integration.md`](docs/agentteams-runtime-integration.md) 与 [`docs/production-deployment-strategy.md`](docs/production-deployment-strategy.md)，说明真实 AgentTeams runtime 和官方组件部署策略。
+8. **扩展评测与实测方案**：查看 [`docs/evaluation-corpus.md`](docs/evaluation-corpus.md)、[`docs/evaluation-corpus-results.md`](docs/evaluation-corpus-results.md)、[`docs/measurement-plan.md`](docs/measurement-plan.md) 与 `scenarios/*/scenario.json`，当前包含 7 个可运行事故样例。
+9. **真实 GitHub 协作证据**：查看 [`docs/live-github-collaboration-evidence.md`](docs/live-github-collaboration-evidence.md)、[Issue #1](https://github.com/ASOUL-Official/asoulai-chronosfix/issues/1) 与 [PR #2](https://github.com/ASOUL-Official/asoulai-chronosfix/pull/2)。
+10. **决赛增强路线**：查看 [`docs/agentteams-runtime-integration.md`](docs/agentteams-runtime-integration.md) 与 [`docs/production-deployment-strategy.md`](docs/production-deployment-strategy.md)，说明真实 AgentTeams runtime 和官方组件部署策略。
 
 本地复现只需要 Python 标准库：
 

@@ -25,6 +25,7 @@
 - [x] 接口 Schema、数据流与等价 MCP 契约：`docs/interface-schema.md`
 - [x] 部署、运行与验证说明：`docs/deployment-and-verification.md`
 - [x] GitHub Issue / PR 模拟链路：`docs/github-issue-pr-flow.md`
+- [x] 真实 GitHub Issue / PR 协作证据：`docs/live-github-collaboration-evidence.md`、Issue #1、PR #2
 - [x] Agent 身份与分工：`docs/agent-identity.md`
 - [x] Skill 工程体系：`docs/skill-specs.md`
 - [x] 创新层设计：`docs/innovation-layer.md`
@@ -39,6 +40,7 @@
 
 - [x] 故障场景数据：`scenarios/checkout-timeout/scenario.json`
 - [x] 扩展故障回放评测集：`docs/evaluation-corpus.md`、`scenarios/*/scenario.json`
+- [x] 7 场景实测汇总：`docs/evaluation-corpus-results.md`
 - [x] 自动化测试：`tests/test_pipeline.py`
 - [x] Trace：`evidence/trace.jsonl`
 - [x] 结构化日志：`evidence/run-log.jsonl`

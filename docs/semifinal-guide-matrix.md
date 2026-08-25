@@ -18,9 +18,9 @@
 | 完整场景链路 | Issue/日志/Trace/Git/配置 → AgentTeams 拆解 → 反事实实验 → 缺陷基因验证 → RiskGate → GitHub PR / Evidence Passport → SkillForge | `demo.py`、`evidence/proof-report.md`、`evidence/github-pr.md` |
 | 样例输入输出 | 样例输入为订单接口超时事故，输出为 proof-bundle、proof-report、trace、metrics、AgentTeams transcript | `scenarios/checkout-timeout/scenario.json`、`evidence/` |
 | 日志 / Trace / 指标 | Trace 记录 Agent/Skill 调用；Log 记录事件与权限范围；Metrics 记录根因、补丁、变体、成功率和耗时 | `evidence/trace.jsonl`、`evidence/run-log.jsonl`、`evidence/engineering-metrics.json` |
-| GitHub Issue / PR 链路 | 事故进入 Issue，选中补丁形成 PR 草案，并附带 diff、checks、RiskGate 状态和审计事件 | `docs/github-issue-pr-flow.md`、`evidence/github-issue.md`、`evidence/github-pr.md` |
+| GitHub Issue / PR 链路 | 事故进入 Issue，选中补丁形成 PR 草案，并附带 diff、checks、RiskGate 状态和审计事件；已补真实 GitHub Issue #1 / PR #2 live artifact | `docs/github-issue-pr-flow.md`、`docs/live-github-collaboration-evidence.md`、`evidence/github-issue.md`、`evidence/github-pr.md` |
 | 评测结果 | 自动化测试覆盖主因证明、审批阻断、补丁选择、Skill 沉淀 | `tests/test_pipeline.py`、`evidence/evaluation-report.md` |
-| 扩展评测集 | 7 个事故样例覆盖配置漂移、依赖变慢、恢复尖峰、下游抖动、缓存回灌和 timeout 放大 | `docs/evaluation-corpus.md`、`scenarios/*/scenario.json` |
+| 扩展评测集 | 7 个事故样例覆盖配置漂移、依赖变慢、恢复尖峰、下游抖动、缓存回灌和 timeout 放大 | `docs/evaluation-corpus.md`、`docs/evaluation-corpus-results.md`、`scenarios/*/scenario.json` |
 | 自动化验证证据 | 一键运行单元测试与 AgentTeams 风格 Demo | `docs/deployment-and-verification.md` |
 | Skill 工程实现 | 9 个核心 Skill，具备输入、输出、安全边界、复用价值和版本演进策略 | `docs/skill-specs.md` |
 | 工具 / MCP / RAG / 可观测集成 | 当前使用等价契约与本地证据；复赛说明迁移到 MCP、云 Skills、Nacos、Higress、PolarDB、RocketMQ、AgentLoop 的接口 | `docs/official-infra-mapping.md`、`docs/interface-schema.md` |

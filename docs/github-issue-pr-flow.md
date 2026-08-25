@@ -1,6 +1,14 @@
 # GitHub Issue / PR 模拟链路
 
-A-CFX 复赛包新增一条可复现的研发协作链路：把事故证据转成 GitHub Issue，把选中补丁转成 PR 草案，并附带补丁 diff、检查结果、RiskGate 状态和审计日志。当前实现不会主动写入真实 GitHub 账号，避免产生外部副作用；它以本仓库 evidence 文件形式模拟真实接入后的 API 输出。
+A-CFX 复赛包新增一条可复现的研发协作链路：把事故证据转成 GitHub Issue，把选中补丁转成 PR 草案，并附带补丁 diff、检查结果、RiskGate 状态和审计日志。当前本地实现以本仓库 evidence 文件形式模拟真实接入后的 API 输出；在用户授权后，项目也补充了真实 GitHub Issue / PR live artifact，用于证明该链路可以进入公开仓库协作流。
+
+## Live GitHub 证据
+
+- Issue #1：https://github.com/ASOUL-Official/asoulai-chronosfix/issues/1
+- PR #2：https://github.com/ASOUL-Official/asoulai-chronosfix/pull/2
+- Demo branch：`demo/live-proof-carrying-pr-20260825`
+
+这条 PR 是 documentation-only，不修改运行时代码，作为低风险 live artifact 保留给评委检查。完整说明见 `docs/live-github-collaboration-evidence.md`。
 
 ## 1. 链路目标
 
