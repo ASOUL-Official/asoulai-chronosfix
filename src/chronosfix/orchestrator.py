@@ -5,6 +5,7 @@ from pathlib import Path
 
 from .models import PatchCandidate
 from .engineering import write_engineering_artifacts
+from .github_flow import build_github_flow_summary
 from .observability import TraceRecorder
 from .simulator import simulate_checkout
 from .skills.change_timeline import build_timeline
@@ -84,6 +85,13 @@ def run_pipeline(scenario_path: Path, output_dir: Path, approved: bool) -> dict:
         asdict(state.evidence_passport),
     )
 
+    trace.emit(
+        "patch-engineer",
+        "GitHubIssuePrFlow",
+        "ok",
+        build_github_flow_summary(state),
+    )
+
     state.skill_candidates = distill_skill_candidates(state)
     trace.emit(
         "commander",
@@ -110,6 +118,7 @@ def run_pipeline(scenario_path: Path, output_dir: Path, approved: bool) -> dict:
             + len(state.evidence_passport.rollback_claims)
         ),
         "skill_candidates": len(state.skill_candidates),
+        "github_flow_artifacts": 7,
         "selected_patch_score": state.selected_patch.total_score,
         "selected_patch_worst_failure_rate": state.selected_patch.worst_failure_rate,
         "trace_spans": len(trace.records) + 1,

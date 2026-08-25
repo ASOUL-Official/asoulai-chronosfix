@@ -4,7 +4,7 @@ const data = {
     baselineP99: 606.96,
     faultVariants: 8,
     evidenceClaims: 12,
-    traceSpans: 15,
+    traceSpans: 16,
     qualityAssets: 3,
   },
   timeline: [
@@ -163,6 +163,12 @@ const data = {
       title: "未审批即阻断",
       proof: "RiskGate: blocked-awaiting-human",
       desc: "不传 --approve 时，中风险补丁不会发布；Evidence Passport 会保留缺口声明和回滚契约。",
+    },
+    {
+      label: "GitHub Issue / PR",
+      title: "真实研发协作模拟链路",
+      proof: "github-issue.md / github-pr.md / github-pr-diff.patch",
+      desc: "事故证据进入 Issue，选中补丁生成 PR 草案，并附带 checks、RiskGate 状态、回滚契约和审计事件。",
     },
   ],
   infra: [

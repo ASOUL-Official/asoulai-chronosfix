@@ -40,6 +40,13 @@ class PipelineTests(unittest.TestCase):
             self.assertIn("fault_variants", payload)
             self.assertIn("evidence_passport", payload)
             self.assertIn("skill_candidates", payload)
+            pr_payload = json.loads((Path(temp_dir) / "github-pr.json").read_text(encoding="utf-8"))
+            self.assertEqual(pr_payload["linked_issue"], "#42")
+            self.assertEqual(pr_payload["selected_patch"]["candidate_id"], "P-RESTORE-POOL")
+            self.assertEqual(pr_payload["riskgate"], "approved")
+            self.assertTrue((Path(temp_dir) / "github-issue.md").exists())
+            self.assertTrue((Path(temp_dir) / "github-pr-diff.patch").exists())
+            self.assertTrue((Path(temp_dir) / "github-pr-checks.json").exists())
 
     def test_medium_risk_patch_requires_human(self):
         scenario = ROOT / "scenarios" / "checkout-timeout" / "scenario.json"

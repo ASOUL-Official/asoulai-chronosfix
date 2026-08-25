@@ -3,7 +3,7 @@
 ## 1. 自动化验证摘要
 
 - 事故样例：INC-2026-0816-001 / 订单创建接口在午间流量下出现高失败率与长尾延迟
-- Agent/Skill Trace Span：15
+- Agent/Skill Trace Span：16
 - 工具/Skill 成功率：100.0%
 - 根因假设数：3
 - 反事实实验数：3
@@ -22,6 +22,7 @@
 | Metrics | `engineering-metrics.json` |
 | 风险审批 | `RiskGate` Span 与 evidence passport 风险声明 |
 | 回滚审计 | selected patch rollback contract 与 proof-report |
+| GitHub Issue/PR 模拟链路 | `github-issue.md`、`github-pr.md`、`github-pr-diff.patch`、`github-pr-checks.json`、`github-review-audit.jsonl` |
 | Skill 复用 | `SkillForge` 输出 3 个 Skill Candidate |
 
 ## 3. 失败处理分支

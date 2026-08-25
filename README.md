@@ -10,13 +10,13 @@ AsoulAI ChronosFix（A-CFX）是面向 GOAI 新智基座 Agent Infra「方向三
 
 如果从 GitHub 首页进入，建议按下面顺序查看：
 
-1. **在线 Demo**：打开 [AsoulAI ChronosFix Repair Cockpit](https://asoul-official.github.io/asoulai-chronosfix/)，直接查看时间线、反事实实验、官方 Baseline 对照、原创性边界、补丁竞赛、证据护照和商业价值飞轮。
+1. **在线 Demo**：打开 [AsoulAI ChronosFix Repair Cockpit](https://asoul-official.github.io/asoulai-chronosfix/)，直接查看时间线、反事实实验、GitHub Issue/PR 模拟链路、官方 Baseline 对照、原创性边界、补丁竞赛、证据护照和商业价值飞轮。
 2. **复赛方案 PPT / PDF**：查看 `submission/ChronosFix_复赛方案.pptx` 与 `submission/ChronosFix_复赛方案.pdf`，重点展示完整场景链路、样例输入输出、日志、Trace、指标、评测结果、自动化验证证据、官方 Infra 映射、风险边界与开放计划。
 3. **500 字作品简介**：查看 [`submission/work-intro-500.txt`](submission/work-intro-500.txt)，可直接用于官方提交入口。
 4. **官方 Baseline 对照**：查看 [`docs/official-baseline.md`](docs/official-baseline.md)，说明本方案如何对齐官方 OpsPilot Zero 示例，并在方向三上增强。
 5. **原创性与命名边界**：查看 [`docs/originality-check.md`](docs/originality-check.md)，说明 A-CFX 如何避免与 GitHub 泛 Chronos / debugging-first 类项目混淆。
-6. **可验证输出**：查看 [`evidence/proof-report.md`](evidence/proof-report.md)、[`evidence/proof-bundle.json`](evidence/proof-bundle.json) 和 [`evidence/trace.jsonl`](evidence/trace.jsonl)。
-7. **复赛工程材料**：查看 [`docs/semifinal-guide-matrix.md`](docs/semifinal-guide-matrix.md)、[`docs/official-infra-mapping.md`](docs/official-infra-mapping.md)、[`docs/interface-schema.md`](docs/interface-schema.md)、[`docs/deployment-and-verification.md`](docs/deployment-and-verification.md)。
+6. **可验证输出**：查看 [`evidence/proof-report.md`](evidence/proof-report.md)、[`evidence/proof-bundle.json`](evidence/proof-bundle.json)、[`evidence/trace.jsonl`](evidence/trace.jsonl) 和 [`evidence/github-pr.md`](evidence/github-pr.md)。
+7. **复赛工程材料**：查看 [`docs/semifinal-guide-matrix.md`](docs/semifinal-guide-matrix.md)、[`docs/official-infra-mapping.md`](docs/official-infra-mapping.md)、[`docs/interface-schema.md`](docs/interface-schema.md)、[`docs/deployment-and-verification.md`](docs/deployment-and-verification.md)、[`docs/github-issue-pr-flow.md`](docs/github-issue-pr-flow.md)。
 
 本地复现只需要 Python 标准库：
 
@@ -79,9 +79,9 @@ A-CFX 的商业命题是：把线上事故处理从“专家临场救火”升�
 - `agentteams/chronosfix-team.yaml`：AgentTeams 编排草案。
 - `agentteams/run_chronosfix_team.py`：可执行 AgentTeams 风格入口，输出 Manager/Worker、上下文传递和状态追踪证据。
 - `tests/test_pipeline.py`：自动化测试，覆盖根因证明、故障变体、补丁选择、证据护照、Skill 沉淀和人工审批门禁。
-- `evidence`：Demo 输出，包括 `trace.jsonl`、`run-log.jsonl`、`engineering-metrics.json`、`agentteams-run.json`、`evaluation-report.md`、`proof-bundle.json` 和 `proof-report.md`。
+- `evidence`：Demo 输出，包括 `trace.jsonl`、`run-log.jsonl`、`engineering-metrics.json`、`agentteams-run.json`、`evaluation-report.md`、`proof-bundle.json`、`proof-report.md`、`github-issue.md`、`github-pr.md`、`github-pr-diff.patch` 和 `github-pr-checks.json`。
 - `repair-cockpit`：可直接打开的 Repair Cockpit 修复驾驶舱，用交互页面展示时间线、平行宇宙、缺陷基因、补丁竞赛、证据护照和 Skill 自进化。
-- `docs`：复赛指南矩阵、官方 Infra 映射、接口 Schema、部署验证、Demo 视频脚本、Agent Identity、Skill 工程体系、架构、安全审计、开源合规、商业化设计。
+- `docs`：复赛指南矩阵、官方 Infra 映射、GitHub Issue/PR 链路、接口 Schema、部署验证、Demo 视频脚本、Agent Identity、Skill 工程体系、架构、安全审计、开源合规、商业化设计。
 - `submission`：复赛 PPT/PDF、作品简介、提交清单。
 - `LICENSE`：Apache-2.0 开源协议。
 
@@ -111,8 +111,8 @@ start repair-cockpit\index.html
 - 选中补丁：恢复连接池 24 并增加容量验证门禁。
 - 证据护照：12 条结构化证据声明。
 - Skill 沉淀：3 个可复用 Skill 候选。
-- 证据链：15 个 Trace Span，覆盖证据融合、时间线、反事实实验、故障基因、补丁竞赛、风险门禁、证据护照和 Skill Forge。
-- 复赛工程证据：`run-log.jsonl`、`engineering-metrics.json`、`agentteams-run.json`、`evaluation-report.md`。
+- 证据链：16 个 Trace Span，覆盖证据融合、时间线、反事实实验、故障基因、补丁竞赛、风险门禁、证据护照、GitHub Issue/PR 链路和 Skill Forge。
+- 复赛工程证据：`run-log.jsonl`、`engineering-metrics.json`、`agentteams-run.json`、`evaluation-report.md`、`github-issue.md`、`github-pr.md`、`github-pr-diff.patch`、`github-pr-checks.json`。
 
 ## 已验证指标
 
@@ -150,6 +150,20 @@ python agentteams/run_chronosfix_team.py --approve --output output/agentteams-la
 
 该入口会生成 `agentteams-run.json`，用于验证角色编排、任务拆解、上下文传递、协同执行和状态追踪。
 
+## GitHub Issue / PR 模拟链路
+
+A-CFX 已新增真实研发协作样机：运行 Demo 后会把事故证据生成 GitHub 风格 Issue，把选中补丁生成 PR 草案，并附带 diff、checks、RiskGate 状态和审计事件。当前为本地可复现模拟，不会主动写入真实 GitHub 账号；真实接入时可映射到 GitHub Issues、Pulls、Checks 和 Git Data API。
+
+核心证据：
+
+- `evidence/github-issue.md`：事故 Issue 正文。
+- `evidence/github-pr.md`：PR 描述，包含根因证明、验证结果、回滚策略。
+- `evidence/github-pr-diff.patch`：模拟补丁 diff。
+- `evidence/github-pr-checks.json`：单测、反事实回放、故障基因、RiskGate 和证据护照检查。
+- `evidence/github-review-audit.jsonl`：Issue、分支、PR、RiskGate 审计事件。
+
+详见 `docs/github-issue-pr-flow.md`。
+
 ## 官方推荐 Infra 映射
 
 A-CFX 已单独补齐官方推荐工具链说明，重点不是堆叠数量，而是接口契约与迁移边界：
@@ -167,4 +181,4 @@ A-CFX 已单独补齐官方推荐工具链说明，重点不是堆叠数量，�
 
 ## 开源计划
 
-复赛提交可运行工程材料、AgentTeams 风格入口、在线 Demo、复赛 PPT/PDF、接口契约、运行报告和自动化验证证据；决赛继续补齐真实 Git 仓库适配器、CI 适配器、日志 Trace 适配器、配置中心 MCP Server、真实历史事故 RAG 和更多故障回放集。项目采用 Apache-2.0 协议开放核心代码、Skill 规格、MCP Schema、样例数据与评测脚本。
+复赛提交可运行工程材料、AgentTeams 风格入口、在线 Demo、GitHub Issue/PR 模拟链路、复赛 PPT/PDF、接口契约、运行报告和自动化验证证据；决赛继续补齐真实 GitHub API 写入、CI 适配器、日志 Trace 适配器、配置中心 MCP Server、真实历史事故 RAG 和更多故障回放集。项目采用 Apache-2.0 协议开放核心代码、Skill 规格、MCP Schema、样例数据与评测脚本。

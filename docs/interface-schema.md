@@ -15,8 +15,9 @@ IncidentInput
   -> PatchTournament
   -> RiskGate
   -> EvidencePassport
+  -> GitHubIssuePrFlow
   -> SkillForge
-  -> ProofReport / Metrics / Trace / AgentTeams Transcript
+  -> ProofReport / Metrics / Trace / AgentTeams Transcript / GitHub Issue + PR
 ```
 
 ## 2. IncidentInput
@@ -116,6 +117,33 @@ OpenTelemetry GenAI 迁移映射：
 }
 ```
 
+### GitHub Issue / PR Adapter
+
+```json
+{
+  "tool_name": "github.issue_pr.draft",
+  "protocol": "MCP/HTTP/GitHub API",
+  "auth": "GitHub App installation token or fine-grained PAT",
+  "input_schema": {
+    "repo": "string",
+    "incident_id": "string",
+    "selected_patch": "object",
+    "evidence_passport": "object",
+    "riskgate": "approved|blocked-awaiting-human"
+  },
+  "output_schema": {
+    "issue": "object",
+    "pull_request": "object",
+    "diff": "string",
+    "checks": "array<object>",
+    "audit_events": "array<object>"
+  },
+  "permission_scope": "issues:write, pull_requests:write, checks:write; merge disabled by default",
+  "failure_handling": "写入失败时保留本地 evidence/github-* 文件并标记外部协作未完成",
+  "audit": "记录 issue number、pr number、branch、trace_id、actor、permission_scope"
+}
+```
+
 ### CI Adapter
 
 ```json
@@ -211,4 +239,3 @@ OpenTelemetry GenAI 迁移映射：
 | 评测失败 | PatchTournament 降低分数，不进入 EvidencePassport 可发布状态 |
 | 中高风险未审批 | RiskGate 返回 `blocked-awaiting-human` |
 | 回滚点缺失 | EvidencePassport 写入 missing claim，禁止标记为可发布 |
-

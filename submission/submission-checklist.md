@@ -20,6 +20,7 @@
 - [x] 官方推荐 Agent Infra 映射：`docs/official-infra-mapping.md`
 - [x] 接口 Schema、数据流与等价 MCP 契约：`docs/interface-schema.md`
 - [x] 部署、运行与验证说明：`docs/deployment-and-verification.md`
+- [x] GitHub Issue / PR 模拟链路：`docs/github-issue-pr-flow.md`
 - [x] Agent 身份与分工：`docs/agent-identity.md`
 - [x] Skill 工程体系：`docs/skill-specs.md`
 - [x] 创新层设计：`docs/innovation-layer.md`
@@ -39,6 +40,11 @@
 - [x] 工程 Metrics：`evidence/engineering-metrics.json`
 - [x] AgentTeams 运行转录：`evidence/agentteams-run.json`
 - [x] 复赛评测报告：`evidence/evaluation-report.md`
+- [x] GitHub Issue：`evidence/github-issue.md`
+- [x] GitHub PR 草案：`evidence/github-pr.md`
+- [x] GitHub PR Diff：`evidence/github-pr-diff.patch`
+- [x] GitHub PR Checks：`evidence/github-pr-checks.json`
+- [x] GitHub 审计事件：`evidence/github-review-audit.jsonl`
 - [x] 证据包：`evidence/proof-bundle.json`
 - [x] 证明报告：`evidence/proof-report.md`
 
@@ -52,7 +58,7 @@
 - [x] 4 个补丁候选竞赛。
 - [x] 1 个证据护照。
 - [x] 3 个 Skill 候选沉淀。
-- [x] 15 段 Trace Span。
+- [x] 16 段 Trace Span。
 - [x] 1 个可交互修复驾驶舱。
 - [x] 1 条研发质量资产商业飞轮。
 - [x] 中风险补丁人工审批门禁。
@@ -62,6 +68,7 @@
 - [x] 将本地 Skill 映射为 AgentTeams Worker Skill。
 - [x] 补齐官方云 Skills、Nacos、Higress、PolarDB、UnifiedModel、RocketMQ、AgentLoop 映射。
 - [x] 增加日志、Metrics、AgentTeams transcript 和复赛评测报告。
+- [x] 增加 GitHub Issue / PR 模拟链路，补齐真实研发协作流证据。
 - [x] 增加部署复现和失败处理说明。
 - [ ] 决赛接入真实 Git 仓库与 PR。
 - [ ] 决赛接入 CI、压测和日志 Trace 平台。

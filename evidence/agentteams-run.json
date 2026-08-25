@@ -177,9 +177,21 @@
       ]
     },
     {
+      "from": "patch-engineer",
+      "skill": "GitHubIssuePrFlow",
+      "span_id": "000000000000000e",
+      "status": "ok",
+      "writes": [
+        "github_issue",
+        "github_pr",
+        "pr_checks",
+        "review_audit"
+      ]
+    },
+    {
       "from": "commander",
       "skill": "SkillForge",
-      "span_id": "000000000000000e",
+      "span_id": "000000000000000f",
       "status": "ok",
       "writes": [
         "skill_candidates"
@@ -188,7 +200,7 @@
     {
       "from": "commander",
       "skill": "ProofReport",
-      "span_id": "000000000000000f",
+      "span_id": "0000000000000010",
       "status": "ok",
       "writes": [
         "proof_report",
@@ -199,7 +211,7 @@
   ],
   "state_tracking": {
     "trace_id": "5408b7a5223b5c79a16bd69f1b06ea34",
-    "span_count": 15,
+    "span_count": 16,
     "approval": "approved",
     "selected_patch": "P-RESTORE-POOL",
     "selected_patch_score": 0.9195,
@@ -210,7 +222,11 @@
       "proof-report.md",
       "engineering-metrics.json",
       "agentteams-run.json",
-      "evaluation-report.md"
+      "evaluation-report.md",
+      "github-issue.md",
+      "github-pr.md",
+      "github-pr-diff.patch",
+      "github-pr-checks.json"
     ]
   },
   "human_gate": {

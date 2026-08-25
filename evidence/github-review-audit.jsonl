@@ -1,0 +1,4 @@
+{"event": "issue.opened", "actor": "incident-commander", "target": "ASOUL-Official/asoulai-chronosfix#42", "permission_scope": "issues:write", "reason": "Create incident issue from normalized evidence."}
+{"event": "branch.created", "actor": "patch-engineer", "target": "chronosfix/inc-2026-0816-001-restore-pool", "permission_scope": "contents:write:branch", "reason": "Draft isolated repair branch; no production release."}
+{"event": "pull_request.opened", "actor": "patch-engineer", "target": "ASOUL-Official/asoulai-chronosfix#43", "permission_scope": "pull_requests:write", "reason": "Attach proof-carrying patch for review."}
+{"event": "riskgate.reviewed", "actor": "release-auditor", "target": "ASOUL-Official/asoulai-chronosfix#43", "permission_scope": "checks:write", "decision": "approved", "reason": "Medium-risk change requires explicit human approval before merge."}

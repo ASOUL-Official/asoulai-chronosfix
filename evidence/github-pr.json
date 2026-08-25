@@ -1,0 +1,137 @@
+{
+  "repository": "ASOUL-Official/asoulai-chronosfix",
+  "number": 43,
+  "state": "ready-for-review",
+  "title": "fix(checkout): 恢复连接池 24 并增加容量验证门禁",
+  "head": "chronosfix/inc-2026-0816-001-restore-pool",
+  "base": "main",
+  "linked_issue": "#42",
+  "riskgate": "approved",
+  "selected_patch": {
+    "candidate_id": "P-RESTORE-POOL",
+    "title": "恢复连接池 24 并增加容量验证门禁",
+    "mean_failure_rate": 0.0078,
+    "worst_failure_rate": 0.0625,
+    "success_score": 0.9922,
+    "total_score": 0.9195,
+    "risk": 0.3,
+    "cost": 0.15,
+    "rollback": "恢复 db.pool.maxSize=8 配置快照",
+    "results": [
+      {
+        "name": "nominal",
+        "failure_rate": 0.0,
+        "p99_ms": 168.5,
+        "healthy": true,
+        "effective_pool_size": 24
+      },
+      {
+        "name": "high-traffic",
+        "failure_rate": 0.0,
+        "p99_ms": 168.5,
+        "healthy": true,
+        "effective_pool_size": 24
+      },
+      {
+        "name": "slow-downstream",
+        "failure_rate": 0.0,
+        "p99_ms": 182.0,
+        "healthy": true,
+        "effective_pool_size": 24
+      },
+      {
+        "name": "combined-stress",
+        "failure_rate": 0.0625,
+        "p99_ms": 238.25,
+        "healthy": true,
+        "effective_pool_size": 24
+      },
+      {
+        "name": "pool-borderline",
+        "failure_rate": 0.0,
+        "p99_ms": 168.5,
+        "healthy": true,
+        "effective_pool_size": 24
+      },
+      {
+        "name": "recovery-spike",
+        "failure_rate": 0.0,
+        "p99_ms": 168.5,
+        "healthy": true,
+        "effective_pool_size": 24
+      },
+      {
+        "name": "downstream-jitter",
+        "failure_rate": 0.0,
+        "p99_ms": 182.0,
+        "healthy": true,
+        "effective_pool_size": 24
+      },
+      {
+        "name": "silent-config-drift",
+        "failure_rate": 0.0,
+        "p99_ms": 177.5,
+        "healthy": true,
+        "effective_pool_size": 24
+      }
+    ]
+  },
+  "root_cause": {
+    "hypothesis_id": "H-POOL",
+    "title": "连接池缩容造成服务容量不足",
+    "baseline_failure_rate": 0.4872,
+    "counterfactual_failure_rate": 0.0,
+    "absolute_effect": 0.4872,
+    "causal_confidence": 1.0,
+    "classification": "primary-cause"
+  },
+  "validation": {
+    "unit_tests": "passed",
+    "counterfactual_replay": "passed",
+    "fault_gene_variants": 8,
+    "patches_compared": 4,
+    "worst_failure_rate": 0.0625,
+    "trace_spans": 16
+  },
+  "evidence_passport": {
+    "patch_id": "P-RESTORE-POOL",
+    "requirement_claims": [
+      "事故 INC-2026-0816-001 要求降低订单创建失败率与 P99 延迟。",
+      "修复不得绕过审批，不得丢失回滚点，不得只修单一样例。",
+      "修复必须覆盖由同一根因繁殖出的故障基因变体。"
+    ],
+    "causal_claims": [
+      "连接池缩容造成服务容量不足: 反事实撤销后失败率 48.7% -> 0.0%，因果置信度 100.0%",
+      "支付客户端升级放大请求占用时间: 单独撤销后失败率 33.3%，判定为放大因素"
+    ],
+    "verification_claims": [
+      "补丁竞赛总分 0.919。",
+      "平均失败率 0.8%，最差失败率 6.2%。",
+      "已覆盖健康变体 8/8: nominal, high-traffic, slow-downstream, combined-stress, pool-borderline, recovery-spike, downstream-jitter, silent-config-drift。"
+    ],
+    "risk_claims": [
+      "风险分 0.30，成本分 0.15。",
+      "审批状态 approved。",
+      "RiskGate 会阻断中高风险补丁的无人值守发布。"
+    ],
+    "rollback_claims": [
+      "恢复 db.pool.maxSize=8 配置快照"
+    ],
+    "missing_claims": []
+  },
+  "changed_files": [
+    "configs/checkout-prod.yaml",
+    "tests/test_checkout_capacity_guard.py",
+    "docs/incidents/INC-2026-0816-001-evidence-passport.md"
+  ],
+  "reviewers": [
+    "release-auditor",
+    "checkout-owner"
+  ],
+  "merge_policy": {
+    "requires_human_approval": true,
+    "requires_green_checks": true,
+    "requires_rollback_contract": true,
+    "requires_evidence_passport": true
+  }
+}

@@ -28,6 +28,11 @@ python demo.py --approve --output evidence
 - `evidence/proof-report.md`
 - `evidence/agentteams-run.json`
 - `evidence/evaluation-report.md`
+- `evidence/github-issue.md`
+- `evidence/github-pr.md`
+- `evidence/github-pr-diff.patch`
+- `evidence/github-pr-checks.json`
+- `evidence/github-review-audit.jsonl`
 
 ## 3. 运行 AgentTeams 风格代码包
 
@@ -90,6 +95,7 @@ Demo 重点展示：
 - 证据护照；
 - Skill 自进化；
 - 复赛工程验证；
+- GitHub Issue / PR 模拟链路；
 - 官方推荐 Infra 映射。
 
 ## 7. 第三方依赖、商业 API 与数据授权
@@ -112,6 +118,6 @@ Demo 重点展示：
 3. 运行 `python demo.py --approve --output evidence`。
 4. 查看 `evidence/evaluation-report.md`。
 5. 查看 `evidence/agentteams-run.json` 和 `evidence/trace.jsonl`。
-6. 打开在线 Demo 或本地 `repair-cockpit/index.html`。
-7. 查看复赛 PPT/PDF 中的工程证据页。
-
+6. 查看 `evidence/github-issue.md`、`evidence/github-pr.md`、`evidence/github-pr-diff.patch` 和 `evidence/github-pr-checks.json`。
+7. 打开在线 Demo 或本地 `repair-cockpit/index.html`。
+8. 查看复赛 PPT/PDF 中的工程证据页。

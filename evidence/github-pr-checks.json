@@ -1,0 +1,32 @@
+{
+  "repository": "ASOUL-Official/asoulai-chronosfix",
+  "pull_request": "#43",
+  "commit_sha": "demo-pr-restore-pool-capacity",
+  "checks": [
+    {
+      "name": "unit-tests",
+      "conclusion": "success",
+      "summary": "python -m unittest discover -s tests -p \"test_*.py\" -q"
+    },
+    {
+      "name": "counterfactual-replay",
+      "conclusion": "success",
+      "summary": "H-POOL rollback replay reduces failure rate to 0.0%."
+    },
+    {
+      "name": "fault-gene-suite",
+      "conclusion": "success",
+      "summary": "8 variants evaluated; worst failure rate 6.2%."
+    },
+    {
+      "name": "riskgate",
+      "conclusion": "success",
+      "summary": "RiskGate decision: approved."
+    },
+    {
+      "name": "evidence-passport",
+      "conclusion": "success",
+      "summary": "Requirement, causal, verification, risk and rollback claims attached."
+    }
+  ]
+}

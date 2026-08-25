@@ -10,14 +10,25 @@
   "fault_variants": 8,
   "evidence_passport_claims": 12,
   "skill_candidates": 3,
+  "github_flow_artifacts": 7,
   "selected_patch_score": 0.9195,
   "selected_patch_worst_failure_rate": 0.0625,
-  "trace_spans": 15,
-  "elapsed_ms": 18.75,
+  "trace_spans": 16,
+  "elapsed_ms": 20.0,
   "evidence_coverage": 1.0,
   "tool_success_rate": 1.0,
   "approval_gate_present": true,
   "rollback_contract_present": true,
+  "github_issue_pr_flow_present": true,
+  "github_issue_pr_artifacts": [
+    "github-issue.md",
+    "github-issue.json",
+    "github-pr.md",
+    "github-pr.json",
+    "github-pr-diff.patch",
+    "github-pr-checks.json",
+    "github-review-audit.jsonl"
+  ],
   "trace_schema": {
     "required_fields": [
       "timestamp",

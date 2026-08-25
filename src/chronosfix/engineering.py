@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from .github_flow import write_github_flow_artifacts
 from .models import IncidentState
 
 
@@ -92,6 +93,10 @@ def build_agentteams_transcript(
                 "engineering-metrics.json",
                 "agentteams-run.json",
                 "evaluation-report.md",
+                "github-issue.md",
+                "github-pr.md",
+                "github-pr-diff.patch",
+                "github-pr-checks.json",
             ],
         },
         "human_gate": {
@@ -113,6 +118,7 @@ def _infer_written_state(skill: str) -> list[str]:
         "PatchTournament": ["patch_tournament", "selected_patch"],
         "RiskGate": ["approval", "risk_decision"],
         "EvidencePassport": ["evidence_passport"],
+        "GitHubIssuePrFlow": ["github_issue", "github_pr", "pr_checks", "review_audit"],
         "SkillForge": ["skill_candidates"],
         "ProofReport": ["proof_report", "proof_bundle", "engineering_metrics"],
     }
@@ -134,6 +140,16 @@ def write_engineering_artifacts(
         "tool_success_rate": round(tool_success_rate, 4),
         "approval_gate_present": state.approval in {"approved", "blocked-awaiting-human"},
         "rollback_contract_present": bool(state.selected_patch and state.selected_patch.rollback),
+        "github_issue_pr_flow_present": True,
+        "github_issue_pr_artifacts": [
+            "github-issue.md",
+            "github-issue.json",
+            "github-pr.md",
+            "github-pr.json",
+            "github-pr-diff.patch",
+            "github-pr-checks.json",
+            "github-review-audit.jsonl",
+        ],
         "trace_schema": {
             "required_fields": [
                 "timestamp",
@@ -155,6 +171,7 @@ def write_engineering_artifacts(
         },
     }
     _json_dump(output_dir / "engineering-metrics.json", engineering_metrics)
+    write_github_flow_artifacts(state, engineering_metrics, output_dir)
 
     logs = [
         {
@@ -201,6 +218,7 @@ def write_engineering_artifacts(
         "| Metrics | `engineering-metrics.json` |",
         "| 风险审批 | `RiskGate` Span 与 evidence passport 风险声明 |",
         "| 回滚审计 | selected patch rollback contract 与 proof-report |",
+        "| GitHub Issue/PR 模拟链路 | `github-issue.md`、`github-pr.md`、`github-pr-diff.patch`、`github-pr-checks.json`、`github-review-audit.jsonl` |",
         "| Skill 复用 | `SkillForge` 输出 3 个 Skill Candidate |",
         "",
         "## 3. 失败处理分支",
@@ -221,6 +239,8 @@ def _permission_scope(skill: str) -> str:
         return "isolated-simulation"
     if skill == "RiskGate":
         return "human-approval-required"
+    if skill == "GitHubIssuePrFlow":
+        return "dev-collaboration-write-draft"
     if skill in {"EvidencePassport", "SkillForge", "ProofReport"}:
         return "write-evidence-artifacts"
     return "least-privilege"

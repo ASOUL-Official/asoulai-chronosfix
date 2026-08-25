@@ -18,6 +18,7 @@
 | 完整场景链路 | Issue/日志/Trace/Git/配置 → AgentTeams 拆解 → 反事实实验 → 补丁竞赛 → RiskGate → Evidence Passport → SkillForge | `demo.py`、`evidence/proof-report.md` |
 | 样例输入输出 | 样例输入为订单接口超时事故，输出为 proof-bundle、proof-report、trace、metrics、AgentTeams transcript | `scenarios/checkout-timeout/scenario.json`、`evidence/` |
 | 日志 / Trace / 指标 | Trace 记录 Agent/Skill 调用；Log 记录事件与权限范围；Metrics 记录根因、补丁、变体、成功率和耗时 | `evidence/trace.jsonl`、`evidence/run-log.jsonl`、`evidence/engineering-metrics.json` |
+| GitHub Issue / PR 链路 | 事故进入 Issue，选中补丁形成 PR 草案，并附带 diff、checks、RiskGate 状态和审计事件 | `docs/github-issue-pr-flow.md`、`evidence/github-issue.md`、`evidence/github-pr.md` |
 | 评测结果 | 自动化测试覆盖主因证明、审批阻断、补丁选择、Skill 沉淀 | `tests/test_pipeline.py`、`evidence/evaluation-report.md` |
 | 自动化验证证据 | 一键运行单元测试与 AgentTeams 风格 Demo | `docs/deployment-and-verification.md` |
 | Skill 工程实现 | 9 个核心 Skill，具备输入、输出、安全边界、复用价值和版本演进策略 | `docs/skill-specs.md` |
@@ -35,9 +36,9 @@
 | 任务输入 | `scenario.json` 输入 Issue、Git、依赖、配置、流量与告警证据 |
 | 任务拆解 | Incident Commander 将任务拆给 Timeline、Hypothesis、Universe、Patch、Verifier、Auditor、Skill Curator |
 | 上下文传递 | Incident State 承载 timeline、hypotheses、experiments、variants、patch scores、approval、passport |
-| 工具调用 | 本地等价工具契约模拟 Git/CI/Log/Trace/Config/Ticket；后续迁移 MCP |
+| 工具调用 | 本地等价工具契约模拟 Git/CI/Log/Trace/Config/Ticket；新增 GitHub Issue/PR API 等价输出；后续迁移 MCP |
 | 结果验证 | CounterfactualReplay 与 PatchTournament 形成可复验数值 |
-| 执行证据沉淀 | trace、log、metrics、proof-bundle、proof-report、agentteams-run |
+| 执行证据沉淀 | trace、log、metrics、proof-bundle、proof-report、agentteams-run、github issue/pr/checks/audit |
 | 审批与回滚 | RiskGate 阻断未审批中风险补丁；EvidencePassport 写入 rollback claims |
 | 经验沉淀 | SkillForge 输出 ConnectionPoolCapacityGuard、CounterfactualConfigReplay、ProofCarryingPatch |
 
@@ -49,5 +50,6 @@
 | AgentTeams 只提名词 | 提供 AgentTeams YAML 与 `run_chronosfix_team.py`，输出 `agentteams-run.json` |
 | 云 Skills 使用不清楚 | 在 `official-infra-mapping.md` 说明云 Skills 的鉴权、HITL、安全、编排和迁移 |
 | 工具集成不可判断 | `interface-schema.md` 给出协议、鉴权、Schema、失败处理、审计与 MCP 迁移成本 |
+| 研发协作流不真实 | 新增 `github-issue-pr-flow.md` 与 `evidence/github-*`，展示 Issue、PR、diff、checks、audit 的可迁移链路 |
 | RAG 不足 | 明确实现共享状态、轨迹可观测、证据链持久化，并规划 PolarDB/pgvector 历史事故 RAG |
 | 隐私/数据授权不清 | 当前样例为合成数据；真实企业数据接入时默认脱敏、最小权限、审计留痕 |
