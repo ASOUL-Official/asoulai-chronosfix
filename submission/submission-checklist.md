@@ -1,21 +1,25 @@
-# 初赛提交清单
+# 复赛提交清单
 
 队伍名称：**AsoulAI**
 
 ## 必交材料
 
+- [x] 更新版复赛项目方案 PPT：`submission/ChronosFix_复赛方案.pptx`
+- [x] 更新版复赛项目方案 PDF：`submission/ChronosFix_复赛方案.pdf`
+- [x] 可执行 AgentTeams 代码包：`agentteams/chronosfix-team.yaml`、`agentteams/run_chronosfix_team.py`
+- [x] 可运行 Demo：`demo.py`
+- [x] 在线 / 本地 Repair Cockpit：`repair-cockpit/index.html`
+- [x] Demo 视频脚本：`docs/demo-video-script.md`
+- [x] 复赛指南对照矩阵：`docs/semifinal-guide-matrix.md`
 - [x] 500 字以内作品简介：`submission/work-intro-500.txt`
 - [x] 评审入口说明：`提交入口说明.md`
-- [x] 初赛 PPT（官方内容框架对齐版，19 页）：`submission/ChronosFix_初赛方案.pptx`
-- [x] 可运行 Demo：`demo.py`
-- [x] 可交互 Repair Cockpit：`repair-cockpit/index.html`
-- [x] 赛题要求映射：`docs/requirements-matrix.md`
-- [x] 官方参考 Baseline 对照：`docs/official-baseline.md`
-- [x] 原创性与命名边界说明：`docs/originality-check.md`
-- [x] AgentTeams 编排草案：`agentteams/chronosfix-team.yaml`
 
 ## 方案完整度材料
 
+- [x] 最新参赛指南要求映射：`docs/semifinal-guide-matrix.md`
+- [x] 官方推荐 Agent Infra 映射：`docs/official-infra-mapping.md`
+- [x] 接口 Schema、数据流与等价 MCP 契约：`docs/interface-schema.md`
+- [x] 部署、运行与验证说明：`docs/deployment-and-verification.md`
 - [x] Agent 身份与分工：`docs/agent-identity.md`
 - [x] Skill 工程体系：`docs/skill-specs.md`
 - [x] 创新层设计：`docs/innovation-layer.md`
@@ -31,6 +35,10 @@
 - [x] 故障场景数据：`scenarios/checkout-timeout/scenario.json`
 - [x] 自动化测试：`tests/test_pipeline.py`
 - [x] Trace：`evidence/trace.jsonl`
+- [x] 结构化日志：`evidence/run-log.jsonl`
+- [x] 工程 Metrics：`evidence/engineering-metrics.json`
+- [x] AgentTeams 运行转录：`evidence/agentteams-run.json`
+- [x] 复赛评测报告：`evidence/evaluation-report.md`
 - [x] 证据包：`evidence/proof-bundle.json`
 - [x] 证明报告：`evidence/proof-report.md`
 
@@ -51,9 +59,12 @@
 
 ## 复赛增强路线
 
-- [ ] 接入真实 Git 仓库与 PR。
-- [ ] 接入 CI、压测和日志 Trace 平台。
-- [ ] 接入配置中心与发布审批系统。
-- [ ] 将本地 Skill 封装为 AgentTeams Worker Skill。
-- [ ] 增加历史故障 RAG 与 Runbook 检索。
-- [ ] 建立多项目故障回放评测集。
+- [x] 将本地 Skill 映射为 AgentTeams Worker Skill。
+- [x] 补齐官方云 Skills、Nacos、Higress、PolarDB、UnifiedModel、RocketMQ、AgentLoop 映射。
+- [x] 增加日志、Metrics、AgentTeams transcript 和复赛评测报告。
+- [x] 增加部署复现和失败处理说明。
+- [ ] 决赛接入真实 Git 仓库与 PR。
+- [ ] 决赛接入 CI、压测和日志 Trace 平台。
+- [ ] 决赛接入配置中心与发布审批系统。
+- [ ] 决赛增加历史故障 RAG 与 Runbook 检索。
+- [ ] 决赛建立多项目故障回放评测集。

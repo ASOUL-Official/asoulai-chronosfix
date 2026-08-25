@@ -1,6 +1,6 @@
 # 赛题要求对照矩阵
 
-| 赛题要求 | ChronosFix 对应设计 | 初赛证据 |
+| 赛题要求 | ChronosFix 对应设计 | 复赛证据 |
 |---|---|---|
 | 对齐官方参考 Baseline | 官方未提供代码仓库型 baseline；本方案以 OpsPilot Zero 示例为参考基线，对齐 AgentTeams、7 职能 Agent、Skill、MCP/适配器、Trace、审计和 Mock Demo 边界 | `docs/official-baseline.md` |
 | 真实企业场景 | 软件研发全流程中的线上故障定位、根因验证、补丁生成、发布审批、回滚与复盘 | `scenarios/checkout-timeout/scenario.json` |
@@ -9,11 +9,13 @@
 | AgentTeams 为协同基座 | Manager-Workers、共享 Incident State、透明协作房间、人类审批、Worker Skill 分工 | `agentteams/chronosfix-team.yaml` |
 | 多 Agent 闭环 | 证据输入、任务拆解、上下文传递、工具调用、反事实实验、补丁竞赛、风险审批、证据沉淀、Skill 沉淀 | `evidence/trace.jsonl` |
 | Skill 必选 | 9 个核心 Skill：EvidenceFusion、ChangeTimeline、CounterfactualReplay、FaultGenome、PatchTournament、RiskGate、EvidencePassport、SkillForge、ProofReport | `docs/skill-specs.md` |
-| MCP 或等价契约 | 初赛使用本地适配器；复赛迁移为 Git/CI/日志/配置中心/工单 MCP Server | `docs/architecture.md` |
-| RAG/上下文增强 | 初赛实现 Incident State、证据索引、Trace 回放；复赛接入历史事故、Runbook 与代码知识库检索 | `evidence/proof-bundle.json` |
+| MCP 或等价契约 | 当前使用本地适配器；生产迁移为 Git/CI/日志/配置中心/工单 MCP Server | `docs/architecture.md` |
+| RAG/上下文增强 | 当前实现 Incident State、证据索引、Trace 回放；后续接入历史事故、Runbook 与代码知识库检索 | `evidence/proof-bundle.json` |
 | 可观测性 | 每个 Agent/Skill 调用记录 trace_id、span_id、status 和 payload | `evidence/trace.jsonl` |
 | 安全边界 | 中风险补丁需要人工审批；所有变更必须带回滚策略和审计记录 | `src/chronosfix/skills/risk_gate.py` |
 | 开放/开源 | 开放核心代码、Skill 规格、MCP Schema、样例故障和评测脚本 | `docs/open-source-compliance.md` |
+| 复赛工程验证 | 提供 AgentTeams 风格入口、日志、Trace、Metrics、评测报告、部署验证说明和 Demo 视频脚本 | `agentteams/run_chronosfix_team.py`、`docs/semifinal-guide-matrix.md` |
+| 官方推荐 Infra 映射 | 映射 AgentTeams、云 Skills、Nacos、Higress、PolarDB、UnifiedModel、RocketMQ、LoongSuite/AgentScope/AgentLoop | `docs/official-infra-mapping.md` |
 
 ## 创新点与完整度增强
 

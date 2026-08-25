@@ -139,6 +139,42 @@ const data = {
       targets: ["代码修复", "配置变更", "依赖升级", "事故复盘"],
     },
   ],
+  engineering: [
+    {
+      label: "AgentTeams 代码包",
+      title: "可执行 Manager / Worker 入口",
+      proof: "agentteams/run_chronosfix_team.py",
+      desc: "运行后生成 agentteams-run.json，验证角色编排、任务拆解、上下文传递、协同执行和状态追踪。",
+    },
+    {
+      label: "样例输入输出",
+      title: "合成事故 + 证据化输出",
+      proof: "scenario.json → proof-bundle.json",
+      desc: "输入包含 Issue、Git、依赖、配置、流量和告警；输出包含根因、补丁、证据护照和 Skill 候选。",
+    },
+    {
+      label: "日志 / Trace / Metrics",
+      title: "复赛验收三件套",
+      proof: "trace.jsonl / run-log.jsonl / engineering-metrics.json",
+      desc: "每个 Agent 与 Skill 调用都有 trace_id、span_id、status、payload 和权限范围记录。",
+    },
+    {
+      label: "异常处理",
+      title: "未审批即阻断",
+      proof: "RiskGate: blocked-awaiting-human",
+      desc: "不传 --approve 时，中风险补丁不会发布；Evidence Passport 会保留缺口声明和回滚契约。",
+    },
+  ],
+  infra: [
+    ["AgentTeams", "多 Agent 编排基点", "Manager/Worker、共享状态、人类可见协作和状态追踪。"],
+    ["云 Skills", "云资源操作 Skill 层", "接入官方 Skills 门户、HITL、安全检测、Skill 发现与安装。"],
+    ["Nacos", "AI 资源治理控制面", "管理 AgentSpec、SkillSpec、Prompt、配置策略和 MCP Endpoint。"],
+    ["Higress", "AI 网关与 MCP 入口", "统一鉴权、路由、限流、Fallback、Token 观测和工具调用治理。"],
+    ["PolarDB", "长记忆与 RAG 数据层", "存储历史事故、Runbook、Trace、审计日志和向量索引。"],
+    ["UnifiedModel", "统一实体关系模型", "把 Incident、Evidence、Trace、Patch、Skill 建成可查询对象图。"],
+    ["RocketMQ", "异步事件流转", "驱动 hypothesis.ready、experiment.done、riskgate.waiting 等可靠事件。"],
+    ["AgentLoop", "观测评估与审计", "承接 Trace、Log、Metrics、实验评估和行为审计回放。"],
+  ],
 };
 
 const percent = (value) => `${(value * 100).toFixed(value === 0 ? 0 : 1)}%`;
@@ -285,6 +321,37 @@ function renderSkills() {
     .join("");
 }
 
+function renderEngineering() {
+  const grid = document.querySelector("#engineering-grid");
+  grid.innerHTML = data.engineering
+    .map(
+      (item) => `
+        <article>
+          <span>${item.label}</span>
+          <strong>${item.title}</strong>
+          <p>${item.desc}</p>
+          <em>${item.proof}</em>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function renderInfra() {
+  const grid = document.querySelector("#infra-grid");
+  grid.innerHTML = data.infra
+    .map(
+      ([name, title, desc]) => `
+        <article>
+          <span>${name}</span>
+          <strong>${title}</strong>
+          <p>${desc}</p>
+        </article>
+      `,
+    )
+    .join("");
+}
+
 function hydrateMetrics() {
   document.querySelector("#metric-failure").textContent = percent(data.metrics.baselineFailureRate);
   document.querySelector("#metric-p99").textContent = `${data.metrics.baselineP99.toFixed(2)}ms`;
@@ -301,3 +368,5 @@ renderGenome();
 renderPatches();
 renderPassport();
 renderSkills();
+renderEngineering();
+renderInfra();

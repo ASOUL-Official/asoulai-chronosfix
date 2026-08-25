@@ -1,0 +1,40 @@
+{
+  "trace_id": "5408b7a5223b5c79a16bd69f1b06ea34",
+  "baseline_failure_rate": 0.4872,
+  "baseline_p99_ms": 606.96,
+  "hypotheses_tested": 3,
+  "parallel_universes": 3,
+  "primary_causes_proven": 1,
+  "patches_compared": 4,
+  "mutation_scenarios": 8,
+  "fault_variants": 8,
+  "evidence_passport_claims": 12,
+  "skill_candidates": 3,
+  "selected_patch_score": 0.9195,
+  "selected_patch_worst_failure_rate": 0.0625,
+  "trace_spans": 15,
+  "elapsed_ms": 18.75,
+  "evidence_coverage": 1.0,
+  "tool_success_rate": 1.0,
+  "approval_gate_present": true,
+  "rollback_contract_present": true,
+  "trace_schema": {
+    "required_fields": [
+      "timestamp",
+      "trace_id",
+      "span_id",
+      "incident_id",
+      "agent",
+      "skill",
+      "status",
+      "payload"
+    ],
+    "open_telemetry_mapping": {
+      "trace_id": "trace_id",
+      "span_id": "span_id",
+      "agent": "gen_ai.agent.name",
+      "skill": "gen_ai.operation.name",
+      "status": "otel.status_code"
+    }
+  }
+}

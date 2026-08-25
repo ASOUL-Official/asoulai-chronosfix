@@ -2,7 +2,7 @@
 
 队伍名称：**AsoulAI**
 
-AsoulAI ChronosFix（A-CFX）是面向 GOAI 新智基座 Agent Infra「方向三：软件研发全流程协同」的初赛方案与可运行 Demo。它解决的不是“让 AI 看日志猜原因”，而是把线上故障修复升级为一条可回放、可验证、可审计、可复用的多 Agent 实验闭环。
+AsoulAI ChronosFix（A-CFX）是面向 GOAI 新智基座 Agent Infra「方向三：软件研发全流程协同」的复赛工程验证方案与可运行 Demo。它解决的不是“让 AI 看日志猜原因”，而是把线上故障修复升级为一条可回放、可验证、可审计、可复用的多 Agent 实验闭环。
 
 一句话：A-CFX 让研发团队在事故发生后，自动重建时间线，在多个平行版本里撤销代码、配置、依赖等可疑变更，用反事实实验证明真正根因，再让补丁带着证据护照进入发布审批；更进一步，它把每次事故沉淀成可复用、可审计、可分发的“研发质量资产”。
 
@@ -11,11 +11,12 @@ AsoulAI ChronosFix（A-CFX）是面向 GOAI 新智基座 Agent Infra「方向三
 如果从 GitHub 首页进入，建议按下面顺序查看：
 
 1. **在线 Demo**：打开 [AsoulAI ChronosFix Repair Cockpit](https://asoul-official.github.io/asoulai-chronosfix/)，直接查看时间线、反事实实验、官方 Baseline 对照、原创性边界、补丁竞赛、证据护照和商业价值飞轮。
-2. **初赛方案 PPT**：查看 [`submission/ChronosFix_初赛方案.pptx`](submission/ChronosFix_初赛方案.pptx)，这是按官方初赛 PPT 内容框架重做的 19 页版本，覆盖 P0 速览、目录、场景价值、方案总览、多 Agent、Skill、工程验证、安全审计、开源计划、落地进展和团队提交物。
+2. **复赛方案 PPT / PDF**：查看 `submission/ChronosFix_复赛方案.pptx` 与 `submission/ChronosFix_复赛方案.pdf`，重点展示完整场景链路、样例输入输出、日志、Trace、指标、评测结果、自动化验证证据、官方 Infra 映射、风险边界与开放计划。
 3. **500 字作品简介**：查看 [`submission/work-intro-500.txt`](submission/work-intro-500.txt)，可直接用于官方提交入口。
 4. **官方 Baseline 对照**：查看 [`docs/official-baseline.md`](docs/official-baseline.md)，说明本方案如何对齐官方 OpsPilot Zero 示例，并在方向三上增强。
 5. **原创性与命名边界**：查看 [`docs/originality-check.md`](docs/originality-check.md)，说明 A-CFX 如何避免与 GitHub 泛 Chronos / debugging-first 类项目混淆。
 6. **可验证输出**：查看 [`evidence/proof-report.md`](evidence/proof-report.md)、[`evidence/proof-bundle.json`](evidence/proof-bundle.json) 和 [`evidence/trace.jsonl`](evidence/trace.jsonl)。
+7. **复赛工程材料**：查看 [`docs/semifinal-guide-matrix.md`](docs/semifinal-guide-matrix.md)、[`docs/official-infra-mapping.md`](docs/official-infra-mapping.md)、[`docs/interface-schema.md`](docs/interface-schema.md)、[`docs/deployment-and-verification.md`](docs/deployment-and-verification.md)。
 
 本地复现只需要 Python 标准库：
 
@@ -24,6 +25,7 @@ git clone https://github.com/ASOUL-Official/asoulai-chronosfix.git
 cd asoulai-chronosfix
 python -m unittest discover -s tests -p "test_*.py" -q
 python demo.py --approve --output evidence
+python agentteams/run_chronosfix_team.py --approve --output output/agentteams-latest
 ```
 
 如果只想看可视化演示，也可以直接打开：
@@ -69,16 +71,18 @@ A-CFX 的商业命题是：把线上事故处理从“专家临场救火”升�
 
 可收费形态包括团队版 SaaS、企业私有化部署、云市场插件、故障基因包/Skill 市场和高风险行业的审计合规模块。核心护城河不是单个模型，而是持续积累的反事实事故数据、补丁验证结果、证据护照和可复用 Skill 资产库。
 
-## 初赛交付内容
+## 复赛交付内容
 
 - `demo.py`：可运行的反事实故障分析 Demo。
 - `scenarios/checkout-timeout/scenario.json`：订单接口故障样例，包含 Git、依赖、配置、流量与告警证据。
 - `src/chronosfix`：多 Agent 编排内核与可复用 Skill 实现。
+- `agentteams/chronosfix-team.yaml`：AgentTeams 编排草案。
+- `agentteams/run_chronosfix_team.py`：可执行 AgentTeams 风格入口，输出 Manager/Worker、上下文传递和状态追踪证据。
 - `tests/test_pipeline.py`：自动化测试，覆盖根因证明、故障变体、补丁选择、证据护照、Skill 沉淀和人工审批门禁。
-- `evidence`：Demo 输出，包括 `trace.jsonl`、`proof-bundle.json` 和 `proof-report.md`。
+- `evidence`：Demo 输出，包括 `trace.jsonl`、`run-log.jsonl`、`engineering-metrics.json`、`agentteams-run.json`、`evaluation-report.md`、`proof-bundle.json` 和 `proof-report.md`。
 - `repair-cockpit`：可直接打开的 Repair Cockpit 修复驾驶舱，用交互页面展示时间线、平行宇宙、缺陷基因、补丁竞赛、证据护照和 Skill 自进化。
-- `docs`：官方参考 Baseline 对照、Agent Identity、Skill 工程体系、架构、安全审计、开源合规、商业化设计和赛题要求映射。
-- `submission`：初赛作品简介、官方模板版 PPT 大纲与提交清单。
+- `docs`：复赛指南矩阵、官方 Infra 映射、接口 Schema、部署验证、Demo 视频脚本、Agent Identity、Skill 工程体系、架构、安全审计、开源合规、商业化设计。
+- `submission`：复赛 PPT/PDF、作品简介、提交清单。
 - `LICENSE`：Apache-2.0 开源协议。
 
 ## 快速运行
@@ -87,6 +91,7 @@ A-CFX 的商业命题是：把线上事故处理从“专家临场救火”升�
 cd D:\1\全球AI大赛\chronosfix
 C:\Users\liuzhanxian\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe -m unittest discover -s tests -v
 C:\Users\liuzhanxian\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe demo.py --approve --output evidence
+C:\Users\liuzhanxian\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe agentteams\run_chronosfix_team.py --approve --output output\agentteams-latest
 ```
 
 打开可视化驾驶舱：
@@ -107,6 +112,7 @@ start repair-cockpit\index.html
 - 证据护照：12 条结构化证据声明。
 - Skill 沉淀：3 个可复用 Skill 候选。
 - 证据链：15 个 Trace Span，覆盖证据融合、时间线、反事实实验、故障基因、补丁竞赛、风险门禁、证据护照和 Skill Forge。
+- 复赛工程证据：`run-log.jsonl`、`engineering-metrics.json`、`agentteams-run.json`、`evaluation-report.md`。
 
 ## 已验证指标
 
@@ -136,6 +142,29 @@ A-CFX 的本地 Demo 使用确定性执行内核模拟 AgentTeams 协同流程�
 
 相关编排草案见 `agentteams/chronosfix-team.yaml`。
 
+复赛可执行入口：
+
+```powershell
+python agentteams/run_chronosfix_team.py --approve --output output/agentteams-latest
+```
+
+该入口会生成 `agentteams-run.json`，用于验证角色编排、任务拆解、上下文传递、协同执行和状态追踪。
+
+## 官方推荐 Infra 映射
+
+A-CFX 已单独补齐官方推荐工具链说明，重点不是堆叠数量，而是接口契约与迁移边界：
+
+- AgentTeams：多 Agent 协同基点。
+- 阿里云云 Skills：云资源操作、HITL、Skill 发现与安装。
+- Nacos：Agent、Skill、Prompt、配置和 MCP Endpoint 治理。
+- Higress：模型、Agent 服务、MCP 工具和云 Skills 的统一网关。
+- PolarDB for PostgreSQL：长记忆、RAG、审计日志和向量索引。
+- UnifiedModel：Incident、Evidence、Patch、Skill 的实体关系图。
+- RocketMQ：事件驱动、异步任务、可靠通知和执行状态流转。
+- LoongSuite / AgentScope Studio / AgentLoop：Trace、Log、Metrics、评估和审计回放。
+
+详见 `docs/official-infra-mapping.md`。
+
 ## 开源计划
 
-初赛提交方案与可运行最小闭环；复赛补齐真实 Git 仓库适配器、CI 适配器、日志 Trace 适配器、配置中心 MCP Server、AgentTeams 部署说明和更多故障回放集。项目计划采用 Apache-2.0 协议开放核心代码、Skill 规格、MCP Schema、样例数据与评测脚本。
+复赛提交可运行工程材料、AgentTeams 风格入口、在线 Demo、复赛 PPT/PDF、接口契约、运行报告和自动化验证证据；决赛继续补齐真实 Git 仓库适配器、CI 适配器、日志 Trace 适配器、配置中心 MCP Server、真实历史事故 RAG 和更多故障回放集。项目采用 Apache-2.0 协议开放核心代码、Skill 规格、MCP Schema、样例数据与评测脚本。

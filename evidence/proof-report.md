@@ -2,7 +2,7 @@
 
 **故障：** 订单创建接口在午间流量下出现高失败率与长尾延迟
 **审批状态：** approved
-**Trace ID：** 见 trace.jsonl
+**Trace ID：** 5408b7a5223b5c79a16bd69f1b06ea34
 
 ## 0. 结论摘要
 

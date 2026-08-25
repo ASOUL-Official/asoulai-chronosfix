@@ -1,0 +1,221 @@
+{
+  "team": "chronosfix-incident-response",
+  "framework_mapping": {
+    "human": "release-owner",
+    "manager": "incident-commander",
+    "workers": [
+      "timeline-analyst",
+      "hypothesis-scientist",
+      "universe-builder",
+      "patch-engineer",
+      "adversarial-verifier",
+      "release-auditor",
+      "skill-curator"
+    ],
+    "matrix_room_equivalent": "repair-cockpit transparent evidence room",
+    "shared_state": [
+      "incident_id",
+      "timeline",
+      "hypotheses",
+      "counterfactual_experiments",
+      "fault_variants",
+      "patch_tournament",
+      "risk_gate",
+      "evidence_passport",
+      "skill_candidates"
+    ]
+  },
+  "task_decomposition": [
+    {
+      "owner": "incident-commander",
+      "task": "accept incident and build evidence index"
+    },
+    {
+      "owner": "timeline-analyst",
+      "task": "order Git/config/dependency/traffic/alert events"
+    },
+    {
+      "owner": "hypothesis-scientist",
+      "task": "produce falsifiable root-cause contracts"
+    },
+    {
+      "owner": "universe-builder",
+      "task": "run counterfactual replay and evolve fault genome"
+    },
+    {
+      "owner": "adversarial-verifier",
+      "task": "score repair candidates on mutated scenarios"
+    },
+    {
+      "owner": "release-auditor",
+      "task": "enforce RiskGate and create evidence passport"
+    },
+    {
+      "owner": "skill-curator",
+      "task": "distill reusable Skill candidates"
+    }
+  ],
+  "context_passing": [
+    {
+      "from": "commander",
+      "skill": "EvidenceFusion",
+      "span_id": "0000000000000001",
+      "status": "ok",
+      "writes": [
+        "incident_id",
+        "evidence_index"
+      ]
+    },
+    {
+      "from": "timeline-analyst",
+      "skill": "ChangeTimeline",
+      "span_id": "0000000000000002",
+      "status": "ok",
+      "writes": [
+        "timeline"
+      ]
+    },
+    {
+      "from": "commander",
+      "skill": "BaselineReplay",
+      "span_id": "0000000000000003",
+      "status": "ok",
+      "writes": [
+        "baseline_metrics"
+      ]
+    },
+    {
+      "from": "hypothesis-scientist",
+      "skill": "HypothesisContract",
+      "span_id": "0000000000000004",
+      "status": "ok",
+      "writes": [
+        "hypotheses"
+      ]
+    },
+    {
+      "from": "universe-builder",
+      "skill": "CounterfactualReplay",
+      "span_id": "0000000000000005",
+      "status": "ok",
+      "writes": [
+        "counterfactual_experiments"
+      ]
+    },
+    {
+      "from": "hypothesis-scientist",
+      "skill": "HypothesisContract",
+      "span_id": "0000000000000006",
+      "status": "ok",
+      "writes": [
+        "hypotheses"
+      ]
+    },
+    {
+      "from": "universe-builder",
+      "skill": "CounterfactualReplay",
+      "span_id": "0000000000000007",
+      "status": "ok",
+      "writes": [
+        "counterfactual_experiments"
+      ]
+    },
+    {
+      "from": "hypothesis-scientist",
+      "skill": "HypothesisContract",
+      "span_id": "0000000000000008",
+      "status": "ok",
+      "writes": [
+        "hypotheses"
+      ]
+    },
+    {
+      "from": "universe-builder",
+      "skill": "CounterfactualReplay",
+      "span_id": "0000000000000009",
+      "status": "ok",
+      "writes": [
+        "counterfactual_experiments"
+      ]
+    },
+    {
+      "from": "universe-builder",
+      "skill": "FaultGenome",
+      "span_id": "000000000000000a",
+      "status": "ok",
+      "writes": [
+        "fault_variants"
+      ]
+    },
+    {
+      "from": "adversarial-verifier",
+      "skill": "PatchTournament",
+      "span_id": "000000000000000b",
+      "status": "ok",
+      "writes": [
+        "patch_tournament",
+        "selected_patch"
+      ]
+    },
+    {
+      "from": "release-auditor",
+      "skill": "RiskGate",
+      "span_id": "000000000000000c",
+      "status": "approved",
+      "writes": [
+        "approval",
+        "risk_decision"
+      ]
+    },
+    {
+      "from": "release-auditor",
+      "skill": "EvidencePassport",
+      "span_id": "000000000000000d",
+      "status": "ok",
+      "writes": [
+        "evidence_passport"
+      ]
+    },
+    {
+      "from": "commander",
+      "skill": "SkillForge",
+      "span_id": "000000000000000e",
+      "status": "ok",
+      "writes": [
+        "skill_candidates"
+      ]
+    },
+    {
+      "from": "commander",
+      "skill": "ProofReport",
+      "span_id": "000000000000000f",
+      "status": "ok",
+      "writes": [
+        "proof_report",
+        "proof_bundle",
+        "engineering_metrics"
+      ]
+    }
+  ],
+  "state_tracking": {
+    "trace_id": "5408b7a5223b5c79a16bd69f1b06ea34",
+    "span_count": 15,
+    "approval": "approved",
+    "selected_patch": "P-RESTORE-POOL",
+    "selected_patch_score": 0.9195,
+    "artifacts": [
+      "trace.jsonl",
+      "run-log.jsonl",
+      "proof-bundle.json",
+      "proof-report.md",
+      "engineering-metrics.json",
+      "agentteams-run.json",
+      "evaluation-report.md"
+    ]
+  },
+  "human_gate": {
+    "condition": "medium/high risk patch",
+    "decision": "approved",
+    "rollback_contract": "恢复 db.pool.maxSize=8 配置快照"
+  }
+}

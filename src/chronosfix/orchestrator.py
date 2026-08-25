@@ -4,6 +4,7 @@ from dataclasses import asdict
 from pathlib import Path
 
 from .models import PatchCandidate
+from .engineering import write_engineering_artifacts
 from .observability import TraceRecorder
 from .simulator import simulate_checkout
 from .skills.change_timeline import build_timeline
@@ -92,6 +93,7 @@ def run_pipeline(scenario_path: Path, output_dir: Path, approved: bool) -> dict:
     )
 
     metrics = {
+        "trace_id": trace.trace_id,
         "baseline_failure_rate": baseline_result.failure_rate,
         "baseline_p99_ms": baseline_result.p99_ms,
         "hypotheses_tested": len(state.experiments),
@@ -117,4 +119,5 @@ def run_pipeline(scenario_path: Path, output_dir: Path, approved: bool) -> dict:
     trace.emit("commander", "ProofReport", "ok", metrics)
     trace.write_jsonl(output_dir / "trace.jsonl")
     write_reports(state, metrics, output_dir)
+    write_engineering_artifacts(state, metrics, trace.records, output_dir)
     return {"state": state, "metrics": metrics, "trace_id": trace.trace_id}

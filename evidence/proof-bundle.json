@@ -646,6 +646,7 @@
     "alert:checkout-5xx"
   ],
   "metrics": {
+    "trace_id": "5408b7a5223b5c79a16bd69f1b06ea34",
     "baseline_failure_rate": 0.4872,
     "baseline_p99_ms": 606.96,
     "hypotheses_tested": 3,

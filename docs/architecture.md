@@ -1,6 +1,6 @@
 # 技术架构
 
-ChronosFix 采用四层结构：Agent 协同层、Skill 能力层、工具适配层、证据治理层。
+ChronosFix 复赛版采用七层结构：AgentTeams 协同层、Skill 能力层、云 Skills / MCP 工具层、AI 治理控制面、AI 网关层、Agent 数据层、证据可观测层。当前代码包用本地确定性引擎交付可运行 Demo，同时按官方推荐工具链定义可迁移接口。
 
 ## 端到端链路
 
@@ -44,9 +44,31 @@ SkillForge 将成功经验沉淀为可复用 Skill 候选
 | Shared File System / Object Storage | Trace、proof-bundle、proof-report、实验产物和回放数据 |
 | Higress AI Gateway / MCP | Git、CI、日志、配置中心、工单和知识库工具入口 |
 
+### 角色、任务、上下文、执行、状态五点
+
+| 指南核验点 | 当前可验证实现 |
+|---|---|
+| 角色编排 | `agentteams/chronosfix-team.yaml` 定义 Human、Manager 和 7 个 Worker |
+| 任务拆解 | `agentteams/run_chronosfix_team.py` 输出 AgentTeams 风格任务拆解 |
+| 上下文传递 | Incident State 承载 timeline、hypotheses、experiments、variants、patch scores、approval、passport |
+| 协同执行 | Demo 串联 9 个 Skill；生产接 RocketMQ 后可将反事实实验和补丁评分并行化 |
+| 状态追踪 | `trace.jsonl`、`run-log.jsonl`、`agentteams-run.json` 记录 trace_id、span_id、agent、skill、status、payload |
+
+## 官方推荐基础设施映射
+
+| 基础设施 | ChronosFix 职责 | 复赛说明 |
+|---|---|---|
+| 阿里云云 Skills | 云资源操作、HITL、官方 Skill 发现与安装 | 本地 Skill 可迁移为云 Skills；高风险配置回滚走人工确认 |
+| Nacos | AgentSpec、SkillSpec、Prompt、配置策略、MCP Endpoint Registry | `official-infra-mapping.md` 定义 namespace/group/dataId |
+| Higress | LLM、Agent 服务、MCP Server、云 Skills 的统一入口 | 统一鉴权、路由、限流、Fallback、Token 观测 |
+| PolarDB for PostgreSQL | 长记忆、RAG、审计日志、Trace、向量索引 | 复赛以 JSON/JSONL 最小实现，生产接表结构和 pgvector |
+| UnifiedModel | Incident、Evidence、Patch、Skill 的实体关系层 | `engineering.py` 提供 object graph 草案 |
+| RocketMQ | 事件驱动、异步任务、Agent 间消息和可靠通知 | 定义 incident/timeline/hypothesis/experiment/riskgate/passport Topics |
+| LoongSuite / AgentScope Studio / AgentLoop | Trace、Log、Metrics、评估、审计回放 | 当前输出可导入观测系统的结构化证据 |
+
 ## MCP 与等价集成契约
 
-初赛 Demo 为了可运行性，使用本地 JSON 和确定性模拟器实现工具适配。复赛迁移时，每个外部系统按同一套契约封装：
+当前可运行 Demo 为了复现稳定性，使用本地 JSON 和确定性模拟器实现工具适配。迁移到真实系统时，每个外部系统按同一套契约封装：
 
 | 工具 | 协议 | 核心输入 | 核心输出 | 权限 | 审计 |
 |---|---|---|---|---|---|
@@ -56,9 +78,11 @@ SkillForge 将成功经验沉淀为可复用 Skill 候选
 | Config Adapter | MCP / HTTP | key、environment、version | config diff、rollback point | 修改需审批 | 记录审批与回滚点 |
 | Ticket Adapter | MCP / HTTP | incident id、status、report | issue、PR、comment | 写入报告需授权 | 记录外部链接 |
 
+完整 Schema 见 `docs/interface-schema.md`。
+
 ## 可观测性
 
-Demo 输出轻量 Trace：
+Demo 输出复赛工程证据：
 
 - `trace_id`：单次事故链路。
 - `span_id`：每个 Agent/Skill 调用。
@@ -66,15 +90,18 @@ Demo 输出轻量 Trace：
 - `skill`：调用能力。
 - `status`：ok、approved 或 blocked。
 - `payload`：输入输出摘要、指标和证据。
+- `run-log.jsonl`：结构化记录权限范围、审批事件和失败处理。
+- `engineering-metrics.json`：记录 Tool 成功率、补丁最差失败率、审批门禁、回滚契约和 Trace Schema。
+- `evaluation-report.md`：汇总自动化验证、复赛验收点和失败分支。
 
 当前增强版会记录 15 段 Trace，覆盖 EvidenceFusion、ChangeTimeline、BaselineReplay、HypothesisContract、CounterfactualReplay、FaultGenome、PatchTournament、RiskGate、EvidencePassport、SkillForge 和 ProofReport。
 
 ## 上下文与 RAG 计划
 
-初赛实现三类上下文能力：
+当前复赛包实现三类上下文能力：
 
 - Incident State：保存任务状态、证据索引、假设、实验、故障变体、补丁排名和证据护照。
 - 轨迹可观测：Trace 可回放每个决策。
 - 证据报告：proof-bundle 可进入知识库。
 
-复赛增加历史事故 RAG 和 Runbook RAG，用于检索相似故障、既往修复、组件约束和发布策略。
+复赛最小实现已覆盖指南中 RAG/上下文增强的三项：共享状态管理、轨迹可观测、证据链持久化。决赛阶段增加历史事故 RAG 和 Runbook RAG，用 PolarDB for PostgreSQL + pgvector 检索相似故障、既往修复、组件约束和发布策略。

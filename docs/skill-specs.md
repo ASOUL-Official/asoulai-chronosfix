@@ -1,6 +1,6 @@
 # Skill 工程体系
 
-ChronosFix 把软件故障处理拆成 9 个可复用 Skill。每个 Skill 都有稳定输入、输出、安全边界和失败处理，方便后续迁移到 AgentTeams Worker、MCP 工具或企业内部平台。
+ChronosFix 把软件故障处理拆成 9 个可复用 Skill。每个 Skill 都有稳定输入、输出、安全边界和失败处理，方便后续迁移到 AgentTeams Worker、MCP 工具、阿里云云 Skills 或企业内部平台。
 
 | Skill 名称 | 类型 | 使用场景 | 输入 | 输出 | 安全边界 | 复用价值 |
 |---|---|---|---|---|---|---|
@@ -17,10 +17,34 @@ ChronosFix 把软件故障处理拆成 9 个可复用 Skill。每个 Skill 都�
 ## 生命周期设计
 
 - **版本**：每个 Skill 使用语义化版本；输入输出 Schema 发生兼容性变更时提升 minor，不兼容时提升 major。
-- **发布**：初赛以本地 Python Skill 交付；复赛封装为 AgentTeams Worker Skill 与 MCP 工具说明。
+- **发布**：初赛以本地 Python Skill 交付；复赛封装为 AgentTeams Worker Skill、云 Skills 映射和 MCP 工具说明。
 - **评估**：以故障回放集统计根因准确率、补丁通过率、误判率、人工审批命中率和证据护照完整率。
 - **回滚**：Skill Registry 保留上一个稳定版本；如果新版本误判率上升，回退到前一版本。
 - **沉淀**：SkillForge 会把一次事故的有效处理模式输出为 Skill Candidate，进入人工评审和回放评测后再注册。
+
+## 云 Skills 门户映射
+
+| A-CFX Skill | 云 Skills 接入方式 | 鉴权 | 编排位置 | 失败处理 |
+|---|---|---|---|---|
+| EvidenceFusion | 调用 SLS、CloudMonitor、资源中心、Nacos 只读 Skills 获取证据 | RAM 只读策略 | Commander / Timeline | 证据缺失时写入 missing evidence，不强判主因 |
+| CounterfactualReplay | 调用配置读取、沙箱环境、CI 触发类 Skills | 沙箱或测试环境权限 | Universe Builder | 沙箱不可用时降级为本地模拟并标注证据等级 |
+| RiskGate | 接入云 Skills HITL 协作平台 | 人工确认 + 操作审计 | Release Auditor | 未审批返回 `blocked-awaiting-human` |
+| EvidencePassport | 写入工单、知识库、审计存储类 Skills | 写证据库权限，不写生产配置 | Release Auditor | 缺少因果/验证/回滚声明时禁止可发布 |
+| SkillForge | 对接云 Skills 门户 / Skill Forge 共建流程 | 仅生成候选，发布需人工评审 | Skill Curator | 新 Skill 不自动上线，必须回放评测 |
+
+## 复赛必填字段覆盖
+
+| 字段 | 覆盖方式 |
+|---|---|
+| Skill 名称 | 上表与 9 个核心 Skill 清单 |
+| 用途 | 每个 Skill 的使用场景 |
+| 输入与输出 | 表格与关键契约示例 |
+| 调用条件 | 由 AgentTeams 任务拆解和 incident state 触发 |
+| 依赖工具 | MCP/Adapter/云 Skills 映射 |
+| 失败处理机制 | 证据缺口、重试、降级、RiskGate 阻断 |
+| 安全边界 | 只读优先、隔离实验、中高风险人工审批 |
+| 复用价值 | 故障基因包、证据护照、Skill Candidate |
+| 多 Agent 关系 | 每个 Skill 绑定 Manager/Worker 角色 |
 
 ## 关键 Skill 契约示例
 
