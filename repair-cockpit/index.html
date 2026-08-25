@@ -6,7 +6,7 @@
     <title>AsoulAI ChronosFix Repair Cockpit</title>
     <meta
       name="description"
-      content="AsoulAI ChronosFix（A-CFX）修复驾驶舱：用时间线、反事实实验、缺陷基因、补丁竞赛和证据护照展示软件研发全流程协同。"
+      content="AsoulAI ChronosFix（A-CFX）修复驾驶舱：用证明链、时间线、反事实实验、缺陷基因、GitHub PR 和证据护照展示软件研发全流程协同。"
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
@@ -17,14 +17,15 @@
           <p class="eyebrow">AsoulAI · GOAI 新智基座 · 方向三</p>
           <div class="brand-lockup" aria-label="作品原创识别">
             <span>A-CFX</span>
-            <span>Fault Genome · Evidence Passport · Skill Flywheel</span>
+            <span>Proof-Carrying Change · Fault Genome · Skill Flywheel</span>
           </div>
           <h1 id="page-title">AsoulAI ChronosFix Repair Cockpit</h1>
-          <p class="hero-subtitle">研发质量资产驾驶舱</p>
+          <p class="hero-subtitle">带证明的软件变更基础设施</p>
           <p class="lede">
-            把 AsoulAI ChronosFix（A-CFX）的“软件故障时间机器”变成可视化演示：从故障证据进入，到反事实根因证明、缺陷基因竞赛、证据护照审批，再到 Skill 自进化沉淀；最终把一次事故变成可复用、可审计、可分发的研发质量资产。
+            A-CFX 不是自动修 Bug，而是把线上事故转成一条可审批、可回放、可复用的 PR 证据链：事故证据 → 反事实证明根因 → 缺陷基因验证补丁 → RiskGate 审批 → GitHub PR / 证据护照 → Skill / 故障资产沉淀。
           </p>
           <div class="hero-actions" aria-label="重点入口">
+            <a href="#proof-chain">证明链</a>
             <a href="#official-baseline">官方 Baseline 对齐</a>
             <a href="#engineering">复赛工程验证</a>
             <a href="#infra">官方基座映射</a>
@@ -36,11 +37,12 @@
           <span class="status-dot"></span>
           <p class="incident-label">AsoulAI · INC-2026-0816-001</p>
           <h2>订单创建接口高失败率</h2>
-          <p>主因已证明：连接池缩容造成服务容量不足。资产已沉淀：故障基因包、证据护照模板、可复用 Skill。</p>
+          <p>主因已证明：连接池缩容造成服务容量不足。交付物已进入 GitHub PR 草案，并携带证据护照、RiskGate 状态和可回滚声明。</p>
         </aside>
       </section>
 
       <nav class="jump-nav" aria-label="演示导航">
+        <a href="#proof-chain">证明链</a>
         <a href="#timeline">时间线</a>
         <a href="#universes">平行宇宙</a>
         <a href="#genome">缺陷基因</a>
@@ -72,13 +74,21 @@
           <span>证据护照声明</span>
         </article>
         <article>
-          <strong id="metric-trace">15</strong>
+          <strong id="metric-trace">16</strong>
           <span>Trace Span</span>
         </article>
         <article>
           <strong id="metric-assets">3</strong>
           <span>质量资产类型</span>
         </article>
+      </section>
+
+      <section class="panel proof-chain-panel" id="proof-chain">
+        <div class="section-title">
+          <p>00C · Proof-Carrying Change Chain</p>
+          <h2>底层逻辑：每次软件变更都必须带证明</h2>
+        </div>
+        <div class="proof-chain" id="proof-chain-list"></div>
       </section>
 
       <section class="cockpit-grid">
@@ -193,7 +203,7 @@
       <section class="panel originality-panel" id="originality">
         <div class="section-title">
           <p>00B · Originality Guard</p>
-          <h2>原创性边界：A-CFX 不是通用 Debug Bot，而是研发质量资产系统</h2>
+          <h2>原创性边界：A-CFX 不是通用 Debug Bot，而是带证明的软件变更基础设施</h2>
         </div>
         <div class="originality-grid">
           <article>
@@ -204,7 +214,7 @@
           <article>
             <span>方法边界</span>
             <strong>先证明，再修复</strong>
-            <p>核心不是“生成补丁”，而是用反事实实验把相关性变成因果证据，再让补丁进入验证和审计。</p>
+            <p>核心不是“生成补丁”，而是用反事实实验把相关性变成因果证据，再让补丁带着证明进入 PR、验证和审计。</p>
           </article>
           <article>
             <span>资产边界</span>
@@ -228,7 +238,7 @@
           <article>
             <span>平台</span>
             <strong>云厂商 / DevOps</strong>
-            <p>嵌入 AIOps、CI/CD、配置中心和工单系统，形成 Agent Infra 增值模块。</p>
+            <p>嵌入 AIOps、CI/CD、配置中心和工单系统，形成带证明 PR / 变更审批能力。</p>
           </article>
           <article>
             <span>资产</span>
@@ -243,8 +253,8 @@
         </div>
         <div class="flywheel">
           <div>事故证据</div>
-          <div>反事实实验</div>
-          <div>证据护照</div>
+          <div>反事实证明</div>
+          <div>PR 证据护照</div>
           <div>Skill / 基因包</div>
           <div>复用与分发</div>
         </div>
@@ -256,8 +266,8 @@
           <h2>60 秒讲清楚这个创意</h2>
         </div>
         <ol>
-          <li>先看时间线：说明代码、依赖、配置、流量在同一窗口内变化，不能靠猜。</li>
-          <li>点开平行宇宙：展示只有恢复连接池后失败率归零，因此主因被证明。</li>
+          <li>先看证明链：说明 A-CFX 不是自动修 Bug，而是带证明的软件变更基础设施。</li>
+          <li>再看时间线和平行宇宙：展示只有恢复连接池后失败率归零，因此主因被证明。</li>
           <li>切到缺陷基因：说明补丁要修一类问题，而不是只过原始样例。</li>
           <li>看补丁竞赛和证据护照：证明发布前有验证、风险、审批和回滚证据。</li>
           <li>最后看 Skill 工坊：事故经验自动沉淀成可复用能力。</li>

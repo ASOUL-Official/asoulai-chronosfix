@@ -2,6 +2,8 @@
 
 ChronosFix 复赛版采用七层结构：AgentTeams 协同层、Skill 能力层、云 Skills / MCP 工具层、AI 治理控制面、AI 网关层、Agent 数据层、证据可观测层。当前代码包用本地确定性引擎交付可运行 Demo，同时按官方推荐工具链定义可迁移接口。
 
+它的架构目标不是“自动修 Bug”，而是支撑一条 **Proof-Carrying Software Change Chain（带证明的软件变更链）**：事故证据 → 反事实证明根因 → 缺陷基因验证补丁 → RiskGate 审批 → GitHub PR / 证据护照 → Skill / 故障资产沉淀。
+
 ## 端到端链路
 
 ```text
@@ -31,6 +33,17 @@ Release Auditor 执行风险门禁、证据护照与审计归档
               v
 SkillForge 将成功经验沉淀为可复用 Skill 候选
 ```
+
+从软件变更视角看，上面的 Agent 流程对应六个可审查交付物：
+
+| 证明链环节 | 关键交付物 |
+|---|---|
+| 事故证据 | timeline、evidence index、impact metrics |
+| 反事实证明根因 | hypothesis contracts、counterfactual experiment result |
+| 缺陷基因验证补丁 | fault variants、patch tournament ranking、regression result |
+| RiskGate 审批 | risk score、approval state、rollback contract |
+| GitHub PR / 证据护照 | PR draft、checks、diff、Evidence Passport |
+| Skill / 故障资产沉淀 | skill candidates、fault gene package、proof template |
 
 ## AgentTeams 映射
 
@@ -94,7 +107,7 @@ Demo 输出复赛工程证据：
 - `engineering-metrics.json`：记录 Tool 成功率、补丁最差失败率、审批门禁、回滚契约和 Trace Schema。
 - `evaluation-report.md`：汇总自动化验证、复赛验收点和失败分支。
 
-当前增强版会记录 15 段 Trace，覆盖 EvidenceFusion、ChangeTimeline、BaselineReplay、HypothesisContract、CounterfactualReplay、FaultGenome、PatchTournament、RiskGate、EvidencePassport、SkillForge 和 ProofReport。
+当前增强版会记录 16 段 Trace，覆盖 EvidenceFusion、ChangeTimeline、BaselineReplay、HypothesisContract、CounterfactualReplay、FaultGenome、PatchTournament、RiskGate、EvidencePassport、GitHub Issue/PR、SkillForge 和 ProofReport。
 
 ## 上下文与 RAG 计划
 

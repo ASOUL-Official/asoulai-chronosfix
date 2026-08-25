@@ -5,6 +5,7 @@
 | 对齐官方参考 Baseline | 官方未提供代码仓库型 baseline；本方案以 OpsPilot Zero 示例为参考基线，对齐 AgentTeams、7 职能 Agent、Skill、MCP/适配器、Trace、审计和 Mock Demo 边界 | `docs/official-baseline.md` |
 | 真实企业场景 | 软件研发全流程中的线上故障定位、根因验证、补丁生成、发布审批、回滚与复盘 | `scenarios/checkout-timeout/scenario.json` |
 | 商业价值与行业复制 | 将事故复盘沉淀为故障基因包、证据护照模板和可复用 Skill，可服务研发组织、云厂商、DevOps 平台和高审计行业 | `docs/business-value.md` |
+| 底层逻辑清晰 | 以带证明的软件变更链统一事故证据、反事实根因、缺陷基因、RiskGate、GitHub PR、证据护照和 Skill 沉淀 | `docs/proof-carrying-change.md` |
 | 至少 3 个不同职能 Agent | 7 个 Agent：Commander、Timeline、Hypothesis、Universe、Patch、Verifier、Auditor | `docs/agent-identity.md` |
 | AgentTeams 为协同基座 | Manager-Workers、共享 Incident State、透明协作房间、人类审批、Worker Skill 分工 | `agentteams/chronosfix-team.yaml` |
 | 多 Agent 闭环 | 证据输入、任务拆解、上下文传递、工具调用、反事实实验、补丁竞赛、风险审批、证据沉淀、Skill 沉淀 | `evidence/trace.jsonl` |
@@ -23,7 +24,7 @@
 |---|---|---|---|
 | 故障时间机器 | AI 只看日志容易猜错根因 | 用反事实撤销实验把“相关性”变成“因果证据” | `CounterfactualReplay`、`proof-bundle.json` |
 | 缺陷基因实验室 | 补丁只修单个样例，容易回归 | 从一个事故繁殖出 8 个同源变体，逼补丁通过对抗测试 | `FaultGenome`、补丁竞赛结果 |
-| 证据护照 | 自动修复缺少发布可信度 | 补丁必须携带需求、因果、验证、风险、回滚、缺口声明 | `EvidencePassport`、`proof-report.md` |
+| PR 证据护照 | AI 参与的修复缺少发布可信度 | 补丁必须携带需求、因果、验证、风险、回滚、缺口声明，并进入 PR checks | `EvidencePassport`、`proof-report.md`、`github-pr.md` |
 | Skill 自进化工坊 | 事故经验复盘后沉睡在文档里 | 自动蒸馏成下次可复用 Skill 候选，形成组织记忆 | `SkillForge`、Skill 候选清单 |
 | 研发质量资产交易所 | 事故处理通常只是一次性成本 | 将故障基因、证据护照和 Skill 变成可复用、可分发、可商业化资产 | `docs/business-value.md`、Repair Cockpit 商业飞轮 |
 

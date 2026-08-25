@@ -131,9 +131,9 @@ p {
 h1 {
   margin-bottom: 8px;
   max-width: none;
-  font-size: clamp(32px, 3.1vw, 50px);
-  line-height: 0.94;
-  letter-spacing: -0.065em;
+  font-size: clamp(28px, 2.45vw, 40px);
+  line-height: 1;
+  letter-spacing: -0.045em;
   white-space: nowrap;
 }
 
@@ -682,17 +682,77 @@ h2 {
 .baseline-panel,
 .engineering-panel,
 .infra-panel,
-.originality-panel {
+.originality-panel,
+.proof-chain-panel {
   margin-top: 18px;
 }
 
 .baseline-grid,
 .engineering-grid,
 .infra-grid,
-.originality-grid {
+.originality-grid,
+.proof-chain {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 14px;
+}
+
+.proof-chain-panel {
+  margin-bottom: 22px;
+}
+
+.proof-chain {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.proof-chain article {
+  position: relative;
+  min-height: 198px;
+  padding: 20px;
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  border-radius: 24px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 82% 6%, rgba(34, 211, 238, 0.18), transparent 7rem),
+    rgba(255, 255, 255, 0.04);
+}
+
+.proof-chain article:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  right: 12px;
+  top: 17px;
+  color: rgba(34, 211, 238, 0.62);
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.proof-chain span {
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  margin-bottom: 18px;
+  border-radius: 999px;
+  color: #07111f;
+  background: linear-gradient(135deg, var(--cyan), var(--green));
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.proof-chain strong {
+  display: block;
+  margin-bottom: 12px;
+  color: #f8fafc;
+  font-size: 18px;
+  letter-spacing: -0.03em;
+}
+
+.proof-chain p {
+  margin-bottom: 0;
+  color: #cbd5e1;
+  font-size: 14px;
+  line-height: 1.65;
 }
 
 .baseline-grid article,
@@ -907,12 +967,14 @@ h2 {
   .engineering-grid,
   .infra-grid,
   .originality-grid,
+  .proof-chain,
   .business-grid,
   .flywheel {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .flywheel div::after {
+  .flywheel div::after,
+  .proof-chain article::after {
     display: none;
   }
 }
@@ -924,12 +986,13 @@ h2 {
 
   .metric-grid,
   .genome-grid,
-  .baseline-grid,
-  .engineering-grid,
-  .infra-grid,
-  .originality-grid,
-  .business-grid,
-  .flywheel,
+    .baseline-grid,
+    .engineering-grid,
+    .infra-grid,
+    .originality-grid,
+    .proof-chain,
+    .business-grid,
+    .flywheel,
   .universe-detail,
   .patch-board {
     grid-template-columns: 1fr;

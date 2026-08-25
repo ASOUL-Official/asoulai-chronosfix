@@ -8,9 +8,9 @@ ChronosFix 把软件故障处理拆成 9 个可复用 Skill。每个 Skill 都�
 | ChangeTimeline | 自定义 Skill | 重建故障前后事件序列 | ChangeEvent 列表 | 排序后的时间线 | 不执行外部变更 | 可用于发布复盘和事故复盘 |
 | CounterfactualReplay | 自定义 Skill | 验证根因假设 | Baseline State、Hypothesis Intervention | 失败率、P99、因果置信度 | 只在隔离环境回放 | 可用于性能回退、依赖升级、配置变更分析 |
 | FaultGenome | 创新 Skill | 从已证明根因繁殖故障变体 | Baseline、实验结果、种子场景 | 同源缺陷变体族 | 只生成测试场景，不发布变更 | 可把一次事故变成一组回归测试资产 |
-| PatchTournament | 自定义 Skill | 比较多个修复方案 | PatchCandidate、故障变体 | 补丁排名、平均/最差失败率、风险成本分 | 只产出建议，不直接发布 | 可用于自动修复、代码评审和发布前验证 |
+| PatchTournament | 自定义 Skill | 比较多个修复方案 | PatchCandidate、故障变体 | 补丁排名、平均/最差失败率、风险成本分 | 只产出建议，不直接发布 | 可用于 AI 修复、代码评审和发布前验证 |
 | RiskGate | 安全 Skill | 中高风险动作前审批 | 选中补丁、风险分、审批状态 | approved 或 blocked-awaiting-human | 未审批时阻断执行 | 可用于运维、安全、FinOps 等高风险动作 |
-| EvidencePassport | 创新 Skill | 为补丁生成发布证明 | Incident State、选中补丁、Trace | 需求、因果、验证、风险、回滚、缺口声明 | 缺少关键声明时不得标记可发布 | 让自动修复具备可解释、可审计、可追责能力 |
+| EvidencePassport | 创新 Skill | 为补丁生成发布证明 | Incident State、选中补丁、Trace | 需求、因果、验证、风险、回滚、缺口声明 | 缺少关键声明时不得标记可发布 | 让 AI 参与的软件变更具备可解释、可审计、可追责能力 |
 | SkillForge | 创新 Skill | 从事故中沉淀可复用 Skill | 已完成事故、证据护照、故障变体 | Skill 候选、Schema、评测案例、安全边界 | 只生成候选，不自动上线新 Skill | 建立“事故变资产”的组织学习闭环 |
 | ProofReport | 自定义 Skill | 产出证据化 PR/报告 | Incident State、Metrics、Trace | proof-report.md、proof-bundle.json | 不包含密钥或原始敏感数据 | 可用于审计、复盘和知识库沉淀 |
 

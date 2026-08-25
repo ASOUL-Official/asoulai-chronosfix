@@ -14,6 +14,14 @@ const data = {
     ["10:15", "流量上涨", "午间活动流量升至 120 RPS", "checkout.rps"],
     ["10:16", "告警触发", "订单创建失败率和 P99 延迟同时升高", "checkout-5xx"],
   ],
+  proofChain: [
+    ["01", "事故证据", "Issue、Git、依赖、配置、流量、告警和 Trace 被合并为同一事实窗口。"],
+    ["02", "反事实证明根因", "在平行版本里撤销可疑变更并重放事故，证明连接池缩容才是主因。"],
+    ["03", "缺陷基因验证补丁", "从已证明事故繁殖 8 个同源变体，让补丁修一类问题。"],
+    ["04", "RiskGate 审批", "中高风险动作必须人工确认，保留 approved / blocked / rollback 证据。"],
+    ["05", "GitHub PR / 证据护照", "补丁生成 PR 草案、checks、diff、因果声明、风险声明和回滚声明。"],
+    ["06", "Skill / 故障资产沉淀", "事故复盘沉淀为 Skill 候选、故障基因包和证据模板。"],
+  ],
   experiments: [
     {
       id: "H-CODE",
@@ -203,6 +211,21 @@ function renderTimeline() {
     .join("");
 }
 
+function renderProofChain() {
+  const grid = document.querySelector("#proof-chain-list");
+  grid.innerHTML = data.proofChain
+    .map(
+      ([step, title, desc]) => `
+        <article>
+          <span>${step}</span>
+          <strong>${title}</strong>
+          <p>${desc}</p>
+        </article>
+      `,
+    )
+    .join("");
+}
+
 function renderExperiments(activeId = "H-POOL") {
   const tabs = document.querySelector("#experiment-tabs");
   tabs.innerHTML = data.experiments
@@ -368,6 +391,7 @@ function hydrateMetrics() {
 }
 
 hydrateMetrics();
+renderProofChain();
 renderTimeline();
 renderExperiments();
 renderGenome();

@@ -1,6 +1,6 @@
 # 复赛参赛指南对照矩阵
 
-本矩阵依据最新版《赛道一：新智基座丨Agent Infra》指南整理，目标是让评委能快速判断 AsoulAI ChronosFix（A-CFX）是否具备可运行、可验证、可审计和可持续演进能力。
+本矩阵依据最新版《赛道一：新智基座丨Agent Infra》指南整理，目标是让评委能快速判断 AsoulAI ChronosFix（A-CFX）是否具备可运行、可验证、可审计和可持续演进能力。复赛版的统一主线是“带证明的软件变更基础设施”：事故证据 → 反事实证明根因 → 缺陷基因验证补丁 → RiskGate 审批 → GitHub PR / 证据护照 → Skill / 故障资产沉淀。
 
 ## 1. 复赛必交材料
 
@@ -14,8 +14,8 @@
 
 | 指南要求 | A-CFX 设计 | 证据文件 |
 |---|---|---|
-| 场景与方案更新 | 从“事故修复 Demo”升级为“研发质量资产平台”：故障时间机器、缺陷基因、证据护照、Skill 飞轮 | `README.md`、`docs/business-value.md` |
-| 完整场景链路 | Issue/日志/Trace/Git/配置 → AgentTeams 拆解 → 反事实实验 → 补丁竞赛 → RiskGate → Evidence Passport → SkillForge | `demo.py`、`evidence/proof-report.md` |
+| 场景与方案更新 | 从“事故修复 Demo”升级为“带证明的软件变更基础设施”：故障时间机器、缺陷基因、证据护照、GitHub PR、Skill 飞轮 | `README.md`、`docs/proof-carrying-change.md`、`docs/business-value.md` |
+| 完整场景链路 | Issue/日志/Trace/Git/配置 → AgentTeams 拆解 → 反事实实验 → 缺陷基因验证 → RiskGate → GitHub PR / Evidence Passport → SkillForge | `demo.py`、`evidence/proof-report.md`、`evidence/github-pr.md` |
 | 样例输入输出 | 样例输入为订单接口超时事故，输出为 proof-bundle、proof-report、trace、metrics、AgentTeams transcript | `scenarios/checkout-timeout/scenario.json`、`evidence/` |
 | 日志 / Trace / 指标 | Trace 记录 Agent/Skill 调用；Log 记录事件与权限范围；Metrics 记录根因、补丁、变体、成功率和耗时 | `evidence/trace.jsonl`、`evidence/run-log.jsonl`、`evidence/engineering-metrics.json` |
 | GitHub Issue / PR 链路 | 事故进入 Issue，选中补丁形成 PR 草案，并附带 diff、checks、RiskGate 状态和审计事件 | `docs/github-issue-pr-flow.md`、`evidence/github-issue.md`、`evidence/github-pr.md` |

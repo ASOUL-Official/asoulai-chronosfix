@@ -21,7 +21,7 @@
 | 7 个职能 Agent | Commander、Timeline、Hypothesis、Universe、Patch、Verifier、Auditor 覆盖诊断、验证、发布和沉淀 | `docs/agent-identity.md` |
 | Skill 工程化 | 9 个可复用 Skill，带输入输出、安全边界、失败处理和复用价值 | `docs/skill-specs.md` |
 | MCP/适配器契约 | 初赛使用本地适配器，复赛迁移到 Git、CI、日志、Trace、配置中心、工单 MCP Server | `docs/architecture.md` |
-| 可观测与审计 | 输出 15 段 Trace、proof-bundle、proof-report、Evidence Passport | `evidence/trace.jsonl` |
+| 可观测与审计 | 输出 16 段 Trace、proof-bundle、proof-report、GitHub PR 草案、Evidence Passport | `evidence/trace.jsonl` |
 | 安全边界 | RiskGate 阻断中高风险无人值守发布，保留回滚与人工审批 | `docs/safety-and-audit.md` |
 | 可演示初赛闭环 | 本地 Demo + Repair Cockpit + PPT + 评审入口说明 | `demo.py`、`repair-cockpit/index.html` |
 
@@ -30,9 +30,10 @@
 | 增强点 | 相比官方示例的差异化价值 |
 |---|---|
 | 软件研发全流程协同 | 从运维故障自愈迁移到 Issue、Git、依赖、配置、CI、发布审批和复盘的研发闭环，更贴合方向三。 |
-| 故障时间机器 | 不只给 RCA 结论，而是用“撤销可疑变更—重放事故—比较指标”的反事实实验把相关性变成因果证据。 |
+| 带证明的软件变更链 | 不只给 RCA 结论，而是把事故证据、反事实根因、缺陷基因验证、RiskGate、GitHub PR / 证据护照和 Skill 沉淀串成可审查链路。 |
+| 故障时间机器 | 用“撤销可疑变更—重放事故—比较指标”的反事实实验把相关性变成因果证据。 |
 | 缺陷基因实验室 | 从一个已证明故障繁殖 8 个同源变体，避免补丁只修单一样例，提升回归防护和评测价值。 |
-| 证据护照 | 每个补丁必须携带需求、因果、验证、风险、回滚和缺口声明，能进入 PR、变更单和发布审批。 |
+| PR 证据护照 | 每个补丁必须携带需求、因果、验证、风险、回滚和缺口声明，能进入 GitHub PR、变更单和发布审批。 |
 | 研发质量资产平台 | 把事故复盘沉淀为故障基因包、证据护照模板、可评测 Skill，形成可复用、可分发、可商业化的资产飞轮。 |
 
 ## 放入提交物的方式

@@ -18,6 +18,7 @@
 
 - [x] 最新参赛指南要求映射：`docs/semifinal-guide-matrix.md`
 - [x] 官方推荐 Agent Infra 映射：`docs/official-infra-mapping.md`
+- [x] 带证明的软件变更基础设施底层逻辑：`docs/proof-carrying-change.md`
 - [x] 接口 Schema、数据流与等价 MCP 契约：`docs/interface-schema.md`
 - [x] 部署、运行与验证说明：`docs/deployment-and-verification.md`
 - [x] GitHub Issue / PR 模拟链路：`docs/github-issue-pr-flow.md`
@@ -60,6 +61,7 @@
 - [x] 3 个 Skill 候选沉淀。
 - [x] 16 段 Trace Span。
 - [x] 1 个可交互修复驾驶舱。
+- [x] 1 条 Proof-Carrying Software Change Chain。
 - [x] 1 条研发质量资产商业飞轮。
 - [x] 中风险补丁人工审批门禁。
 
@@ -69,6 +71,7 @@
 - [x] 补齐官方云 Skills、Nacos、Higress、PolarDB、UnifiedModel、RocketMQ、AgentLoop 映射。
 - [x] 增加日志、Metrics、AgentTeams transcript 和复赛评测报告。
 - [x] 增加 GitHub Issue / PR 模拟链路，补齐真实研发协作流证据。
+- [x] 增加“事故证据 → 反事实根因 → 缺陷基因 → RiskGate → PR 证据护照 → Skill 沉淀”的统一底层逻辑。
 - [x] 增加部署复现和失败处理说明。
 - [ ] 决赛接入真实 Git 仓库与 PR。
 - [ ] 决赛接入 CI、压测和日志 Trace 平台。

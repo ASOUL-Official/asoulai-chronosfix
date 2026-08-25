@@ -1,10 +1,34 @@
-# AsoulAI ChronosFix（A-CFX）：软件故障时间机器
+# AsoulAI ChronosFix（A-CFX）：带证明的软件变更基础设施
 
 队伍名称：**AsoulAI**
 
-AsoulAI ChronosFix（A-CFX）是面向 GOAI 新智基座 Agent Infra「方向三：软件研发全流程协同」的复赛工程验证方案与可运行 Demo。它解决的不是“让 AI 看日志猜原因”，而是把线上故障修复升级为一条可回放、可验证、可审计、可复用的多 Agent 实验闭环。
+AsoulAI ChronosFix（A-CFX）是面向 GOAI 新智基座 Agent Infra「方向三：软件研发全流程协同」的复赛工程验证方案与可运行 Demo。它的底层逻辑不是“让 AI 自动修 Bug”，而是构建一套 **Proof-Carrying Software Change Infra（带证明的软件变更基础设施）**：每一次软件变更进入 PR、审批和发布链路前，都必须携带可回放、可验证、可审计、可复用的证据。
 
-一句话：A-CFX 让研发团队在事故发生后，自动重建时间线，在多个平行版本里撤销代码、配置、依赖等可疑变更，用反事实实验证明真正根因，再让补丁带着证据护照进入发布审批；更进一步，它把每次事故沉淀成可复用、可审计、可分发的“研发质量资产”。
+一句话：A-CFX 把线上事故转化为一条带证明的软件变更链：**事故证据 → 反事实证明根因 → 缺陷基因验证补丁 → RiskGate 审批 → GitHub PR / 证据护照 → Skill / 故障资产沉淀**。它让研发团队不是“相信 AI 的结论”，而是审查 AI 交付的证据。
+
+## 底层逻辑：Proof-Carrying Software Change Infra
+
+A-CFX 的核心判断是：企业不是缺少一个会生成补丁的 Agent，而是缺少一套能把“事故、代码、验证、审批、审计、复盘资产”串起来的软件变更基础设施。
+
+```text
+事故证据
+  -> 反事实证明根因
+  -> 缺陷基因验证补丁
+  -> RiskGate 审批
+  -> GitHub PR / 证据护照
+  -> Skill / 故障资产沉淀
+```
+
+这条链把所有创新点收束到一个可评审、可落地、可商业化的主线上：
+
+- **事故证据**：从 Issue、Git、依赖、配置、流量、告警、Trace 中抽取同一时间窗口的事实。
+- **反事实证明根因**：在平行版本里撤销可疑变更并重放事故，把“时间相关”变成“因果可证”。
+- **缺陷基因验证补丁**：从已证明根因繁殖同源故障变体，逼补丁修一类问题，而不是只修原始样例。
+- **RiskGate 审批**：中高风险动作必须人类确认，系统保留 blocked、approved、rollback 和 evidence gap。
+- **GitHub PR / 证据护照**：补丁不只给 diff，还携带因果、验证、风险、回滚、缺口声明，可直接进入研发协作流。
+- **Skill / 故障资产沉淀**：把事故复盘蒸馏为可评测 Skill、故障基因包和证据模板，形成组织级质量资产飞轮。
+
+完整设计说明见 [`docs/proof-carrying-change.md`](docs/proof-carrying-change.md)。
 
 ## 评审快速使用
 
@@ -16,7 +40,7 @@ AsoulAI ChronosFix（A-CFX）是面向 GOAI 新智基座 Agent Infra「方向三
 4. **官方 Baseline 对照**：查看 [`docs/official-baseline.md`](docs/official-baseline.md)，说明本方案如何对齐官方 OpsPilot Zero 示例，并在方向三上增强。
 5. **原创性与命名边界**：查看 [`docs/originality-check.md`](docs/originality-check.md)，说明 A-CFX 如何避免与 GitHub 泛 Chronos / debugging-first 类项目混淆。
 6. **可验证输出**：查看 [`evidence/proof-report.md`](evidence/proof-report.md)、[`evidence/proof-bundle.json`](evidence/proof-bundle.json)、[`evidence/trace.jsonl`](evidence/trace.jsonl) 和 [`evidence/github-pr.md`](evidence/github-pr.md)。
-7. **复赛工程材料**：查看 [`docs/semifinal-guide-matrix.md`](docs/semifinal-guide-matrix.md)、[`docs/official-infra-mapping.md`](docs/official-infra-mapping.md)、[`docs/interface-schema.md`](docs/interface-schema.md)、[`docs/deployment-and-verification.md`](docs/deployment-and-verification.md)、[`docs/github-issue-pr-flow.md`](docs/github-issue-pr-flow.md)。
+7. **复赛工程材料**：查看 [`docs/proof-carrying-change.md`](docs/proof-carrying-change.md)、[`docs/semifinal-guide-matrix.md`](docs/semifinal-guide-matrix.md)、[`docs/official-infra-mapping.md`](docs/official-infra-mapping.md)、[`docs/interface-schema.md`](docs/interface-schema.md)、[`docs/deployment-and-verification.md`](docs/deployment-and-verification.md)、[`docs/github-issue-pr-flow.md`](docs/github-issue-pr-flow.md)。
 
 本地复现只需要 Python 标准库：
 
@@ -42,34 +66,34 @@ repair-cockpit/index.html
 
 ## 原创性与命名边界
 
-公开展示统一使用 **AsoulAI ChronosFix（A-CFX）**，避免与 GitHub 上泛 Chronos / debugging-first 类项目混淆。A-CFX 的核心差异不是单点调试模型或自动补丁脚本，而是“反事实根因证明 + 故障基因实验室 + 证据护照 + Skill 飞轮”的研发质量资产闭环。详见 `docs/originality-check.md`。
+公开展示统一使用 **AsoulAI ChronosFix（A-CFX）**，避免与 GitHub 上泛 Chronos / debugging-first 类项目混淆。A-CFX 的核心差异不是单点调试模型或自动补丁脚本，而是“带证明的软件变更链 + 反事实根因证明 + 故障基因验证 + PR 证据护照 + Skill 飞轮”的研发质量资产闭环。详见 `docs/originality-check.md`。
 
-## 核心创意
+## 核心创意如何对应证明链
 
 1. **故障时间机器**
-   多 Agent 不直接下结论，而是把事故前后的 Git、依赖、配置、流量、告警证据拼成时间线；每个根因假设都必须在隔离平行宇宙中被撤销、重放、证伪或证实。
+   对应“事故证据 → 反事实证明根因”。多 Agent 不直接下结论，而是把事故前后的 Git、依赖、配置、流量、告警证据拼成时间线；每个根因假设都必须在隔离平行宇宙中被撤销、重放、证伪或证实。
 
 2. **缺陷基因实验室**
-   系统从一个已证明的故障中繁殖出一组同源变体，例如边界流量、恢复期尖峰、下游抖动、隐性配置漂移。补丁必须通过这组“故障家族”而不是只修原始样例。
+   对应“缺陷基因验证补丁”。系统从一个已证明的故障中繁殖出一组同源变体，例如边界流量、恢复期尖峰、下游抖动、隐性配置漂移。补丁必须通过这组“故障家族”而不是只修原始样例。
 
 3. **证据护照**
-   每个候选补丁都携带需求声明、因果声明、验证声明、风险声明、回滚声明和缺口声明。没有证据护照的补丁不能被标记为可发布。
+   对应“GitHub PR / 证据护照”。每个候选补丁都携带需求声明、因果声明、验证声明、风险声明、回滚声明和缺口声明。没有证据护照的补丁不能被标记为可发布。
 
 4. **Skill 自进化工坊**
-   一次事故处理完成后，系统会把有效经验蒸馏成可复用 Skill 候选，例如连接池容量守卫、反事实配置回放、带证明补丁生成器，让团队越用越强。
+   对应“Skill / 故障资产沉淀”。一次事故处理完成后，系统会把有效经验蒸馏成可复用 Skill 候选，例如连接池容量守卫、反事实配置回放、带证明补丁生成器，让团队越用越强。
 
 5. **研发质量资产交易所**
    事故不再只是成本中心。A-CFX 会把一次修复沉淀为三类资产：故障基因包、证据护照模板和可评测 Skill。企业内部可在多个研发团队复用，开源社区可沉淀行业样例，云厂商或平台方可把它变成面向 CI/CD、AIOps、DevSecOps 的 Agent Infra 增值能力。
 
 ## 商业价值与落地模式
 
-A-CFX 的商业命题是：把线上事故处理从“专家临场救火”升级为“可复用质量资产生产线”。它面向三类付费场景：
+A-CFX 的商业命题是：把线上事故处理从“专家临场救火”升级为“带证明的软件变更生产线”。它面向三类付费场景：
 
 - **中大型研发组织**：接入 Git、CI、日志、Trace、配置中心和工单系统，减少故障定位时间、降低误修复风险，并把复盘沉淀成跨团队复用的 Skill。
-- **云厂商与 DevOps 平台**：作为 Agent Infra 插件能力嵌入 APM、CI/CD、配置中心、工单和发布平台，为客户提供“带证据的自动修复”。
+- **云厂商与 DevOps 平台**：作为 Agent Infra 插件能力嵌入 APM、CI/CD、配置中心、工单和发布平台，为客户提供“带证明的 PR / 变更审批能力”。
 - **开源与生态市场**：开放故障回放集、MCP 适配器模板和 Skill 规格，让社区贡献行业故障基因包，形成越用越强的数据与能力飞轮。
 
-可收费形态包括团队版 SaaS、企业私有化部署、云市场插件、故障基因包/Skill 市场和高风险行业的审计合规模块。核心护城河不是单个模型，而是持续积累的反事实事故数据、补丁验证结果、证据护照和可复用 Skill 资产库。
+可收费形态包括团队版 SaaS、企业私有化部署、云市场插件、故障基因包/Skill 市场和高风险行业的审计合规模块。核心护城河不是单个模型，而是持续积累的反事实事故数据、补丁验证结果、PR 证据护照和可复用 Skill 资产库。
 
 ## 复赛交付内容
 

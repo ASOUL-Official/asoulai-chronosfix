@@ -1,6 +1,12 @@
 # 官方推荐 Agent Infra 映射
 
-A-CFX 的原则不是堆叠工具，而是把“软件故障时间机器”映射为可替换、可治理、可审计的 Agent Infra。当前复赛包采用本地确定性引擎交付可复现 Demo，同时给出迁移到官方推荐基础设施的接口边界。
+A-CFX 的原则不是堆叠工具，而是把“带证明的软件变更链”映射为可替换、可治理、可审计的 Agent Infra。当前复赛包采用本地确定性引擎交付可复现 Demo，同时给出迁移到官方推荐基础设施的接口边界。
+
+统一主线：
+
+```text
+事故证据 -> 反事实证明根因 -> 缺陷基因验证补丁 -> RiskGate 审批 -> GitHub PR / 证据护照 -> Skill / 故障资产沉淀
+```
 
 参考链接：
 
@@ -35,7 +41,7 @@ A-CFX 的原则不是堆叠工具，而是把“软件故障时间机器”映�
 | 指南核验点 | A-CFX 映射 |
 |---|---|
 | 角色编排 | Human=Release Owner；Manager=Incident Commander；Workers=Timeline/Hypothesis/Universe/Patch/Verifier/Auditor/Skill Curator |
-| 任务拆解 | Commander 按 Evidence → Timeline → Hypothesis → Replay → Genome → Tournament → RiskGate → Passport → SkillForge 拆解 |
+| 任务拆解 | Commander 按 Evidence → Counterfactual Proof → Fault Genome → RiskGate → PR / Passport → SkillForge 拆解 |
 | 上下文传递 | Incident State 作为共享状态；每个 Skill 只读或写入明确字段 |
 | 协同执行 | 当前为确定性顺序执行，复赛接 RocketMQ 后可让 Hypothesis、Replay、Patch Scoring 并行 |
 | 状态追踪 | trace_id/span_id、agent、skill、status、payload 写入 trace；agentteams-run 记录任务与状态 |
