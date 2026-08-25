@@ -1,22 +1,23 @@
 {
   "repository": "ASOUL-Official/asoulai-chronosfix",
+  "mode": "local-draft",
   "number": 42,
-  "state": "open",
+  "number_kind": "local-placeholder",
+  "state": "open-draft",
   "title": "[SEV-2] 订单创建接口在午间流量下出现高失败率与长尾延迟",
   "labels": [
     "incident",
-    "sev-2",
-    "checkout",
     "agentteams",
-    "needs-riskgate"
+    "needs-riskgate",
+    "local-draft",
+    "sev-2",
+    "checkout-timeout"
   ],
-  "assignees": [
-    "incident-commander",
-    "release-auditor"
-  ],
+  "assignees": [],
   "created_from": {
     "incident_id": "INC-2026-0816-001",
-    "trace_id": "5408b7a5223b5c79a16bd69f1b06ea34",
+    "run_id": "run-1dc8539cfe9b40abb4ec1504e50ca512",
+    "trace_id": "2c59718376e24a778d34af02a6c2a85a",
     "scenario": "scenarios/checkout-timeout/scenario.json"
   },
   "impact": {
@@ -77,16 +78,17 @@
     }
   ],
   "acceptance_criteria": [
-    "反事实实验必须证明主因，而不是只给日志总结。",
-    "候选补丁必须通过缺陷基因变体回归。",
-    "PR 必须包含 RiskGate 状态、回滚契约和证据护照链接。",
-    "中高风险变更无人工审批时必须保持 blocked-awaiting-human。"
+    "反事实实验必须提供可复查的主因证据。",
+    "选中变更必须通过全部必选验证检查。",
+    "PR 必须绑定场景、精确 changes、rollback_changes 与 RiskGate 决策。",
+    "缺少检查、回滚或必要人工审批时，PR 必须保持 draft。"
   ],
   "linked_artifacts": [
     "trace.jsonl",
     "run-log.jsonl",
     "proof-bundle.json",
     "proof-report.md",
+    "run-manifest.json",
     "github-pr.md"
   ]
 }

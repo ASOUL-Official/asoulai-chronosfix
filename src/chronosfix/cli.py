@@ -29,23 +29,40 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Record the human approval needed for the medium-risk winning patch.",
     )
+    parser.add_argument(
+        "--approver",
+        help="Named human approver. Required together with --approve for medium/high risk patches.",
+    )
+    parser.add_argument(
+        "--approval-reason",
+        help="Human-readable reason recorded in the approval audit trail.",
+    )
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    result = run_pipeline(args.scenario, args.output, args.approve)
+    if args.approve and not args.approver:
+        raise SystemExit("--approve requires --approver; a boolean alone is not an auditable approval")
+    result = run_pipeline(
+        args.scenario,
+        args.output,
+        args.approve,
+        approver=args.approver,
+        approval_reason=args.approval_reason,
+    )
     state = result["state"]
-    primary = next(item for item in state.experiments if item.classification == "primary-cause")
+    primary = next((item for item in state.experiments if item.classification == "primary-cause"), None)
     summary = {
         "incident_id": state.incident_id,
+        "run_id": result["run_id"],
         "trace_id": result["trace_id"],
-        "primary_cause": primary.title,
-        "causal_confidence": primary.causal_confidence,
+        "primary_cause": primary.title if primary else None,
+        "intervention_effect_score": primary.intervention_effect_score if primary else None,
         "selected_patch": state.selected_patch.title,
-        "approval": state.approval,
+        "quality_gate": state.quality_gate,
+        "release_decision": state.approval,
         "proof_report": str(args.output / "proof-report.md"),
     }
     print(json.dumps(summary, ensure_ascii=False, indent=2))
     return 0 if state.approval == "approved" else 2
-

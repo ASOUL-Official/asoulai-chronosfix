@@ -3,9 +3,9 @@
 ## 开放范围
 
 - ChronosFix 核心编排代码。
-- 9 个核心 Skill 的输入输出 Schema 和实现。
-- Agent Identity 清单与 AgentTeams 编排草案。
-- checkout-timeout 样例故障数据。
+- 9 个核心业务 Skill、官方 SLS 只读 Adapter 的输入输出契约与实现。
+- Agent Identity、1 Manager / 8 Worker / 1 Team / 1 Human 的 AgentTeams v1beta1 资源声明和离线校验器。
+- 12 个 Golden / Badcase / 证据不足合成样例。
 - 自动化测试、反事实实验、故障基因生成和补丁竞赛评测脚本。
 - MCP 适配器契约示例。
 
@@ -17,7 +17,7 @@
 
 ## 许可证
 
-计划采用 Apache-2.0。第三方依赖目前仅使用 Python 标准库；复赛接入 AgentTeams、MCP、CI 或云产品时，将补充依赖版本和许可证清单。
+仓库已采用 Apache-2.0。核心流水线只依赖 Python 标准库；AgentTeams 清单校验可选依赖 PyYAML。`SBOM.json` 与 `THIRD_PARTY_NOTICES.md` 记录当前依赖、上游资源及许可证边界；后续新增 Runtime、MCP 或云 SDK 时必须同步更新。
 
 ## 数据与隐私
 
@@ -28,7 +28,7 @@
 评审可在本地运行：
 
 ```powershell
-python demo.py --approve --output evidence
+python demo.py --approve --approver "AsoulAI Release Owner" --approval-reason "Semifinal evidence review" --output evidence
 ```
 
 然后查看：

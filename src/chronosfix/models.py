@@ -20,6 +20,7 @@ class ServiceState:
     dependency_latency_factor: float
     code_version: str
     adaptive_min_pool: bool = False
+    code_latency_factor: float = 1.0
 
     def evolve(self, changes: dict[str, Any]) -> "ServiceState":
         data = asdict(self)
@@ -52,8 +53,9 @@ class ExperimentResult:
     baseline_failure_rate: float
     counterfactual_failure_rate: float
     absolute_effect: float
-    causal_confidence: float
+    intervention_effect_score: float
     classification: str
+    classification_reason: str = ""
 
 
 @dataclass(frozen=True)
@@ -64,6 +66,7 @@ class PatchCandidate:
     risk: float
     cost: float
     rollback: str
+    rollback_changes: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -78,6 +81,8 @@ class PatchScore:
     cost: float
     rollback: str
     results: list[dict[str, Any]]
+    changes: dict[str, Any] = field(default_factory=dict)
+    rollback_changes: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -87,6 +92,7 @@ class FaultVariant:
     trigger: str
     changes: dict[str, Any]
     expected_risk: str
+    mandatory: bool = True
 
 
 @dataclass(frozen=True)
@@ -98,6 +104,7 @@ class EvidencePassport:
     risk_claims: list[str]
     rollback_claims: list[str]
     missing_claims: list[str]
+    integrity: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -127,4 +134,9 @@ class IncidentState:
     skill_candidates: list[SkillCandidate] = field(default_factory=list)
     selected_patch: PatchScore | None = None
     approval: str = "not-requested"
+    quality_gate: str = "not-evaluated"
+    gate_result: dict[str, Any] = field(default_factory=dict)
+    approval_record: dict[str, Any] = field(default_factory=dict)
+    run_id: str = ""
+    scenario_path: str = ""
     evidence_index: list[str] = field(default_factory=list)

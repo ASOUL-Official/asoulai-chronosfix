@@ -1,6 +1,18 @@
 {
   "incident_id": "INC-2026-0825-004",
   "title": "恢复窗口流量尖峰击穿低连接池配置",
+  "ground_truth": {
+    "case_type": "golden",
+    "model_support": "supported",
+    "expected_outcome": "diagnose",
+    "expected_primary_causes": ["H-POOL"],
+    "expected_amplifiers": ["H-DEPENDENCY"],
+    "expected_not_causal": ["H-CODE"],
+    "fixture_scope": "pipeline-and-evaluation",
+    "known_actual_causes": ["H-POOL"],
+    "rationale": "当前确定性容量模型中，恢复连接池可解释基线故障，库存客户端变慢只放大容量压力。",
+    "boundary_note": "合成恢复尖峰回放；不模拟真实任务队列、背压、重试或请求到达分布。"
+  },
   "baseline": {
     "traffic_rps": 180.0,
     "pool_size": 14,
@@ -27,9 +39,9 @@
     {"name": "larger-replay-slow-inventory", "changes": {"traffic_rps": 205.0, "dependency_latency_factor": 1.65}}
   ],
   "patch_candidates": [
-    {"id": "P-ROLLBACK-CODE", "title": "回滚恢复任务日志级别调整", "changes": {"code_version": "pre-d09aa7"}, "risk": 0.12, "cost": 0.20, "rollback": "重新部署 d09aa7"},
-    {"id": "P-PIN-DEPENDENCY", "title": "将库存客户端回退至 4.3", "changes": {"dependency_latency_factor": 1.0}, "risk": 0.30, "cost": 0.35, "rollback": "恢复 inventory-client 4.4 锁文件"},
-    {"id": "P-RESTORE-POOL", "title": "恢复连接池 24 并增加恢复窗口容量门禁", "changes": {"pool_size": 24}, "risk": 0.30, "cost": 0.15, "rollback": "恢复 db.pool.maxSize=14 配置快照"},
-    {"id": "P-ADAPTIVE-GUARD", "title": "启用自适应连接池下限保护", "changes": {"pool_size": 24, "adaptive_min_pool": true}, "risk": 0.55, "cost": 0.45, "rollback": "关闭 adaptive_min_pool 并恢复配置快照"}
+    {"id": "P-ROLLBACK-CODE", "title": "回滚恢复任务日志级别调整", "changes": {"code_version": "pre-d09aa7"}, "rollback_changes": {"code_version": "d09aa7"}, "risk": 0.12, "cost": 0.20, "rollback": "重新部署 d09aa7"},
+    {"id": "P-PIN-DEPENDENCY", "title": "将库存客户端回退至 4.3", "changes": {"dependency_latency_factor": 1.0}, "rollback_changes": {"dependency_latency_factor": 1.4}, "risk": 0.30, "cost": 0.35, "rollback": "恢复 inventory-client 4.4 锁文件"},
+    {"id": "P-RESTORE-POOL", "title": "恢复连接池 24 并增加恢复窗口容量门禁", "changes": {"pool_size": 24}, "rollback_changes": {"pool_size": 14}, "risk": 0.30, "cost": 0.15, "rollback": "恢复 db.pool.maxSize=14 配置快照"},
+    {"id": "P-ADAPTIVE-GUARD", "title": "启用自适应连接池下限保护", "changes": {"pool_size": 24, "adaptive_min_pool": true}, "rollback_changes": {"pool_size": 14, "adaptive_min_pool": false}, "risk": 0.55, "cost": 0.45, "rollback": "关闭 adaptive_min_pool 并恢复配置快照"}
   ]
 }

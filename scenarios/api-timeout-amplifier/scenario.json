@@ -1,6 +1,18 @@
 {
   "incident_id": "INC-2026-0825-007",
   "title": "API timeout 策略放大连接池缩容故障",
+  "ground_truth": {
+    "case_type": "golden",
+    "model_support": "supported",
+    "expected_outcome": "diagnose",
+    "expected_primary_causes": ["H-POOL"],
+    "expected_amplifiers": ["H-DEPENDENCY"],
+    "expected_not_causal": ["H-CODE"],
+    "fixture_scope": "pipeline-and-evaluation",
+    "known_actual_causes": ["H-POOL"],
+    "rationale": "当前容量方程中恢复连接池可消除基线失败，timeout 依赖延迟是放大因素。",
+    "boundary_note": "合成容量回放；不包含真实网关 timeout 栈和端到端请求。"
+  },
   "baseline": {
     "traffic_rps": 150.0,
     "pool_size": 12,
@@ -27,9 +39,9 @@
     {"name": "peak-tail-timeout", "changes": {"traffic_rps": 172.0, "dependency_latency_factor": 1.75}}
   ],
   "patch_candidates": [
-    {"id": "P-ROLLBACK-CODE", "title": "回滚 timeout 监控字段", "changes": {"code_version": "pre-a77e31"}, "risk": 0.12, "cost": 0.18, "rollback": "重新部署 a77e31"},
-    {"id": "P-PIN-DEPENDENCY", "title": "将网关客户端回退至 5.8", "changes": {"dependency_latency_factor": 1.0}, "risk": 0.30, "cost": 0.35, "rollback": "恢复 gateway-client 6.0 锁文件"},
-    {"id": "P-RESTORE-POOL", "title": "恢复连接池 24 并增加 timeout 长尾容量验证", "changes": {"pool_size": 24}, "risk": 0.30, "cost": 0.15, "rollback": "恢复 db.pool.maxSize=12 配置快照"},
-    {"id": "P-ADAPTIVE-GUARD", "title": "启用自适应连接池下限保护", "changes": {"pool_size": 24, "adaptive_min_pool": true}, "risk": 0.55, "cost": 0.45, "rollback": "关闭 adaptive_min_pool 并恢复配置快照"}
+    {"id": "P-ROLLBACK-CODE", "title": "回滚 timeout 监控字段", "changes": {"code_version": "pre-a77e31"}, "rollback_changes": {"code_version": "a77e31"}, "risk": 0.12, "cost": 0.18, "rollback": "重新部署 a77e31"},
+    {"id": "P-PIN-DEPENDENCY", "title": "将网关客户端回退至 5.8", "changes": {"dependency_latency_factor": 1.0}, "rollback_changes": {"dependency_latency_factor": 1.5}, "risk": 0.30, "cost": 0.35, "rollback": "恢复 gateway-client 6.0 锁文件"},
+    {"id": "P-RESTORE-POOL", "title": "恢复连接池 24 并增加 timeout 长尾容量验证", "changes": {"pool_size": 24}, "rollback_changes": {"pool_size": 12}, "risk": 0.30, "cost": 0.15, "rollback": "恢复 db.pool.maxSize=12 配置快照"},
+    {"id": "P-ADAPTIVE-GUARD", "title": "启用自适应连接池下限保护", "changes": {"pool_size": 24, "adaptive_min_pool": true}, "rollback_changes": {"pool_size": 12, "adaptive_min_pool": false}, "risk": 0.55, "cost": 0.45, "rollback": "关闭 adaptive_min_pool 并恢复配置快照"}
   ]
 }

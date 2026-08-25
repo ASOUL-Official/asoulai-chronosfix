@@ -1,38 +1,74 @@
-# 真实 AgentTeams Runtime 接入判断
+# AgentTeams Runtime 接入状态与验证路径
 
-结论：**可以接真实 AgentTeams runtime，但不建议在复赛提交前强行全量接入。**
+## 当前结论
 
-根据公开资料，HiClaw 已更名为 AgentTeams，并且不只是概念框架，而是有真实控制面与 runtime：支持 Manager、Worker、Human、Team、Matrix 协作房间、controller、Helm / Kubernetes、对象存储和多 Worker runtime。它适合决赛阶段做“真实框架接入证明”。
+ChronosFix 已完成 AgentTeams **正式资源层**接入，但尚未完成 **Controller 运行层**接入。
 
-## 为什么现在不强接
-
-1. **环境成本高**
-   AgentTeams 真实 runtime 需要容器 / Kubernetes / Matrix / 存储 / 网关等环境，比当前 Python 标准库 Demo 重很多。
-
-2. **复赛风险高**
-   复赛重点是 Demo 可运行性和工程验证。当前本地确定性实现稳定、可复现、无外部依赖；如果临时接 runtime，最容易在安装、网络、镜像、端口和凭证上翻车。
-
-3. **评审重点不是“堆组件”**
-   官方要求强调设计理念、接口契约、必要性、权限边界、端到端证据和迁移成本。当前材料已经把 AgentTeams 的 Manager / Worker / Shared State / Trace 映射讲清楚。
-
-## 决赛接入路线
-
-| 阶段 | 目标 | 交付物 |
+| 层级 | 当前状态 | 证据 |
 |---|---|---|
-| P0：当前复赛 | 等价 AgentTeams 风格入口 | `agentteams/chronosfix-team.yaml`、`agentteams-run.json` |
-| P1：轻量真实接入 | 把 A-CFX AgentSpec 转为 AgentTeams Team / Worker 声明 | `agentteams/runtime/` 下的 Team/Worker YAML |
-| P2：本地 runtime 演示 | 真实 Manager 创建 Worker，执行一个场景，输出 Matrix/Trace 截图 | runtime 运行记录、截图、导出日志 |
-| P3：生产化 | 接 Nacos/Higress/RocketMQ/PolarDB/AgentLoop | Helm values、网关策略、事件模型、数据表 |
+| 资源规范 | 使用 `agentteams.io/v1beta1` | `agentteams/runtime/chronosfix-resources.yaml` |
+| 角色拓扑 | 1 Manager、8 Worker、1 Team、1 Human；Team 恰好一个 `team_leader` | `evidence/agentteams-manifest-validation.json` |
+| Worker Skill | 本地确定性引擎封装为 `chronosfix-local-engine` | `agentteams/skills/chronosfix-local-engine/SKILL.md` |
+| 本地协同证据 | 生成 AgentTeams-compatible transcript | `agentteams/run_chronosfix_team.py`、`evidence/agentteams-run.json` |
+| Controller / Matrix | **未安装、未执行** | 无真实 Controller 日志或 Matrix 记录 |
+| Manager/Worker 模型推理 | **未执行** | 尚未配置模型 API Key |
 
-## 需要你提供/确认的东西
+因此，当前提交可证明“角色、任务、上下文、权限和状态如何映射到 AgentTeams 正式资源”，不能声称已经在 AgentTeams Controller 中完成真实多 Agent 推理。
 
-如果要进入 P1/P2，需要确认：
+## 固定版本与离线校验
 
-- 机器是否能稳定运行 Docker Desktop 或 WSL2 Docker。
-- 是否允许下载 AgentTeams 镜像和安装脚本。
-- 是否有可用模型 API Key / 兼容模型网关。
-- 是否愿意为决赛准备一个独立演示环境，避免影响现在稳定提交包。
+- 官方 AgentTeams 源码版本：`v1.2.3`。
+- 固定 commit：`223ddc2b8073e4c8b93bcbb15e1d717f196c04d9`。
+- 资源 apiVersion：`agentteams.io/v1beta1`。
+- Team 成员字段：`workerMembers`。
+- Team Leader：`chronosfix-incident-commander`，恰好一个。
+- 依赖锁：`agentteams/runtime/dependency-lock.json`。
 
-## 答辩话术
+离线验证命令：
 
-当前复赛版没有假装已经部署真实 AgentTeams runtime，而是做了可验证等价实现，并给出迁移边界：Manager 对应 Incident Commander，Workers 对应 7 个职能 Agent，Incident State 对应共享上下文，trace/run-log/agentteams-run 对应状态追踪。决赛阶段可把这些 YAML 与状态 Schema 映射到真实 AgentTeams Team / Worker / Human / Matrix Room。
+```powershell
+python agentteams/runtime/validate_resources.py agentteams/runtime/chronosfix-resources.yaml
+```
+
+验证器需要 PyYAML；核心 ChronosFix 流水线仍只使用 Python 标准库。当前校验结果已经固化到 `evidence/agentteams-manifest-validation.json`。
+
+## 本地兼容入口
+
+```powershell
+python agentteams/run_chronosfix_team.py --approve --approver "AsoulAI Release Owner" --approval-reason "Semifinal evidence review" --output output/agentteams-latest
+```
+
+该命令运行 ChronosFix 本地确定性内核，并输出：
+
+- 角色与任务状态；
+- Incident State 上下文摘要；
+- `run_id`、`trace_id`；
+- `quality_gate` 与 `release_decision`；
+- Trace、Metrics、报告和 run manifest 路径。
+
+输出中的 `execution_mode` 为 `local-deterministic-engine`，`agentteams_runtime_executed` 为 false。
+
+## 真实 Controller 验证还需要什么
+
+真实运行会创建或管理容器、卷、管理员配置、Matrix 协作空间，并需要模型凭据，因此不能仅凭代码仓库自动视为已授权完成。完成真实接入至少需要：
+
+1. 获得安装 AgentTeams Controller 的外部状态变更授权。
+2. 配置可用模型 API Key 或兼容模型网关。
+3. 启动 Controller 并应用 `chronosfix-resources.yaml`。
+4. 在 Matrix/Controller 中发起一个合成事故任务。
+5. 保存 Team Active 状态、Worker 状态、协作记录、Controller 日志和最终产物。
+6. 对照本地 run manifest，验证相同门禁边界没有被 Runtime 改写。
+
+仓库已提供 `agentteams/runtime/apply_resources.sh` 作为后续入口；它在 Controller 不可用时会失败退出，不会伪造成功。
+
+## 答辩口径
+
+可说：
+
+> 我们已把 ChronosFix 映射为 AgentTeams v1beta1 的 Manager、8 个 Worker、Team 和 Human 正式资源，并完成离线结构验证；当前可执行证据来自本地确定性 Worker engine。Controller 与 Matrix 尚未安装，因此我们把 transcript 明确标记为 compatible mapping evidence，而非真实 Runtime 证据。
+
+不可说：
+
+- “已经在 AgentTeams 上完成端到端运行”；
+- “已经产生真实 Matrix 多 Agent 对话”；
+- “AgentTeams 已经接入生产环境”。

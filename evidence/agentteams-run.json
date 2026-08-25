@@ -1,9 +1,13 @@
 {
   "team": "chronosfix-incident-response",
+  "execution_mode": "local-deterministic-engine",
+  "agentteams_runtime_executed": false,
+  "boundary_note": "This transcript is an AgentTeams-compatible mapping artifact, not Controller/Matrix runtime evidence.",
   "framework_mapping": {
     "human": "release-owner",
-    "manager": "incident-commander",
+    "manager": "chronosfix-manager",
     "workers": [
+      "incident-commander",
       "timeline-analyst",
       "hypothesis-scientist",
       "universe-builder",
@@ -43,6 +47,10 @@
       "task": "run counterfactual replay and evolve fault genome"
     },
     {
+      "owner": "patch-engineer",
+      "task": "materialize selected patch changes and rollback contract"
+    },
+    {
       "owner": "adversarial-verifier",
       "task": "score repair candidates on mutated scenarios"
     },
@@ -57,7 +65,7 @@
   ],
   "context_passing": [
     {
-      "from": "commander",
+      "from": "incident-commander",
       "skill": "EvidenceFusion",
       "span_id": "0000000000000001",
       "status": "ok",
@@ -76,7 +84,7 @@
       ]
     },
     {
-      "from": "commander",
+      "from": "incident-commander",
       "skill": "BaselineReplay",
       "span_id": "0000000000000003",
       "status": "ok",
@@ -139,18 +147,36 @@
       ]
     },
     {
+      "from": "hypothesis-scientist",
+      "skill": "CausalIdentifiabilityArbitration",
+      "span_id": "000000000000000a",
+      "status": "ok",
+      "writes": [
+        "shared_state"
+      ]
+    },
+    {
       "from": "universe-builder",
       "skill": "FaultGenome",
-      "span_id": "000000000000000a",
+      "span_id": "000000000000000b",
       "status": "ok",
       "writes": [
         "fault_variants"
       ]
     },
     {
+      "from": "patch-engineer",
+      "skill": "PatchCandidateContract",
+      "span_id": "000000000000000c",
+      "status": "ok",
+      "writes": [
+        "shared_state"
+      ]
+    },
+    {
       "from": "adversarial-verifier",
       "skill": "PatchTournament",
-      "span_id": "000000000000000b",
+      "span_id": "000000000000000d",
       "status": "ok",
       "writes": [
         "patch_tournament",
@@ -160,8 +186,8 @@
     {
       "from": "release-auditor",
       "skill": "RiskGate",
-      "span_id": "000000000000000c",
-      "status": "approved",
+      "span_id": "000000000000000e",
+      "status": "ok",
       "writes": [
         "approval",
         "risk_decision"
@@ -170,7 +196,7 @@
     {
       "from": "release-auditor",
       "skill": "EvidencePassport",
-      "span_id": "000000000000000d",
+      "span_id": "000000000000000f",
       "status": "ok",
       "writes": [
         "evidence_passport"
@@ -179,7 +205,7 @@
     {
       "from": "patch-engineer",
       "skill": "GitHubIssuePrFlow",
-      "span_id": "000000000000000e",
+      "span_id": "0000000000000010",
       "status": "ok",
       "writes": [
         "github_issue",
@@ -189,18 +215,18 @@
       ]
     },
     {
-      "from": "commander",
+      "from": "skill-curator",
       "skill": "SkillForge",
-      "span_id": "000000000000000f",
+      "span_id": "0000000000000011",
       "status": "ok",
       "writes": [
         "skill_candidates"
       ]
     },
     {
-      "from": "commander",
+      "from": "incident-commander",
       "skill": "ProofReport",
-      "span_id": "0000000000000010",
+      "span_id": "0000000000000012",
       "status": "ok",
       "writes": [
         "proof_report",
@@ -210,9 +236,20 @@
     }
   ],
   "state_tracking": {
-    "trace_id": "5408b7a5223b5c79a16bd69f1b06ea34",
-    "span_count": 16,
-    "approval": "approved",
+    "run_id": "run-1dc8539cfe9b40abb4ec1504e50ca512",
+    "trace_id": "2c59718376e24a778d34af02a6c2a85a",
+    "span_count": 18,
+    "quality_gate": "passed",
+    "release_decision": "approved",
+    "approval_record": {
+      "status": "approved",
+      "approver": "AsoulAI Release Owner",
+      "reason": "Semifinal evidence review",
+      "timestamp": "2026-08-25T08:35:10.809777+00:00",
+      "policy_version": "chronosfix-riskgate/v1",
+      "is_human": true,
+      "input_digest": "2bd548b7d8a9cb07d0124b9a0e365a605ef7d170a935ab1f5bbd411967d0fbb6"
+    },
     "selected_patch": "P-RESTORE-POOL",
     "selected_patch_score": 0.9195,
     "artifacts": [
@@ -226,12 +263,16 @@
       "github-issue.md",
       "github-pr.md",
       "github-pr-diff.patch",
-      "github-pr-checks.json"
+      "github-pr-checks.json",
+      "run-manifest.json"
     ]
   },
   "human_gate": {
     "condition": "medium/high risk patch",
     "decision": "approved",
-    "rollback_contract": "恢复 db.pool.maxSize=8 配置快照"
+    "approver": "AsoulAI Release Owner",
+    "timestamp": "2026-08-25T08:35:10.809777+00:00",
+    "rollback_contract": "恢复 db.pool.maxSize=8 配置快照",
+    "rollback_verified": true
   }
 }

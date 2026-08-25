@@ -5,15 +5,32 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "chronosfix"
 version = "0.1.0"
-description = "Evidence-first multi-agent counterfactual debugging demo"
+description = "Deterministic incident-to-PR causal change governance with verifiable evidence"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "Apache-2.0" }
 authors = [{ name = "AsoulAI" }]
 dependencies = []
+keywords = ["agentteams", "counterfactual-debugging", "incident-response", "software-governance"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+
+[project.optional-dependencies]
+validation = ["PyYAML>=6.0.2,<7"]
+
+[project.urls]
+Repository = "https://github.com/ASOUL-Official/asoulai-chronosfix"
+Demo = "https://asoul-official.github.io/asoulai-chronosfix/"
 
 [project.scripts]
 chronosfix = "chronosfix.cli:main"
+chronosfix-evaluate = "chronosfix.evaluation:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

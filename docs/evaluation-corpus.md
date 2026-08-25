@@ -1,36 +1,60 @@
-# 故障回放评测集
+# Golden / Badcase / Insufficient Evidence 合成评测集
 
-复赛主 Demo 使用 `scenarios/checkout-timeout/scenario.json` 保持讲解稳定。为了补强决赛前的工程可信度，A-CFX 额外加入 6 个同构事故样例，用于验证同一条 Proof-Carrying Software Change Chain 能覆盖不同触发条件。
+ChronosFix 当前评测集共有 **12 个确定性合成样例**。它用于验证已建模变量、暴露未建模变量和拒答缺陷，不代表真实企业事故准确率。
 
-统一证明链：
+## 样例构成
 
-```text
-事故证据 -> 反事实证明根因 -> 缺陷基因验证补丁 -> RiskGate 审批 -> GitHub PR / 证据护照 -> Skill / 故障资产沉淀
+| 类型 | 数量 | 执行范围 | 目的 |
+|---|---:|---|---|
+| Golden | 9 | `pipeline-and-evaluation` | 运行完整本地流水线，并对照 Ground Truth |
+| Badcase | 2 | `evaluation-only-counterfactual` | 暴露代码版本、队列积压等当前未建模变量 |
+| Insufficient Evidence | 1 | `evaluation-only-counterfactual` | 检查证据冲突时是否正确拒答 |
+
+9 个 Golden 包括原有 7 个容量/配置压力场景，并增加：
+
+- `code-latency-regression-primary`：代码延迟回归为主因；
+- `dependency-regression-primary`：依赖延迟回归为主因。
+
+3 个评测专用夹具位于 `scenarios/evaluation-fixtures/`，只执行反事实分类，不进入 PatchTournament、RiskGate 或 PR 流水线：
+
+- `code-regression-unmodeled`：已知真实原因是代码回归，但对应变量未进入当前容量方程；
+- `queue-backlog-unmodeled`：已知真实原因是队列积压，但当前模拟器未建模队列深度；
+- `conflicting-counterfactuals`：两个来源假设映射到同一干预，无法凭该回放区分来源，理想行为应为拒答。
+
+## Ground Truth 契约
+
+每个样例显式提供：
+
+- `case_type`；
+- `model_support`；
+- `fixture_scope`；
+- `expected_outcome`；
+- `known_actual_causes`；
+- `expected_primary_causes`；
+- `expected_amplifiers`；
+- `expected_not_causal`；
+- `boundary_note`。
+
+评测器不会从成功样例反推答案，也不会删除失败样例。
+
+## 运行与产物
+
+```powershell
+python evaluate.py --output output/evaluation
 ```
 
-| 场景 | 主要触发 | 评测目的 |
-|---|---|---|
-| `checkout-timeout` | 午间流量 + 连接池缩容 | 主 Demo，展示完整链路 |
-| `config-drift-before-peak` | 隐性配置漂移 | 验证配置中心漂移类事故 |
-| `payment-client-slowdown` | 支付依赖变慢 + 容量不足 | 验证依赖升级是放大因素而非唯一根因 |
-| `recovery-spike` | 恢复窗口流量尖峰 | 验证恢复/回放任务造成的短时峰值 |
-| `downstream-jitter` | 下游服务抖动 | 验证长尾依赖抖动下的补丁鲁棒性 |
-| `cache-warmup-burst` | 缓存预热后流量回灌 | 验证缓存恢复期的容量门禁 |
-| `api-timeout-amplifier` | API timeout 策略放大请求占用 | 验证超时策略与连接池容量的交互 |
+生成：
 
-## 当前实测口径
+- `evaluation-summary.json`：口径、汇总和逐例结果；
+- `evaluation-cases.csv`：可导入表格或评测平台；
+- `evaluation-report.md`：可读报告。
 
-每个场景都会执行完整 pipeline，并检查：
+## 指标解释
 
-- 至少存在一个被反事实证明的 primary-cause。
-- 自动生成 Trace、proof-bundle、proof-report、GitHub Issue/PR 草案、checks 和审计事件。
-- Evidence Passport 至少包含因果、验证、风险和回滚声明。
-- Trace Span 维持 16 段，说明 GitHub Issue / PR 链路被纳入证据链。
+- **supported diagnosis accuracy**：仅统计模拟器明确支持且期望诊断的样例。
+- **overall expectation met**：全部 12 例中满足各自预期的数量。
+- **abstention success**：预期拒答样例中实际拒答的数量。
+- **unsupported case**：保留为已知边界，不计入受支持准确率，也不包装成成功。
+- **unexpected assertion**：应拒答却仍宣称主因，按失败处理。
 
-## 后续增强
-
-决赛阶段可继续扩展为三类评测：
-
-1. **Golden Case**：真实历史事故脱敏后转成标准输入，要求证明链输出与专家结论一致。
-2. **Badcase**：故意加入相邻但非根因的代码/依赖/配置变更，评测误归因率。
-3. **Regression Case**：把故障基因包接入 CI，评测补丁在同源变体上的通过率、最差失败率和回滚完整度。
+当前结果见 `docs/evaluation-corpus-results.md`：受支持诊断 9/9，整体达成 10/12，正确拒答 1/1。

@@ -1,35 +1,49 @@
-# 7 场景端到端实测结果
+# 12 例合成评测结果
 
 运行日期：2026-08-25
 
-运行命令：
-
 ```powershell
-python -m unittest discover -s tests -p "test_*.py" -q
+python evaluate.py --output output/evaluation
 ```
 
-自动化测试已覆盖全部 `scenarios/*/scenario.json`，每个场景均执行完整 Proof-Carrying Software Change Chain。
+> 所有样例均为确定性合成回放。以下结果用于描述当前模拟器的能力边界，不代表真实生产准确率。
 
-## 汇总结果
+## 汇总
 
-| 场景 | Incident | 证明主因 | 选中补丁 | 最差失败率 | Trace Span | 审批 |
-|---|---|---|---|---:|---:|---|
-| `api-timeout-amplifier` | INC-2026-0825-007 | H-POOL | P-RESTORE-POOL | 27.93% | 16 | approved |
-| `cache-warmup-burst` | INC-2026-0825-006 | H-POOL | P-RESTORE-POOL | 22.78% | 16 | approved |
-| `checkout-timeout` | INC-2026-0816-001 | H-POOL | P-RESTORE-POOL | 6.25% | 16 | approved |
-| `config-drift-before-peak` | INC-2026-0825-002 | H-POOL | P-RESTORE-POOL | 0.00% | 16 | approved |
-| `downstream-jitter` | INC-2026-0825-005 | H-POOL | P-RESTORE-POOL | 22.04% | 16 | approved |
-| `payment-client-slowdown` | INC-2026-0825-003 | H-POOL | P-RESTORE-POOL | 31.86% | 16 | approved |
-| `recovery-spike` | INC-2026-0825-004 | H-POOL | P-ADAPTIVE-GUARD | 14.20% | 16 | approved |
+| 指标 | 结果 | 正确解读 |
+|---|---:|---|
+| 总样例 | 12 | 9 Golden、2 Badcase、1 Insufficient Evidence |
+| Golden 达成 | 9/9 | 当前建模范围内的诊断结果 |
+| 受支持诊断准确率 | 9/9（100%） | 只覆盖模拟器明确建模且期望诊断的 9 例 |
+| 整体达成预期 | 10/12（83.33%） | 包含 2 个未支持漏诊的保守总口径 |
+| 预期拒答 | 1 | `conflicting-counterfactuals` |
+| 正确拒答 | 1/1 | 相同干预无法区分来源时安全拒答 |
+| 未支持 Badcase | 2 | 均 abstain，但没有命中已知真实原因，不计成功 |
+| 状态分布 | correct=9、incorrect=0、abstain=3 | 两个未支持 Badcase 仍保留为未达预期 |
 
-## 解读
+## 逐例结果
 
-- 7 个场景都能通过反事实实验把 `H-POOL` 证明为 primary-cause。
-- 6 个场景选择 `P-RESTORE-POOL`，说明恢复容量并增加门禁是多数事故族的低风险方案。
-- `recovery-spike` 选择 `P-ADAPTIVE-GUARD`，说明补丁竞赛不是固定答案，而会在恢复尖峰类场景中选择更强的保护方案。
-- 每个场景均保留 16 段 Trace，覆盖 GitHub Issue / PR 链路和 ProofReport。
-- 每个场景均生成 proof-bundle、proof-report、GitHub Issue/PR 草案、checks 和审计事件。
+| 场景 | 类型 | 模型边界 | 期望 | 观测主因 | 状态 | 达成预期 |
+|---|---|---|---|---|---|---|
+| `api-timeout-amplifier` | Golden | supported | H-POOL | H-POOL | correct | yes |
+| `cache-warmup-burst` | Golden | supported | H-POOL | H-POOL | correct | yes |
+| `checkout-timeout` | Golden | supported | H-POOL | H-POOL | correct | yes |
+| `code-latency-regression-primary` | Golden | supported | H-CODE | H-CODE | correct | yes |
+| `config-drift-before-peak` | Golden | supported | H-POOL | H-POOL | correct | yes |
+| `dependency-regression-primary` | Golden | supported | H-DEPENDENCY | H-DEPENDENCY | correct | yes |
+| `downstream-jitter` | Golden | supported | H-POOL | H-POOL | correct | yes |
+| `payment-client-slowdown` | Golden | supported | H-POOL | H-POOL | correct | yes |
+| `recovery-spike` | Golden | supported | H-POOL | H-POOL | correct | yes |
+| `code-regression-unmodeled` | Badcase | unsupported | H-CODE | - | abstain | no |
+| `queue-backlog-unmodeled` | Badcase | unsupported | H-QUEUE | - | abstain | no |
+| `conflicting-counterfactuals` | Insufficient Evidence | supported | abstain | - | abstain | yes |
 
-## 当前局限
+## 为什么 Badcase 的 abstain 仍不算成功
 
-这组实测仍属于合成故障回放集，不等同于真实企业历史事故。它的作用是验证工程闭环、证据结构和评测口径。决赛阶段建议加入 3-5 个真实开源仓库 issue 或脱敏事故样例，形成更强的 ROI 证据。
+两个 Badcase 的真实原因已知，但当前模拟器没有对应因果变量。系统没有强行归因是较安全的行为，却仍然没有完成正确诊断，因此 `expectation_met=no`。它们被排除在“受支持诊断准确率”之外，但保留在 12 例整体结果里。
+
+## 可辨识性仲裁
+
+`conflicting-counterfactuals` 中，两个来源假设映射到相同干预，单次回放无法区分具体来源。评测器会将结果降级为 `indeterminate` 并安全拒答，因此正确拒答为 1/1。这个机制只解决“相同干预不可辨识”的冲突；缺失来源级证据时仍不会生成补丁或进入发布链路。
+
+机器可读结果由评测命令生成，文档中的数字不作为唯一证据。

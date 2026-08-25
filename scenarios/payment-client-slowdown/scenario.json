@@ -1,6 +1,18 @@
 {
   "incident_id": "INC-2026-0825-003",
   "title": "支付客户端重试耗时上升放大连接池容量风险",
+  "ground_truth": {
+    "case_type": "golden",
+    "model_support": "supported",
+    "expected_outcome": "diagnose",
+    "expected_primary_causes": ["H-POOL"],
+    "expected_amplifiers": ["H-DEPENDENCY"],
+    "expected_not_causal": ["H-CODE"],
+    "fixture_scope": "pipeline-and-evaluation",
+    "known_actual_causes": ["H-POOL"],
+    "rationale": "当前确定性容量模型中，恢复连接池可消除主要失败，支付客户端延迟是放大因素。",
+    "boundary_note": "合成容量回放；不包含真实支付客户端重试分布、超时栈和生产流量。"
+  },
   "baseline": {
     "traffic_rps": 140.0,
     "pool_size": 10,
@@ -27,9 +39,9 @@
     {"name": "campaign-retry-tail", "changes": {"traffic_rps": 165.0, "dependency_latency_factor": 1.9}}
   ],
   "patch_candidates": [
-    {"id": "P-ROLLBACK-CODE", "title": "回滚支付回调日志采样", "changes": {"code_version": "pre-c18f20"}, "risk": 0.12, "cost": 0.20, "rollback": "重新部署 c18f20"},
-    {"id": "P-PIN-DEPENDENCY", "title": "将支付客户端回退至 2.7", "changes": {"dependency_latency_factor": 1.0}, "risk": 0.32, "cost": 0.38, "rollback": "恢复 payment-client 3.0 锁文件"},
-    {"id": "P-RESTORE-POOL", "title": "恢复连接池 24 并增加支付高峰容量门禁", "changes": {"pool_size": 24}, "risk": 0.30, "cost": 0.15, "rollback": "恢复 db.pool.maxSize=10 配置快照"},
-    {"id": "P-ADAPTIVE-GUARD", "title": "启用自适应连接池下限保护", "changes": {"pool_size": 24, "adaptive_min_pool": true}, "risk": 0.55, "cost": 0.45, "rollback": "关闭 adaptive_min_pool 并恢复配置快照"}
+    {"id": "P-ROLLBACK-CODE", "title": "回滚支付回调日志采样", "changes": {"code_version": "pre-c18f20"}, "rollback_changes": {"code_version": "c18f20"}, "risk": 0.12, "cost": 0.20, "rollback": "重新部署 c18f20"},
+    {"id": "P-PIN-DEPENDENCY", "title": "将支付客户端回退至 2.7", "changes": {"dependency_latency_factor": 1.0}, "rollback_changes": {"dependency_latency_factor": 1.7}, "risk": 0.32, "cost": 0.38, "rollback": "恢复 payment-client 3.0 锁文件"},
+    {"id": "P-RESTORE-POOL", "title": "恢复连接池 24 并增加支付高峰容量门禁", "changes": {"pool_size": 24}, "rollback_changes": {"pool_size": 10}, "risk": 0.30, "cost": 0.15, "rollback": "恢复 db.pool.maxSize=10 配置快照"},
+    {"id": "P-ADAPTIVE-GUARD", "title": "启用自适应连接池下限保护", "changes": {"pool_size": 24, "adaptive_min_pool": true}, "rollback_changes": {"pool_size": 10, "adaptive_min_pool": false}, "risk": 0.55, "cost": 0.45, "rollback": "关闭 adaptive_min_pool 并恢复配置快照"}
   ]
 }

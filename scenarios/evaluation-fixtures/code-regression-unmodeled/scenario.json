@@ -1,0 +1,48 @@
+{
+  "incident_id": "EVAL-BADCASE-001",
+  "title": "代码回归导致 CPU 热点，但当前容量模拟器未建模代码行为",
+  "ground_truth": {
+    "case_type": "badcase",
+    "model_support": "unsupported",
+    "expected_outcome": "diagnose",
+    "expected_primary_causes": ["H-CODE"],
+    "expected_amplifiers": [],
+    "expected_not_causal": [],
+    "fixture_scope": "evaluation-only-counterfactual",
+    "known_actual_causes": ["H-CODE"],
+    "rationale": "夹具 Ground Truth 指定代码回归为真实主因；当前模拟器不使用 code_version，预期会漏诊，作为公开的模型边界而非准确率成功样例。",
+    "boundary_note": "仅运行反事实分类评测，不进入补丁竞赛、RiskGate 或 PR 流水线；结果不得表述为已支持代码根因诊断。"
+  },
+  "baseline": {
+    "traffic_rps": 120.0,
+    "pool_size": 8,
+    "dependency_latency_factor": 1.3,
+    "code_version": "cpu-hot-loop",
+    "adaptive_min_pool": false
+  },
+  "events": [
+    {
+      "timestamp": "2026-08-25T17:00:00+08:00",
+      "kind": "commit",
+      "source": "fixture:git/cpu-hot-loop",
+      "summary": "合成代码回归 Ground Truth：循环边界错误造成 CPU 热点",
+      "details": {"synthetic": true, "evaluation_only": true}
+    },
+    {
+      "timestamp": "2026-08-25T17:05:00+08:00",
+      "kind": "incident",
+      "source": "fixture:alert/cpu-saturation",
+      "summary": "CPU 饱和并出现请求失败",
+      "details": {"synthetic": true, "ground_truth": "H-CODE"}
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H-CODE",
+      "title": "代码回归造成 CPU 热点",
+      "owner": "evaluation-fixture",
+      "intervention": {"code_version": "pre-cpu-hot-loop"},
+      "rationale": "理想系统应通过真实二进制或性能回放验证；当前确定性容量模型不会响应这个干预。"
+    }
+  ]
+}

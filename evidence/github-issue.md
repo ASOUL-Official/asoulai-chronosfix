@@ -1,8 +1,11 @@
 # [SEV-2] 订单创建接口在午间流量下出现高失败率与长尾延迟
 
-仓库：`ASOUL-Official/asoulai-chronosfix`  
-Issue：`#42`  
-标签：incident, sev-2, checkout, agentteams, needs-riskgate
+> 本文件是本地可复现的 GitHub Issue 草案，不代表已写入远端仓库。
+
+仓库：`ASOUL-Official/asoulai-chronosfix`
+本地草案编号：`#42`
+场景：`scenarios/checkout-timeout/scenario.json`
+标签：incident, agentteams, needs-riskgate, local-draft, sev-2, checkout-timeout
 
 ## 影响
 
@@ -21,10 +24,10 @@ Issue：`#42`
 
 ## 验收条件
 
-- [ ] 反事实实验必须证明主因，而不是只给日志总结。
-- [ ] 候选补丁必须通过缺陷基因变体回归。
-- [ ] PR 必须包含 RiskGate 状态、回滚契约和证据护照链接。
-- [ ] 中高风险变更无人工审批时必须保持 blocked-awaiting-human。
+- [ ] 反事实实验必须提供可复查的主因证据。
+- [ ] 选中变更必须通过全部必选验证检查。
+- [ ] PR 必须绑定场景、精确 changes、rollback_changes 与 RiskGate 决策。
+- [ ] 缺少检查、回滚或必要人工审批时，PR 必须保持 draft。
 
 ## 关联证据
 
@@ -32,4 +35,5 @@ Issue：`#42`
 - `run-log.jsonl`
 - `proof-bundle.json`
 - `proof-report.md`
+- `run-manifest.json`
 - `github-pr.md`

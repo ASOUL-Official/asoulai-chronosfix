@@ -1,68 +1,79 @@
-# 官方组件部署策略：不是全量堆叠，而是分阶段证明
+# 官方组件分阶段部署策略
 
-结论：**全部部署当然最完整，但复赛/决赛前不一定最优。** 推荐按“最小闭环 → 真实协作流 → 治理与观测 → 规模化数据层”的顺序推进。
+原则：先补能改变证据等级的集成，不为“组件数量”牺牲核心闭环稳定性。
 
-## 全量部署的成本
+## 当前基线
 
-| 组件 | 部署复杂度 | 最容易卡的点 | 是否建议复赛前强接 |
-|---|---:|---|---|
-| AgentTeams | 高 | Docker/K8s、Matrix、对象存储、模型凭证 | 不建议，放决赛增强 |
-| 云 Skills | 中 | 账号鉴权、RAM 权限、官方 Skill 可用性 | 文档映射优先 |
-| Nacos | 中 | 配置模型、命名空间、权限和变更审计 | 可做轻量 demo，但非必须 |
-| Higress | 中高 | 网关路由、鉴权、模型/工具代理、Trace 注入 | 决赛前可重点接 |
-| PolarDB for PostgreSQL | 中 | 云资源、表结构、pgvector、权限边界 | 可用本地 PostgreSQL 替代验证 |
-| UnifiedModel | 中 | 实体建模与查询接口 | 文档和 object graph 先行 |
-| RocketMQ | 中 | Topic、Consumer、幂等、重试 | 可用本地事件日志替代 |
-| LoongSuite / AgentScope Studio / AgentLoop | 中 | Trace schema 对齐、上报凭证、评估面板 | 决赛前优先接 AgentLoop/Studio |
+| 能力 | 当前状态 |
+|---|---|
+| 核心流水线 | 本地可运行、自动化测试、Trace/manifest/回滚证据 |
+| 评测 | 12 个合成样例；9/9 受支持诊断、10/12 整体、1/1 冲突拒答 |
+| AgentTeams | v1beta1 正式资源离线校验；Controller 未安装 |
+| 云 Skill | 官方 SLS 只读 Skill dry-run；未查真实云 |
+| GitHub | local-draft；Issue #1/PR #2 documentation-only |
+| Nacos/Higress/PolarDB/RocketMQ/观测 | 接口设计，尚未部署 |
 
-## 推荐部署顺序
+## P1：真实外部证据
 
-### P0：当前复赛包，保持稳定
+优先完成两个最小闭环：
 
-- Python 标准库 Demo。
-- AgentTeams 风格入口。
-- Repair Cockpit 在线 Demo。
-- 7 个场景评测集。
-- Trace、Log、Metrics、GitHub PR 草案、Evidence Passport。
+1. **真实只读 SLS 查询**
+   - 提供专用 Project/Logstore；
+   - 使用最小 RAM Policy；
+   - 保存成功、权限拒绝、超时三种证据；
+   - 不把 AccessKey 写入仓库或 Agent 上下文。
 
-目标：保证评委一定能跑。
+2. **真实低风险 GitHub PR + CI**
+   - GitHub App/PAT 分权；
+   - 由真实 selected patch 生成隔离分支；
+   - CI 实际运行并回传 commit SHA、job/check URL；
+   - PR 保持 draft，合并由人工和保护规则决定。
 
-### P1：真实研发协作流
+这两项能把 dry-run/local-draft 提升为 external execution evidence。
 
-优先做真实 GitHub Issue / PR / Checks 的最小闭环。
+## P2：AgentTeams Controller
 
-原因：这比全量部署 Nacos/Higress/RocketMQ 更能证明方向三“软件研发全流程协同”的商业价值。
+前置条件：
 
-需要：
+- 用户明确授权安装器创建/管理容器、卷和管理员配置；
+- 可用模型 API Key 或模型网关；
+- 独立演示环境；
+- 回滚/清理方案。
 
-- GitHub 账号权限或 token。
-- 一个演示分支。
-- 一个不会影响主项目的 demo PR。
+验收证据：
 
-### P2：网关与治理
+- Controller 版本与状态；
+- 资源 apply 结果；
+- Team Active、Worker 状态；
+- Matrix 协作记录；
+- Worker Skill 调用；
+- 最终 run/trace/门禁结果；
+- 失败和人工审批分支。
 
-接 Higress / Nacos 的轻量演示：
+在这些证据产生前，只使用“formal-spec offline-validated”。
 
-- Higress：把 LLM、Agent 服务、MCP 工具统一入口讲清楚。
-- Nacos：管理 AgentSpec、SkillSpec、Prompt、风险阈值。
+## P3：治理与网关
 
-目标：回答“生产环境怎么治理、鉴权、路由、限流、回滚”。
+- Nacos 托管 Agent/Skill/Prompt/Policy 版本，并演示更新与回滚；
+- Higress 统一代理至少一个工具，演示鉴权、限流、失败和 Trace correlation；
+- 所有写动作走具名审批，不能把网关成功等同于业务质量通过。
 
-### P3：数据层与观测
+## P4：数据、事件与观测
 
-接 PolarDB / AgentLoop / AgentScope Studio：
+- PolarDB/UnifiedModel 保存 Incident、Evidence、Trace、Passport 和 Skill；
+- RocketMQ 驱动实验与审批等待，验证幂等、重复投递和死信；
+- AgentLoop/AgentScope Studio 导入真实 Agent Trace；
+- LoongSuite 接一个真实服务，区分服务 Trace 与 Agent Trace。
 
-- PolarDB：历史事故、Trace、Evidence Passport、Skill Candidate。
-- AgentLoop/Studio：Agent 推理轨迹、成本、质量、失败分支。
+## 部署复杂度与取舍
 
-目标：回答“如何持续优化质量、成本、可靠性”。
+| 组件 | 主要成本 | 迁移失败时保底 |
+|---|---|---|
+| AgentTeams | Controller、Matrix、存储、模型凭据 | 本地确定性 engine + 明确 runtime=false |
+| 云 Skills | RAM、CLI、资源目标 | dry-run + 合成证据 |
+| GitHub/CI | Token、分支保护、Check API | local-draft |
+| Nacos/Higress | 命名空间、鉴权、网关策略 | 版本化本地配置 |
+| PolarDB/RocketMQ | 云资源、Schema、可靠性运维 | JSON/JSONL 与顺序事件日志 |
+| AgentLoop/Studio | Trace 映射、上报凭据 | 本地 Trace/报告 |
 
-## 我的建议
-
-如果时间紧，只做这三件最划算：
-
-1. **保留当前稳定提交包**，不要让重组件破坏可运行性。
-2. **补真实 GitHub PR 或手动可验证 PR 证据**，增强方向三真实性。
-3. **准备 AgentTeams runtime 接入路线图**，诚实说明复赛是等价实现，决赛接真实 runtime。
-
-这比临时全量部署 8 个组件更稳，也更符合“不是堆工具，而是讲清必要性、边界和迁移成本”的评审口径。
+“全部部署”只有在每个组件都有实际调用、权限、失败和观测证据时才更完整；仅启动空组件不会增加有效完成度。

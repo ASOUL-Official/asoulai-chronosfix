@@ -45,10 +45,14 @@ def build_agentteams_transcript(
     ]
     return {
         "team": "chronosfix-incident-response",
+        "execution_mode": "local-deterministic-engine",
+        "agentteams_runtime_executed": False,
+        "boundary_note": "This transcript is an AgentTeams-compatible mapping artifact, not Controller/Matrix runtime evidence.",
         "framework_mapping": {
             "human": "release-owner",
-            "manager": "incident-commander",
+            "manager": "chronosfix-manager",
             "workers": [
+                "incident-commander",
                 "timeline-analyst",
                 "hypothesis-scientist",
                 "universe-builder",
@@ -65,6 +69,7 @@ def build_agentteams_transcript(
             {"owner": "timeline-analyst", "task": "order Git/config/dependency/traffic/alert events"},
             {"owner": "hypothesis-scientist", "task": "produce falsifiable root-cause contracts"},
             {"owner": "universe-builder", "task": "run counterfactual replay and evolve fault genome"},
+            {"owner": "patch-engineer", "task": "materialize selected patch changes and rollback contract"},
             {"owner": "adversarial-verifier", "task": "score repair candidates on mutated scenarios"},
             {"owner": "release-auditor", "task": "enforce RiskGate and create evidence passport"},
             {"owner": "skill-curator", "task": "distill reusable Skill candidates"},
@@ -80,9 +85,12 @@ def build_agentteams_transcript(
             for item in trace_records
         ],
         "state_tracking": {
+            "run_id": state.run_id,
             "trace_id": trace_records[0]["trace_id"] if trace_records else None,
             "span_count": len(trace_records),
-            "approval": state.approval,
+            "quality_gate": state.quality_gate,
+            "release_decision": state.approval,
+            "approval_record": state.approval_record,
             "selected_patch": state.selected_patch.candidate_id if state.selected_patch else None,
             "selected_patch_score": metrics.get("selected_patch_score"),
             "artifacts": [
@@ -97,12 +105,16 @@ def build_agentteams_transcript(
                 "github-pr.md",
                 "github-pr-diff.patch",
                 "github-pr-checks.json",
+                "run-manifest.json",
             ],
         },
         "human_gate": {
             "condition": "medium/high risk patch",
             "decision": state.approval,
+            "approver": state.approval_record.get("approver"),
+            "timestamp": state.approval_record.get("timestamp"),
             "rollback_contract": state.selected_patch.rollback if state.selected_patch else None,
+            "rollback_verified": metrics.get("rollback_verified"),
         },
     }
 
@@ -133,13 +145,17 @@ def write_engineering_artifacts(
 ) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    ok_spans = sum(item["status"] in {"ok", "approved"} for item in trace_records)
-    tool_success_rate = ok_spans / len(trace_records) if trace_records else 0.0
+    completed_spans = sum(item["status"] not in {"error", "cancelled"} for item in trace_records)
+    pipeline_step_completion_rate = completed_spans / len(trace_records) if trace_records else 0.0
     engineering_metrics = {
         **metrics,
-        "tool_success_rate": round(tool_success_rate, 4),
-        "approval_gate_present": state.approval in {"approved", "blocked-awaiting-human"},
+        "pipeline_step_completion_rate": round(pipeline_step_completion_rate, 4),
+        "pipeline_step_completion_rate_kind": "derived-from-trace-status",
+        "external_tool_success_rate": None,
+        "external_tool_success_rate_note": "No external tool was invoked by the local deterministic run.",
+        "approval_gate_present": bool(state.gate_result),
         "rollback_contract_present": bool(state.selected_patch and state.selected_patch.rollback),
+        "rollback_verified": metrics.get("rollback_verified", False),
         "github_issue_pr_flow_present": True,
         "github_issue_pr_artifacts": [
             "github-issue.md",
@@ -153,8 +169,14 @@ def write_engineering_artifacts(
         "trace_schema": {
             "required_fields": [
                 "timestamp",
+                "started_at",
+                "ended_at",
+                "duration_ms",
+                "duration_kind",
+                "run_id",
                 "trace_id",
                 "span_id",
+                "parent_span_id",
                 "incident_id",
                 "agent",
                 "skill",
@@ -177,7 +199,11 @@ def write_engineering_artifacts(
         {
             "level": "INFO" if item["status"] in {"ok", "approved"} else "WARN",
             "trace_id": item["trace_id"],
+            "run_id": item.get("run_id"),
             "span_id": item["span_id"],
+            "parent_span_id": item.get("parent_span_id"),
+            "timestamp": item.get("timestamp"),
+            "duration_ms": item.get("duration_ms"),
             "agent": item["agent"],
             "event": item["skill"],
             "message": f"{item['agent']} executed {item['skill']} with status {item['status']}",
@@ -199,31 +225,35 @@ def write_engineering_artifacts(
         "## 1. 自动化验证摘要",
         "",
         f"- 事故样例：{state.incident_id} / {state.title}",
+        f"- Run ID：{state.run_id}",
         f"- Agent/Skill Trace Span：{len(trace_records)}",
-        f"- 工具/Skill 成功率：{tool_success_rate:.1%}",
+        f"- 流水线步骤完成率（由 Trace 推导）：{pipeline_step_completion_rate:.1%}",
         f"- 根因假设数：{metrics['hypotheses_tested']}",
-        f"- 反事实实验数：{metrics['parallel_universes']}",
+        f"- 反事实实验数：{metrics['counterfactual_experiments']}",
         f"- 故障基因变体数：{metrics['fault_variants']}",
         f"- 补丁候选数：{metrics['patches_compared']}",
         f"- 选中补丁最差失败率：{metrics['selected_patch_worst_failure_rate']:.1%}",
-        f"- 审批状态：{state.approval}",
+        f"- 质量门禁：{state.quality_gate}",
+        f"- 发布决策：{state.approval}",
+        f"- 回滚验证：{'通过' if metrics.get('rollback_verified') else '失败'}",
         "",
         "## 2. 复赛验收点覆盖",
         "",
         "| 验收点 | 证据 |",
         "|---|---|",
-        "| AgentTeams 编排 | `agentteams/chronosfix-team.yaml`、`agentteams-run.json` |",
-        "| 样例输入输出 | `scenarios/checkout-timeout/scenario.json`、`proof-bundle.json` |",
+        "| AgentTeams 等价编排证据 | `agentteams/chronosfix-team.yaml`、`agentteams-run.json`（非 Controller Runtime 证据） |",
+        f"| 样例输入输出 | `{state.scenario_path}`、`proof-bundle.json` |",
         "| 日志与 Trace | `run-log.jsonl`、`trace.jsonl` |",
         "| Metrics | `engineering-metrics.json` |",
         "| 风险审批 | `RiskGate` Span 与 evidence passport 风险声明 |",
-        "| 回滚审计 | selected patch rollback contract 与 proof-report |",
-        "| GitHub Issue/PR 模拟链路 | `github-issue.md`、`github-pr.md`、`github-pr-diff.patch`、`github-pr-checks.json`、`github-review-audit.jsonl` |",
+        "| 回滚审计 | machine-readable rollback_changes、回滚验证结果与 proof-report |",
+        "| GitHub Issue/PR 本地草案链路 | `github-issue.md`、`github-pr.md`、`github-pr-diff.patch`、`github-pr-checks.json`、`github-review-audit.jsonl` |",
+        "| 完整性绑定 | `run-manifest.json` 与 Evidence Passport SHA-256 摘要 |",
         "| Skill 复用 | `SkillForge` 输出 3 个 Skill Candidate |",
         "",
         "## 3. 失败处理分支",
         "",
-        "运行 `python demo.py --output output/no-approval` 时不传 `--approve`，RiskGate 会返回 `blocked-awaiting-human`，证明中风险补丁不会无人值守发布。",
+        "运行 `python demo.py --output output/no-approval` 时不传 `--approve`，健康但中风险的补丁会返回 `blocked-awaiting-human`。若任一强制变体、回滚或执行检查失败，则优先返回 `blocked-quality-gate`，人工不能覆盖质量失败。",
         "",
         "## 4. 开放 / 开源复现",
         "",
@@ -240,7 +270,7 @@ def _permission_scope(skill: str) -> str:
     if skill == "RiskGate":
         return "human-approval-required"
     if skill == "GitHubIssuePrFlow":
-        return "dev-collaboration-write-draft"
+        return "local-artifact-write-draft"
     if skill in {"EvidencePassport", "SkillForge", "ProofReport"}:
         return "write-evidence-artifacts"
     return "least-privilege"

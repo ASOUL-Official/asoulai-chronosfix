@@ -1,6 +1,18 @@
 {
   "incident_id": "INC-2026-0825-006",
   "title": "缓存预热后流量回灌暴露连接池容量缺口",
+  "ground_truth": {
+    "case_type": "golden",
+    "model_support": "supported",
+    "expected_outcome": "diagnose",
+    "expected_primary_causes": ["H-POOL"],
+    "expected_amplifiers": ["H-DEPENDENCY"],
+    "expected_not_causal": ["H-CODE"],
+    "fixture_scope": "pipeline-and-evaluation",
+    "known_actual_causes": ["H-POOL"],
+    "rationale": "恢复连接池可消除基线失败，缓存客户端耗时在当前模型中只构成放大因素。",
+    "boundary_note": "合成容量回放；不模拟真实缓存命中率、队列和预热调度。"
+  },
   "baseline": {
     "traffic_rps": 150.0,
     "pool_size": 11,
@@ -27,9 +39,9 @@
     {"name": "larger-backfill-tail", "changes": {"traffic_rps": 175.0, "dependency_latency_factor": 1.65}}
   ],
   "patch_candidates": [
-    {"id": "P-ROLLBACK-CODE", "title": "回滚缓存预热批量日志", "changes": {"code_version": "pre-f63c10"}, "risk": 0.12, "cost": 0.18, "rollback": "重新部署 f63c10"},
-    {"id": "P-PIN-DEPENDENCY", "title": "将缓存客户端回退至 5.1", "changes": {"dependency_latency_factor": 1.0}, "risk": 0.30, "cost": 0.35, "rollback": "恢复 cache-client 5.2 锁文件"},
-    {"id": "P-RESTORE-POOL", "title": "恢复连接池 24 并增加缓存回灌门禁", "changes": {"pool_size": 24}, "risk": 0.30, "cost": 0.15, "rollback": "恢复 db.pool.maxSize=11 配置快照"},
-    {"id": "P-ADAPTIVE-GUARD", "title": "启用自适应连接池下限保护", "changes": {"pool_size": 24, "adaptive_min_pool": true}, "risk": 0.55, "cost": 0.45, "rollback": "关闭 adaptive_min_pool 并恢复配置快照"}
+    {"id": "P-ROLLBACK-CODE", "title": "回滚缓存预热批量日志", "changes": {"code_version": "pre-f63c10"}, "rollback_changes": {"code_version": "f63c10"}, "risk": 0.12, "cost": 0.18, "rollback": "重新部署 f63c10"},
+    {"id": "P-PIN-DEPENDENCY", "title": "将缓存客户端回退至 5.1", "changes": {"dependency_latency_factor": 1.0}, "rollback_changes": {"dependency_latency_factor": 1.4}, "risk": 0.30, "cost": 0.35, "rollback": "恢复 cache-client 5.2 锁文件"},
+    {"id": "P-RESTORE-POOL", "title": "恢复连接池 24 并增加缓存回灌门禁", "changes": {"pool_size": 24}, "rollback_changes": {"pool_size": 11}, "risk": 0.30, "cost": 0.15, "rollback": "恢复 db.pool.maxSize=11 配置快照"},
+    {"id": "P-ADAPTIVE-GUARD", "title": "启用自适应连接池下限保护", "changes": {"pool_size": 24, "adaptive_min_pool": true}, "rollback_changes": {"pool_size": 11, "adaptive_min_pool": false}, "risk": 0.55, "cost": 0.45, "rollback": "关闭 adaptive_min_pool 并恢复配置快照"}
   ]
 }

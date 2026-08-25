@@ -1,6 +1,18 @@
 {
   "incident_id": "INC-2026-0816-001",
   "title": "订单创建接口在午间流量下出现高失败率与长尾延迟",
+  "ground_truth": {
+    "case_type": "golden",
+    "model_support": "supported",
+    "expected_outcome": "diagnose",
+    "expected_primary_causes": ["H-POOL"],
+    "expected_amplifiers": ["H-DEPENDENCY"],
+    "expected_not_causal": ["H-CODE"],
+    "fixture_scope": "pipeline-and-evaluation",
+    "known_actual_causes": ["H-POOL"],
+    "rationale": "在当前确定性容量模型中，恢复连接池可消除主要失败，回退依赖只能部分缓解。",
+    "boundary_note": "合成容量回放；只验证 pool_size 与 dependency_latency_factor，不证明真实生产根因。"
+  },
   "baseline": {
     "traffic_rps": 120.0,
     "pool_size": 8,
@@ -79,6 +91,7 @@
       "id": "P-ROLLBACK-CODE",
       "title": "回滚关联日志提交",
       "changes": {"code_version": "pre-a91c7e"},
+      "rollback_changes": {"code_version": "a91c7e"},
       "risk": 0.15,
       "cost": 0.20,
       "rollback": "重新部署 a91c7e"
@@ -87,6 +100,7 @@
       "id": "P-PIN-DEPENDENCY",
       "title": "将支付客户端回退至 1.8",
       "changes": {"dependency_latency_factor": 1.0},
+      "rollback_changes": {"dependency_latency_factor": 1.3},
       "risk": 0.30,
       "cost": 0.35,
       "rollback": "恢复 payment-client 2.0 锁文件"
@@ -95,6 +109,7 @@
       "id": "P-RESTORE-POOL",
       "title": "恢复连接池 24 并增加容量验证门禁",
       "changes": {"pool_size": 24},
+      "rollback_changes": {"pool_size": 8},
       "risk": 0.30,
       "cost": 0.15,
       "rollback": "恢复 db.pool.maxSize=8 配置快照"
@@ -103,6 +118,7 @@
       "id": "P-ADAPTIVE-GUARD",
       "title": "启用自适应连接池下限保护",
       "changes": {"pool_size": 24, "adaptive_min_pool": true},
+      "rollback_changes": {"pool_size": 8, "adaptive_min_pool": false},
       "risk": 0.55,
       "cost": 0.45,
       "rollback": "关闭 adaptive_min_pool 并恢复配置快照"

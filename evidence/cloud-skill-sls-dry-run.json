@@ -1,0 +1,55 @@
+{
+  "skill": {
+    "name": "alibabacloud-sls-query",
+    "portal": "https://skills.aliyun.com/skills/alibabacloud-sls-query",
+    "source": "https://github.com/aliyun/alibabacloud-aiops-skills",
+    "source_commit": "4dc1013ec2564f85fd07e5b5945b2d34ceca7eff",
+    "source_path": "skills/storage/sls/alibabacloud-sls-query",
+    "permission_boundary": "SLS GetIndex + GetLogsV2 read-only"
+  },
+  "request": {
+    "project": "chronosfix-demo",
+    "logstore": "checkout",
+    "from_epoch": 1787623200,
+    "to_epoch": 1787624100,
+    "query": "status >= 500 and route: \"/api/order/create\"",
+    "profile": null
+  },
+  "commands": [
+    [
+      "aliyun",
+      "sls",
+      "get-index",
+      "--project",
+      "chronosfix-demo",
+      "--logstore",
+      "checkout",
+      "--user-agent",
+      "AlibabaCloud-Agent-Skills/alibabacloud-sls-query/4b680db91fca400c81c37aa9aaa85310"
+    ],
+    [
+      "aliyun",
+      "sls",
+      "get-logs-v2",
+      "--project",
+      "chronosfix-demo",
+      "--logstore",
+      "checkout",
+      "--user-agent",
+      "AlibabaCloud-Agent-Skills/alibabacloud-sls-query/4b680db91fca400c81c37aa9aaa85310",
+      "--from",
+      "1787623200",
+      "--to",
+      "1787624100",
+      "--query",
+      "status >= 500 and route: \"/api/order/create\""
+    ]
+  ],
+  "execution_mode": "dry-run",
+  "credential_handling": "existing aliyun CLI profile only; secrets never enter the Agent context",
+  "required_ram_actions": [
+    "log:GetIndex",
+    "log:GetLogStoreLogs"
+  ],
+  "fallback": "If SLS or credentials are unavailable, retain local synthetic evidence and label it simulated."
+}

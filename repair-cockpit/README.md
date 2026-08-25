@@ -1,42 +1,58 @@
-# Repair Cockpit 修复驾驶舱
+# AsoulAI ChronosFix Repair Cockpit
 
-队伍名称：**AsoulAI**
+这是 ChronosFix 的复赛评委模式 Demo。页面不在 `app.js` 中维护业务结果，而是读取由工程证据生成的 `data/demo-data.json`。
 
-这是 AsoulAI ChronosFix（A-CFX）的可交互展示层，用来把“带证明的软件变更基础设施”的核心创意、复赛工程验证和官方 Agent Infra 基座映射可视化。
+## 生成最新 Demo 数据
 
-## 打开方式
+在项目根目录运行：
 
-直接双击或在浏览器中打开：
-
-```text
-repair-cockpit/index.html
+```powershell
+python repair-cockpit/scripts/build_demo_data.py
 ```
 
-页面是纯静态 HTML/CSS/JS，不依赖后端服务。
+生成器会：
 
-## 展示内容
+- 从 9 个 Golden 场景执行完整离线流水线；
+- 分别执行“具名离线审批”和“无人审批阻断”两个真实 RiskGate 分支；
+- 从 3 个评测专用夹具读取 Badcase / 证据不足结果；
+- 汇总 `run_id`、`trace_id`、三态门禁、故障族结果、证据护照与评测口径；
+- 只把前端需要的字段写入 `repair-cockpit/data/demo-data.json`。
 
-- 官方参考 Baseline：说明 A-CFX 如何对齐 OpsPilot Zero 示例，并在软件研发全流程协同方向上增强。
-- 证明链：展示事故证据、反事实根因、缺陷基因、RiskGate、GitHub PR / 证据护照和 Skill 沉淀如何串成一条软件变更链。
-- 原创性边界：说明公开展示统一使用 AsoulAI ChronosFix / A-CFX，避免与 GitHub 泛 Chronos 项目混淆。
-- 故障时间线：展示代码、依赖、配置、流量、告警如何在同一窗口内变化。
-- 平行宇宙实验室：点击 CODE / DEPENDENCY / POOL 查看反事实实验结果。
-- 缺陷基因实验室：按风险过滤 8 个同源故障变体。
-- 补丁竞赛：点击不同补丁，查看分数、失败率、风险、成本和回滚策略。
-- 证据护照：展示需求、因果、验证、风险、回滚、缺口声明。
-- Skill 自进化工坊：展示事故沉淀出的可复用 Skill 候选。
-- 商业价值飞轮：展示 A-CFX 如何服务研发组织、云厂商 / DevOps 平台和高审计行业。
-- 质量资产沉淀：把事故证据、反事实实验、证据护照、Skill 与故障基因包串成可复用资产链。
-- 复赛验证：展示 AgentTeams 代码包、样例输入输出、日志 / Trace / Metrics、失败处理。
-- GitHub Issue / PR 模拟链路：展示事故如何进入 Issue、补丁如何形成 PR 草案、检查和审计如何闭环。
-- 官方基座：展示 AgentTeams、云 Skills、Nacos、Higress、PolarDB、UnifiedModel、RocketMQ、AgentLoop 的接口映射。
+## 本地打开
 
-## 60 秒演示话术
+浏览器通常禁止 `file://` 页面读取相邻 JSON，因此请在项目根目录启动静态服务：
 
-1. 先看顶部证明链：A-CFX 不是自动修 Bug，而是把事故转成带证明的软件变更。
-2. 再看时间线和平行宇宙：只有恢复连接池后失败率归零，因此主因被证明。
-3. 然后看缺陷基因：补丁要通过 8 个同源变体，说明它修的是一类问题。
-4. 接着看补丁竞赛和 RiskGate：最终补丁不是随便生成，而是综合正确性、风险、成本和审批筛出来。
-5. 再看“复赛验证”里的 GitHub Issue / PR 链路：证明根因分析能落到真实研发协作流，不只是生成报告。
-6. 然后看“官方基座”：证明它不是静态页面，而是有可运行入口、工程证据和迁移路径。
-7. 最后看证据护照、Skill 工坊和商业价值飞轮：发布有证据，复盘能变成下一次可复用能力，也能变成平台化商业资产。
+```powershell
+python -m http.server 8000 --directory repair-cockpit
+```
+
+然后访问：
+
+```text
+http://localhost:8000/
+```
+
+GitHub Pages 会直接按静态资源方式加载，无需后端。
+
+## 60 秒评委动线
+
+1. 选择 `checkout-timeout`，说明页面读取的是离线运行证据而非前端写死数字。
+2. 点击“因果证明”，展示主因、放大因素和证伪假设的反事实差异。
+3. 点击“故障族验证”，展示补丁竞赛、真实变更字段和强制变体结果。
+4. 在“三态门禁”切换“证明通过 / 无人审批·阻断”，观察 `human_approval`、`quality_gate`、`release_decision` 独立变化。
+5. 点击“证据护照”，展示 SHA-256、回滚契约以及真实仓库、Issue、PR、评测链接。
+6. 点击“评测与沉淀”，展示 9 个 Golden 和 3 个边界样例；再选择 Badcase，说明失败不会进入补丁或发布流程。
+
+## 状态边界
+
+- `offline-validated`：核心流水线在确定性合成场景中离线执行并留下证据。
+- `dry-run`：GitHub 修复流当前生成本地草案；公开 Issue #1 / PR #2 仅作为真实协作证据。
+- `pending`：不宣称已经连接真实 AgentTeams Controller Runtime、阿里云 Skills 或生产云资源。
+- 页面中的 `commit=pending` 表示本地补丁草案尚未形成真实提交，避免使用虚构 SHA。
+
+## 静态检查
+
+```powershell
+node --check repair-cockpit/app.js
+python -m json.tool repair-cockpit/data/demo-data.json > $null
+```

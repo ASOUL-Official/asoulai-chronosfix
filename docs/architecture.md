@@ -1,120 +1,108 @@
-# 技术架构
+# 技术架构与证据边界
 
-ChronosFix 复赛版采用七层结构：AgentTeams 协同层、Skill 能力层、云 Skills / MCP 工具层、AI 治理控制面、AI 网关层、Agent 数据层、证据可观测层。当前代码包用本地确定性引擎交付可运行 Demo，同时按官方推荐工具链定义可迁移接口。
-
-它的架构目标不是“自动修 Bug”，而是支撑一条 **Proof-Carrying Software Change Chain（带证明的软件变更链）**：事故证据 → 反事实证明根因 → 缺陷基因验证补丁 → RiskGate 审批 → GitHub PR / 证据护照 → Skill / 故障资产沉淀。
-
-## 端到端链路
+ChronosFix 用一条带证明的软件变更链组织本地工程实现与 Agent Infra 迁移接口：
 
 ```text
-Issue / Alert / Log / Trace / Git / Config
-              |
-              v
-Incident Commander 拆解任务与维护共享状态
-              |
-              v
-Timeline Analyst 构建故障时间线
-              |
-              v
-Hypothesis Scientist 生成可证伪假设
-              |
-              v
-Universe Builder 创建平行版本、反事实重放、故障基因繁殖
-              |
-              v
-Patch Engineer 生成候选补丁与回滚契约
-              |
-              v
-Adversarial Verifier 在故障基因族上进行补丁竞赛
-              |
-              v
-Release Auditor 执行风险门禁、证据护照与审计归档
-              |
-              v
-SkillForge 将成功经验沉淀为可复用 Skill 候选
+Issue / Alert / Git / Config / Trace
+  -> Incident State
+  -> 可证伪假设与反事实干预
+  -> 故障族与补丁竞赛
+  -> quality_gate
+  -> named human approval
+  -> local GitHub draft + Evidence Passport
+  -> Skill Candidate + run manifest
 ```
 
-从软件变更视角看，上面的 Agent 流程对应六个可审查交付物：
+## 分层架构
 
-| 证明链环节 | 关键交付物 |
-|---|---|
-| 事故证据 | timeline、evidence index、impact metrics |
-| 反事实证明根因 | hypothesis contracts、counterfactual experiment result |
-| 缺陷基因验证补丁 | fault variants、patch tournament ranking、regression result |
-| RiskGate 审批 | risk score、approval state、rollback contract |
-| GitHub PR / 证据护照 | PR draft、checks、diff、Evidence Passport |
-| Skill / 故障资产沉淀 | skill candidates、fault gene package、proof template |
-
-## AgentTeams 映射
-
-| AgentTeams 能力 | ChronosFix 映射 |
-|---|---|
-| Manager | Incident Commander |
-| Worker | Timeline、Hypothesis、Universe、Patch、Verifier、Auditor |
-| Team | ChronosFix Incident Response Team |
-| Human | 研发负责人或值班 SRE，负责中高风险审批 |
-| Matrix Room | 故障协作房间，全员可见每个 Agent 的结论和证据 |
-| Shared File System / Object Storage | Trace、proof-bundle、proof-report、实验产物和回放数据 |
-| Higress AI Gateway / MCP | Git、CI、日志、配置中心、工单和知识库工具入口 |
-
-### 角色、任务、上下文、执行、状态五点
-
-| 指南核验点 | 当前可验证实现 |
-|---|---|
-| 角色编排 | `agentteams/chronosfix-team.yaml` 定义 Human、Manager 和 7 个 Worker |
-| 任务拆解 | `agentteams/run_chronosfix_team.py` 输出 AgentTeams 风格任务拆解 |
-| 上下文传递 | Incident State 承载 timeline、hypotheses、experiments、variants、patch scores、approval、passport |
-| 协同执行 | Demo 串联 9 个 Skill；生产接 RocketMQ 后可将反事实实验和补丁评分并行化 |
-| 状态追踪 | `trace.jsonl`、`run-log.jsonl`、`agentteams-run.json` 记录 trace_id、span_id、agent、skill、status、payload |
-
-## 官方推荐基础设施映射
-
-| 基础设施 | ChronosFix 职责 | 复赛说明 |
+| 层 | 当前实现 | 生产化映射 |
 |---|---|---|
-| 阿里云云 Skills | 云资源操作、HITL、官方 Skill 发现与安装 | 本地 Skill 可迁移为云 Skills；高风险配置回滚走人工确认 |
-| Nacos | AgentSpec、SkillSpec、Prompt、配置策略、MCP Endpoint Registry | `official-infra-mapping.md` 定义 namespace/group/dataId |
-| Higress | LLM、Agent 服务、MCP Server、云 Skills 的统一入口 | 统一鉴权、路由、限流、Fallback、Token 观测 |
-| PolarDB for PostgreSQL | 长记忆、RAG、审计日志、Trace、向量索引 | 复赛以 JSON/JSONL 最小实现，生产接表结构和 pgvector |
-| UnifiedModel | Incident、Evidence、Patch、Skill 的实体关系层 | `engineering.py` 提供 object graph 草案 |
-| RocketMQ | 事件驱动、异步任务、Agent 间消息和可靠通知 | 定义 incident/timeline/hypothesis/experiment/riskgate/passport Topics |
-| LoongSuite / AgentScope Studio / AgentLoop | Trace、Log、Metrics、评估、审计回放 | 当前输出可导入观测系统的结构化证据 |
+| 协同层 | 本地确定性 orchestrator；AgentTeams-compatible transcript | AgentTeams Manager/Worker/Team/Human/Matrix |
+| Skill 层 | 9 个核心本地 Skill + 官方 SLS 只读 Adapter；完整性/评测为辅助模块 | AgentTeams Worker Skill / 企业 Skill Registry |
+| 工具层 | 本地场景文件、GitHub local-draft、官方 SLS Skill dry-run | 云 Skills、MCP、Git/CI/Log/Config/Ticket Adapter |
+| 治理与网关 | 契约和策略说明 | Nacos、Higress |
+| 数据层 | Incident State、JSON/JSONL、SHA-256 manifest | PolarDB for PostgreSQL、UnifiedModel |
+| 事件层 | 本地顺序执行与事件日志 | RocketMQ |
+| 可观测层 | 18 Span Trace、结构化日志、实测 duration、派生指标 | LoongSuite、AgentScope Studio、AgentLoop |
 
-## MCP 与等价集成契约
+其他官方组件目前是接口映射，不是部署证据。
 
-当前可运行 Demo 为了复现稳定性，使用本地 JSON 和确定性模拟器实现工具适配。迁移到真实系统时，每个外部系统按同一套契约封装：
+## AgentTeams 正式资源
 
-| 工具 | 协议 | 核心输入 | 核心输出 | 权限 | 审计 |
-|---|---|---|---|---|---|
-| Git Adapter | MCP / CLI | repo、commit、path、diff range | diff、blame、commit metadata | 只读；修复分支可写需授权 | 记录 commit range 和调用人 |
-| CI Adapter | MCP / HTTP | branch、test target、env | test result、logs、coverage | 触发测试，不直发生产 | 记录 job id 和结果 |
-| Log/Trace Adapter | MCP / HTTP | service、time window、query | logs、spans、metrics | 只读脱敏 | 记录 query 和 trace id |
-| Config Adapter | MCP / HTTP | key、environment、version | config diff、rollback point | 修改需审批 | 记录审批与回滚点 |
-| Ticket Adapter | MCP / HTTP | incident id、status、report | issue、PR、comment | 写入报告需授权 | 记录外部链接 |
+`agentteams/runtime/chronosfix-resources.yaml` 使用 `agentteams.io/v1beta1`，包含：
 
-完整 Schema 见 `docs/interface-schema.md`。
+- 1 Manager；
+- 8 Worker，其中 Incident Commander 为唯一 `team_leader`；
+- 1 Team，通过 `workerMembers` 关联成员；
+- 1 Human，作为具名 Release Owner。
 
-## 可观测性
+资源已经离线校验，结果为 `evidence/agentteams-manifest-validation.json`。AgentTeams Controller / Matrix 尚未安装和执行；`agentteams-run.json` 是本地确定性内核生成的兼容映射证据，不是真实 Runtime 轨迹。
 
-Demo 输出复赛工程证据：
+## Agent 协作映射
 
-- `trace_id`：单次事故链路。
-- `span_id`：每个 Agent/Skill 调用。
-- `agent`：负责的职能 Agent。
-- `skill`：调用能力。
-- `status`：ok、approved 或 blocked。
-- `payload`：输入输出摘要、指标和证据。
-- `run-log.jsonl`：结构化记录权限范围、审批事件和失败处理。
-- `engineering-metrics.json`：记录 Tool 成功率、补丁最差失败率、审批门禁、回滚契约和 Trace Schema。
-- `evaluation-report.md`：汇总自动化验证、复赛验收点和失败分支。
+| 环节 | Worker | 共享状态 |
+|---|---|---|
+| 证据融合与时间线 | Timeline Analyst | events、timeline、evidence index |
+| 假设契约 | Hypothesis Scientist | hypotheses、interventions、拒答条件 |
+| 反事实与故障族 | Universe Builder | experiments、classifications、variants |
+| 补丁契约 | Patch Engineer | changes、rollback_changes |
+| 对抗验证 | Adversarial Verifier | patch scores、mandatory variant results |
+| 门禁与护照 | Release Auditor | quality gate、approval record、passport |
+| 资产沉淀 | Skill Curator | skill candidates |
+| 总体协调 | Incident Commander | run status、最终报告、人工升级 |
 
-当前增强版会记录 16 段 Trace，覆盖 EvidenceFusion、ChangeTimeline、BaselineReplay、HypothesisContract、CounterfactualReplay、FaultGenome、PatchTournament、RiskGate、EvidencePassport、GitHub Issue/PR、SkillForge 和 ProofReport。
+## RiskGate 状态模型
 
-## 上下文与 RAG 计划
+质量与人工审批是两个正交维度：
 
-当前复赛包实现三类上下文能力：
+```text
+quality_gate = passed
+AND (risk low OR named human approval valid)
+=> release_ready = true
+```
 
-- Incident State：保存任务状态、证据索引、假设、实验、故障变体、补丁排名和证据护照。
-- 轨迹可观测：Trace 可回放每个决策。
-- 证据报告：proof-bundle 可进入知识库。
+质量门禁检查：
 
-复赛最小实现已覆盖指南中 RAG/上下文增强的三项：共享状态管理、轨迹可观测、证据链持久化。决赛阶段增加历史事故 RAG 和 Runbook RAG，用 PolarDB for PostgreSQL + pgvector 检索相似故障、既往修复、组件约束和发布策略。
+- 是否证明至少一个主因；
+- 所有强制变体是否健康；
+- 是否存在 missing claims；
+- 是否有机器可读回滚且实际恢复基线；
+- 所有 required checks 是否执行并有退出码或 run ID 等结果证据。
+
+中高风险审批记录包含 approver、reason、timestamp、policy_version 和 input_digest。人工不能覆盖 `blocked-quality-gate`。
+
+## Trace、指标与完整性
+
+主场景当前生成 18 个 Span。每条 Span 包含：
+
+- `timestamp`、`started_at`、`ended_at`；
+- `duration_ms` 与 `duration_kind`；
+- `run_id`、`trace_id`、`span_id`、`parent_span_id`；
+- incident、agent、skill、status、payload。
+
+`engineering-metrics.json.elapsed_ms` 来自本地 wall-clock 实测；步骤完成率和证据覆盖率分别标记为 derived。因为本地运行没有调用外部工具，`external_tool_success_rate` 为 null，而不是虚构 100%。
+
+`run-manifest.json` 使用 SHA-256 绑定场景、补丁 changes、rollback_changes、审批输入摘要和主要证据文件。它提供完整性检测，不等同于密码学签名或远程不可抵赖存证。
+
+## 12 例评测边界
+
+- 9 个 pipeline Golden：受支持诊断 9/9。
+- 2 个 evaluation-only Badcase：当前变量未建模，均 abstain，但不计成功。
+- 1 个 Insufficient Evidence：通过可辨识性仲裁正确拒答 1/1。
+- 整体达成预期 10/12。
+
+这些均为合成回放，不能外推生产准确率。
+
+## 外部工具契约
+
+真实系统按相同输入/输出与权限模型接入：
+
+| 工具 | 当前证据 | 生产权限 |
+|---|---|---|
+| Git / GitHub | local-draft + documentation-only Issue #1/PR #2 | 分支、PR、Checks 分权；合并禁用 |
+| CI | 本地 validation checks 带执行结果 | 只触发测试，不直发生产 |
+| SLS | 官方 `alibabacloud-sls-query` dry-run | RAM GetIndex/GetLogsV2 只读 |
+| 配置中心 | Schema/Adapter 契约 | 读取自动，回滚必须 HITL |
+| 发布系统 | RiskGate 本地门禁 | 具名审批、回滚与审计 |
+
+详细 Schema 见 `docs/interface-schema.md`。

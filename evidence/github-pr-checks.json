@@ -1,32 +1,68 @@
 {
   "repository": "ASOUL-Official/asoulai-chronosfix",
+  "mode": "local-draft",
   "pull_request": "#43",
-  "commit_sha": "demo-pr-restore-pool-capacity",
+  "commit_sha": null,
+  "base_commit_sha": "53c64c3b87f0fd5098e08a8e26ccbf98dfc31aec",
+  "run_id": "run-1dc8539cfe9b40abb4ec1504e50ca512",
+  "status": "completed",
   "checks": [
     {
-      "name": "unit-tests",
-      "conclusion": "success",
-      "summary": "python -m unittest discover -s tests -p \"test_*.py\" -q"
-    },
-    {
       "name": "counterfactual-replay",
+      "required": true,
+      "executed": true,
       "conclusion": "success",
-      "summary": "H-POOL rollback replay reduces failure rate to 0.0%."
+      "exit_code": 0,
+      "run_id": "run-1dc8539cfe9b40abb4ec1504e50ca512",
+      "evidence": "experiment results persisted in proof-bundle.json",
+      "summary": "1 primary cause(s) reached the intervention threshold.",
+      "source": "metrics.validation_checks"
     },
     {
       "name": "fault-gene-suite",
+      "required": true,
+      "executed": true,
       "conclusion": "success",
-      "summary": "8 variants evaluated; worst failure rate 6.2%."
+      "exit_code": 0,
+      "run_id": "run-1dc8539cfe9b40abb4ec1504e50ca512",
+      "evidence": "selected_patch.results in proof-bundle.json",
+      "summary": "8 mandatory variants evaluated; worst failure rate 6.2%.",
+      "source": "metrics.validation_checks"
+    },
+    {
+      "name": "rollback-contract",
+      "required": true,
+      "executed": true,
+      "conclusion": "success",
+      "exit_code": 0,
+      "run_id": "run-1dc8539cfe9b40abb4ec1504e50ca512",
+      "evidence": "patch changes followed by rollback_changes compared with baseline",
+      "summary": "Rollback restores the complete baseline state.",
+      "source": "metrics.validation_checks"
     },
     {
       "name": "riskgate",
+      "required": true,
+      "executed": true,
       "conclusion": "success",
-      "summary": "RiskGate decision: approved."
+      "quality_gate": "passed",
+      "decision": "approved",
+      "blockers": [],
+      "summary": "RiskGate decision: approved; quality gate: passed.",
+      "source": "state.gate_result"
     },
     {
-      "name": "evidence-passport",
+      "name": "human-approval",
+      "required": true,
+      "executed": true,
       "conclusion": "success",
-      "summary": "Requirement, causal, verification, risk and rollback claims attached."
+      "approver": "AsoulAI Release Owner",
+      "approved_at": "2026-08-25T08:35:10.809777+00:00",
+      "reason": "Semifinal evidence review",
+      "policy_version": "chronosfix-riskgate/v1",
+      "input_digest": "2bd548b7d8a9cb07d0124b9a0e365a605ef7d170a935ab1f5bbd411967d0fbb6",
+      "summary": "Named human approval recorded for AsoulAI Release Owner.",
+      "source": "state.approval_record"
     }
   ]
 }

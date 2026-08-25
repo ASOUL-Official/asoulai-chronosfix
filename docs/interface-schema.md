@@ -1,241 +1,181 @@
 # 接口 Schema、数据流与等价 MCP 契约
 
-复赛评审不要求所有外部系统都已实现 MCP Server，但要求工具调用链稳定、可迁移、可审计。A-CFX 的接口设计将 Skill 作为能力抽象层，将 MCP/Adapter/云 Skills 作为工具连接层。
+ChronosFix 将 Skill 作为能力层，将本地函数、MCP、HTTP 或官方云 Skill 作为可替换的工具层。机器可读 JSON Schema 位于 `schemas/`；本文件解释主要字段、权限和迁移边界。
 
-## 1. 端到端数据流
+## 1. 数据流
 
 ```text
-IncidentInput
-  -> EvidenceFusion
-  -> IncidentState
-  -> ChangeTimeline
-  -> HypothesisContract
+ScenarioInput
+  -> EvidenceFusion / ChangeTimeline
   -> CounterfactualReplay
-  -> FaultGenome
-  -> PatchTournament
+  -> Identifiability Arbitration
+  -> FaultGenome / PatchTournament
   -> RiskGate
   -> EvidencePassport
-  -> GitHubIssuePrFlow
-  -> SkillForge
-  -> ProofReport / Metrics / Trace / AgentTeams Transcript / GitHub Issue + PR
+  -> GitHub local draft
+  -> SkillForge / ProofReport
+  -> run-manifest + Trace + Metrics
 ```
 
-## 2. IncidentInput
+## 2. 反事实实验结果
 
 ```json
 {
-  "incident_id": "INC-2026-0816-001",
-  "title": "订单创建接口高失败率",
-  "baseline": {
-    "traffic_rps": 120.0,
-    "pool_size": 8,
-    "dependency_latency_factor": 1.3,
-    "code_version": "a91c7e"
-  },
-  "events": [
-    {
-      "timestamp": "2026-08-06T10:10:00+08:00",
-      "kind": "config",
-      "source": "db.pool.maxSize",
-      "summary": "数据库连接池从 24 调整为 8",
-      "details": {}
-    }
-  ],
-  "hypotheses": [],
-  "patch_candidates": []
+  "hypothesis_id": "H-POOL",
+  "classification": "primary-cause",
+  "baseline_failure_rate": 0.4872,
+  "counterfactual_failure_rate": 0.0,
+  "intervention_effect_score": 1.0
 }
 ```
+
+`intervention_effect_score` 是确定性回放中“干预后失败率相对下降比例”，不是统计置信度、概率或模型校准分。相同干预对应多个来源假设时，结果会降级为 `indeterminate`；在缺少来源级证据时不得选择补丁。
+
+旧字段 `causal_confidence` 已移除，公开材料不再把模拟效果称为“因果置信度”。
 
 ## 3. Trace Span
 
 ```json
 {
-  "timestamp": "2026-08-06T10:16:00+08:00",
-  "trace_id": "5408b7a5223b5c79a16bd69f1b06ea34",
-  "span_id": "0000000000000006",
+  "timestamp": "2026-08-25T07:11:45.052828+00:00",
+  "started_at": "2026-08-25T07:11:45.052777+00:00",
+  "ended_at": "2026-08-25T07:11:45.052828+00:00",
+  "duration_ms": 0.051,
+  "duration_kind": "measured",
+  "run_id": "run-...",
+  "trace_id": "5b653e47e7e34e00be3f34308ba40c71",
+  "span_id": "000000000000000d",
+  "parent_span_id": "000000000000000c",
   "incident_id": "INC-2026-0816-001",
-  "agent": "universe-builder",
-  "skill": "CounterfactualReplay",
+  "agent": "release-auditor",
+  "skill": "RiskGate",
   "status": "ok",
   "payload": {
-    "hypothesis_id": "H-POOL",
-    "counterfactual_failure_rate": 0.0,
-    "causal_confidence": 1.0
+    "quality_gate": "passed",
+    "human_approval": "approved",
+    "release_ready": true
   }
 }
 ```
 
-OpenTelemetry GenAI 迁移映射：
+主场景当前有 18 个 Span。duration 来自本地实测；instant event 明确标记 `duration_kind=instant-event`。
+
+OpenTelemetry 迁移映射：
 
 | A-CFX 字段 | OTel 语义 |
 |---|---|
-| `trace_id` | Trace ID |
-| `span_id` | Span ID |
+| `trace_id` / `span_id` / `parent_span_id` | Trace/Span 关系 |
 | `agent` | `gen_ai.agent.name` |
 | `skill` | `gen_ai.operation.name` |
 | `status` | `otel.status_code` |
-| `payload` | Span attributes / event payload |
+| `duration_ms` | Span duration |
+| `payload` | attributes / events |
 
-## 4. Tool Adapter 契约
+## 4. RiskGate
+
+输入：
+
+```json
+{
+  "selected_patch": {
+    "changes": {"pool_size": 24},
+    "rollback_changes": {"pool_size": 8},
+    "results": [{"name": "nominal", "mandatory": true, "healthy": true}]
+  },
+  "primary_cause_proven": true,
+  "missing_claims": [],
+  "rollback_verified": true,
+  "checks": [{
+    "name": "fault-gene-suite",
+    "required": true,
+    "executed": true,
+    "exit_code": 0,
+    "conclusion": "success",
+    "run_id": "run-..."
+  }],
+  "approval": {
+    "status": "approved",
+    "approver": "AsoulAI Release Owner",
+    "reason": "Semifinal evidence review",
+    "is_human": true
+  }
+}
+```
+
+输出分离：
+
+- `quality_gate=passed|failed`；
+- `human_approval=approved|not-required|missing-or-invalid`；
+- `decision=approved|blocked-quality-gate|blocked-awaiting-human`；
+- `release_ready=true|false`；
+- `quality_blockers` 与 `approval_blockers`。
+
+布尔 `approved=true` 不能代替具名审批；人工不能覆盖 `quality_gate=failed`。
+
+## 5. Tool Adapter 通用契约
 
 | 字段 | 说明 |
 |---|---|
-| `tool_name` | 稳定工具名，如 `git.diff.read`、`ci.test.trigger`、`nacos.config.diff` |
-| `protocol` | `MCP`、`HTTP`、`CLI`、`CloudSkill` |
-| `auth` | RAM Role、PAT、consumer token、OIDC、read-only token |
-| `input_schema` | JSON Schema 或等价字段表 |
-| `output_schema` | 返回结构、证据等级和错误结构 |
-| `permission_scope` | read-only、test-trigger、approval-required、write-evidence |
-| `idempotency_key` | incident_id + tool_name + normalized input hash |
-| `retry_policy` | timeout、max_retries、backoff |
-| `audit` | trace_id、span_id、caller、external_link、redaction |
-| `mcp_migration_cost` | low / medium / high，以及原因 |
+| `tool_name` | 稳定工具名，如 `git.diff.read`、`ci.test.trigger` |
+| `protocol` | local、MCP、HTTP、CLI、CloudSkill |
+| `input_schema` / `output_schema` | JSON Schema 与版本 |
+| `permission_scope` | read-only、test-trigger、draft-write、approval-required |
+| `idempotency_key` | incident + tool + normalized input hash |
+| `retry_policy` | timeout、max retries、backoff |
+| `audit` | run/trace、caller、目标、脱敏和外部链接 |
+| `evidence_level` | measured、derived、simulated、dry-run、external |
+| `failure_handling` | retry、degrade、evidence gap、fail-closed |
 
-## 5. 关键工具契约
+## 6. 官方 SLS Skill 契约
 
-### Git Adapter
+当前适配器绑定官方 `alibabacloud-sls-query`，只规划：
 
-```json
-{
-  "tool_name": "git.diff.read",
-  "protocol": "MCP/CLI",
-  "auth": "read-only repository token",
-  "input_schema": {
-    "repo": "string",
-    "base_ref": "string",
-    "head_ref": "string",
-    "paths": "array<string>"
-  },
-  "output_schema": {
-    "diffs": "array<object>",
-    "commits": "array<object>",
-    "evidence_level": "strong|weak|missing"
-  },
-  "permission_scope": "read-only",
-  "failure_handling": "timeout 后记录 evidence gap，不生成强因果结论",
-  "audit": "记录 repo、commit range、trace_id、caller"
-}
-```
+- SLS `GetIndex`；
+- SLS `GetLogsV2`；
+- 最长 24 小时查询窗口；
+- RAM `log:GetIndex` 与 `log:GetLogStoreLogs`；
+- Aliyun CLI Profile 凭据隔离；
+- 专用 User-Agent。
 
-### GitHub Issue / PR Adapter
+`evidence/cloud-skill-sls-dry-run.json` 为 dry-run，不是云查询响应。真实执行必须显式 `--execute` 且由已有只读 Profile 提供凭据。
 
-```json
-{
-  "tool_name": "github.issue_pr.draft",
-  "protocol": "MCP/HTTP/GitHub API",
-  "auth": "GitHub App installation token or fine-grained PAT",
-  "input_schema": {
-    "repo": "string",
-    "incident_id": "string",
-    "selected_patch": "object",
-    "evidence_passport": "object",
-    "riskgate": "approved|blocked-awaiting-human"
-  },
-  "output_schema": {
-    "issue": "object",
-    "pull_request": "object",
-    "diff": "string",
-    "checks": "array<object>",
-    "audit_events": "array<object>"
-  },
-  "permission_scope": "issues:write, pull_requests:write, checks:write; merge disabled by default",
-  "failure_handling": "写入失败时保留本地 evidence/github-* 文件并标记外部协作未完成",
-  "audit": "记录 issue number、pr number、branch、trace_id、actor、permission_scope"
-}
-```
+## 7. GitHub local-draft 契约
 
-### CI Adapter
+本地输出与 GitHub API 的映射：
 
-```json
-{
-  "tool_name": "ci.test.trigger",
-  "protocol": "MCP/HTTP",
-  "auth": "CI trigger token scoped to test jobs",
-  "input_schema": {
-    "branch": "string",
-    "test_suite": "string",
-    "scenario_id": "string"
-  },
-  "output_schema": {
-    "job_id": "string",
-    "status": "passed|failed|timeout",
-    "logs_url": "string",
-    "coverage": "number"
-  },
-  "permission_scope": "test-trigger",
-  "failure_handling": "失败进入 PatchTournament 低分；超时进入待人工确认",
-  "audit": "记录 job_id、branch、scenario_id"
-}
-```
+| 本地产物 | 候选 GitHub API | 当前状态 |
+|---|---|---|
+| `github-issue.json` | Issues API | local-draft |
+| `github-pr.json` | Pulls API | local-draft |
+| `github-pr-diff.patch` | Git Data/Contents | local-draft |
+| `github-pr-checks.json` | Checks API | 本地检查汇总，不是真实 Check Run |
+| `github-review-audit.jsonl` | Audit/SIEM | 本地审计事件 |
 
-### Nacos Config Adapter
+草案必须从实际 scenario、selected patch、changes、rollback changes、执行检查和审批记录派生。输入不足时 PR 保持 draft/pending，不能伪造 commit SHA 或成功检查。
 
-```json
-{
-  "tool_name": "nacos.config.diff",
-  "protocol": "CloudSkill/MCP/HTTP",
-  "auth": "RAM role with read-only config access; rollback requires HITL",
-  "input_schema": {
-    "namespace": "string",
-    "group": "string",
-    "data_id": "string",
-    "time_window": "string"
-  },
-  "output_schema": {
-    "config_events": "array<object>",
-    "rollback_point": "string",
-    "risk_level": "low|medium|high"
-  },
-  "permission_scope": "read-only unless RiskGate approved",
-  "failure_handling": "配置读取失败时不允许把配置变更标记为主因",
-  "audit": "记录 namespace/group/dataId、审批人、回滚点"
-}
-```
+公开 Issue #1 / PR #2 为 documentation-only，不是上述 Adapter 的在线执行结果。
 
-### Higress Gateway Adapter
+## 8. Evidence Passport 与完整性
 
-```json
-{
-  "tool_name": "higress.gateway.metrics",
-  "protocol": "MCP/HTTP",
-  "auth": "gateway consumer token",
-  "input_schema": {
-    "route": "string",
-    "time_window": "string",
-    "metrics": "array<string>"
-  },
-  "output_schema": {
-    "status_code_rate": "object",
-    "latency": "object",
-    "rate_limit_events": "array<object>"
-  },
-  "permission_scope": "read-only metrics; policy changes require approval",
-  "failure_handling": "网关证据缺失时降级为应用侧 Trace + Log 证据",
-  "audit": "记录 route、time_window、trace_id"
-}
-```
+Evidence Passport 包含 requirement、causal、verification、risk、rollback、missing claims 和 integrity 摘要。`run-manifest.json` 进一步绑定：
 
-## 6. Evidence Passport
+- scenario SHA-256；
+- patch changes SHA-256；
+- rollback changes SHA-256；
+- approval input digest；
+- 主要产物 SHA-256；
+- run/trace、生成时间、Python/平台和 Git commit。
 
-```json
-{
-  "patch_id": "P-RESTORE-POOL",
-  "requirement_claims": ["修复必须降低订单创建失败率与 P99 延迟"],
-  "causal_claims": ["恢复连接池后失败率 48.7% -> 0.0%"],
-  "verification_claims": ["补丁通过 8/8 个故障基因变体"],
-  "risk_claims": ["风险分 0.30，审批状态 approved"],
-  "rollback_claims": ["恢复 db.pool.maxSize=8 配置快照"],
-  "missing_claims": ["复赛需接入真实 CI、日志和历史事故回放集"]
-}
-```
+SHA-256 用于检测本地证据漂移，不等同于数字签名或远程可信时间戳。
 
-## 7. 失败处理规范
+## 9. 失败处理
 
-| 失败类型 | 系统行为 |
+| 失败 | 行为 |
 |---|---|
-| 工具超时 | 重试；仍失败则记录 evidence gap，不输出强证据 |
-| 权限不足 | 写入 run-log，等待人工授权，不绕过权限 |
-| 证据冲突 | Hypothesis Scientist 保留多假设，交给反事实实验裁决 |
-| 评测失败 | PatchTournament 降低分数，不进入 EvidencePassport 可发布状态 |
-| 中高风险未审批 | RiskGate 返回 `blocked-awaiting-human` |
-| 回滚点缺失 | EvidencePassport 写入 missing claim，禁止标记为可发布 |
+| 工具超时/权限不足 | 记录 evidence gap，不输出强结论 |
+| 同一干预无法区分来源 | 标记 indeterminate 并拒答 |
+| 强制变体失败 | `blocked-quality-gate` |
+| required check 无执行结果 | `blocked-quality-gate` |
+| 回滚缺失或未验证 | `blocked-quality-gate` |
+| 中高风险缺少具名审批 | `blocked-awaiting-human` |
+| GitHub 输入不足 | 仅生成 pending draft，不声称外部写入 |

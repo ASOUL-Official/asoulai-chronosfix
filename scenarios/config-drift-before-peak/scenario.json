@@ -1,6 +1,18 @@
 {
   "incident_id": "INC-2026-0825-002",
   "title": "午高峰前隐性配置漂移导致订单服务容量不足",
+  "ground_truth": {
+    "case_type": "golden",
+    "model_support": "supported",
+    "expected_outcome": "diagnose",
+    "expected_primary_causes": ["H-POOL"],
+    "expected_amplifiers": ["H-DEPENDENCY"],
+    "expected_not_causal": ["H-CODE"],
+    "fixture_scope": "pipeline-and-evaluation",
+    "known_actual_causes": ["H-POOL"],
+    "rationale": "配置漂移后的连接池容量低于需求；恢复容量可消除基线失败，依赖回退只部分缓解。",
+    "boundary_note": "合成配置容量回放；不等同于真实配置中心漂移检测准确率。"
+  },
   "baseline": {
     "traffic_rps": 110.0,
     "pool_size": 7,
@@ -79,6 +91,7 @@
       "id": "P-ROLLBACK-CODE",
       "title": "回滚指标上报字段整理",
       "changes": {"code_version": "pre-b72d4a"},
+      "rollback_changes": {"code_version": "b72d4a"},
       "risk": 0.12,
       "cost": 0.18,
       "rollback": "重新部署 b72d4a"
@@ -87,6 +100,7 @@
       "id": "P-PIN-DEPENDENCY",
       "title": "将支付客户端回退至 2.0",
       "changes": {"dependency_latency_factor": 1.0},
+      "rollback_changes": {"dependency_latency_factor": 1.25},
       "risk": 0.28,
       "cost": 0.32,
       "rollback": "恢复 payment-client 2.1 锁文件"
@@ -95,6 +109,7 @@
       "id": "P-RESTORE-POOL",
       "title": "恢复连接池 24 并增加配置漂移检测",
       "changes": {"pool_size": 24},
+      "rollback_changes": {"pool_size": 7},
       "risk": 0.30,
       "cost": 0.15,
       "rollback": "恢复 db.pool.maxSize=7 配置快照"
@@ -103,6 +118,7 @@
       "id": "P-ADAPTIVE-GUARD",
       "title": "启用自适应连接池下限保护",
       "changes": {"pool_size": 24, "adaptive_min_pool": true},
+      "rollback_changes": {"pool_size": 7, "adaptive_min_pool": false},
       "risk": 0.55,
       "cost": 0.45,
       "rollback": "关闭 adaptive_min_pool 并恢复配置快照"

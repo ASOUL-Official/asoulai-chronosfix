@@ -1,0 +1,133 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:30d3558a-dadc-46c3-8a99-f06b7b3188bd",
+  "version": 1,
+  "metadata": {
+    "component": {
+      "type": "application",
+      "bom-ref": "pkg:pypi/chronosfix@0.1.0",
+      "name": "chronosfix",
+      "version": "0.1.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "purl": "pkg:pypi/chronosfix@0.1.0"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "build:setuptools@>=68",
+      "name": "setuptools",
+      "version": ">=68",
+      "scope": "excluded",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "validation:pyyaml@>=6.0.2,<7",
+      "name": "PyYAML",
+      "version": ">=6.0.2,<7",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bom-ref": "pkg:github/actions/checkout@v4",
+      "name": "actions/checkout",
+      "version": "v4",
+      "scope": "excluded",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:github/actions/checkout@v4"
+    },
+    {
+      "type": "application",
+      "bom-ref": "pkg:github/actions/setup-python@v5",
+      "name": "actions/setup-python",
+      "version": "v5",
+      "scope": "excluded",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:github/actions/setup-python@v5"
+    },
+    {
+      "type": "application",
+      "bom-ref": "pkg:github/actions/configure-pages@v5",
+      "name": "actions/configure-pages",
+      "version": "v5",
+      "scope": "excluded",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:github/actions/configure-pages@v5"
+    },
+    {
+      "type": "application",
+      "bom-ref": "pkg:github/actions/upload-pages-artifact@v3",
+      "name": "actions/upload-pages-artifact",
+      "version": "v3",
+      "scope": "excluded",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:github/actions/upload-pages-artifact@v3"
+    },
+    {
+      "type": "application",
+      "bom-ref": "pkg:github/actions/deploy-pages@v4",
+      "name": "actions/deploy-pages",
+      "version": "v4",
+      "scope": "excluded",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:github/actions/deploy-pages@v4"
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "pkg:pypi/chronosfix@0.1.0",
+      "dependsOn": []
+    }
+  ]
+}

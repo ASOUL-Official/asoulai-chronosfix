@@ -2,212 +2,144 @@
 
 队伍名称：**AsoulAI**
 
-AsoulAI ChronosFix（A-CFX）是面向 GOAI 新智基座 Agent Infra「方向三：软件研发全流程协同」的复赛工程验证方案与可运行 Demo。它的底层逻辑不是“让 AI 自动修 Bug”，而是构建一套 **Proof-Carrying Software Change Infra（带证明的软件变更基础设施）**：每一次软件变更进入 PR、审批和发布链路前，都必须携带可回放、可验证、可审计、可复用的证据。
-
-一句话：A-CFX 把线上事故转化为一条带证明的软件变更链：**事故证据 → 反事实证明根因 → 缺陷基因验证补丁 → RiskGate 审批 → GitHub PR / 证据护照 → Skill / 故障资产沉淀**。它让研发团队不是“相信 AI 的结论”，而是审查 AI 交付的证据。
-
-## 底层逻辑：Proof-Carrying Software Change Infra
-
-A-CFX 的核心判断是：企业不是缺少一个会生成补丁的 Agent，而是缺少一套能把“事故、代码、验证、审批、审计、复盘资产”串起来的软件变更基础设施。
+AsoulAI ChronosFix（A-CFX）面向 GOAI 新智基座 Agent Infra「方向三：软件研发全流程协同」。它不把“AI 给出一个补丁”当作完成，而是要求每次变更进入 PR、审批和发布链路前，携带可回放、可验证、可审计的证据。
 
 ```text
 事故证据
   -> 反事实证明根因
-  -> 缺陷基因验证补丁
-  -> RiskGate 审批
-  -> GitHub PR / 证据护照
+  -> 故障基因验证补丁
+  -> 质量门禁 + 具名人工审批
+  -> GitHub PR 本地草案 / 证据护照
   -> Skill / 故障资产沉淀
 ```
 
-这条链把所有创新点收束到一个可评审、可落地、可商业化的主线上：
+## 当前证据等级（先看这里）
 
-- **事故证据**：从 Issue、Git、依赖、配置、流量、告警、Trace 中抽取同一时间窗口的事实。
-- **反事实证明根因**：在平行版本里撤销可疑变更并重放事故，把“时间相关”变成“因果可证”。
-- **缺陷基因验证补丁**：从已证明根因繁殖同源故障变体，逼补丁修一类问题，而不是只修原始样例。
-- **RiskGate 审批**：中高风险动作必须人类确认，系统保留 blocked、approved、rollback 和 evidence gap。
-- **GitHub PR / 证据护照**：补丁不只给 diff，还携带因果、验证、风险、回滚、缺口声明，可直接进入研发协作流。
-- **Skill / 故障资产沉淀**：把事故复盘蒸馏为可评测 Skill、故障基因包和证据模板，形成组织级质量资产飞轮。
+| 能力 | 当前状态 | 不应误解为 |
+|---|---|---|
+| ChronosFix 核心流水线 | Python 标准库本地可运行，自动生成 Trace、日志、指标、PR 草案和证据包 | 真实生产环境修复结果 |
+| RiskGate | 质量门禁与人工审批分离；中高风险要求具名审批，人工不能覆盖失败质量检查 | 已接企业发布审批系统 |
+| 评测集 | 12 个合成样例：9 Golden、2 Badcase、1 Insufficient Evidence | 真实企业事故准确率 |
+| AgentTeams | `agentteams.io/v1beta1` Manager/Worker/Team/Human 正式资源已离线校验 | AgentTeams Controller / Matrix 已执行 |
+| 官方云 Skill | `alibabacloud-sls-query` 只读适配器完成契约测试和 dry-run | 已成功查询真实阿里云 SLS |
+| GitHub 协作 | 核心流水线生成本地 Issue/PR/diff/checks 草案；公开 Issue #1 / PR #2 为 documentation-only 迁移证据 | 已由程序写入真实修复 PR 或 GitHub Check Run |
+| 其他官方组件 | Nacos、Higress、PolarDB、UnifiedModel、RocketMQ、AgentLoop 等已定义接口和迁移边界 | 已全部部署 |
 
-完整设计说明见 [`docs/proof-carrying-change.md`](docs/proof-carrying-change.md)。
+详细边界见 [`agentteams/runtime/runtime-status.md`](agentteams/runtime/runtime-status.md)。
 
-## 评审快速使用
+## 可复现运行
 
-如果从 GitHub 首页进入，建议按下面顺序查看：
-
-1. **在线 Demo**：打开 [AsoulAI ChronosFix Repair Cockpit](https://asoul-official.github.io/asoulai-chronosfix/)，直接查看时间线、反事实实验、GitHub Issue/PR 模拟链路、官方 Baseline 对照、原创性边界、补丁竞赛、证据护照和商业价值飞轮。
-2. **复赛方案 PPT / PDF**：查看 `submission/ChronosFix_复赛方案.pptx` 与 `submission/ChronosFix_复赛方案.pdf`，重点展示完整场景链路、样例输入输出、日志、Trace、指标、评测结果、自动化验证证据、官方 Infra 映射、风险边界与开放计划。
-3. **500 字作品简介**：查看 [`submission/work-intro-500.txt`](submission/work-intro-500.txt)，可直接用于官方提交入口。
-4. **官方 Baseline 对照**：查看 [`docs/official-baseline.md`](docs/official-baseline.md)，说明本方案如何对齐官方 OpsPilot Zero 示例，并在方向三上增强。
-5. **原创性与命名边界**：查看 [`docs/originality-check.md`](docs/originality-check.md)，说明 A-CFX 如何避免与 GitHub 泛 Chronos / debugging-first 类项目混淆。
-6. **可验证输出**：查看 [`evidence/proof-report.md`](evidence/proof-report.md)、[`evidence/proof-bundle.json`](evidence/proof-bundle.json)、[`evidence/trace.jsonl`](evidence/trace.jsonl) 和 [`evidence/github-pr.md`](evidence/github-pr.md)。
-7. **复赛工程材料**：查看 [`docs/proof-carrying-change.md`](docs/proof-carrying-change.md)、[`docs/semifinal-guide-matrix.md`](docs/semifinal-guide-matrix.md)、[`docs/official-infra-mapping.md`](docs/official-infra-mapping.md)、[`docs/interface-schema.md`](docs/interface-schema.md)、[`docs/deployment-and-verification.md`](docs/deployment-and-verification.md)、[`docs/github-issue-pr-flow.md`](docs/github-issue-pr-flow.md)。
-8. **扩展评测与实测方案**：查看 [`docs/evaluation-corpus.md`](docs/evaluation-corpus.md)、[`docs/evaluation-corpus-results.md`](docs/evaluation-corpus-results.md)、[`docs/measurement-plan.md`](docs/measurement-plan.md) 与 `scenarios/*/scenario.json`，当前包含 7 个可运行事故样例。
-9. **真实 GitHub 协作证据**：查看 [`docs/live-github-collaboration-evidence.md`](docs/live-github-collaboration-evidence.md)、[Issue #1](https://github.com/ASOUL-Official/asoulai-chronosfix/issues/1) 与 [PR #2](https://github.com/ASOUL-Official/asoulai-chronosfix/pull/2)。
-10. **决赛增强路线**：查看 [`docs/agentteams-runtime-integration.md`](docs/agentteams-runtime-integration.md) 与 [`docs/production-deployment-strategy.md`](docs/production-deployment-strategy.md)，说明真实 AgentTeams runtime 和官方组件部署策略。
-
-本地复现只需要 Python 标准库：
+环境：Python 3.10+，核心闭环不依赖第三方 Python 包，也不需要云账号。
 
 ```powershell
 git clone https://github.com/ASOUL-Official/asoulai-chronosfix.git
 cd asoulai-chronosfix
 python -m unittest discover -s tests -p "test_*.py" -q
-python demo.py --approve --output evidence
-python agentteams/run_chronosfix_team.py --approve --output output/agentteams-latest
+python demo.py --approve --approver "AsoulAI Release Owner" --approval-reason "Semifinal evidence review" --output evidence
+python evaluate.py --output output/evaluation
+python agentteams/run_chronosfix_team.py --approve --approver "AsoulAI Release Owner" --approval-reason "Semifinal evidence review" --output output/agentteams-latest
+python scripts/build_submission_package.py
 ```
 
-如果只想看可视化演示，也可以直接打开：
-
-```text
-repair-cockpit/index.html
-```
-
-## 官方参考 Baseline
-
-官方规范文件未提供必须继承的代码仓库型 baseline，但在 Agent Infra 赛道说明中给出了作品示例 Demo：**OpsPilot Zero——面向千行百业云上与自建 IDC 业务故障的零人工运维多 Agent 排查与自愈系统**。A-CFX 将它作为官方参考 Baseline：对齐其 AgentTeams、7 职能 Agent、Skill 工程化、MCP/适配器、Incident State、AgentLoop Trace、安全审计和初赛 Mock Demo 边界；同时把场景从运维故障自愈迁移到方向三的软件研发全流程协同，并新增反事实根因证明、缺陷基因实验室、证据护照和研发质量资产飞轮。
-
-详细对照见 `docs/official-baseline.md`。
-
-## 原创性与命名边界
-
-公开展示统一使用 **AsoulAI ChronosFix（A-CFX）**，避免与 GitHub 上泛 Chronos / debugging-first 类项目混淆。A-CFX 的核心差异不是单点调试模型或自动补丁脚本，而是“带证明的软件变更链 + 反事实根因证明 + 故障基因验证 + PR 证据护照 + Skill 飞轮”的研发质量资产闭环。详见 `docs/originality-check.md`。
-
-## 核心创意如何对应证明链
-
-1. **故障时间机器**
-   对应“事故证据 → 反事实证明根因”。多 Agent 不直接下结论，而是把事故前后的 Git、依赖、配置、流量、告警证据拼成时间线；每个根因假设都必须在隔离平行宇宙中被撤销、重放、证伪或证实。
-
-2. **缺陷基因实验室**
-   对应“缺陷基因验证补丁”。系统从一个已证明的故障中繁殖出一组同源变体，例如边界流量、恢复期尖峰、下游抖动、隐性配置漂移。补丁必须通过这组“故障家族”而不是只修原始样例。
-
-3. **证据护照**
-   对应“GitHub PR / 证据护照”。每个候选补丁都携带需求声明、因果声明、验证声明、风险声明、回滚声明和缺口声明。没有证据护照的补丁不能被标记为可发布。
-
-4. **Skill 自进化工坊**
-   对应“Skill / 故障资产沉淀”。一次事故处理完成后，系统会把有效经验蒸馏成可复用 Skill 候选，例如连接池容量守卫、反事实配置回放、带证明补丁生成器，让团队越用越强。
-
-5. **研发质量资产交易所**
-   事故不再只是成本中心。A-CFX 会把一次修复沉淀为三类资产：故障基因包、证据护照模板和可评测 Skill。企业内部可在多个研发团队复用，开源社区可沉淀行业样例，云厂商或平台方可把它变成面向 CI/CD、AIOps、DevSecOps 的 Agent Infra 增值能力。
-
-## 商业价值与落地模式
-
-A-CFX 的商业命题是：把线上事故处理从“专家临场救火”升级为“带证明的软件变更生产线”。它面向三类付费场景：
-
-- **中大型研发组织**：接入 Git、CI、日志、Trace、配置中心和工单系统，减少故障定位时间、降低误修复风险，并把复盘沉淀成跨团队复用的 Skill。
-- **云厂商与 DevOps 平台**：作为 Agent Infra 插件能力嵌入 APM、CI/CD、配置中心、工单和发布平台，为客户提供“带证明的 PR / 变更审批能力”。
-- **开源与生态市场**：开放故障回放集、MCP 适配器模板和 Skill 规格，让社区贡献行业故障基因包，形成越用越强的数据与能力飞轮。
-
-可收费形态包括团队版 SaaS、企业私有化部署、云市场插件、故障基因包/Skill 市场和高风险行业的审计合规模块。核心护城河不是单个模型，而是持续积累的反事实事故数据、补丁验证结果、PR 证据护照和可复用 Skill 资产库。
-
-## 复赛交付内容
-
-- `demo.py`：可运行的反事实故障分析 Demo。
-- `scenarios/checkout-timeout/scenario.json`：订单接口故障样例，包含 Git、依赖、配置、流量与告警证据。
-- `scenarios/*/scenario.json`：7 个故障回放样例，覆盖配置漂移、依赖变慢、恢复尖峰、下游抖动、缓存回灌和 timeout 放大。
-- `src/chronosfix`：多 Agent 编排内核与可复用 Skill 实现。
-- `agentteams/chronosfix-team.yaml`：AgentTeams 编排草案。
-- `agentteams/run_chronosfix_team.py`：可执行 AgentTeams 风格入口，输出 Manager/Worker、上下文传递和状态追踪证据。
-- `tests/test_pipeline.py`：自动化测试，覆盖根因证明、故障变体、补丁选择、证据护照、Skill 沉淀和人工审批门禁。
-- `evidence`：Demo 输出，包括 `trace.jsonl`、`run-log.jsonl`、`engineering-metrics.json`、`agentteams-run.json`、`evaluation-report.md`、`proof-bundle.json`、`proof-report.md`、`github-issue.md`、`github-pr.md`、`github-pr-diff.patch` 和 `github-pr-checks.json`。
-- `repair-cockpit`：可直接打开的 Repair Cockpit 修复驾驶舱，用交互页面展示时间线、平行宇宙、缺陷基因、补丁竞赛、证据护照和 Skill 自进化。
-- `docs`：复赛指南矩阵、官方 Infra 映射、GitHub Issue/PR 链路、接口 Schema、部署验证、Demo 视频脚本、Agent Identity、Skill 工程体系、架构、安全审计、开源合规、商业化设计。
-- `submission`：复赛 PPT/PDF、作品简介、提交清单。
-- `LICENSE`：Apache-2.0 开源协议。
-
-## 快速运行
+验证未审批分支：
 
 ```powershell
-cd D:\1\全球AI大赛\chronosfix
-C:\Users\liuzhanxian\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe -m unittest discover -s tests -v
-C:\Users\liuzhanxian\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe demo.py --approve --output evidence
-C:\Users\liuzhanxian\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe agentteams\run_chronosfix_team.py --approve --output output\agentteams-latest
+python demo.py --output output/no-approval
 ```
 
-打开可视化驾驶舱：
+预期：若质量检查通过但中风险补丁缺少具名审批，发布决策为 `blocked-awaiting-human`，进程返回码为 `2`。若强制故障变体、回滚或执行证据失败，则状态优先为 `blocked-quality-gate`，即使有人审批也不能放行。
 
-```powershell
-start repair-cockpit\index.html
-```
+在线 Repair Cockpit：<https://asoul-official.github.io/asoulai-chronosfix/>。它是静态演示界面；可审计事实以命令生成的 `evidence/` 文件为准。
 
-推送到 GitHub 后，仓库内置的 GitHub Pages 工作流会自动发布 `repair-cockpit` 目录，用作在线 Demo。
+## 当前可验证结果
 
-运行成功后会输出：
+主场景 `checkout-timeout` 的一次证据运行记录了：
 
-- 主要原因：连接池缩容造成服务容量不足。
-- 被证伪原因：关联日志代码变更。
-- 放大因素：支付客户端升级增加请求占用时间。
-- 缺陷基因变体：8 个同源对抗场景。
-- 选中补丁：恢复连接池 24 并增加容量验证门禁。
-- 证据护照：12 条结构化证据声明。
-- Skill 沉淀：3 个可复用 Skill 候选。
-- 证据链：16 个 Trace Span，覆盖证据融合、时间线、反事实实验、故障基因、补丁竞赛、风险门禁、证据护照、GitHub Issue/PR 链路和 Skill Forge。
-- 复赛工程证据：`run-log.jsonl`、`engineering-metrics.json`、`agentteams-run.json`、`evaluation-report.md`、`github-issue.md`、`github-pr.md`、`github-pr-diff.patch`、`github-pr-checks.json`。
+- 基线失败率 48.72%，P99 606.96 ms；
+- 3 个假设、3 次反事实干预、8 个强制故障变体、4 个候选补丁；
+- 选中补丁 `P-RESTORE-POOL`，最差变体失败率 6.25%；
+- 质量门禁 `passed`，具名人工审批后发布决策 `approved`；
+- 回滚字段已恢复到场景基线并通过机器校验；
+- 18 个 Trace Span，带 `run_id`、`trace_id`、父子关系和实测 duration；
+- 端到端 `elapsed_ms` 为本地 wall-clock 实测；证据覆盖率与步骤完成率明确标记为派生指标；
+- `run-manifest.json` 使用 SHA-256 绑定输入场景、补丁、回滚、审批摘要和输出文件。
 
-## 已验证指标
+### 12 例合成评测的准确口径
 
-- 基线失败率：48.72%。
-- 基线 P99：606.96 ms。
-- 根因假设：3 个。
-- 平行实验：3 组。
-- 补丁候选：4 个。
-- 对抗变体：8 个。
-- 故障回放评测集：7 个场景。
-- 选中补丁平均失败率：1.15%。
-- 选中补丁最差失败率：6.25%。
-- 审批策略：中高风险补丁必须人工确认，审批后才允许交付。
+- Golden：9/9 达成 Ground Truth；这也是**当前模拟器支持范围内**的诊断口径。
+- 全部样例：10/12 达成预期，不能写成 12/12。
+- Badcase：2 个属于当前未建模根因，系统均未强行归因，但也未命中已知真实原因，因此作为已知漏诊保留。
+- Insufficient Evidence：1 个，正确拒答 1/1；可辨识性仲裁在多个来源假设映射到相同干预时降级为 `indeterminate` 并安全拒答。
+- 全部数据均为确定性合成回放，不代表生产准确率、真实 MTTR 或商业 ROI。
 
-## AgentTeams 映射
+运行 `python evaluate.py --output output/evaluation` 可生成 `evaluation-summary.json`、`evaluation-cases.csv` 和 `evaluation-report.md`。评测说明见 [`docs/evaluation-corpus.md`](docs/evaluation-corpus.md) 与 [`docs/evaluation-corpus-results.md`](docs/evaluation-corpus-results.md)。
 
-A-CFX 的本地 Demo 使用确定性执行内核模拟 AgentTeams 协同流程；复赛阶段可迁移到 AgentTeams Manager-Workers 架构：
+## RiskGate：质量不能被审批覆盖
 
-- Manager 对应 `Incident Commander`，负责任务拆解、状态流转、冲突裁决与人工升级。
-- Workers 对应 Timeline、Hypothesis、Universe、Patch、Verifier、Auditor 等职能 Agent。
-- `FaultGenome` 由 Universe Builder 承担，用于从主因繁殖故障变体。
-- `EvidencePassport` 由 Release Auditor 承担，用于生成补丁发布证据。
-- `SkillForge` 由 Commander 汇总，用于把事故经验沉淀成可复用 Skill。
-- 共享状态对应 Incident State 与证据索引。
-- Matrix Room 对应透明协作与人类可见干预。
-- Higress/MCP 对应 Git、CI、日志、配置中心和工单系统接入层。
-- MinIO/对象存储对应 Trace、报告、实验产物和回放数据沉淀。
+RiskGate 输出两个独立维度：
 
-相关编排草案见 `agentteams/chronosfix-team.yaml`。
+- `quality_gate`：主因、强制变体、缺失声明、回滚和执行检查是否成立；
+- `human_approval`：中高风险是否由具名人类审批，并记录理由、时间、策略版本和输入摘要。
 
-复赛可执行入口：
+只有两者同时满足，`release_ready` 才能为 true。布尔参数 `--approve` 不能单独构成有效审批，命令行必须同时提供 `--approver`；审批只接受风险，不能将失败质量改成通过。
 
-```powershell
-python agentteams/run_chronosfix_team.py --approve --output output/agentteams-latest
-```
+## AgentTeams 对齐
 
-该入口会生成 `agentteams-run.json`，用于验证角色编排、任务拆解、上下文传递、协同执行和状态追踪。
+仓库提供两层材料：
 
-## GitHub Issue / PR 模拟链路
+1. [`agentteams/run_chronosfix_team.py`](agentteams/run_chronosfix_team.py) 调用本地确定性内核并输出 AgentTeams-compatible transcript。输出明确标记 `agentteams_runtime_executed: false`。
+2. [`agentteams/runtime/chronosfix-resources.yaml`](agentteams/runtime/chronosfix-resources.yaml) 使用 `agentteams.io/v1beta1`，包含 1 Manager、8 Worker、1 Team、1 Human；Team 通过 `workerMembers` 关联成员且恰好一个 `team_leader`。离线校验结果见 [`evidence/agentteams-manifest-validation.json`](evidence/agentteams-manifest-validation.json)。
 
-A-CFX 已新增真实研发协作样机：运行 Demo 后会把事故证据生成 GitHub 风格 Issue，把选中补丁生成 PR 草案，并附带 diff、checks、RiskGate 状态和审计事件。当前为本地可复现模拟，不会主动写入真实 GitHub 账号；真实接入时可映射到 GitHub Issues、Pulls、Checks 和 Git Data API。
+AgentTeams Controller 尚未安装，因此仓库当前没有 Controller、Matrix 房间或真实 Manager/Worker 推理协作记录。完整状态、固定版本和接入步骤见 [`docs/agentteams-runtime-integration.md`](docs/agentteams-runtime-integration.md)。
 
-核心证据：
+## 官方云 Skill
 
-- `evidence/github-issue.md`：事故 Issue 正文。
-- `evidence/github-pr.md`：PR 描述，包含根因证明、验证结果、回滚策略。
-- `evidence/github-pr-diff.patch`：模拟补丁 diff。
-- `evidence/github-pr-checks.json`：单测、反事实回放、故障基因、RiskGate 和证据护照检查。
-- `evidence/github-review-audit.jsonl`：Issue、分支、PR、RiskGate 审计事件。
+仓库实现了官方 `alibabacloud-sls-query` 的最小权限适配器：
 
-详见 `docs/github-issue-pr-flow.md`。
+- 固定上游来源与 commit；
+- 仅规划 `GetIndex` 与 `GetLogsV2`；
+- 查询窗口不超过 24 小时；
+- 凭据只从已有 Aliyun CLI Profile 获取，不进入 Agent 上下文或证据文件；
+- 当前证据 [`evidence/cloud-skill-sls-dry-run.json`](evidence/cloud-skill-sls-dry-run.json) 为 dry-run。
 
-## 官方推荐 Infra 映射
+因为尚未提供真实 SLS Project、Logstore 和只读 RAM Profile，目前没有声称完成云端查询。
 
-A-CFX 已单独补齐官方推荐工具链说明，重点不是堆叠数量，而是接口契约与迁移边界：
+## GitHub Issue / PR 的边界
 
-- AgentTeams：多 Agent 协同基点。
-- 阿里云云 Skills：云资源操作、HITL、Skill 发现与安装。
-- Nacos：Agent、Skill、Prompt、配置和 MCP Endpoint 治理。
-- Higress：模型、Agent 服务、MCP 工具和云 Skills 的统一网关。
-- PolarDB for PostgreSQL：长记忆、RAG、审计日志和向量索引。
-- UnifiedModel：Incident、Evidence、Patch、Skill 的实体关系图。
-- RocketMQ：事件驱动、异步任务、可靠通知和执行状态流转。
-- LoongSuite / AgentScope Studio / AgentLoop：Trace、Log、Metrics、评估和审计回放。
+本地流水线根据实际 `scenario_path`、`selected_patch.changes`、`rollback_changes`、执行检查和 RiskGate 结果生成：
 
-详见 `docs/official-infra-mapping.md`。
+- `github-issue.md/json`；
+- `github-pr.md/json`；
+- `github-pr-diff.patch`；
+- `github-pr-checks.json`；
+- `github-review-audit.jsonl`。
 
-## 开源计划
+这些文件是可复现的 **local-draft**，不会自动调用 GitHub API。公开 [Issue #1](https://github.com/ASOUL-Official/asoulai-chronosfix/issues/1) 与 [PR #2](https://github.com/ASOUL-Official/asoulai-chronosfix/pull/2) 是 documentation-only 迁移证据，只证明仓库协作路径和证据护照表达，不证明自动代码修复、真实 CI Check Run 或生产发布。
 
-复赛提交可运行工程材料、AgentTeams 风格入口、在线 Demo、GitHub Issue/PR 模拟链路、复赛 PPT/PDF、接口契约、运行报告和自动化验证证据；决赛继续补齐真实 GitHub API 写入、CI 适配器、日志 Trace 适配器、配置中心 MCP Server、真实历史事故 RAG 和更多故障回放集。项目采用 Apache-2.0 协议开放核心代码、Skill 规格、MCP Schema、样例数据与评测脚本。
+## 评审建议路径
+
+1. 查看本 README 的“当前证据等级”。
+2. 运行测试、主 Demo、12 例评测和未审批分支。
+3. 检查 `evidence/run-manifest.json`、`trace.jsonl`、`proof-bundle.json`、`github-pr-checks.json`。
+4. 查看 AgentTeams v1beta1 清单与离线校验证据。
+5. 查看官方 SLS Skill dry-run 与权限边界。
+6. 打开 Repair Cockpit 和 `submission/ChronosFix_复赛方案.pdf` 辅助观看。
+
+## 商业价值：当前是待验证假设
+
+A-CFX 面向中大型研发组织、云厂商/DevOps 平台和高审计行业，候选形态包括团队版 SaaS、私有化部署、云市场插件和审计模块。当前仓库只证明工程闭环，不声称已经实现客户节省、MTTR 降幅、付费转化或生产 ROI。
+
+商业验证将采用“人工 baseline vs A-CFX”的同题对照，测量 MTTA、生成可审查 PR 材料的时间、误归因率、审计材料完整度和回滚验证覆盖率。详见 [`docs/business-value.md`](docs/business-value.md) 与 [`docs/measurement-plan.md`](docs/measurement-plan.md)。
+
+## 主要目录
+
+- `src/chronosfix/`：确定性编排、RiskGate、Trace、完整性和评测实现。
+- `scenarios/`：9 个 pipeline Golden 和 3 个 evaluation-only 夹具。
+- `schemas/`：机器可读 JSON Schema。
+- `agentteams/`：本地兼容入口、Worker Skill、v1beta1 正式资源和离线校验工具。
+- `evidence/`：主场景证据、AgentTeams 清单校验和官方 SLS Skill dry-run。
+- `repair-cockpit/`：静态可视化 Demo。
+- `docs/`：架构、接口、安全、评测、部署、商业与合规说明。
+- `submission/`：复赛 PPT/PDF、500 字简介、提交清单，以及带 SHA-256 清单的完整提交压缩包。
+
+项目采用 Apache-2.0 许可证；当前场景均为合成数据，不含真实企业日志、用户数据或密钥。

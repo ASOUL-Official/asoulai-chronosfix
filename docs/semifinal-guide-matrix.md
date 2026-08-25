@@ -7,7 +7,7 @@
 | 复赛材料 | 指南要求 | A-CFX 对应交付 | 状态 |
 |---|---|---|---|
 | 更新版项目方案 PPT/PDF | 更新场景闭环、架构、Skill、风险边界与落地计划 | `submission/ChronosFix_复赛方案.pptx`、`submission/ChronosFix_复赛方案.pdf` | 已完成 |
-| 可执行 AgentTeams 代码包 | 运行入口、依赖说明、配置文件、样例输入输出和运行证据 | `agentteams/chronosfix-team.yaml`、`agentteams/run_chronosfix_team.py`、`evidence/agentteams-run.json` | 已补强 |
+| 可执行 AgentTeams 代码包 | 运行入口、依赖说明、配置文件、样例输入输出和运行证据 | 本地 compatible 入口、11 份 v1beta1 资源、Worker Skill、依赖锁、离线校验和 transcript | 已补强 |
 | 可运行 Demo / Demo 视频 | 展示完整场景链路、Agent 协作、工具调用、异常处理与技术亮点 | 在线 Demo、`repair-cockpit/`、`docs/demo-video-script.md` | 已补强 |
 
 ## 2. 更新版方案内容要求
@@ -17,14 +17,14 @@
 | 场景与方案更新 | 从“事故修复 Demo”升级为“带证明的软件变更基础设施”：故障时间机器、缺陷基因、证据护照、GitHub PR、Skill 飞轮 | `README.md`、`docs/proof-carrying-change.md`、`docs/business-value.md` |
 | 完整场景链路 | Issue/日志/Trace/Git/配置 → AgentTeams 拆解 → 反事实实验 → 缺陷基因验证 → RiskGate → GitHub PR / Evidence Passport → SkillForge | `demo.py`、`evidence/proof-report.md`、`evidence/github-pr.md` |
 | 样例输入输出 | 样例输入为订单接口超时事故，输出为 proof-bundle、proof-report、trace、metrics、AgentTeams transcript | `scenarios/checkout-timeout/scenario.json`、`evidence/` |
-| 日志 / Trace / 指标 | Trace 记录 Agent/Skill 调用；Log 记录事件与权限范围；Metrics 记录根因、补丁、变体、成功率和耗时 | `evidence/trace.jsonl`、`evidence/run-log.jsonl`、`evidence/engineering-metrics.json` |
-| GitHub Issue / PR 链路 | 事故进入 Issue，选中补丁形成 PR 草案，并附带 diff、checks、RiskGate 状态和审计事件；已补真实 GitHub Issue #1 / PR #2 live artifact | `docs/github-issue-pr-flow.md`、`docs/live-github-collaboration-evidence.md`、`evidence/github-issue.md`、`evidence/github-pr.md` |
-| 评测结果 | 自动化测试覆盖主因证明、审批阻断、补丁选择、Skill 沉淀 | `tests/test_pipeline.py`、`evidence/evaluation-report.md` |
-| 扩展评测集 | 7 个事故样例覆盖配置漂移、依赖变慢、恢复尖峰、下游抖动、缓存回灌和 timeout 放大 | `docs/evaluation-corpus.md`、`docs/evaluation-corpus-results.md`、`scenarios/*/scenario.json` |
-| 自动化验证证据 | 一键运行单元测试与 AgentTeams 风格 Demo | `docs/deployment-and-verification.md` |
-| Skill 工程实现 | 9 个核心 Skill，具备输入、输出、安全边界、复用价值和版本演进策略 | `docs/skill-specs.md` |
+| 日志 / Trace / 指标 | 18 段 Trace 记录 Agent/Skill 调用；Log 记录事件与权限范围；Metrics 区分 measured / derived，外部工具未调用时为 null | `evidence/trace.jsonl`、`evidence/run-log.jsonl`、`evidence/engineering-metrics.json` |
+| GitHub Issue / PR 链路 | 事故进入本地 Issue/PR 草案，并附 diff、checks、RiskGate 与审计；公开 Issue #1 / PR #2 明确为 documentation-only | `docs/github-issue-pr-flow.md`、`docs/live-github-collaboration-evidence.md`、`evidence/github-issue.md`、`evidence/github-pr.md` |
+| 评测结果 | 36 项自动化测试；12 场景为 9/9 受支持诊断、1/1 冲突拒答、整体 10/12 | `tests/`、`evidence/evaluation-corpus/` |
+| 扩展评测集 | 9 Golden、2 Badcase、1 证据冲突 / 不足样例；失败样例不从分母删除 | `docs/evaluation-corpus.md`、`docs/evaluation-corpus-results.md`、`scenarios/` |
+| 自动化验证证据 | 一键运行测试、严格 JSON/JSONL 校验、AgentTeams 资源校验与 Demo | `.github/workflows/verify.yml`、`docs/deployment-and-verification.md` |
+| Skill 工程实现 | 9 个业务 Skill + 1 个官方 SLS 只读 Adapter，具备输入、输出、安全边界和版本策略 | `docs/skill-specs.md` |
 | 工具 / MCP / RAG / 可观测集成 | 当前使用等价契约与本地证据；复赛说明迁移到 MCP、云 Skills、Nacos、Higress、PolarDB、RocketMQ、AgentLoop 的接口 | `docs/official-infra-mapping.md`、`docs/interface-schema.md` |
-| 真实 Runtime / 部署计划 | 说明真实 AgentTeams runtime 可接入但不建议复赛前强接；官方组件采用分阶段部署 | `docs/agentteams-runtime-integration.md`、`docs/production-deployment-strategy.md` |
+| 真实 Runtime / 部署计划 | 明确 Controller/Matrix 尚未执行、所需授权与验收证据；官方组件采用分阶段部署 | `docs/agentteams-runtime-integration.md`、`docs/production-deployment-strategy.md` |
 | 接口 Schema / 数据流 | 定义 Incident、Trace、Tool Adapter、Skill、Evidence Passport、EventBus Schema | `docs/interface-schema.md` |
 | 部署配置 | Python 标准库可复现；在线 Demo 通过 GitHub Pages 发布；复赛提供 AgentTeams 风格入口 | `README.md`、`docs/deployment-and-verification.md` |
 | 失败处理 | RiskGate 无审批时阻断；工具契约定义 timeout/retry/idempotency/degrade | `tests/test_pipeline.py`、`docs/interface-schema.md` |
@@ -49,7 +49,7 @@
 | 可能扣分点 | 应对 |
 |---|---|
 | 只有 PPT、缺少 PoC | 仓库可运行，包含测试、Demo、Trace、Metrics、运行报告 |
-| AgentTeams 只提名词 | 提供 AgentTeams YAML 与 `run_chronosfix_team.py`，输出 `agentteams-run.json` |
+| AgentTeams 只提名词 | 提供 v1beta1 Manager/Worker/Team/Human 资源、Worker Skill、依赖锁、离线校验和 compatible transcript；不冒充真实 Runtime |
 | 云 Skills 使用不清楚 | 在 `official-infra-mapping.md` 说明云 Skills 的鉴权、HITL、安全、编排和迁移 |
 | 工具集成不可判断 | `interface-schema.md` 给出协议、鉴权、Schema、失败处理、审计与 MCP 迁移成本 |
 | 研发协作流不真实 | 新增 `github-issue-pr-flow.md` 与 `evidence/github-*`，展示 Issue、PR、diff、checks、audit 的可迁移链路 |

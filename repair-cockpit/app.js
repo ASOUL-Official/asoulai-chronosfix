@@ -1,402 +1,630 @@
-const data = {
-  metrics: {
-    baselineFailureRate: 0.4872,
-    baselineP99: 606.96,
-    faultVariants: 8,
-    evidenceClaims: 12,
-    traceSpans: 16,
-    qualityAssets: 3,
-  },
-  timeline: [
-    ["09:40", "代码提交", "为订单请求增加关联日志", "git:a91c7e"],
-    ["09:55", "依赖升级", "支付客户端升级，重试路径平均延迟增加", "payment-client@2.0"],
-    ["10:10", "配置变更", "数据库连接池从 24 调整为 8", "db.pool.maxSize"],
-    ["10:15", "流量上涨", "午间活动流量升至 120 RPS", "checkout.rps"],
-    ["10:16", "告警触发", "订单创建失败率和 P99 延迟同时升高", "checkout-5xx"],
-  ],
-  proofChain: [
-    ["01", "事故证据", "Issue、Git、依赖、配置、流量、告警和 Trace 被合并为同一事实窗口。"],
-    ["02", "反事实证明根因", "在平行版本里撤销可疑变更并重放事故，证明连接池缩容才是主因。"],
-    ["03", "缺陷基因验证补丁", "从已证明事故繁殖 8 个同源变体，让补丁修一类问题。"],
-    ["04", "RiskGate 审批", "中高风险动作必须人工确认，保留 approved / blocked / rollback 证据。"],
-    ["05", "GitHub PR / 证据护照", "补丁生成 PR 草案、checks、diff、因果声明、风险声明和回滚声明。"],
-    ["06", "Skill / 故障资产沉淀", "事故复盘沉淀为 Skill 候选、故障基因包和证据模板。"],
-  ],
-  experiments: [
-    {
-      id: "H-CODE",
-      title: "关联日志代码变更导致性能回退",
-      baseline: 0.4872,
-      counterfactual: 0.4872,
-      confidence: 0,
-      classification: "证伪",
-      explanation: "撤销代码提交后失败率没有改善，因此它不是主因。",
-    },
-    {
-      id: "H-DEPENDENCY",
-      title: "支付客户端升级放大请求占用时间",
-      baseline: 0.4872,
-      counterfactual: 0.3333,
-      confidence: 0.3159,
-      classification: "放大因素",
-      explanation: "回退依赖后失败率下降但没有归零，说明它会放大故障但不是唯一主因。",
-    },
-    {
-      id: "H-POOL",
-      title: "连接池缩容造成服务容量不足",
-      baseline: 0.4872,
-      counterfactual: 0,
-      confidence: 1,
-      classification: "主因",
-      explanation: "恢复连接池后失败率归零，因果置信度达到 100%。",
-    },
-  ],
-  genome: [
-    ["nominal", "known", "从事故证据中复现的种子场景"],
-    ["high-traffic", "known", "高流量压力下验证容量是否仍足够"],
-    ["slow-downstream", "known", "下游服务变慢时验证连接占用影响"],
-    ["combined-stress", "known", "流量与下游压力同时出现"],
-    ["pool-borderline", "medium", "中等流量下容量接近饱和边界"],
-    ["recovery-spike", "high", "恢复窗口出现流量尖峰"],
-    ["downstream-jitter", "medium", "中等流量叠加间歇性下游延迟抖动"],
-    ["silent-config-drift", "high", "午间峰值前容量配置发生隐性漂移"],
-  ],
-  patches: [
-    {
-      id: "P-RESTORE-POOL",
-      title: "恢复连接池 24 并增加容量验证门禁",
-      score: 0.9195,
-      meanFailure: 0.0078,
-      worstFailure: 0.0625,
-      risk: 0.3,
-      cost: 0.15,
-      rollback: "恢复 db.pool.maxSize=8 配置快照",
-      verdict: "最终选中：分数最高，最差场景仍满足健康阈值。",
-    },
-    {
-      id: "P-ADAPTIVE-GUARD",
-      title: "启用自适应连接池下限保护",
-      score: 0.845,
-      meanFailure: 0,
-      worstFailure: 0,
-      risk: 0.55,
-      cost: 0.45,
-      rollback: "关闭 adaptive_min_pool 并恢复配置快照",
-      verdict: "技术效果最好，但风险和成本更高，适合复赛增强。",
-    },
-    {
-      id: "P-PIN-DEPENDENCY",
-      title: "将支付客户端回退至 1.8",
-      score: 0.613,
-      meanFailure: 0.2781,
-      worstFailure: 0.5,
-      risk: 0.3,
-      cost: 0.35,
-      rollback: "恢复 payment-client 2.0 锁文件",
-      verdict: "只能缓解放大因素，不能修复主因。",
-    },
-    {
-      id: "P-ROLLBACK-CODE",
-      title: "回滚关联日志提交",
-      score: 0.5359,
-      meanFailure: 0.4359,
-      worstFailure: 0.5,
-      risk: 0.15,
-      cost: 0.2,
-      rollback: "重新部署 a91c7e",
-      verdict: "代码变更已被证伪，回滚不能解决故障。",
-    },
-  ],
-  passport: {
-    需求声明: [
-      "事故 INC-2026-0816-001 要求降低订单创建失败率与 P99 延迟。",
-      "修复不得绕过审批，不得丢失回滚点，不得只修单一样例。",
-      "修复必须覆盖由同一根因繁殖出的故障基因变体。",
-    ],
-    因果声明: [
-      "连接池缩容造成服务容量不足：反事实撤销后失败率 48.7% → 0.0%，因果置信度 100.0%。",
-      "支付客户端升级放大请求占用时间：单独撤销后失败率 33.3%，判定为放大因素。",
-    ],
-    验证声明: [
-      "补丁竞赛总分 0.919。",
-      "平均失败率 0.8%，最差失败率 6.2%。",
-      "已覆盖健康变体 8/8。",
-    ],
-    风险声明: [
-      "风险分 0.30，成本分 0.15。",
-      "审批状态 approved。",
-      "RiskGate 会阻断中高风险补丁的无人值守发布。",
-    ],
-    回滚声明: ["恢复 db.pool.maxSize=8 配置快照。"],
-    缺口声明: ["当前合成 Demo 已覆盖核心故障族；复赛需接入真实 CI、日志和历史事故回放集。"],
-  },
-  skills: [
-    {
-      name: "ConnectionPoolCapacityGuard",
-      desc: "连接池容量守卫：当配置变更与流量上涨同时出现时，生成容量建议和测试门禁。",
-      targets: ["电商订单", "支付链路", "网关服务", "连接池治理"],
-    },
-    {
-      name: "CounterfactualConfigReplay",
-      desc: "配置变更反事实回放：在隔离环境验证配置变化是否为主因。",
-      targets: ["配置中心", "依赖升级", "发布回滚", "性能回退"],
-    },
-    {
-      name: "ProofCarryingPatch",
-      desc: "带证明补丁生成器：为 PR、变更单或发布审批生成证据护照。",
-      targets: ["代码修复", "配置变更", "依赖升级", "事故复盘"],
-    },
-  ],
-  engineering: [
-    {
-      label: "AgentTeams 代码包",
-      title: "可执行 Manager / Worker 入口",
-      proof: "agentteams/run_chronosfix_team.py",
-      desc: "运行后生成 agentteams-run.json，验证角色编排、任务拆解、上下文传递、协同执行和状态追踪。",
-    },
-    {
-      label: "样例输入输出",
-      title: "合成事故 + 证据化输出",
-      proof: "scenario.json → proof-bundle.json",
-      desc: "输入包含 Issue、Git、依赖、配置、流量和告警；输出包含根因、补丁、证据护照和 Skill 候选。",
-    },
-    {
-      label: "日志 / Trace / Metrics",
-      title: "复赛验收三件套",
-      proof: "trace.jsonl / run-log.jsonl / engineering-metrics.json",
-      desc: "每个 Agent 与 Skill 调用都有 trace_id、span_id、status、payload 和权限范围记录。",
-    },
-    {
-      label: "异常处理",
-      title: "未审批即阻断",
-      proof: "RiskGate: blocked-awaiting-human",
-      desc: "不传 --approve 时，中风险补丁不会发布；Evidence Passport 会保留缺口声明和回滚契约。",
-    },
-    {
-      label: "GitHub Issue / PR",
-      title: "真实研发协作模拟链路",
-      proof: "github-issue.md / github-pr.md / github-pr-diff.patch",
-      desc: "事故证据进入 Issue，选中补丁生成 PR 草案，并附带 checks、RiskGate 状态、回滚契约和审计事件。",
-    },
-  ],
-  infra: [
-    ["AgentTeams", "多 Agent 编排基点", "Manager/Worker、共享状态、人类可见协作和状态追踪。"],
-    ["云 Skills", "云资源操作 Skill 层", "接入官方 Skills 门户、HITL、安全检测、Skill 发现与安装。"],
-    ["Nacos", "AI 资源治理控制面", "管理 AgentSpec、SkillSpec、Prompt、配置策略和 MCP Endpoint。"],
-    ["Higress", "AI 网关与 MCP 入口", "统一鉴权、路由、限流、Fallback、Token 观测和工具调用治理。"],
-    ["PolarDB", "长记忆与 RAG 数据层", "存储历史事故、Runbook、Trace、审计日志和向量索引。"],
-    ["UnifiedModel", "统一实体关系模型", "把 Incident、Evidence、Trace、Patch、Skill 建成可查询对象图。"],
-    ["RocketMQ", "异步事件流转", "驱动 hypothesis.ready、experiment.done、riskgate.waiting 等可靠事件。"],
-    ["AgentLoop", "观测评估与审计", "承接 Trace、Log、Metrics、实验评估和行为审计回放。"],
-  ],
+const DATA_URL = "./data/demo-data.json";
+
+const view = {
+  data: null,
+  scenarioId: null,
+  mode: "approved",
+  stepIndex: 0,
 };
 
-const percent = (value) => `${(value * 100).toFixed(value === 0 ? 0 : 1)}%`;
+const $ = (selector) => document.querySelector(selector);
+const escapeHtml = (value) =>
+  String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 
-function renderTimeline() {
-  const container = document.querySelector("#timeline-list");
-  container.innerHTML = data.timeline
-    .map(
-      ([time, kind, summary, source]) => `
-        <article class="timeline-item">
-          <div class="timeline-dot" aria-hidden="true"></div>
-          <div>
-            <span>${time} · ${source}</span>
-            <strong>${kind}</strong>
-            <p>${summary}</p>
-          </div>
-        </article>
-      `,
-    )
-    .join("");
+const percent = (value, digits = 1) =>
+  typeof value === "number" ? `${(value * 100).toFixed(digits)}%` : "—";
+const milliseconds = (value) =>
+  typeof value === "number" ? `${value.toFixed(value >= 100 ? 1 : 2)} ms` : "—";
+const shortId = (value, length = 16) => {
+  if (!value) return "pending";
+  return value.length > length ? `${value.slice(0, length)}…` : value;
+};
+const list = (values) => (values?.length ? values.join("、") : "—");
+
+function statusClass(value) {
+  const normalized = String(value ?? "").toLowerCase();
+  if (["approved", "passed", "success", "correct", "offline-validated"].includes(normalized)) {
+    return "is-pass";
+  }
+  if (
+    normalized.includes("blocked") ||
+    ["failed", "failure", "incorrect", "not-approved", "rejected"].includes(normalized)
+  ) {
+    return "is-block";
+  }
+  if (["pending", "dry-run", "abstain"].includes(normalized)) return "is-pending";
+  return "is-neutral";
 }
 
-function renderProofChain() {
-  const grid = document.querySelector("#proof-chain-list");
-  grid.innerHTML = data.proofChain
-    .map(
-      ([step, title, desc]) => `
-        <article>
-          <span>${step}</span>
-          <strong>${title}</strong>
-          <p>${desc}</p>
-        </article>
-      `,
-    )
-    .join("");
+function currentScenario() {
+  return view.data.cases.find((item) => item.id === view.scenarioId) ?? view.data.cases[0];
 }
 
-function renderExperiments(activeId = "H-POOL") {
-  const tabs = document.querySelector("#experiment-tabs");
-  tabs.innerHTML = data.experiments
+function currentMode() {
+  const scenario = currentScenario();
+  return scenario.modes?.[view.mode] ?? null;
+}
+
+function renderExternalLinks() {
+  $("#external-links").innerHTML = view.data.links
     .map(
       (item) => `
-        <button class="tab ${item.id === activeId ? "active" : ""}" data-id="${item.id}" type="button">
-          ${item.id.replace("H-", "")}
+        <a href="${escapeHtml(item.href)}" target="_blank" rel="noreferrer">
+          ${escapeHtml(item.label)} <span aria-hidden="true">↗</span>
+        </a>
+      `,
+    )
+    .join("");
+}
+
+function renderTruthStrip() {
+  $("#truth-strip").innerHTML = view.data.truthful_status
+    .map(
+      (item) => `
+        <article class="truth-item">
+          <span>${escapeHtml(item.label)}</span>
+          <strong class="status-pill ${statusClass(item.value)}">${escapeHtml(item.value)}</strong>
+          <small>${escapeHtml(item.detail)}</small>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function renderScenarioOptions() {
+  const golden = view.data.cases.filter((item) => item.kind === "golden");
+  const evaluationOnly = view.data.cases.filter((item) => item.kind !== "golden");
+  const options = (items) =>
+    items
+      .map(
+        (item) => `
+          <option value="${escapeHtml(item.id)}">
+            ${escapeHtml(item.id)} · ${escapeHtml(item.title)}
+          </option>
+        `,
+      )
+      .join("");
+  $("#scenario-select").innerHTML = `
+    <optgroup label="Golden · 完整流水线 ${golden.length} 个">
+      ${options(golden)}
+    </optgroup>
+    <optgroup label="Badcase / 证据不足 · 只进入评测 ${evaluationOnly.length} 个">
+      ${options(evaluationOnly)}
+    </optgroup>
+  `;
+  $("#scenario-select").value = view.scenarioId;
+}
+
+function renderJudgeSteps() {
+  $("#judge-steps").innerHTML = view.data.judge_steps
+    .map(
+      (item, index) => `
+        <button class="${index === view.stepIndex ? "active" : ""}" data-step="${index}" type="button">
+          <span>${escapeHtml(item.number)}</span>
+          <strong>${escapeHtml(item.label)}</strong>
         </button>
       `,
     )
     .join("");
 
-  const active = data.experiments.find((item) => item.id === activeId) ?? data.experiments[0];
-  document.querySelector("#experiment-detail").innerHTML = `
-    <article class="cause-card">
-      <h3>${active.title}</h3>
-      <p>${active.explanation}</p>
-      <div class="rate-pair">
-        <div>
-          <strong>${percent(active.baseline)}</strong>
-          <span>基线失败率</span>
-        </div>
-        <div>
-          <strong>${percent(active.counterfactual)}</strong>
-          <span>反事实失败率</span>
-        </div>
-      </div>
+  $("#judge-steps").querySelectorAll("button").forEach((button) => {
+    button.addEventListener("click", () => {
+      view.stepIndex = Number(button.dataset.step);
+      renderJudgeSteps();
+      renderStage();
+    });
+  });
+}
+
+function setStatus(element, value) {
+  element.textContent = value;
+  element.className = statusClass(value);
+}
+
+function renderGateAndIdentity() {
+  const scenario = currentScenario();
+  const mode = currentMode();
+  const isPipeline = scenario.runtime_scope === "pipeline-and-evaluation";
+
+  const human = mode?.human_approval ?? "pending";
+  const quality = mode?.quality_gate ?? "pending";
+  const decision = mode?.release_decision ?? "pending";
+  setStatus($("#human-approval"), human);
+  setStatus($("#quality-gate"), quality);
+  setStatus($("#release-decision"), decision);
+
+  $("#run-id").textContent = mode?.run_id ?? "pending · evaluation-only";
+  $("#trace-id").textContent = mode?.trace_id ?? "pending · no pipeline trace";
+  const revision = view.data.revision;
+  const base = revision.base_commit ? ` · base ${shortId(revision.base_commit, 10)}` : "";
+  $("#commit-id").textContent = `${revision.commit} · ${revision.kind}${base}`;
+  $("#commit-id").title = revision.base_commit ?? "No patch commit was created by this dry-run.";
+
+  $("#scenario-note").innerHTML = isPipeline
+    ? `<strong>Golden · 完整流水线</strong>　${escapeHtml(scenario.incident_id)}　·　合成数据、离线实测`
+    : `<strong>${escapeHtml(scenario.kind)} · evaluation-only</strong>　不会进入补丁、RiskGate 或 PR 流程；用于如实暴露系统边界。`;
+
+  $("#decision-switch").querySelectorAll("button").forEach((button) => {
+    button.classList.toggle("active", button.dataset.mode === view.mode);
+    button.disabled = !isPipeline;
+  });
+}
+
+function metricCard(label, value, note = "") {
+  return `
+    <article class="metric-card">
+      <span>${escapeHtml(label)}</span>
+      <strong>${escapeHtml(value)}</strong>
+      ${note ? `<small>${escapeHtml(note)}</small>` : ""}
     </article>
-    <div class="classification">
+  `;
+}
+
+function renderIncident(scenario) {
+  const baselineMetrics = scenario.baseline_metrics ?? {};
+  const baseline = scenario.baseline ?? {};
+  const events = scenario.timeline ?? [];
+  return `
+    <div class="section-head">
       <div>
-        <strong>${active.classification}</strong>
-        <p>因果置信度 ${percent(active.confidence)}</p>
+        <span class="micro-label">${escapeHtml(scenario.incident_id)}</span>
+        <h3>${escapeHtml(scenario.title)}</h3>
+      </div>
+      <span class="case-badge ${scenario.kind === "golden" ? "golden" : "badcase"}">
+        ${escapeHtml(scenario.kind)}
+      </span>
+    </div>
+    <div class="metric-row">
+      ${metricCard("基线失败率", percent(baselineMetrics.failure_rate), "deterministic synthetic")}
+      ${metricCard("基线 P99", milliseconds(baselineMetrics.p99_ms), "simulator output")}
+      ${metricCard("流量", `${baseline.traffic_rps ?? "—"} RPS`, "scenario input")}
+      ${metricCard("连接池", `${baseline.pool_size ?? "—"}`, "scenario input")}
+    </div>
+    <div class="timeline compact-scroll">
+      ${events
+        .map((event, index) => {
+          const timestamp = event.timestamp?.slice(11, 16) ?? `T${index + 1}`;
+          return `
+            <article>
+              <span class="timeline-index">${String(index + 1).padStart(2, "0")}</span>
+              <div>
+                <small>${escapeHtml(timestamp)} · ${escapeHtml(event.source)}</small>
+                <strong>${escapeHtml(event.kind)}</strong>
+                <p>${escapeHtml(event.summary)}</p>
+              </div>
+            </article>
+          `;
+        })
+        .join("")}
+    </div>
+  `;
+}
+
+function classificationLabel(value) {
+  return {
+    "primary-cause": "主因",
+    amplifier: "放大因素",
+    "not-causal": "已证伪",
+  }[value] ?? value;
+}
+
+function renderCausal(scenario) {
+  const evaluation = scenario.evaluation;
+  if (scenario.runtime_scope !== "pipeline-and-evaluation") {
+    return `
+      <div class="evaluation-focus ${evaluation.expectation_met ? "is-met" : "is-missed"}">
+        <span>${escapeHtml(evaluation.case_type)} · ${escapeHtml(evaluation.model_support)}</span>
+        <h3>${escapeHtml(scenario.title)}</h3>
+        <p>${escapeHtml(evaluation.rationale)}</p>
+        <div class="comparison-grid">
+          ${metricCard(
+            "Ground Truth",
+            evaluation.expected_outcome === "abstain"
+              ? "应拒答"
+              : list(evaluation.expected_primary_causes),
+            "expected",
+          )}
+          ${metricCard("系统观测", list(evaluation.observed_primary_causes), evaluation.status)}
+          ${metricCard("是否达成", evaluation.expectation_met ? "YES" : "NO", "kept as failure")}
+        </div>
+        <div class="boundary-note">
+          <strong>已知边界，不包装成成功</strong>
+          <p>${escapeHtml(evaluation.boundary_note)}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="experiment-grid">
+      ${scenario.experiments
+        .map(
+          (item) => `
+            <article class="experiment-card ${statusClass(
+              item.classification === "primary-cause" ? "passed" : "neutral",
+            )}">
+              <div class="card-topline">
+                <span>${escapeHtml(item.hypothesis_id)}</span>
+                <strong>${escapeHtml(classificationLabel(item.classification))}</strong>
+              </div>
+              <h3>${escapeHtml(item.title)}</h3>
+              <div class="rate-flow">
+                <span>${percent(item.baseline_failure_rate)}</span>
+                <i>→</i>
+                <span>${percent(item.counterfactual_failure_rate)}</span>
+              </div>
+              <p>干预效果分 ${percent(item.intervention_effect_score)}；该值是确定性回放效果分，不是统计学置信区间。</p>
+            </article>
+          `,
+        )
+        .join("")}
+    </div>
+    <div class="scope-note">
+      <strong>Ground Truth 对照：</strong>
+      期望主因 ${escapeHtml(list(evaluation.expected_primary_causes))}；观测主因
+      ${escapeHtml(list(evaluation.observed_primary_causes))}；结果
+      <span class="status-pill ${statusClass(evaluation.status)}">${escapeHtml(evaluation.status)}</span>。
+    </div>
+  `;
+}
+
+function renderPatch(scenario) {
+  if (!scenario.selected_patch) {
+    return `
+      <div class="blocked-stage">
+        <span>evaluation-only</span>
+        <h3>此样例不会生成补丁</h3>
+        <p>Badcase 与证据不足夹具只验证系统是否识别边界；它们不会进入 Patch Tournament、RiskGate 或 GitHub PR，避免把已知错误包装成自动修复。</p>
+      </div>
+    `;
+  }
+  const selected = scenario.selected_patch;
+  const healthy = selected.results.filter((item) => item.healthy).length;
+  return `
+    <div class="patch-layout">
+      <article class="winner-card">
+        <span>SELECTED PATCH · ${escapeHtml(selected.candidate_id)}</span>
+        <h3>${escapeHtml(selected.title)}</h3>
+        <div class="winner-score">${selected.total_score.toFixed(4)}</div>
+        <p>变更：<code>${escapeHtml(JSON.stringify(selected.changes))}</code></p>
+        <p>回滚：<code>${escapeHtml(JSON.stringify(selected.rollback_changes))}</code></p>
+        <div class="health-bar"><i style="width:${(healthy / selected.results.length) * 100}%"></i></div>
+        <small>${healthy}/${selected.results.length} 强制故障族变体健康 · 最差失败率 ${percent(
+          selected.worst_failure_rate,
+          2,
+        )}</small>
+      </article>
+      <div class="ranking-list">
+        ${scenario.patches
+          .map(
+            (patch, index) => `
+              <article class="${patch.candidate_id === selected.candidate_id ? "selected" : ""}">
+                <span>#${index + 1}</span>
+                <div>
+                  <strong>${escapeHtml(patch.candidate_id)}</strong>
+                  <small>${escapeHtml(patch.title)}</small>
+                </div>
+                <b>${patch.total_score.toFixed(4)}</b>
+              </article>
+            `,
+          )
+          .join("")}
       </div>
     </div>
-  `;
-
-  tabs.querySelectorAll("button").forEach((button) => {
-    button.addEventListener("click", () => renderExperiments(button.dataset.id));
-  });
-}
-
-function renderGenome(filter = "all") {
-  const grid = document.querySelector("#genome-grid");
-  grid.innerHTML = data.genome
-    .map(([name, risk, trigger]) => {
-      const hidden = filter !== "all" && filter !== risk ? "hidden" : "";
-      return `
-        <article class="gene ${hidden}">
-          <span class="risk-${risk}">${risk}</span>
-          <strong>${name}</strong>
-          <p>${trigger}</p>
-        </article>
-      `;
-    })
-    .join("");
-
-  document.querySelectorAll(".filter").forEach((button) => {
-    button.classList.toggle("active", button.dataset.risk === filter);
-    button.addEventListener("click", () => renderGenome(button.dataset.risk));
-  });
-}
-
-function renderPatches(activeId = "P-RESTORE-POOL") {
-  const ranking = document.querySelector("#patch-ranking");
-  ranking.innerHTML = data.patches
-    .map(
-      (patch) => `
-        <button class="patch-button ${patch.id === activeId ? "active" : ""}" data-id="${patch.id}" type="button">
-          <div class="patch-topline">
-            <strong>${patch.title}</strong>
-            <span>${patch.score.toFixed(4)}</span>
-          </div>
-          <div class="bar"><span style="width:${Math.round(patch.score * 100)}%"></span></div>
-        </button>
-      `,
-    )
-    .join("");
-
-  const patch = data.patches.find((item) => item.id === activeId) ?? data.patches[0];
-  document.querySelector("#patch-detail").innerHTML = `
-    <h3>${patch.title}</h3>
-    <p>${patch.verdict}</p>
-    <div class="result-lines">
-      <div class="result-line"><span>平均失败率</span><strong>${percent(patch.meanFailure)}</strong></div>
-      <div class="result-line"><span>最差失败率</span><strong>${percent(patch.worstFailure)}</strong></div>
-      <div class="result-line"><span>风险 / 成本</span><strong>${patch.risk.toFixed(2)} / ${patch.cost.toFixed(2)}</strong></div>
-      <div class="result-line"><span>回滚策略</span><strong>${patch.rollback}</strong></div>
+    <div class="gene-list" aria-label="故障族变体">
+      ${selected.results
+        .map(
+          (item) => `
+            <article class="${item.healthy ? "healthy" : "unhealthy"}">
+              <span>${item.healthy ? "PASS" : "BLOCK"}</span>
+              <strong>${escapeHtml(item.name)}</strong>
+              <small>${percent(item.failure_rate, 2)} · P99 ${milliseconds(item.p99_ms)}</small>
+            </article>
+          `,
+        )
+        .join("")}
     </div>
   `;
+}
 
-  ranking.querySelectorAll("button").forEach((button) => {
-    button.addEventListener("click", () => renderPatches(button.dataset.id));
+function renderGate(scenario) {
+  const mode = currentMode();
+  if (!mode) {
+    return `
+      <div class="blocked-stage">
+        <span>pending · evaluation-only</span>
+        <h3>评测夹具在门禁前停止</h3>
+        <p>这不是缺失的绿色状态，而是明确的安全边界：没有可靠因果结论，就不生成补丁、不请求审批、不创建发布决策。</p>
+      </div>
+    `;
+  }
+  const gateItems = [
+    ["human_approval", mode.human_approval, "具名人类授权"],
+    ["quality_gate", mode.quality_gate, "自动证据门禁"],
+    ["release_decision", mode.release_decision, "最终发布决策"],
+  ];
+  return `
+    <div class="gate-explainer">
+      ${gateItems
+        .map(
+          ([label, value, note]) => `
+            <article class="${statusClass(value)}">
+              <span>${label}</span>
+              <strong>${escapeHtml(value)}</strong>
+              <small>${note}</small>
+            </article>
+          `,
+        )
+        .join("")}
+    </div>
+    <div class="check-grid">
+      ${mode.checks
+        .map(
+          (check) => `
+            <article>
+              <span class="status-pill ${statusClass(check.conclusion)}">${escapeHtml(
+                check.conclusion,
+              )}</span>
+              <strong>${escapeHtml(check.name)}</strong>
+              <p>${escapeHtml(check.summary)}</p>
+              <small>${escapeHtml(check.source ?? "offline run evidence")}</small>
+            </article>
+          `,
+        )
+        .join("")}
+    </div>
+    <div class="blocker-row ${mode.blockers.length ? "has-blockers" : ""}">
+      <strong>${mode.release_ready ? "满足离线放行条件" : "Fail closed：当前不可发布"}</strong>
+      <span>${escapeHtml(mode.blockers.length ? mode.blockers.join("；") : "无阻断项")}</span>
+    </div>
+  `;
+}
+
+function claimBlock(title, claims) {
+  return `
+    <article class="claim-block">
+      <span>${escapeHtml(title)}</span>
+      <ul>${(claims ?? []).map((claim) => `<li>${escapeHtml(claim)}</li>`).join("")}</ul>
+    </article>
+  `;
+}
+
+function renderEvidence(scenario) {
+  if (!scenario.passport) {
+    return `
+      <div class="evidence-boundary">
+        <span>NO PASSPORT GENERATED</span>
+        <h3>Badcase 被保留为评测证据，而不是修复证据</h3>
+        <p>${escapeHtml(scenario.evaluation.boundary_note)}</p>
+        ${renderLinkCards()}
+      </div>
+    `;
+  }
+  const passport = scenario.passport;
+  const integrity = passport.integrity ?? {};
+  return `
+    <div class="passport-grid">
+      ${claimBlock("因果声明", passport.causal_claims)}
+      ${claimBlock("验证声明", passport.verification_claims)}
+      ${claimBlock("风险声明", passport.risk_claims)}
+      ${claimBlock("回滚声明", passport.rollback_claims)}
+    </div>
+    <div class="integrity-grid">
+      <div><span>scenario_sha256</span><code>${escapeHtml(shortId(integrity.scenario_sha256, 24))}</code></div>
+      <div><span>patch_sha256</span><code>${escapeHtml(shortId(integrity.patch_changes_sha256, 24))}</code></div>
+      <div><span>approval_digest</span><code>${escapeHtml(shortId(integrity.approval_input_digest, 24))}</code></div>
+      <div><span>policy</span><code>${escapeHtml(integrity.policy_version ?? "pending")}</code></div>
+    </div>
+    ${renderLinkCards()}
+  `;
+}
+
+function renderLinkCards() {
+  return `
+    <div class="link-cards">
+      ${view.data.links
+        .map(
+          (item) => `
+            <a href="${escapeHtml(item.href)}" target="_blank" rel="noreferrer">
+              <span>PUBLIC EVIDENCE</span>
+              <strong>${escapeHtml(item.label)}</strong>
+              <small>打开真实链接 ↗</small>
+            </a>
+          `,
+        )
+        .join("")}
+    </div>
+  `;
+}
+
+function caseTypeLabel(item) {
+  if (item.case_type === "golden") return "Golden";
+  if (item.case_type === "insufficient-evidence") return "证据不足";
+  return "Badcase";
+}
+
+function renderLearning(scenario) {
+  const evaluation = view.data.evaluation;
+  const summary = evaluation.summary;
+  const skillSource = scenario.skills?.length
+    ? scenario
+    : view.data.cases.find((item) => item.skills?.length);
+  return `
+    <div class="metric-row evaluation-metrics">
+      ${metricCard("Golden", `${summary.golden_expectation_met}/${summary.golden_cases}`, "受支持的合成诊断")}
+      ${metricCard(
+        "Badcase / 证据不足",
+        `${summary.case_type_counts.badcase + summary.case_type_counts["insufficient-evidence"]}`,
+        "全部如实展示",
+      )}
+      ${metricCard("正确拒答", `${summary.correct_abstentions}/${summary.expected_abstention_cases}`, "当前仍有改进空间")}
+      ${metricCard("错误强归因", `${summary.unexpected_assertion_cases}`, "保留为失败")}
+    </div>
+    <div class="evaluation-caption">
+      <strong>限定口径：</strong>9/9 只表示确定性模拟器已建模变量上的 Golden Case；2 个未建模 Badcase 和 1 个证据冲突样例不计入成功数。
+    </div>
+    <div class="corpus-table-wrap">
+      <table>
+        <thead>
+          <tr><th>场景</th><th>类型</th><th>期望</th><th>观测主因</th><th>状态</th><th>达成</th></tr>
+        </thead>
+        <tbody>
+          ${evaluation.cases
+            .map(
+              (item) => `
+                <tr class="${item.scenario_id === scenario.id ? "current" : ""}">
+                  <td><button data-scenario="${escapeHtml(item.scenario_id)}" type="button">${escapeHtml(
+                    item.scenario_id,
+                  )}</button></td>
+                  <td>${caseTypeLabel(item)}</td>
+                  <td>${escapeHtml(
+                    item.expected_outcome === "abstain" ? "拒答" : list(item.expected_primary_causes),
+                  )}</td>
+                  <td>${escapeHtml(list(item.observed_primary_causes))}</td>
+                  <td><span class="status-pill ${statusClass(item.status)}">${escapeHtml(
+                    item.status,
+                  )}</span></td>
+                  <td>${item.expectation_met ? "YES" : "NO"}</td>
+                </tr>
+              `,
+            )
+            .join("")}
+        </tbody>
+      </table>
+    </div>
+    <div class="learning-bottom">
+      <section>
+        <span class="micro-label">SKILL CANDIDATES · OFFLINE</span>
+        <div class="skill-chips">
+          ${(skillSource?.skills ?? [])
+            .map((item) => `<span>${escapeHtml(item.name)} · v${escapeHtml(item.version)}</span>`)
+            .join("")}
+        </div>
+      </section>
+      <section class="runtime-boundary">
+        ${view.data.truthful_status
+          .map(
+            (item) => `
+              <div>
+                <strong>${escapeHtml(item.label)}</strong>
+                <span class="status-pill ${statusClass(item.value)}">${escapeHtml(item.value)}</span>
+              </div>
+            `,
+          )
+          .join("")}
+      </section>
+    </div>
+  `;
+}
+
+const stepCopy = {
+  incident: "把 Issue、Git、依赖、配置、流量与告警合并到同一个可追踪事故窗口。",
+  causal: "逐一撤销可疑变量并重放，区分主因、放大因素与已证伪假设。",
+  patch: "候选补丁必须通过同源故障族；健康失败就停，不靠人工强行放行。",
+  gate: "把人类授权、自动质量门禁和最终发布决策明确拆成三个状态。",
+  evidence: "将因果、验证、风险、回滚与完整性摘要绑定为可审计证据护照。",
+  learning: "9 个 Golden 与 3 个边界样例一起展示，成功和失败都沉淀为工程资产。",
+};
+
+function renderStage() {
+  const scenario = currentScenario();
+  const step = view.data.judge_steps[view.stepIndex];
+  $("#step-kicker").textContent = `STEP ${step.number}`;
+  $("#step-title").textContent = step.label;
+  $("#step-summary").textContent = stepCopy[step.id];
+  $("#step-progress-label").textContent = `${view.stepIndex + 1} / ${view.data.judge_steps.length}`;
+  $("#step-progress-bar").style.width = `${((view.stepIndex + 1) / view.data.judge_steps.length) * 100}%`;
+  $("#next-step").textContent =
+    view.stepIndex === view.data.judge_steps.length - 1 ? "回到第一步" : "下一步";
+
+  const renderers = {
+    incident: renderIncident,
+    causal: renderCausal,
+    patch: renderPatch,
+    gate: renderGate,
+    evidence: renderEvidence,
+    learning: renderLearning,
+  };
+  $("#stage-content").innerHTML = renderers[step.id](scenario);
+
+  $("#stage-content").querySelectorAll("button[data-scenario]").forEach((button) => {
+    button.addEventListener("click", () => {
+      view.scenarioId = button.dataset.scenario;
+      $("#scenario-select").value = view.scenarioId;
+      renderGateAndIdentity();
+      renderStage();
+    });
   });
 }
 
-function renderPassport() {
-  const list = document.querySelector("#passport-list");
-  list.innerHTML = Object.entries(data.passport)
-    .map(
-      ([title, claims]) => `
-        <article class="passport-block">
-          <h3>${title}</h3>
-          <ul>${claims.map((claim) => `<li>${claim}</li>`).join("")}</ul>
-        </article>
-      `,
-    )
-    .join("");
+function renderScenario() {
+  renderGateAndIdentity();
+  renderStage();
 }
 
-function renderSkills() {
-  const list = document.querySelector("#skill-list");
-  list.innerHTML = data.skills
-    .map(
-      (skill) => `
-        <article class="skill-card">
-          <h3>${skill.name}</h3>
-          <p>${skill.desc}</p>
-          <div class="targets">${skill.targets.map((target) => `<span>${target}</span>`).join("")}</div>
-        </article>
-      `,
-    )
-    .join("");
+function bindControls() {
+  $("#scenario-select").addEventListener("change", (event) => {
+    view.scenarioId = event.target.value;
+    renderScenario();
+  });
+
+  $("#decision-switch").querySelectorAll("button").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (button.disabled) return;
+      view.mode = button.dataset.mode;
+      renderScenario();
+    });
+  });
+
+  $("#next-step").addEventListener("click", () => {
+    view.stepIndex = (view.stepIndex + 1) % view.data.judge_steps.length;
+    renderJudgeSteps();
+    renderStage();
+    $(".stage").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
 }
 
-function renderEngineering() {
-  const grid = document.querySelector("#engineering-grid");
-  grid.innerHTML = data.engineering
-    .map(
-      (item) => `
-        <article>
-          <span>${item.label}</span>
-          <strong>${item.title}</strong>
-          <p>${item.desc}</p>
-          <em>${item.proof}</em>
-        </article>
-      `,
-    )
-    .join("");
+function showError(error) {
+  $("#loading-screen").hidden = true;
+  const template = $("#error-template");
+  const fragment = template.content.cloneNode(true);
+  fragment.querySelector("p").textContent =
+    `${error.message}。请先生成数据并通过本地 HTTP 服务打开页面；直接双击 file:// 页面通常无法读取 JSON。`;
+  document.body.append(fragment);
 }
 
-function renderInfra() {
-  const grid = document.querySelector("#infra-grid");
-  grid.innerHTML = data.infra
-    .map(
-      ([name, title, desc]) => `
-        <article>
-          <span>${name}</span>
-          <strong>${title}</strong>
-          <p>${desc}</p>
-        </article>
-      `,
-    )
-    .join("");
+async function init() {
+  try {
+    const response = await fetch(DATA_URL, { cache: "no-store" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    view.data = await response.json();
+    const preferred = view.data.cases.find((item) => item.id === "checkout-timeout");
+    view.scenarioId = preferred?.id ?? view.data.cases[0]?.id;
+    if (!view.scenarioId) throw new Error("JSON 中没有评测场景");
+
+    $("#product-title").textContent = view.data.product.title;
+    $("#product-subtitle").textContent = view.data.product.subtitle;
+    renderExternalLinks();
+    renderTruthStrip();
+    renderScenarioOptions();
+    renderJudgeSteps();
+    renderScenario();
+    bindControls();
+
+    const stamp = new Date(view.data.generated_at);
+    $("#data-stamp").textContent = `JSON 生成时间：${stamp.toLocaleString("zh-CN", {
+      hour12: false,
+    })}`;
+    $("#loading-screen").hidden = true;
+    $("#app").hidden = false;
+  } catch (error) {
+    showError(error);
+  }
 }
 
-function hydrateMetrics() {
-  document.querySelector("#metric-failure").textContent = percent(data.metrics.baselineFailureRate);
-  document.querySelector("#metric-p99").textContent = `${data.metrics.baselineP99.toFixed(2)}ms`;
-  document.querySelector("#metric-variants").textContent = data.metrics.faultVariants;
-  document.querySelector("#metric-claims").textContent = data.metrics.evidenceClaims;
-  document.querySelector("#metric-trace").textContent = data.metrics.traceSpans;
-  document.querySelector("#metric-assets").textContent = data.metrics.qualityAssets;
-}
-
-hydrateMetrics();
-renderProofChain();
-renderTimeline();
-renderExperiments();
-renderGenome();
-renderPatches();
-renderPassport();
-renderSkills();
-renderEngineering();
-renderInfra();
+init();

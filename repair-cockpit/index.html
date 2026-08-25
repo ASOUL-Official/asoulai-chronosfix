@@ -3,278 +3,114 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#07111f" />
     <title>AsoulAI ChronosFix Repair Cockpit</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%235ee7f5'/%3E%3Cpath d='M18 43 29 18h7l11 25h-8l-2-6H27l-2 6zm11-12h6l-3-9z' fill='%2307111f'/%3E%3C/svg%3E" />
     <meta
       name="description"
-      content="AsoulAI ChronosFix（A-CFX）修复驾驶舱：用证明链、时间线、反事实实验、缺陷基因、GitHub PR 和证据护照展示软件研发全流程协同。"
+      content="AsoulAI ChronosFix 复赛评委模式：用真实 JSON 证据展示事故、因果证明、故障族验证、三态门禁、证据护照与 Golden/Badcase 评测。"
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <main class="shell">
-      <section class="hero" aria-labelledby="page-title">
+    <div class="loading-screen" id="loading-screen" role="status" aria-live="polite">
+      <div class="loading-mark">A-CFX</div>
+      <p>正在读取离线证据包…</p>
+    </div>
+
+    <main class="shell" id="app" hidden>
+      <header class="topbar">
+        <div class="brand-block">
+          <span class="brand-mark">A-CFX</span>
+          <div class="brand-copy">
+            <p>AsoulAI · GOAI 新智基座 · 方向三</p>
+            <h1 id="product-title">AsoulAI ChronosFix Repair Cockpit</h1>
+          </div>
+        </div>
+        <nav class="external-links" id="external-links" aria-label="公开证据链接"></nav>
+      </header>
+
+      <section class="truth-strip" id="truth-strip" aria-label="当前实现边界"></section>
+
+      <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <p class="eyebrow">AsoulAI · GOAI 新智基座 · 方向三</p>
-          <div class="brand-lockup" aria-label="作品原创识别">
-            <span>A-CFX</span>
-            <span>Proof-Carrying Change · Fault Genome · Skill Flywheel</span>
-          </div>
-          <h1 id="page-title">AsoulAI ChronosFix Repair Cockpit</h1>
-          <p class="hero-subtitle">带证明的软件变更基础设施</p>
-          <p class="lede">
-            A-CFX 不是自动修 Bug，而是把线上事故转成一条可审批、可回放、可复用的 PR 证据链：事故证据 → 反事实证明根因 → 缺陷基因验证补丁 → RiskGate 审批 → GitHub PR / 证据护照 → Skill / 故障资产沉淀。
+          <p class="eyebrow">JUDGE MODE · 60 秒完整链路</p>
+          <h2 id="hero-title">先证明根因，再允许变更进入 PR</h2>
+          <p class="hero-subtitle" id="product-subtitle"></p>
+          <p class="hero-note">
+            页面数据来自 <code>data/demo-data.json</code>；绿色只代表离线合成验证通过，不代表已经连接真实 AgentTeams Controller、云资源或生产发布系统。
           </p>
-          <div class="hero-actions" aria-label="重点入口">
-            <a href="#proof-chain">证明链</a>
-            <a href="#official-baseline">官方 Baseline 对齐</a>
-            <a href="#engineering">复赛工程验证</a>
-            <a href="#infra">官方基座映射</a>
-            <a href="#originality">原创性边界</a>
-            <a href="#business">商业价值飞轮</a>
+        </div>
+
+        <div class="control-deck" aria-label="演示控制台">
+          <label class="field-label" for="scenario-select">评测场景</label>
+          <select id="scenario-select"></select>
+          <div class="mode-row">
+            <span class="field-label">决策分支</span>
+            <div class="segmented" id="decision-switch" role="group" aria-label="通过或阻断分支">
+              <button class="active" data-mode="approved" type="button">证明通过</button>
+              <button data-mode="blocked" type="button">无人审批 · 阻断</button>
+            </div>
           </div>
+          <p class="control-note" id="scenario-note"></p>
         </div>
-        <aside class="hero-card" aria-label="当前事故摘要">
-          <span class="status-dot"></span>
-          <p class="incident-label">AsoulAI · INC-2026-0816-001</p>
-          <h2>订单创建接口高失败率</h2>
-          <p>主因已证明：连接池缩容造成服务容量不足。交付物已进入 GitHub PR 草案，并携带证据护照、RiskGate 状态和可回滚声明。</p>
-        </aside>
       </section>
 
-      <nav class="jump-nav" aria-label="演示导航">
-        <a href="#proof-chain">证明链</a>
-        <a href="#timeline">时间线</a>
-        <a href="#universes">平行宇宙</a>
-        <a href="#genome">缺陷基因</a>
-        <a href="#tournament">补丁竞赛</a>
-        <a href="#passport">证据护照</a>
-        <a href="#skill-forge">Skill 工坊</a>
-        <a href="#official-baseline">官方 Baseline</a>
-        <a href="#engineering">复赛验证</a>
-        <a href="#infra">官方基座</a>
-        <a href="#originality">原创性</a>
-        <a href="#business">商业价值</a>
-      </nav>
-
-      <section class="metric-grid" aria-label="核心运行指标">
+      <section class="gate-strip" aria-label="三态门禁">
         <article>
-          <strong id="metric-failure">48.72%</strong>
-          <span>基线失败率</span>
+          <span>human_approval</span>
+          <strong id="human-approval">pending</strong>
+          <small>人类授权不能覆盖质量失败</small>
         </article>
         <article>
-          <strong id="metric-p99">606.96ms</strong>
-          <span>基线 P99</span>
+          <span>quality_gate</span>
+          <strong id="quality-gate">pending</strong>
+          <small>反事实、故障族、回滚、检查</small>
         </article>
         <article>
-          <strong id="metric-variants">8</strong>
-          <span>缺陷基因变体</span>
-        </article>
-        <article>
-          <strong id="metric-claims">12</strong>
-          <span>证据护照声明</span>
-        </article>
-        <article>
-          <strong id="metric-trace">16</strong>
-          <span>Trace Span</span>
-        </article>
-        <article>
-          <strong id="metric-assets">3</strong>
-          <span>质量资产类型</span>
+          <span>release_decision</span>
+          <strong id="release-decision">pending</strong>
+          <small>只有前两项同时成立才可放行</small>
         </article>
       </section>
 
-      <section class="panel proof-chain-panel" id="proof-chain">
-        <div class="section-title">
-          <p>00C · Proof-Carrying Change Chain</p>
-          <h2>底层逻辑：每次软件变更都必须带证明</h2>
-        </div>
-        <div class="proof-chain" id="proof-chain-list"></div>
+      <section class="run-strip" aria-label="本次运行身份">
+        <div><span>run_id</span><code id="run-id">pending</code></div>
+        <div><span>trace_id</span><code id="trace-id">pending</code></div>
+        <div><span>commit</span><code id="commit-id">pending · local-draft</code></div>
       </section>
 
-      <section class="cockpit-grid">
-        <aside class="panel timeline-panel" id="timeline">
-          <div class="section-title">
-            <p>01 · Evidence Timeline</p>
-            <h2>故障时间线</h2>
+      <nav class="judge-steps" id="judge-steps" aria-label="评委模式六步导览"></nav>
+
+      <section class="stage" aria-live="polite">
+        <aside class="stage-aside">
+          <p class="eyebrow" id="step-kicker">STEP 01</p>
+          <h2 id="step-title">事故事实</h2>
+          <p id="step-summary"></p>
+          <div class="step-progress" aria-label="演示进度">
+            <span id="step-progress-label">1 / 6</span>
+            <div><i id="step-progress-bar"></i></div>
           </div>
-          <div class="timeline" id="timeline-list"></div>
+          <button class="next-step" id="next-step" type="button">下一步</button>
         </aside>
-
-        <section class="main-stack">
-          <section class="panel universe-panel" id="universes">
-            <div class="section-title">
-              <p>02 · Counterfactual Universes</p>
-              <h2>平行宇宙实验室</h2>
-            </div>
-            <div class="universe-tabs" id="experiment-tabs"></div>
-            <div class="universe-detail" id="experiment-detail"></div>
-          </section>
-
-          <section class="panel genome-panel" id="genome">
-            <div class="section-title">
-              <p>03 · Fault Genome Lab</p>
-              <h2>缺陷基因实验室</h2>
-            </div>
-            <div class="filter-row" aria-label="缺陷风险过滤">
-              <button class="filter active" data-risk="all" type="button">全部</button>
-              <button class="filter" data-risk="known" type="button">已知复现</button>
-              <button class="filter" data-risk="medium" type="button">中风险</button>
-              <button class="filter" data-risk="high" type="button">高风险</button>
-            </div>
-            <div class="genome-grid" id="genome-grid"></div>
-          </section>
-
-          <section class="panel tournament-panel" id="tournament">
-            <div class="section-title">
-              <p>04 · Patch Tournament</p>
-              <h2>补丁竞赛</h2>
-            </div>
-            <div class="patch-board">
-              <div class="patch-ranking" id="patch-ranking"></div>
-              <article class="patch-detail" id="patch-detail"></article>
-            </div>
-          </section>
-        </section>
-
-        <aside class="side-stack">
-          <section class="panel passport-panel" id="passport">
-            <div class="section-title">
-              <p>05 · Evidence Passport</p>
-              <h2>证据护照</h2>
-            </div>
-            <div class="passport" id="passport-list"></div>
-          </section>
-
-          <section class="panel skill-panel" id="skill-forge">
-            <div class="section-title">
-              <p>06 · Skill Forge</p>
-              <h2>Skill 自进化工坊</h2>
-            </div>
-            <div class="skill-list" id="skill-list"></div>
-          </section>
-        </aside>
+        <div class="stage-content" id="stage-content"></div>
       </section>
 
-      <section class="panel baseline-panel" id="official-baseline">
-        <div class="section-title">
-          <p>00 · Official Baseline</p>
-          <h2>官方参考 Baseline：从 OpsPilot Zero 到 ChronosFix</h2>
-        </div>
-        <div class="baseline-grid">
-          <article>
-            <span>官方示例</span>
-            <strong>OpsPilot Zero</strong>
-            <p>官方规范未给出强制代码 baseline，但给出零人工运维多 Agent 排查与自愈示例，强调 AgentTeams、Skill、MCP/适配器、Trace、审计和安全边界。</p>
-          </article>
-          <article>
-            <span>对齐项</span>
-            <strong>Agent Infra 基座</strong>
-            <p>ChronosFix 保留 7 职能 Agent、9 个 Skill、AgentTeams 编排草案、共享 Incident State、可回放 Trace 和 RiskGate 审批门禁。</p>
-          </article>
-          <article>
-            <span>增强项</span>
-            <strong>软件研发时间机器</strong>
-            <p>面向方向三，把运维自愈扩展到 Issue、Git、依赖、配置、CI、补丁验证、发布审批和复盘资产化。</p>
-          </article>
-          <article>
-            <span>差异化</span>
-            <strong>质量资产飞轮</strong>
-            <p>新增反事实根因证明、缺陷基因实验室、证据护照和研发质量资产平台，让事故处理沉淀为可复用、可商业化资产。</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="panel engineering-panel" id="engineering">
-        <div class="section-title">
-          <p>08 · Semifinal Engineering Evidence</p>
-          <h2>复赛工程验证：可运行、可复现、可审计</h2>
-        </div>
-        <div class="engineering-grid" id="engineering-grid"></div>
-      </section>
-
-      <section class="panel infra-panel" id="infra">
-        <div class="section-title">
-          <p>09 · Official Agent Infra Mapping</p>
-          <h2>官方推荐基座映射：不是堆工具，而是可迁移接口</h2>
-        </div>
-        <div class="infra-grid" id="infra-grid"></div>
-      </section>
-
-      <section class="panel originality-panel" id="originality">
-        <div class="section-title">
-          <p>00B · Originality Guard</p>
-          <h2>原创性边界：A-CFX 不是通用 Debug Bot，而是带证明的软件变更基础设施</h2>
-        </div>
-        <div class="originality-grid">
-          <article>
-            <span>命名边界</span>
-            <strong>AsoulAI ChronosFix / A-CFX</strong>
-            <p>公开展示统一使用 AsoulAI 前缀与 A-CFX 缩写，避免与 GitHub 上泛 Chronos / debug model 类项目混淆。</p>
-          </article>
-          <article>
-            <span>方法边界</span>
-            <strong>先证明，再修复</strong>
-            <p>核心不是“生成补丁”，而是用反事实实验把相关性变成因果证据，再让补丁带着证明进入 PR、验证和审计。</p>
-          </article>
-          <article>
-            <span>资产边界</span>
-            <strong>事故变资产</strong>
-            <p>每次事故沉淀为故障基因包、证据护照模板和可复用 Skill，形成团队级质量资产飞轮。</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="panel business-panel" id="business">
-        <div class="section-title">
-          <p>07 · Business Flywheel</p>
-          <h2>商业价值：把事故成本变成研发质量资产</h2>
-        </div>
-        <div class="business-grid">
-          <article>
-            <span>客户</span>
-            <strong>中大型研发组织</strong>
-            <p>减少定位时间、降低误修复风险，把复盘经验跨团队复用。</p>
-          </article>
-          <article>
-            <span>平台</span>
-            <strong>云厂商 / DevOps</strong>
-            <p>嵌入 AIOps、CI/CD、配置中心和工单系统，形成带证明 PR / 变更审批能力。</p>
-          </article>
-          <article>
-            <span>资产</span>
-            <strong>故障基因包 + Skill</strong>
-            <p>把事故样例、补丁验证和证据模板沉淀为可评测、可分发资产。</p>
-          </article>
-          <article>
-            <span>收费</span>
-            <strong>SaaS / 私有化 / 市场</strong>
-            <p>团队版订阅、企业私有化、云市场插件、审计合规模块和 Skill 市场。</p>
-          </article>
-        </div>
-        <div class="flywheel">
-          <div>事故证据</div>
-          <div>反事实证明</div>
-          <div>PR 证据护照</div>
-          <div>Skill / 基因包</div>
-          <div>复用与分发</div>
-        </div>
-      </section>
-
-      <section class="panel demo-script">
-        <div>
-          <p class="eyebrow">评审演示动线</p>
-          <h2>60 秒讲清楚这个创意</h2>
-        </div>
-        <ol>
-          <li>先看证明链：说明 A-CFX 不是自动修 Bug，而是带证明的软件变更基础设施。</li>
-          <li>再看时间线和平行宇宙：展示只有恢复连接池后失败率归零，因此主因被证明。</li>
-          <li>切到缺陷基因：说明补丁要修一类问题，而不是只过原始样例。</li>
-          <li>看补丁竞赛和证据护照：证明发布前有验证、风险、审批和回滚证据。</li>
-          <li>最后看 Skill 工坊：事故经验自动沉淀成可复用能力。</li>
-        </ol>
-      </section>
+      <footer>
+        <p>AsoulAI ChronosFix · 可审计的离线工程验证 Demo</p>
+        <p id="data-stamp"></p>
+      </footer>
     </main>
 
-    <script src="./app.js"></script>
+    <template id="error-template">
+      <section class="error-card">
+        <span>A-CFX DATA ERROR</span>
+        <h1>证据 JSON 未能读取</h1>
+        <p></p>
+        <code>python -m http.server 8000 --directory repair-cockpit</code>
+      </section>
+    </template>
+
+    <script src="./app.js" defer></script>
   </body>
 </html>

@@ -17,11 +17,11 @@
 
 | 官方参考 Baseline 能力 | ChronosFix 对齐方式 | 证据位置 |
 |---|---|---|
-| AgentTeams 编排层 | 使用 Manager-Workers 草案，明确 Commander 与各 Worker Agent 的职责、共享状态、升级策略 | `agentteams/chronosfix-team.yaml` |
-| 7 个职能 Agent | Commander、Timeline、Hypothesis、Universe、Patch、Verifier、Auditor 覆盖诊断、验证、发布和沉淀 | `docs/agent-identity.md` |
-| Skill 工程化 | 9 个可复用 Skill，带输入输出、安全边界、失败处理和复用价值 | `docs/skill-specs.md` |
-| MCP/适配器契约 | 初赛使用本地适配器，复赛迁移到 Git、CI、日志、Trace、配置中心、工单 MCP Server | `docs/architecture.md` |
-| 可观测与审计 | 输出 16 段 Trace、proof-bundle、proof-report、GitHub PR 草案、Evidence Passport | `evidence/trace.jsonl` |
+| AgentTeams 编排层 | 提供 1 Manager、8 Worker、1 Team、1 Human 的 v1beta1 资源声明，明确共享状态与升级策略 | `agentteams/runtime/chronosfix-resources.yaml` |
+| 8 个 Worker 职能 | Commander、Timeline、Hypothesis、Universe、Patch、Verifier、Auditor、Curator 覆盖诊断、验证、发布和沉淀 | `docs/agent-identity.md` |
+| Skill 工程化 | 9 个业务 Skill + 1 个官方 SLS Skill Adapter，带输入输出、安全边界、失败处理和复用价值 | `docs/skill-specs.md` |
+| MCP/适配器契约 | 当前实现本地适配器与 SLS 只读 dry-run；Git、CI、配置中心、工单保留等价契约和迁移边界 | `docs/architecture.md` |
+| 可观测与审计 | 输出 18 段 Trace、proof-bundle、proof-report、PR 草案、Evidence Passport 和 Run Manifest | `evidence/trace.jsonl` |
 | 安全边界 | RiskGate 阻断中高风险无人值守发布，保留回滚与人工审批 | `docs/safety-and-audit.md` |
 | 可演示初赛闭环 | 本地 Demo + Repair Cockpit + PPT + 评审入口说明 | `demo.py`、`repair-cockpit/index.html` |
 
@@ -38,9 +38,9 @@
 
 ## 放入提交物的方式
 
-- PPT 中新增“官方参考 Baseline 对照”页，用一页说明官方示例、ChronosFix 对齐项与增强项。
-- Repair Cockpit 中新增“官方 Baseline 对照”模块，评委打开 Demo 即可看到我们不是偏题，而是在官方结构上做方向三增强。
-- README、评审入口和赛题要求矩阵中增加官方参考 Baseline 说明，避免“是否对齐官方示例”的疑问。
+- 复赛 PPT 用同一闭环展示对官方示例能力的继承，并把重点落到方向三的 PR 与变更治理。
+- Repair Cockpit 直接展示 AgentTeams 边界、因果证明、三态门禁和评测证据，不声称真实 Runtime 已运行。
+- README、评审入口和赛题要求矩阵保留官方参考 Baseline 的可追溯说明。
 
 ## 来源
 

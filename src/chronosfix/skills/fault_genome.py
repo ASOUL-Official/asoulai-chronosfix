@@ -26,6 +26,7 @@ def evolve_fault_family(
                 trigger="从事故证据中复现的种子场景",
                 changes=item["changes"],
                 expected_risk="known",
+                mandatory=item.get("mandatory", True),
             )
         )
 

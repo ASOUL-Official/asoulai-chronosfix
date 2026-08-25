@@ -1,0 +1,462 @@
+{
+  "schema_version": "chronosfix.evaluation/v1",
+  "measurement_scope": {
+    "supported_diagnosis_accuracy": "Only cases whose causal variable is represented by the deterministic simulator.",
+    "unsupported_cases": "Reported as known limitations and excluded from supported diagnosis accuracy.",
+    "evaluation_only_fixtures": "Run only through counterfactual classification, never through patch, gate or PR flow.",
+    "synthetic_data": true
+  },
+  "summary": {
+    "total_cases": 12,
+    "case_type_counts": {
+      "badcase": 2,
+      "golden": 9,
+      "insufficient-evidence": 1
+    },
+    "status_counts": {
+      "correct": 9,
+      "incorrect": 0,
+      "abstain": 3
+    },
+    "expectation_met_cases": 10,
+    "expectation_met_rate": 0.8333,
+    "golden_cases": 9,
+    "golden_expectation_met": 9,
+    "supported_diagnosis_cases": 9,
+    "supported_diagnosis_correct": 9,
+    "supported_diagnosis_accuracy": 1.0,
+    "expected_abstention_cases": 1,
+    "correct_abstentions": 1,
+    "abstention_success_rate": 1.0,
+    "unsupported_cases": 2,
+    "unsupported_expectation_failures": 2,
+    "unsupported_false_assertions": 0,
+    "evaluation_only_cases": 3,
+    "unexpected_assertion_cases": 0
+  },
+  "known_limitations": [
+    {
+      "scenario_id": "code-regression-unmodeled",
+      "model_support": "unsupported",
+      "status": "abstain",
+      "expectation_met": false,
+      "boundary_note": "仅运行反事实分类评测，不进入补丁竞赛、RiskGate 或 PR 流水线；结果不得表述为已支持代码根因诊断。"
+    },
+    {
+      "scenario_id": "conflicting-counterfactuals",
+      "model_support": "supported",
+      "status": "abstain",
+      "expectation_met": true,
+      "boundary_note": "本夹具验证可辨识性仲裁：两个来源假设映射到相同干预时降级为 indeterminate；未加入来源级证据前不得自动放行补丁。"
+    },
+    {
+      "scenario_id": "queue-backlog-unmodeled",
+      "model_support": "unsupported",
+      "status": "abstain",
+      "expectation_met": false,
+      "boundary_note": "code_version 仅作为不影响容量方程的评测哨兵；本夹具不声称已实现 RocketMQ 队列根因回放。"
+    }
+  ],
+  "cases": [
+    {
+      "scenario_id": "api-timeout-amplifier",
+      "scenario_path": "api-timeout-amplifier/scenario.json",
+      "incident_id": "INC-2026-0825-007",
+      "case_type": "golden",
+      "model_support": "supported",
+      "fixture_scope": "pipeline-and-evaluation",
+      "expected_outcome": "diagnose",
+      "known_actual_causes": [
+        "H-POOL"
+      ],
+      "expected_primary_causes": [
+        "H-POOL"
+      ],
+      "expected_amplifiers": [
+        "H-DEPENDENCY"
+      ],
+      "expected_not_causal": [
+        "H-CODE"
+      ],
+      "observed_primary_causes": [
+        "H-POOL"
+      ],
+      "observed_amplifiers": [
+        "H-DEPENDENCY"
+      ],
+      "observed_not_causal": [
+        "H-CODE"
+      ],
+      "status": "correct",
+      "expectation_met": true,
+      "classification_match": true,
+      "unexpected_assertion": false,
+      "rationale": "当前容量方程中恢复连接池可消除基线失败，timeout 依赖延迟是放大因素。",
+      "boundary_note": "合成容量回放；不包含真实网关 timeout 栈和端到端请求。"
+    },
+    {
+      "scenario_id": "cache-warmup-burst",
+      "scenario_path": "cache-warmup-burst/scenario.json",
+      "incident_id": "INC-2026-0825-006",
+      "case_type": "golden",
+      "model_support": "supported",
+      "fixture_scope": "pipeline-and-evaluation",
+      "expected_outcome": "diagnose",
+      "known_actual_causes": [
+        "H-POOL"
+      ],
+      "expected_primary_causes": [
+        "H-POOL"
+      ],
+      "expected_amplifiers": [
+        "H-DEPENDENCY"
+      ],
+      "expected_not_causal": [
+        "H-CODE"
+      ],
+      "observed_primary_causes": [
+        "H-POOL"
+      ],
+      "observed_amplifiers": [
+        "H-DEPENDENCY"
+      ],
+      "observed_not_causal": [
+        "H-CODE"
+      ],
+      "status": "correct",
+      "expectation_met": true,
+      "classification_match": true,
+      "unexpected_assertion": false,
+      "rationale": "恢复连接池可消除基线失败，缓存客户端耗时在当前模型中只构成放大因素。",
+      "boundary_note": "合成容量回放；不模拟真实缓存命中率、队列和预热调度。"
+    },
+    {
+      "scenario_id": "checkout-timeout",
+      "scenario_path": "checkout-timeout/scenario.json",
+      "incident_id": "INC-2026-0816-001",
+      "case_type": "golden",
+      "model_support": "supported",
+      "fixture_scope": "pipeline-and-evaluation",
+      "expected_outcome": "diagnose",
+      "known_actual_causes": [
+        "H-POOL"
+      ],
+      "expected_primary_causes": [
+        "H-POOL"
+      ],
+      "expected_amplifiers": [
+        "H-DEPENDENCY"
+      ],
+      "expected_not_causal": [
+        "H-CODE"
+      ],
+      "observed_primary_causes": [
+        "H-POOL"
+      ],
+      "observed_amplifiers": [
+        "H-DEPENDENCY"
+      ],
+      "observed_not_causal": [
+        "H-CODE"
+      ],
+      "status": "correct",
+      "expectation_met": true,
+      "classification_match": true,
+      "unexpected_assertion": false,
+      "rationale": "在当前确定性容量模型中，恢复连接池可消除主要失败，回退依赖只能部分缓解。",
+      "boundary_note": "合成容量回放；只验证 pool_size 与 dependency_latency_factor，不证明真实生产根因。"
+    },
+    {
+      "scenario_id": "code-latency-regression-primary",
+      "scenario_path": "code-latency-regression-primary/scenario.json",
+      "incident_id": "INC-2026-0821-CODE",
+      "case_type": "golden",
+      "model_support": "supported",
+      "fixture_scope": "pipeline-and-evaluation",
+      "expected_outcome": "diagnose",
+      "known_actual_causes": [
+        "H-CODE"
+      ],
+      "expected_primary_causes": [
+        "H-CODE"
+      ],
+      "expected_amplifiers": [
+        "H-DEPENDENCY",
+        "H-POOL"
+      ],
+      "expected_not_causal": [],
+      "observed_primary_causes": [
+        "H-CODE"
+      ],
+      "observed_amplifiers": [
+        "H-DEPENDENCY",
+        "H-POOL"
+      ],
+      "observed_not_causal": [],
+      "status": "correct",
+      "expectation_met": true,
+      "classification_match": true,
+      "unexpected_assertion": false,
+      "rationale": "代码延迟因子升至2.4；回滚代码性能因子后故障消失，轻微依赖优化或扩容只能缓解。",
+      "boundary_note": "模型要求显式提供code_latency_factor，不会从版本字符串猜测性能。"
+    },
+    {
+      "scenario_id": "config-drift-before-peak",
+      "scenario_path": "config-drift-before-peak/scenario.json",
+      "incident_id": "INC-2026-0825-002",
+      "case_type": "golden",
+      "model_support": "supported",
+      "fixture_scope": "pipeline-and-evaluation",
+      "expected_outcome": "diagnose",
+      "known_actual_causes": [
+        "H-POOL"
+      ],
+      "expected_primary_causes": [
+        "H-POOL"
+      ],
+      "expected_amplifiers": [
+        "H-DEPENDENCY"
+      ],
+      "expected_not_causal": [
+        "H-CODE"
+      ],
+      "observed_primary_causes": [
+        "H-POOL"
+      ],
+      "observed_amplifiers": [
+        "H-DEPENDENCY"
+      ],
+      "observed_not_causal": [
+        "H-CODE"
+      ],
+      "status": "correct",
+      "expectation_met": true,
+      "classification_match": true,
+      "unexpected_assertion": false,
+      "rationale": "配置漂移后的连接池容量低于需求；恢复容量可消除基线失败，依赖回退只部分缓解。",
+      "boundary_note": "合成配置容量回放；不等同于真实配置中心漂移检测准确率。"
+    },
+    {
+      "scenario_id": "dependency-regression-primary",
+      "scenario_path": "dependency-regression-primary/scenario.json",
+      "incident_id": "INC-2026-0820-DEP",
+      "case_type": "golden",
+      "model_support": "supported",
+      "fixture_scope": "pipeline-and-evaluation",
+      "expected_outcome": "diagnose",
+      "known_actual_causes": [
+        "H-DEPENDENCY"
+      ],
+      "expected_primary_causes": [
+        "H-DEPENDENCY"
+      ],
+      "expected_amplifiers": [
+        "H-POOL"
+      ],
+      "expected_not_causal": [
+        "H-CODE"
+      ],
+      "observed_primary_causes": [
+        "H-DEPENDENCY"
+      ],
+      "observed_amplifiers": [
+        "H-POOL"
+      ],
+      "observed_not_causal": [
+        "H-CODE"
+      ],
+      "status": "correct",
+      "expectation_met": true,
+      "classification_match": true,
+      "unexpected_assertion": false,
+      "rationale": "连接池保持20，但依赖延迟因子升至2.6；仅恢复依赖性能即可消除故障。",
+      "boundary_note": "这是确定性依赖延迟模型的Golden Case，不代表真实生产准确率。"
+    },
+    {
+      "scenario_id": "downstream-jitter",
+      "scenario_path": "downstream-jitter/scenario.json",
+      "incident_id": "INC-2026-0825-005",
+      "case_type": "golden",
+      "model_support": "supported",
+      "fixture_scope": "pipeline-and-evaluation",
+      "expected_outcome": "diagnose",
+      "known_actual_causes": [
+        "H-POOL"
+      ],
+      "expected_primary_causes": [
+        "H-POOL"
+      ],
+      "expected_amplifiers": [
+        "H-DEPENDENCY"
+      ],
+      "expected_not_causal": [
+        "H-CODE"
+      ],
+      "observed_primary_causes": [
+        "H-POOL"
+      ],
+      "observed_amplifiers": [
+        "H-DEPENDENCY"
+      ],
+      "observed_not_causal": [
+        "H-CODE"
+      ],
+      "status": "correct",
+      "expectation_met": true,
+      "classification_match": true,
+      "unexpected_assertion": false,
+      "rationale": "在当前回放模型中，连接池缩容是主因，下游延迟抖动放大容量压力。",
+      "boundary_note": "合成延迟因子；不模拟真实时序抖动分布、超时或重试风暴。"
+    },
+    {
+      "scenario_id": "code-regression-unmodeled",
+      "scenario_path": "evaluation-fixtures/code-regression-unmodeled/scenario.json",
+      "incident_id": "EVAL-BADCASE-001",
+      "case_type": "badcase",
+      "model_support": "unsupported",
+      "fixture_scope": "evaluation-only-counterfactual",
+      "expected_outcome": "diagnose",
+      "known_actual_causes": [
+        "H-CODE"
+      ],
+      "expected_primary_causes": [
+        "H-CODE"
+      ],
+      "expected_amplifiers": [],
+      "expected_not_causal": [],
+      "observed_primary_causes": [],
+      "observed_amplifiers": [],
+      "observed_not_causal": [
+        "H-CODE"
+      ],
+      "status": "abstain",
+      "expectation_met": false,
+      "classification_match": false,
+      "unexpected_assertion": false,
+      "rationale": "夹具 Ground Truth 指定代码回归为真实主因；当前模拟器不使用 code_version，预期会漏诊，作为公开的模型边界而非准确率成功样例。",
+      "boundary_note": "仅运行反事实分类评测，不进入补丁竞赛、RiskGate 或 PR 流水线；结果不得表述为已支持代码根因诊断。"
+    },
+    {
+      "scenario_id": "conflicting-counterfactuals",
+      "scenario_path": "evaluation-fixtures/conflicting-counterfactuals/scenario.json",
+      "incident_id": "EVAL-INSUFFICIENT-001",
+      "case_type": "insufficient-evidence",
+      "model_support": "supported",
+      "fixture_scope": "evaluation-only-counterfactual",
+      "expected_outcome": "abstain",
+      "known_actual_causes": [],
+      "expected_primary_causes": [],
+      "expected_amplifiers": [],
+      "expected_not_causal": [],
+      "observed_primary_causes": [],
+      "observed_amplifiers": [],
+      "observed_not_causal": [],
+      "status": "abstain",
+      "expectation_met": true,
+      "classification_match": true,
+      "unexpected_assertion": false,
+      "rationale": "两个假设都映射到同一 pool_size 干预，现有证据无法区分配置中心漂移与自动伸缩器覆盖；安全行为应是拒绝唯一归因。",
+      "boundary_note": "本夹具验证可辨识性仲裁：两个来源假设映射到相同干预时降级为 indeterminate；未加入来源级证据前不得自动放行补丁。"
+    },
+    {
+      "scenario_id": "queue-backlog-unmodeled",
+      "scenario_path": "evaluation-fixtures/queue-backlog-unmodeled/scenario.json",
+      "incident_id": "EVAL-BADCASE-002",
+      "case_type": "badcase",
+      "model_support": "unsupported",
+      "fixture_scope": "evaluation-only-counterfactual",
+      "expected_outcome": "diagnose",
+      "known_actual_causes": [
+        "H-QUEUE"
+      ],
+      "expected_primary_causes": [
+        "H-QUEUE"
+      ],
+      "expected_amplifiers": [],
+      "expected_not_causal": [],
+      "observed_primary_causes": [],
+      "observed_amplifiers": [],
+      "observed_not_causal": [
+        "H-QUEUE"
+      ],
+      "status": "abstain",
+      "expectation_met": false,
+      "classification_match": false,
+      "unexpected_assertion": false,
+      "rationale": "夹具 Ground Truth 指定队列积压为真实主因；ServiceState 没有队列深度或消费速率，因此当前评测应如实暴露漏诊。",
+      "boundary_note": "code_version 仅作为不影响容量方程的评测哨兵；本夹具不声称已实现 RocketMQ 队列根因回放。"
+    },
+    {
+      "scenario_id": "payment-client-slowdown",
+      "scenario_path": "payment-client-slowdown/scenario.json",
+      "incident_id": "INC-2026-0825-003",
+      "case_type": "golden",
+      "model_support": "supported",
+      "fixture_scope": "pipeline-and-evaluation",
+      "expected_outcome": "diagnose",
+      "known_actual_causes": [
+        "H-POOL"
+      ],
+      "expected_primary_causes": [
+        "H-POOL"
+      ],
+      "expected_amplifiers": [
+        "H-DEPENDENCY"
+      ],
+      "expected_not_causal": [
+        "H-CODE"
+      ],
+      "observed_primary_causes": [
+        "H-POOL"
+      ],
+      "observed_amplifiers": [
+        "H-DEPENDENCY"
+      ],
+      "observed_not_causal": [
+        "H-CODE"
+      ],
+      "status": "correct",
+      "expectation_met": true,
+      "classification_match": true,
+      "unexpected_assertion": false,
+      "rationale": "当前确定性容量模型中，恢复连接池可消除主要失败，支付客户端延迟是放大因素。",
+      "boundary_note": "合成容量回放；不包含真实支付客户端重试分布、超时栈和生产流量。"
+    },
+    {
+      "scenario_id": "recovery-spike",
+      "scenario_path": "recovery-spike/scenario.json",
+      "incident_id": "INC-2026-0825-004",
+      "case_type": "golden",
+      "model_support": "supported",
+      "fixture_scope": "pipeline-and-evaluation",
+      "expected_outcome": "diagnose",
+      "known_actual_causes": [
+        "H-POOL"
+      ],
+      "expected_primary_causes": [
+        "H-POOL"
+      ],
+      "expected_amplifiers": [
+        "H-DEPENDENCY"
+      ],
+      "expected_not_causal": [
+        "H-CODE"
+      ],
+      "observed_primary_causes": [
+        "H-POOL"
+      ],
+      "observed_amplifiers": [
+        "H-DEPENDENCY"
+      ],
+      "observed_not_causal": [
+        "H-CODE"
+      ],
+      "status": "correct",
+      "expectation_met": true,
+      "classification_match": true,
+      "unexpected_assertion": false,
+      "rationale": "当前确定性容量模型中，恢复连接池可解释基线故障，库存客户端变慢只放大容量压力。",
+      "boundary_note": "合成恢复尖峰回放；不模拟真实任务队列、背压、重试或请求到达分布。"
+    }
+  ]
+}

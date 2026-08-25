@@ -1,0 +1,105 @@
+{
+  "incident_id": "INC-2026-0820-DEP",
+  "title": "支付依赖延迟回退导致订单链路容量骤降",
+  "ground_truth": {
+    "case_type": "golden",
+    "model_support": "supported",
+    "expected_outcome": "diagnose",
+    "expected_primary_causes": ["H-DEPENDENCY"],
+    "expected_amplifiers": ["H-POOL"],
+    "expected_not_causal": ["H-CODE"],
+    "fixture_scope": "pipeline-and-evaluation",
+    "known_actual_causes": ["H-DEPENDENCY"],
+    "rationale": "连接池保持20，但依赖延迟因子升至2.6；仅恢复依赖性能即可消除故障。",
+    "boundary_note": "这是确定性依赖延迟模型的Golden Case，不代表真实生产准确率。"
+  },
+  "baseline": {
+    "traffic_rps": 100.0,
+    "pool_size": 20,
+    "dependency_latency_factor": 2.6,
+    "code_version": "dep-client-3.2",
+    "adaptive_min_pool": false,
+    "code_latency_factor": 1.0
+  },
+  "events": [
+    {
+      "timestamp": "2026-08-20T10:00:00+08:00",
+      "kind": "commit",
+      "source": "git:dep-observability",
+      "summary": "增加依赖调用观测字段",
+      "details": {"files": ["checkout/payment_trace.py"]}
+    },
+    {
+      "timestamp": "2026-08-20T10:05:00+08:00",
+      "kind": "dependency",
+      "source": "lockfile:payment-client@3.2",
+      "summary": "支付SDK重试策略改变，平均占用时间显著上升",
+      "details": {"from": "3.1", "to": "3.2", "latency_factor": 2.6}
+    },
+    {
+      "timestamp": "2026-08-20T10:10:00+08:00",
+      "kind": "incident",
+      "source": "alert:checkout-dependency-latency",
+      "summary": "订单失败率和P99同步升高",
+      "details": {"severity": "SEV-2"}
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H-CODE",
+      "title": "观测代码变更导致性能回退",
+      "owner": "hypothesis-scientist",
+      "intervention": {"code_version": "pre-dep-observability"},
+      "rationale": "撤销相邻提交验证其是否为主因。"
+    },
+    {
+      "id": "H-DEPENDENCY",
+      "title": "支付依赖延迟回退是主因",
+      "owner": "hypothesis-scientist",
+      "intervention": {"dependency_latency_factor": 1.0},
+      "rationale": "只恢复依赖延迟，保持流量和连接池不变。"
+    },
+    {
+      "id": "H-POOL",
+      "title": "连接池余量偏低放大故障",
+      "owner": "hypothesis-scientist",
+      "intervention": {"pool_size": 22},
+      "rationale": "小幅扩容只能缓解而不能消除依赖回退。"
+    }
+  ],
+  "mutations": [
+    {"name": "nominal", "changes": {"traffic_rps": 100.0, "dependency_latency_factor": 2.6}},
+    {"name": "traffic-110", "changes": {"traffic_rps": 110.0, "dependency_latency_factor": 2.6}},
+    {"name": "traffic-120", "changes": {"traffic_rps": 120.0, "dependency_latency_factor": 2.8}},
+    {"name": "pool-drift", "changes": {"traffic_rps": 100.0, "pool_size": 18, "dependency_latency_factor": 2.6}}
+  ],
+  "patch_candidates": [
+    {
+      "id": "P-ROLLBACK-DEPENDENCY",
+      "title": "回退支付依赖并锁定延迟预算",
+      "changes": {"dependency_latency_factor": 1.0},
+      "risk": 0.3,
+      "cost": 0.2,
+      "rollback": "恢复 payment-client 3.2 与 latency_factor=2.6 快照",
+      "rollback_changes": {"dependency_latency_factor": 2.6}
+    },
+    {
+      "id": "P-SCALE-POOL",
+      "title": "连接池扩至32缓解依赖占用",
+      "changes": {"pool_size": 32},
+      "risk": 0.45,
+      "cost": 0.45,
+      "rollback": "恢复 pool_size=20 快照",
+      "rollback_changes": {"pool_size": 20}
+    },
+    {
+      "id": "P-ROLLBACK-CODE",
+      "title": "回滚观测代码提交",
+      "changes": {"code_version": "pre-dep-observability"},
+      "risk": 0.15,
+      "cost": 0.2,
+      "rollback": "恢复 code_version=dep-client-3.2",
+      "rollback_changes": {"code_version": "dep-client-3.2"}
+    }
+  ]
+}

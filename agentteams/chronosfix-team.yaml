@@ -1,58 +1,27 @@
-# ChronosFix AgentTeams declarative orchestration sketch.
-# The exact apiVersion may be adjusted to the target AgentTeams release.
-apiVersion: agentteams.ai/v1alpha1
+apiVersion: agentteams.io/v1beta1
 kind: Team
 metadata:
   name: chronosfix-incident-response
 spec:
-  description: "Counterfactual software incident debugging and verified repair team"
-  goal: "Prove software incident root cause through replayable counterfactual experiments, adversarial fault genomes, and proof-carrying repair proposals."
-  human:
-    name: release-owner
-    role: "Approve medium/high-risk fixes and review the evidence report."
-  manager:
-    name: incident-commander
-    role: "Coordinate task decomposition, shared state, evidence routing, and final decision."
-  sharedState:
-    type: incident-state
-    artifacts:
-      - trace.jsonl
-      - proof-bundle.json
-      - proof-report.md
-      - evidence-passport.json
-      - skill-candidates.json
-  workers:
-    - name: timeline-analyst
-      role: "Fuse Git, log, trace, config, traffic, and alert evidence into a time-ordered incident timeline."
-      skills: [EvidenceFusion, ChangeTimeline]
-    - name: hypothesis-scientist
-      role: "Generate falsifiable root-cause hypotheses and required interventions."
-      skills: [EvidenceFusion]
-    - name: universe-builder
-      role: "Create isolated counterfactual versions, replay the incident, and evolve related fault variants."
-      skills: [CounterfactualReplay, FaultGenome]
-    - name: patch-engineer
-      role: "Generate repair candidates with cost, risk, and rollback contracts."
-      skills: [PatchTournament]
-    - name: adversarial-verifier
-      role: "Run patch candidates against fault genome scenarios and rank them."
-      skills: [PatchTournament, FaultGenome]
-    - name: release-auditor
-      role: "Evaluate risk gates, collect human approval, produce evidence passports, and publish audit evidence."
-      skills: [RiskGate, EvidencePassport, ProofReport]
-    - name: skill-curator
-      role: "Distill resolved incident patterns into reusable Skill candidates."
-      skills: [SkillForge]
-  toolContracts:
-    - name: git-adapter
-      protocol: MCP
-      mode: read-mostly
-    - name: ci-adapter
-      protocol: MCP
-      mode: test-trigger
-    - name: log-trace-adapter
-      protocol: MCP
-      mode: read-only
-    - name: config-adapter
-      protocol: MCP
-      mode: approval-required
+  description: 从生产事故证据到因果证明、质量门禁和PR证据草案的协作团队
+  heartbeatEvery: 30m
+  workerMembers:
+    - name: chronosfix-incident-commander
+      role: team_leader
+    - name: chronosfix-timeline-analyst
+      role: worker
+    - name: chronosfix-hypothesis-scientist
+      role: worker
+    - name: chronosfix-universe-builder
+      role: worker
+    - name: chronosfix-patch-engineer
+      role: worker
+    - name: chronosfix-adversarial-verifier
+      role: worker
+    - name: chronosfix-release-auditor
+      role: worker
+    - name: chronosfix-skill-curator
+      role: worker
+
+# Full Manager/Worker/Team/Human bundle:
+# agentteams/runtime/chronosfix-resources.yaml

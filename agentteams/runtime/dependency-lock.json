@@ -1,0 +1,16 @@
+{
+  "agentteams": {
+    "version": "v1.2.3",
+    "commit": "223ddc2b8073e4c8b93bcbb15e1d717f196c04d9",
+    "source": "https://github.com/agentscope-ai/AgentTeams",
+    "api_version": "agentteams.io/v1beta1"
+  },
+  "official_cloud_skill": {
+    "name": "alibabacloud-sls-query",
+    "source": "https://github.com/aliyun/alibabacloud-aiops-skills",
+    "commit": "4dc1013ec2564f85fd07e5b5945b2d34ceca7eff",
+    "path": "skills/storage/sls/alibabacloud-sls-query",
+    "portal": "https://skills.aliyun.com/skills/alibabacloud-sls-query",
+    "redistribution": "not vendored; installed from pinned upstream source"
+  }
+}

@@ -34,6 +34,6 @@ A-CFX 的独有识别不是“自动修 Bug”，而是一条证明链：
 
 ## 提交材料中的同步位置
 
-- PPT 第 15 页：开源开放与原创性边界。
-- Demo 页面：`Originality Guard` 模块。
-- README：`原创性与命名边界` 小节。
+- PPT 全程统一使用 AsoulAI ChronosFix / A-CFX，并把主叙事锁定为带证明的质量资产闭环。
+- Repair Cockpit 标题、页脚和证据链接统一使用 A-CFX 标识。
+- README、作品简介和本说明保持同一名称与差异化边界。

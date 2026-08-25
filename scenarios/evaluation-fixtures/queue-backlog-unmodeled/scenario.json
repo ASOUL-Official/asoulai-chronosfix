@@ -1,0 +1,48 @@
+{
+  "incident_id": "EVAL-BADCASE-002",
+  "title": "异步队列积压触发超时，但当前容量模拟器未建模队列状态",
+  "ground_truth": {
+    "case_type": "badcase",
+    "model_support": "unsupported",
+    "expected_outcome": "diagnose",
+    "expected_primary_causes": ["H-QUEUE"],
+    "expected_amplifiers": [],
+    "expected_not_causal": [],
+    "fixture_scope": "evaluation-only-counterfactual",
+    "known_actual_causes": ["H-QUEUE"],
+    "rationale": "夹具 Ground Truth 指定队列积压为真实主因；ServiceState 没有队列深度或消费速率，因此当前评测应如实暴露漏诊。",
+    "boundary_note": "code_version 仅作为不影响容量方程的评测哨兵；本夹具不声称已实现 RocketMQ 队列根因回放。"
+  },
+  "baseline": {
+    "traffic_rps": 135.0,
+    "pool_size": 9,
+    "dependency_latency_factor": 1.35,
+    "code_version": "queue-backlog-present",
+    "adaptive_min_pool": false
+  },
+  "events": [
+    {
+      "timestamp": "2026-08-25T17:20:00+08:00",
+      "kind": "queue",
+      "source": "fixture:rocketmq/order-events",
+      "summary": "合成 Ground Truth：消费停滞导致队列深度持续上升",
+      "details": {"synthetic": true, "evaluation_only": true, "queue_depth": 42000}
+    },
+    {
+      "timestamp": "2026-08-25T17:25:00+08:00",
+      "kind": "incident",
+      "source": "fixture:alert/queue-lag",
+      "summary": "订单异步确认超时",
+      "details": {"synthetic": true, "ground_truth": "H-QUEUE"}
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H-QUEUE",
+      "title": "队列积压导致异步确认超时",
+      "owner": "evaluation-fixture",
+      "intervention": {"code_version": "queue-drained-evaluation-sentinel"},
+      "rationale": "理想系统应干预队列深度和消费速率；当前模型没有这些变量，哨兵不会改变模拟结果。"
+    }
+  ]
+}

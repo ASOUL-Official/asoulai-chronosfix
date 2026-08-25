@@ -18,6 +18,9 @@ def score_patch(
         results.append(
             {
                 "name": mutation["name"],
+                # Existing variants remain release blockers. Scenarios may
+                # explicitly mark exploratory variants as non-mandatory.
+                "mandatory": mutation.get("mandatory", True),
                 "failure_rate": result.failure_rate,
                 "p99_ms": result.p99_ms,
                 "healthy": result.healthy,
@@ -39,6 +42,8 @@ def score_patch(
         cost=candidate.cost,
         rollback=candidate.rollback,
         results=results,
+        changes=candidate.changes,
+        rollback_changes=candidate.rollback_changes,
     )
 
 
@@ -47,7 +52,17 @@ def run_tournament(
     candidates: list[PatchCandidate],
     mutations: list[dict],
 ) -> list[PatchScore]:
+    def ranking_key(item: PatchScore) -> tuple[bool, float, str]:
+        mandatory = [result for result in item.results if result.get("mandatory", True)]
+        release_eligible = bool(mandatory) and all(
+            result.get("healthy") is True for result in mandatory
+        )
+        # A higher scalar score can never outrank a candidate that actually
+        # passes the mandatory release suite. If none pass, retain a stable
+        # best-effort ranking so RiskGate can fail closed with useful evidence.
+        return (not release_eligible, -item.total_score, item.candidate_id)
+
     return sorted(
         [score_patch(baseline, candidate, mutations) for candidate in candidates],
-        key=lambda item: (-item.total_score, item.candidate_id),
+        key=ranking_key,
     )

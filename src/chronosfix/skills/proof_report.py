@@ -28,7 +28,10 @@ def _passport_claim_count(passport: EvidencePassport | None) -> int:
 def write_reports(state: IncidentState, metrics: dict, output_dir: Path) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     payload = {
+        "schema_version": "chronosfix.proof-bundle/v1",
+        "run_id": state.run_id,
         "incident_id": state.incident_id,
+        "scenario_path": state.scenario_path,
         "title": state.title,
         "baseline": asdict(state.baseline),
         "timeline": [asdict(item) for item in state.events],
@@ -38,7 +41,10 @@ def write_reports(state: IncidentState, metrics: dict, output_dir: Path) -> None
         "selected_patch": asdict(state.selected_patch) if state.selected_patch else None,
         "evidence_passport": asdict(state.evidence_passport) if state.evidence_passport else None,
         "skill_candidates": [asdict(item) for item in state.skill_candidates],
-        "approval": state.approval,
+        "quality_gate": state.quality_gate,
+        "release_decision": state.approval,
+        "gate_result": state.gate_result,
+        "approval_record": state.approval_record,
         "evidence_index": state.evidence_index,
         "metrics": metrics,
     }
@@ -55,7 +61,9 @@ def write_reports(state: IncidentState, metrics: dict, output_dir: Path) -> None
         f"# ChronosFix 证据化修复报告：{state.incident_id}",
         "",
         f"**故障：** {state.title}",
-        f"**审批状态：** {state.approval}",
+        f"**Run ID：** {state.run_id}",
+        f"**质量门禁：** {state.quality_gate}",
+        f"**发布决策：** {state.approval}",
         f"**Trace ID：** {metrics.get('trace_id', '见 trace.jsonl')}",
         "",
         "## 0. 结论摘要",
@@ -75,7 +83,7 @@ def write_reports(state: IncidentState, metrics: dict, output_dir: Path) -> None
         lines.append(
             f"- 主因：**{primary.title}**。反事实实验将失败率从 "
             f"{primary.baseline_failure_rate:.1%} 降至 {primary.counterfactual_failure_rate:.1%}，"
-            f"因果置信度 {primary.causal_confidence:.1%}。"
+            f"干预效果分 {primary.intervention_effect_score:.1%}。该分数是确定性回放的效果比例，不是统计置信区间。"
         )
     else:
         lines.append("- 尚未找到达到阈值的主因。")
@@ -108,6 +116,15 @@ def write_reports(state: IncidentState, metrics: dict, output_dir: Path) -> None
         lines.extend(_render_claims("风险声明", passport.risk_claims))
         lines.extend(_render_claims("回滚声明", passport.rollback_claims))
         lines.extend(_render_claims("缺口声明", passport.missing_claims))
+        if passport.integrity:
+            lines.extend(
+                [
+                    "### 完整性摘要",
+                    "",
+                    *[f"- `{key}`：`{value}`" for key, value in passport.integrity.items()],
+                    "",
+                ]
+            )
         lines.append(f"证据声明总数：{_passport_claim_count(passport)}。")
     else:
         lines.append("- 未生成证据护照。")
@@ -128,6 +145,8 @@ def write_reports(state: IncidentState, metrics: dict, output_dir: Path) -> None
                 "",
                 f"选择 **{selected.title}**，因为它在正确性、风险和实施成本的综合评分中排名第一。",
                 f"发布前必须保留回滚点：{selected.rollback}。",
+                f"机器可验证回滚字段：`{selected.rollback_changes}`；验证结果：`{metrics.get('rollback_verified')}`。",
+                f"具名审批人：`{state.approval_record.get('approver')}`；审批时间：`{state.approval_record.get('timestamp')}`。",
                 "全部 Agent、Skill、实验、审批和报告动作均写入 `trace.jsonl`，可用于复盘和审计。",
             ]
         )

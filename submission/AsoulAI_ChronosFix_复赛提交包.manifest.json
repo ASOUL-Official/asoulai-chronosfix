@@ -1,0 +1,627 @@
+{
+  "schema": "chronosfix.submission-package/v1",
+  "team": "AsoulAI",
+  "work": "ChronosFix",
+  "direction": "新智基座方向三：软件研发全流程协同",
+  "file_count": 123,
+  "files": [
+    {
+      "path": ".gitattributes",
+      "size": 107,
+      "sha256": "d6879de73e54cf4806bc54d6ada87601391a260a3a894ac39307cb95a5e8f5c7"
+    },
+    {
+      "path": ".github/workflows/deploy-repair-cockpit.yml",
+      "size": 757,
+      "sha256": "43245ee83d943aced44430ea8605efcea425d3c46046c59cd8a661a8735df805"
+    },
+    {
+      "path": ".github/workflows/verify.yml",
+      "size": 1616,
+      "sha256": "dad95aeecad68b1ec56e3487dde51f160073f4ae277ada845313e4fd50d301c2"
+    },
+    {
+      "path": ".gitignore",
+      "size": 119,
+      "sha256": "71ee5048d5c412bf3a4013f7f0817a72c2610528db421c4b0472e8a9cb6e4ee4"
+    },
+    {
+      "path": "LICENSE",
+      "size": 9445,
+      "sha256": "9aa4ac84af439f9ef9dd60e8b4d618171293d94cf6e0deef953950b248f38426"
+    },
+    {
+      "path": "README.md",
+      "size": 9131,
+      "sha256": "1b41c5a181e710a578c374eb0e822a4ccb568b064bb87d15ff75756facb8493a"
+    },
+    {
+      "path": "SBOM.json",
+      "size": 2880,
+      "sha256": "2309ffba4e52120ff58bac9078cd9ccb98b28b2b90fc7757c68beac28ed2405f"
+    },
+    {
+      "path": "THIRD_PARTY_NOTICES.md",
+      "size": 2337,
+      "sha256": "105d23e493bacde977fd8a5b3fcec21f60a75fdd00277981baa56379d6d3b082"
+    },
+    {
+      "path": "agentteams/chronosfix-team.yaml",
+      "size": 806,
+      "sha256": "0b09be41861dfc2e39360ca9103d274afedbb96274e5e5be6b9953968fda83aa"
+    },
+    {
+      "path": "agentteams/run_chronosfix_team.py",
+      "size": 3053,
+      "sha256": "58d7436296fde281e8ad41a4dd1edd891e2290bfb63954b7c5d7dabbcff8d411"
+    },
+    {
+      "path": "agentteams/runtime/apply_resources.sh",
+      "size": 746,
+      "sha256": "a3da96084a0280f9952069c2ddaf4d8a1a218e004fd3b88fe979bfeed4b1ab84"
+    },
+    {
+      "path": "agentteams/runtime/chronosfix-resources.yaml",
+      "size": 5841,
+      "sha256": "7c0f899e64f0869fd3ee35b21781c7f4343344458356214ae6cbf18815253098"
+    },
+    {
+      "path": "agentteams/runtime/dependency-lock.json",
+      "size": 617,
+      "sha256": "adca0ee7073df07ac5c245b73dc22ce8d54499bb631855aee9da68248f33b1d3"
+    },
+    {
+      "path": "agentteams/runtime/install_worker_skills.sh",
+      "size": 1213,
+      "sha256": "531f2e906f04b013cb8d796753509290e204cc05c1664b29e1540559a8c9cce3"
+    },
+    {
+      "path": "agentteams/runtime/runtime-status.md",
+      "size": 1510,
+      "sha256": "992486ae0877e63fca7036132abf244ba50d3e202b29151b1506e3507eeebc5d"
+    },
+    {
+      "path": "agentteams/runtime/validate_resources.py",
+      "size": 4014,
+      "sha256": "9db05d743a201c77680b4f465218c19b737914c6ce295c7f88b044e034d957ea"
+    },
+    {
+      "path": "agentteams/skills/chronosfix-local-engine/SKILL.md",
+      "size": 1629,
+      "sha256": "1d5ef2ae16c018f6f7a7674b4efd49009bc8e9753a2373d6c4f7bb6ccf02e626"
+    },
+    {
+      "path": "cloud_skill_demo.py",
+      "size": 1801,
+      "sha256": "9319f0b2ae2eab0781b474c46701b6c699e75f03dbb8e3f1936afad81c1038b7"
+    },
+    {
+      "path": "demo.py",
+      "size": 206,
+      "sha256": "158c35da7765af5f278af1a6585b9973ac07f16c8282be394a3cbffbdffaae12"
+    },
+    {
+      "path": "docs/agent-identity.md",
+      "size": 3043,
+      "sha256": "b164234a5c856660e7c43eea39c4964b2a6befb3a039759e7bb00b98b166b137"
+    },
+    {
+      "path": "docs/agentteams-runtime-integration.md",
+      "size": 3718,
+      "sha256": "7dca8c51994cc42695ed67ef7d8b5887d3fb921754c7e0a7182c884468d911c3"
+    },
+    {
+      "path": "docs/architecture.md",
+      "size": 4806,
+      "sha256": "1fa74a8b926d6df511a163e36083cdff118b4eb0fee86ddbd75d89b93aa1b456"
+    },
+    {
+      "path": "docs/business-value.md",
+      "size": 3452,
+      "sha256": "b44cd8f959898b1f478227eefe96a6fd6de941a8a5d54d074661bf2795af5f8a"
+    },
+    {
+      "path": "docs/demo-video-script.md",
+      "size": 4192,
+      "sha256": "a0d9f68ad91451efb760ea2c21f06bf66907a58e18032f33b2f1e01adf1737d3"
+    },
+    {
+      "path": "docs/deployment-and-verification.md",
+      "size": 4186,
+      "sha256": "1fcaf4deec6bdcdb3ed5dffa64e6b439e96ede57ff13f4f0c907961ead84d101"
+    },
+    {
+      "path": "docs/evaluation-corpus-results.md",
+      "size": 2920,
+      "sha256": "09f08d38b3c648a976eec4aa6bf44b9e257295737f8e0281da83157b2b250720"
+    },
+    {
+      "path": "docs/evaluation-corpus.md",
+      "size": 2534,
+      "sha256": "9ea920a302d7629e3ee70ae6703308e97f224fe60af5f1aa03efea55fbee13bd"
+    },
+    {
+      "path": "docs/github-issue-pr-flow.md",
+      "size": 3010,
+      "sha256": "b9f69c4e6f0fb6ab93df01be21d96f506ae8bb9df33a40f6fef383edb2f6eec7"
+    },
+    {
+      "path": "docs/innovation-layer.md",
+      "size": 4231,
+      "sha256": "f7a78675c21386a5833c2b27980b3968f159e6147af21b5bf1c2ce77e4d6821c"
+    },
+    {
+      "path": "docs/interface-schema.md",
+      "size": 6036,
+      "sha256": "063e32857f73dc7d9f59f211c25134e58b3611b851bb4ea1294400443056d4b5"
+    },
+    {
+      "path": "docs/live-github-collaboration-evidence.md",
+      "size": 1761,
+      "sha256": "0e35042724d91000f6f6222d31f4a0cc971cfd83e9199bb9d7f27293bc434975"
+    },
+    {
+      "path": "docs/measurement-plan.md",
+      "size": 4214,
+      "sha256": "15fefdcdd8d7d6a53ca41a8e64c6e955a4e94c44177bdb47bc3e597c29462a04"
+    },
+    {
+      "path": "docs/official-baseline.md",
+      "size": 4126,
+      "sha256": "3a16ee84db890080453e14adaad690a62b7fd9e98f9249667cde5a45d0abad50"
+    },
+    {
+      "path": "docs/official-infra-mapping.md",
+      "size": 5338,
+      "sha256": "88fbf1c98a156e562fad811cf585080258e717b56f573c08acfc8054e3cb1934"
+    },
+    {
+      "path": "docs/open-source-compliance.md",
+      "size": 1448,
+      "sha256": "a32c34c2603d2178894cd1071221cfcc5441fb0cd20ad292e7054851851a6195"
+    },
+    {
+      "path": "docs/originality-check.md",
+      "size": 1951,
+      "sha256": "548dde1c6d23ab2e09544dc048adeedafdaaf17c4e2178e548144a10fb946ec6"
+    },
+    {
+      "path": "docs/production-deployment-strategy.md",
+      "size": 3119,
+      "sha256": "d516cef299ea3e38fe632da2ab17256d6fc32659c5cb345016a007c54f7c1e66"
+    },
+    {
+      "path": "docs/proof-carrying-change.md",
+      "size": 2757,
+      "sha256": "9b212d4ba8f89663fba4eff4c883d3fb0c93226bcc38f661e751254b64776c2f"
+    },
+    {
+      "path": "docs/requirements-matrix.md",
+      "size": 4827,
+      "sha256": "c73a5b4d322542339402e8f083121fd2a909027650fcfd586668874baa42e6c4"
+    },
+    {
+      "path": "docs/safety-and-audit.md",
+      "size": 2977,
+      "sha256": "c0da9770d494fb3ee313b87e8657dd1e7a0402ace901379ceb8cbbdd4d0cec78"
+    },
+    {
+      "path": "docs/semifinal-guide-matrix.md",
+      "size": 6618,
+      "sha256": "36bf3331d226f8af4ff126f5d6407baa49863672a1f0ad221ee428f015cb9bec"
+    },
+    {
+      "path": "docs/skill-specs.md",
+      "size": 3387,
+      "sha256": "3902e3df367a3762052d172fdf76bf81c87ef6ddf2f34ede0f23590045e2ed69"
+    },
+    {
+      "path": "evaluate.py",
+      "size": 212,
+      "sha256": "7a8e43303bc97e4a6613efd04c35922b775739e5edf4cc16d3e557e7ded8b89a"
+    },
+    {
+      "path": "evidence/agentteams-manifest-validation.json",
+      "size": 343,
+      "sha256": "99a038814b0350b40852b431a0107b01fe394700649708c56c0e19d79e26417d"
+    },
+    {
+      "path": "evidence/agentteams-run.json",
+      "size": 7107,
+      "sha256": "1e05d11efa7311fe009820240664b3f900cad7e4b4605511b5e3c41751c2ff92"
+    },
+    {
+      "path": "evidence/cloud-skill-sls-dry-run.json",
+      "size": 1667,
+      "sha256": "900e5601270a42986cce1a1d4821b5dc1a3b1e8067a604ed0964b2eb8de262a7"
+    },
+    {
+      "path": "evidence/engineering-metrics.json",
+      "size": 3270,
+      "sha256": "12abd71a69d47bb27c6a152b8270968a078acdfae8e7fce974aff2fd51321e54"
+    },
+    {
+      "path": "evidence/evaluation-corpus/evaluation-cases.csv",
+      "size": 5560,
+      "sha256": "3bb9c33aa9806beaf7819d78014984637745fcaf7888ce86004b3e366138c784"
+    },
+    {
+      "path": "evidence/evaluation-corpus/evaluation-report.md",
+      "size": 3982,
+      "sha256": "e4f1a487de38121fc5cb6cb63c9da4aa1c874c1a7a938c7d4efef67d1ad9b55a"
+    },
+    {
+      "path": "evidence/evaluation-corpus/evaluation-summary.json",
+      "size": 16026,
+      "sha256": "5d0dbeb483541eb0ad8b9453f6e9fbdf83c79d82015d1d1aecb5753c52581ed8"
+    },
+    {
+      "path": "evidence/evaluation-report.md",
+      "size": 1841,
+      "sha256": "f659a617922a6c2565aec1e11fdebdf508a821f5ce00a629188091007c586374"
+    },
+    {
+      "path": "evidence/github-issue.json",
+      "size": 2561,
+      "sha256": "2ee36d63905ca0d5eee9147f316df5a49e8eaf9a5136750eb7ad890e45670e42"
+    },
+    {
+      "path": "evidence/github-issue.md",
+      "size": 1395,
+      "sha256": "f79ec340445ae6827717fba37d4536bb2bdb0dc97d606eab20de12e7cc4e3706"
+    },
+    {
+      "path": "evidence/github-pr-checks.json",
+      "size": 2381,
+      "sha256": "fb3ab9ca882f3db33d6893e66fc166bd454f7c89830866f3c131a039305534e2"
+    },
+    {
+      "path": "evidence/github-pr-diff.patch",
+      "size": 2448,
+      "sha256": "90e0bea91f0ea6702d1232d45f85c20d6fe63fd33391337fb24aae0ba6e7b498"
+    },
+    {
+      "path": "evidence/github-pr.json",
+      "size": 8183,
+      "sha256": "ef201fe744db879f7a778443e8412834b9fd317431ba4784f82f18770342e4f0"
+    },
+    {
+      "path": "evidence/github-pr.md",
+      "size": 1804,
+      "sha256": "9a143d376e32a6726850c473b3587c9108be756f59c3d7b81ea853b1b57f15c8"
+    },
+    {
+      "path": "evidence/github-review-audit.jsonl",
+      "size": 3476,
+      "sha256": "393670551e454d2a8d260e3821f0cdbb11c25b0442d1b9be68ab8721cf0dd8bd"
+    },
+    {
+      "path": "evidence/proof-bundle.json",
+      "size": 25133,
+      "sha256": "93ed0f410bc3d7679c1599501a4c4e49ed8bcba8ca12585e67768a5fe1f8b2d7"
+    },
+    {
+      "path": "evidence/proof-report.md",
+      "size": 6836,
+      "sha256": "f26c40a7930a95f214f3b7dcc47041ccad275db369e3314380579601dc43f341"
+    },
+    {
+      "path": "evidence/run-log.jsonl",
+      "size": 8375,
+      "sha256": "c21d69fc5d6db2b0f51106a16b4baaa0a3f84c78ca392373b4abe45963566b49"
+    },
+    {
+      "path": "evidence/run-manifest.json",
+      "size": 4498,
+      "sha256": "00742758458bb5e45189630cded88b23c7f1479a95a0a9cf7a3fa13f60838d7d"
+    },
+    {
+      "path": "evidence/trace.jsonl",
+      "size": 29111,
+      "sha256": "04cd4005fbcc7b6926127166d6ee863876a137a318e399a4a60b48cb1ac577f6"
+    },
+    {
+      "path": "pyproject.toml",
+      "size": 1111,
+      "sha256": "8334f8d5b5b96ceeb8f9aae123fd4fc2fa14e6c336c18dbbee9c7696cefb56e0"
+    },
+    {
+      "path": "repair-cockpit/README.md",
+      "size": 2356,
+      "sha256": "6b4733bd03a7cca9b60dcb4de1d1ca9e6b88d7c1f82b55ac714d0916c95f8134"
+    },
+    {
+      "path": "repair-cockpit/app.js",
+      "size": 22881,
+      "sha256": "c04c86d6213271c93f73ae6b5da98cff7d46e670ea2eb4c427aa276bf63c7fde"
+    },
+    {
+      "path": "repair-cockpit/data/.gitkeep",
+      "size": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "repair-cockpit/data/demo-data.json",
+      "size": 341830,
+      "sha256": "0a1997498877f461ede74249eb57821eb0804b6a1e74e3d2b9d4741cd18e1f38"
+    },
+    {
+      "path": "repair-cockpit/index.html",
+      "size": 4969,
+      "sha256": "dabebef5b474ee44eb89318533449cdb09af821fb1347b2657bc73ca8eed2860"
+    },
+    {
+      "path": "repair-cockpit/scripts/build_demo_data.py",
+      "size": 8911,
+      "sha256": "61700f2ec9a09103aa767e55f7f8b091de7eb64d51e16d36d9195d0f4197a7d2"
+    },
+    {
+      "path": "repair-cockpit/styles.css",
+      "size": 27697,
+      "sha256": "3acf2ab021286f53428e06bf537c2dc0ce15a45b719a3f7d695e06548b88c131"
+    },
+    {
+      "path": "scenarios/api-timeout-amplifier/scenario.json",
+      "size": 4163,
+      "sha256": "2a16dd93709ce2ff3b87dd172e14865876a62221dcfcb454808cbd3648db6e44"
+    },
+    {
+      "path": "scenarios/cache-warmup-burst/scenario.json",
+      "size": 4144,
+      "sha256": "3dc310d9eeef22b69e4ce1cbc5632d5a2f809d162bd4d0936048b6cc20716b4d"
+    },
+    {
+      "path": "scenarios/checkout-timeout/scenario.json",
+      "size": 4712,
+      "sha256": "f287e45a9a2e5804892cbd402649aa1e0a1ae6a02bbd42fb72b717239e543867"
+    },
+    {
+      "path": "scenarios/code-latency-regression-primary/scenario.json",
+      "size": 3851,
+      "sha256": "f6102ce27051e882309ea253766bf9b300e26cd2ef2b5d6d8c99d7c7528080ca"
+    },
+    {
+      "path": "scenarios/config-drift-before-peak/scenario.json",
+      "size": 4711,
+      "sha256": "c074b44d5170eaa77514d1e673b903dbc5a1581062e9b60687bbe54a4296fc19"
+    },
+    {
+      "path": "scenarios/dependency-regression-primary/scenario.json",
+      "size": 3805,
+      "sha256": "c491538ea16927595665cd90311d254d70f46aa88ed93c6e9528996b749f8565"
+    },
+    {
+      "path": "scenarios/downstream-jitter/scenario.json",
+      "size": 4150,
+      "sha256": "da22403383cf8448acb94b719f7765c0e95ab3cdb9affee32da55a2d081e3240"
+    },
+    {
+      "path": "scenarios/evaluation-fixtures/code-regression-unmodeled/scenario.json",
+      "size": 1867,
+      "sha256": "1ac0c5918be73d443ccd1fa5356bd48b34bba976e51d7f90a49678aa96b893c9"
+    },
+    {
+      "path": "scenarios/evaluation-fixtures/conflicting-counterfactuals/scenario.json",
+      "size": 2142,
+      "sha256": "947065f1f572af85c30742f526177e6b3580b93bf810b30d1da4286ab961bd6a"
+    },
+    {
+      "path": "scenarios/evaluation-fixtures/queue-backlog-unmodeled/scenario.json",
+      "size": 1877,
+      "sha256": "6b8b61bc0db59748c2a392394290d7245088b59b1b67090748757f9fd69ffe68"
+    },
+    {
+      "path": "scenarios/payment-client-slowdown/scenario.json",
+      "size": 4261,
+      "sha256": "da6714f125b3a6015586f30de022dc33b1d4911077527f64400b7cdf832be510"
+    },
+    {
+      "path": "scenarios/recovery-spike/scenario.json",
+      "size": 4178,
+      "sha256": "e13981cfb59e5be6b6ada89d5d8171db517920ac11ae63576f44262a65735aa8"
+    },
+    {
+      "path": "schemas/scenario.schema.json",
+      "size": 4380,
+      "sha256": "600a1879374b754e16ee259335ab84052873185d1feb0835014b37aab7ef3252"
+    },
+    {
+      "path": "scripts/build_submission_package.py",
+      "size": 3366,
+      "sha256": "3671c6ecfbea36af32ba213f2d7b036e5dcb6a2ff7fe773b844b7ccb6269a5cc"
+    },
+    {
+      "path": "scripts/validate_json_artifacts.py",
+      "size": 3763,
+      "sha256": "6228e712f8be24a45a11efb0c9e1663b83be4a7c4ea9d1e0ccd34e30cc5cc4ce"
+    },
+    {
+      "path": "src/chronosfix/__init__.py",
+      "size": 75,
+      "sha256": "63749c65eb987a63525b9a51a61bab2541059721dc909a2101b551d947b1bf88"
+    },
+    {
+      "path": "src/chronosfix/__main__.py",
+      "size": 81,
+      "sha256": "2cdd23d4f5cd6c3b3e4cb690ad16d560637767b9ca5b2a3cf129fcc0a5ebc82b"
+    },
+    {
+      "path": "src/chronosfix/cli.py",
+      "size": 2292,
+      "sha256": "1d02f507ddbeb014fb3a2186dc58a59e5d98e28bbed45bd7ce8f5598aeb6e75b"
+    },
+    {
+      "path": "src/chronosfix/cloud_skills.py",
+      "size": 5189,
+      "sha256": "4524233a6895613fc946dd76778215699955e9d67aa1204be46b4332a7bdd5d8"
+    },
+    {
+      "path": "src/chronosfix/engineering.py",
+      "size": 12929,
+      "sha256": "079b4d642b665d1c20642e311178187636b8c84a6662dd9e2fe07f2eaa0b1a67"
+    },
+    {
+      "path": "src/chronosfix/evaluation.py",
+      "size": 20071,
+      "sha256": "a6be55bac35777cd0dc9bb39a5e87707da18a6b93f055af0eab1ae3187adce8e"
+    },
+    {
+      "path": "src/chronosfix/github_flow.py",
+      "size": 30445,
+      "sha256": "c8a12ea3e0551c2faf07c8b1fdddc5caa307dd8ad5df6259ed4c8de27448426d"
+    },
+    {
+      "path": "src/chronosfix/integrity.py",
+      "size": 4238,
+      "sha256": "29cd46ae5a526c0bcdda82ca919fb8ad3d967f82d94c7d4fb2f71cb4b8e1aaab"
+    },
+    {
+      "path": "src/chronosfix/models.py",
+      "size": 3545,
+      "sha256": "a46cbb560daf5b8012d4838828389142e3e415686cb0d29176bd7ed868f26bef"
+    },
+    {
+      "path": "src/chronosfix/observability.py",
+      "size": 2289,
+      "sha256": "353b4ecf558b1223ca739f7897462749d820515202d264949dfdd4c8e9bfee29"
+    },
+    {
+      "path": "src/chronosfix/orchestrator.py",
+      "size": 15978,
+      "sha256": "b5e7280193cd3cf96359fe68f1156405795e7d2ddf61235fd87624b24d7e7eae"
+    },
+    {
+      "path": "src/chronosfix/schema.py",
+      "size": 4733,
+      "sha256": "52b6991dafe4dbc3b6dd0a10d885c265957a68b512b10587b55ae4ac2f157d71"
+    },
+    {
+      "path": "src/chronosfix/simulator.py",
+      "size": 1628,
+      "sha256": "7fa51aabd56a31fd0f6145a2cb5b6f654d3cd256e8571a06a421b2cb42d1f0db"
+    },
+    {
+      "path": "src/chronosfix/skills/__init__.py",
+      "size": 65,
+      "sha256": "2ef08685ed68e7bdb99d4d937b813d7e0821f4df24860ecf4d0f7900d646cee6"
+    },
+    {
+      "path": "src/chronosfix/skills/change_timeline.py",
+      "size": 225,
+      "sha256": "2554a22f2258d46d79df5c16e936d90219c187642b0851971ae11951e718f834"
+    },
+    {
+      "path": "src/chronosfix/skills/counterfactual_replay.py",
+      "size": 3034,
+      "sha256": "dad0a5788ddc0dc8b691a43195e9d81d10cdead7ad418e5f5fe14ac42a1707b5"
+    },
+    {
+      "path": "src/chronosfix/skills/evidence_fusion.py",
+      "size": 720,
+      "sha256": "2e2833c3ebcd384cd62e8196ad3402772c34205318e95744b6094d3e45a49c4b"
+    },
+    {
+      "path": "src/chronosfix/skills/evidence_passport.py",
+      "size": 4771,
+      "sha256": "35c645d8170f2ee3797ac1a78c6acb460bc0dfaddc4bdf88ce64cbd4d9c6ef36"
+    },
+    {
+      "path": "src/chronosfix/skills/fault_genome.py",
+      "size": 2917,
+      "sha256": "4cf65263a68f10cb4df5e2ba8050ee8d70b6e2c20151c43f23ee396d52591cbb"
+    },
+    {
+      "path": "src/chronosfix/skills/patch_tournament.py",
+      "size": 2608,
+      "sha256": "bebd85ae2321e3c56c7ba8eca63f159b5acc96d98fcb62e654071730236f533a"
+    },
+    {
+      "path": "src/chronosfix/skills/proof_report.py",
+      "size": 7069,
+      "sha256": "98563aa22ee53ab4b8ac0fe01ddf355e0fa6e9f54e5d915dbce2af2cb731c644"
+    },
+    {
+      "path": "src/chronosfix/skills/risk_gate.py",
+      "size": 11847,
+      "sha256": "fb72cc6e8d6400b469c393a1287c63278d45447338c7d3247bfe834975b4d7df"
+    },
+    {
+      "path": "src/chronosfix/skills/skill_forge.py",
+      "size": 2561,
+      "sha256": "4e541750b9bc1868882cc39d83741ffd6237abcab8d9af5fbb17d6822d4ddd7e"
+    },
+    {
+      "path": "submission/ChronosFix_复赛方案.pdf",
+      "size": 722150,
+      "sha256": "672c3a9b40c8339273b2ea02f26279d25662ede73355b179828fca022ee3949b"
+    },
+    {
+      "path": "submission/ChronosFix_复赛方案.pptx",
+      "size": 106593,
+      "sha256": "413487b4512cc0c4971393d2e856a6c277a42c19ea326d15818b93d88c814135"
+    },
+    {
+      "path": "submission/ppt-outline.md",
+      "size": 2887,
+      "sha256": "6d70c98c9a9eb9ef64d0412e9a738e83adaca24d37caa208065cc60852f9589d"
+    },
+    {
+      "path": "submission/submission-checklist.md",
+      "size": 5122,
+      "sha256": "3c1a2b6489bb7b02cc6a7de5b8d53f5efde95391605e2e92dbbfaa25cad546f4"
+    },
+    {
+      "path": "submission/work-intro-500.txt",
+      "size": 963,
+      "sha256": "7ddd47850b65be0b10cd4793a94927ef26d983fc4e980991546c9a3a22bc29f7"
+    },
+    {
+      "path": "tests/test_cloud_skills.py",
+      "size": 1565,
+      "sha256": "f2b0bd39d0cd5ed27c89097b56b14251152e8e0854d41d582b220337fa111d8d"
+    },
+    {
+      "path": "tests/test_evaluation.py",
+      "size": 5820,
+      "sha256": "28745d279ba2357f1e021f3a2c06a5758d338db139a1b1dfc0a0ac3bdecf1f5b"
+    },
+    {
+      "path": "tests/test_github_flow.py",
+      "size": 9775,
+      "sha256": "f38cc12e9d0ba3937ef320f60709e3c9a15119d123e7784896a148f1cf102078"
+    },
+    {
+      "path": "tests/test_integrity.py",
+      "size": 3320,
+      "sha256": "b368b854d123799b9e00954e5a5027affba81a68a63a3ea101fd67a0041498ec"
+    },
+    {
+      "path": "tests/test_pipeline.py",
+      "size": 7915,
+      "sha256": "eee7f50ce25dd754ea419137ff049f6e8c624a79b7ac4ad3ac764a1998aadf5e"
+    },
+    {
+      "path": "tests/test_repository_validation.py",
+      "size": 1935,
+      "sha256": "e9885c849bf151d3ff7d1ca3e221bb77739577062c284b9ca4790c05796b8fbd"
+    },
+    {
+      "path": "tests/test_risk_gate.py",
+      "size": 7147,
+      "sha256": "e7a5cf7a3a6a66fddb1678b45d645b91e92320502340ee86a27d10e1f969c07c"
+    },
+    {
+      "path": "tests/test_schema.py",
+      "size": 1368,
+      "sha256": "add2c9510b8ecfc3fa6830c51aa2b9ffbba4847f4ec9fbe1a60d8e83c1b1e9b2"
+    },
+    {
+      "path": "提交入口说明.md",
+      "size": 5584,
+      "sha256": "5bc201fbe040d0bf50fde077ca39e7aed65e9ca33df912afc295f62410b7102d"
+    }
+  ],
+  "archive": "AsoulAI_ChronosFix_复赛提交包.zip",
+  "archive_size": 1008481,
+  "archive_sha256": "2032608c80560bfa17f99c0aab1fa3fd01b8f91501f81be528162a30a49d7e45"
+}

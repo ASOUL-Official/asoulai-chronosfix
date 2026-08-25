@@ -1,0 +1,16 @@
+{
+  "schema": "chronosfix.agentteams-manifest-validation/v1",
+  "manifest": "agentteams/runtime/chronosfix-resources.yaml",
+  "valid": true,
+  "document_count": 11,
+  "counts": {
+    "Human": 1,
+    "Manager": 1,
+    "Team": 1,
+    "Worker": 8
+  },
+  "team_leaders": [
+    "chronosfix-incident-commander"
+  ],
+  "errors": []
+}

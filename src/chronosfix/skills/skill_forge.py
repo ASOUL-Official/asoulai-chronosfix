@@ -26,7 +26,7 @@ def distill_skill_candidates(state: IncidentState) -> list[SkillCandidate]:
             source_incident=incident,
             trigger_pattern=f"需要验证配置变更是否为主因：{primary_title}。",
             input_schema={"baseline_state": "object", "intervention": "object", "success_metric": "string"},
-            output_schema={"counterfactual_result": "object", "causal_confidence": "number"},
+            output_schema={"counterfactual_result": "object", "intervention_effect_score": "number"},
             evaluation_cases=[item.hypothesis_id for item in state.experiments],
             safety_boundary="只在隔离环境重放，不直接修改生产配置。",
             reuse_targets=["配置中心", "依赖升级", "发布回滚", "性能回退分析"],
