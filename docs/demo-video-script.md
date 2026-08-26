@@ -22,6 +22,8 @@ python demo.py --approve --approver "AsoulAI Release Owner" --approval-reason "S
 
 > 输入是合成的订单接口事故，包含 Issue、Git、依赖、配置、流量和告警。核心流水线使用 Python 标准库离线运行，不需要模型 API 或云账号。
 
+补充画面（可选 15 秒）：运行 `python scripts/run_semifinal_acceptance.py --output output/semifinal-acceptance`，展示验收器同时运行通过分支和无人审批阻断分支。它会在隔离目录生成 JSON/Markdown 报告，不覆盖 `evidence/` 主证据。
+
 ## 2. 反事实与可辨识性（45 秒）
 
 画面：展示 H-CODE、H-DEPENDENCY、H-POOL 与评测报告。
@@ -54,13 +56,15 @@ python demo.py --approve --approver "AsoulAI Release Owner" --approval-reason "S
 
 > 评测集有 9 个 Golden、2 个 Badcase 和 1 个证据不足样例。受支持诊断 9/9 正确，整体 10/12 达成预期，冲突场景正确拒答 1/1；两个未建模 Badcase 仍是已知漏诊。全部是合成回放，不代表生产准确率。
 
-## 6. GitHub 协作边界（35 秒）
+## 6. GitHub 协作边界（45 秒）
 
-画面：本地 `github-pr.json`、diff/checks，以及公开 Issue #1/PR #2。
+画面：本地 `github-pr.json`、diff/checks，以及公开 Issue #1/PR #2；最后打开真实 Draft PR #3 的 Checks 页面。
 
 讲法：
 
 > 流水线根据本次 scenario、selected changes、rollback 和本地执行检查生成 PR local-draft；不会自动写 GitHub。公开 Issue #1 和 PR #2 是 documentation-only，只证明协作形式，不证明自动代码修复或真实 GitHub Check Run。
+
+> 另外，我们创建了真实的工程验收 PR #3：它触发 Python 3.10、3.11、3.12 三个 GitHub Actions 作业，并上传一键验收 JSON/Markdown Artifact。PR #3 证明的是工程验证链路，不冒充 AgentTeams Runtime 或云端执行。
 
 ## 7. AgentTeams 与官方云 Skill（45 秒）
 
@@ -81,3 +85,7 @@ python demo.py --approve --approver "AsoulAI Release Owner" --approval-reason "S
 结尾：
 
 > ChronosFix 让人类审查的不只是 AI 的答案，而是一条不能被审批绕过的证据链。
+
+## 9. 现场备用路径（不剪辑时使用）
+
+如果现场网络不可用，直接使用仓库本地的 `repair-cockpit/` 静态页面和 `evidence/` 文件；如果需要证明工程验收，展示已保存的 `output/semifinal-acceptance/semifinal-acceptance.md` 或重新运行一键验收器。演示时明确说“离线确定性验证”，不要把本地文件说成在线服务返回值。

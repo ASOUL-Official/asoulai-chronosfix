@@ -32,3 +32,24 @@
 本地流水线生成的 Issue/PR/diff/checks/audit 是每次运行派生的 local-draft；它们具有 scenario、selected patch、rollback、RiskGate 和 run ID。公开 Issue #1/PR #2 是另一层低风险人工创建证据，二者不能互相替代。
 
 真实端到端接入需要新增 GitHub App/PAT 最小权限、真实修复分支、真实 CI、Check Run URL 和外部写入审计。
+
+## PR #3：真实工程验收证据
+
+为验证当前复赛增强，我们另建了真实工程分支和 PR：
+
+| 类型 | 链接/标识 | 结果 |
+|---|---|---|
+| PR | https://github.com/ASOUL-Official/asoulai-chronosfix/pull/3 | 已合并 |
+| Branch | `demo/live-engineering-gate-20260826` | 从复赛 main 创建 |
+| Commit | `3821f7ac7289f7d990b9eb5f78f19f85c68bf5f4` | 一键验收器与 Schema 验证器 |
+| Merge commit | `9d80acc38135644bbdf49253e4d1e34779c4bae1` | 已进入 main |
+
+PR #3 的 GitHub Actions 在 Python 3.10、3.11、3.12 上全部通过，并上传 `chronosfix-semifinal-acceptance-*` Artifact。Artifact 内容包含 8 项自动检查和 15 项关键断言：
+
+- 36 项测试、严格 JSON/JSONL、公开 Draft 2020-12 Schema；
+- AgentTeams v1beta1 清单（1 Manager、8 Worker、1 Team、1 Human）；
+- 已审批分支 `approved` 与无人审批分支 `blocked-awaiting-human`；
+- 12 场景、9/9 支持范围诊断、1/1 正确拒答、10/12 达成预期；
+- 明确记录 AgentTeams Runtime 未执行、云 Skill 为 dry-run、评测数据为合成数据。
+
+PR #3 证明真实 GitHub 分支、CI 和 Artifact 证据链已经跑通；它仍不等同于真实 AgentTeams Controller、真实云日志或生产发布执行。

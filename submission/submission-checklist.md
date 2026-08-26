@@ -28,6 +28,7 @@
 - [x] 部署、运行与验证说明：`docs/deployment-and-verification.md`
 - [x] GitHub Issue / PR dry-run 链路：`docs/github-issue-pr-flow.md`
 - [x] 真实 GitHub Issue / PR 协作证据：`docs/live-github-collaboration-evidence.md`、Issue #1、PR #2
+- [x] 真实工程验收 PR：PR #3（三版本 CI + 验收 Artifact）
 - [x] Agent 身份与分工：`docs/agent-identity.md`
 - [x] Skill 工程体系：`docs/skill-specs.md`
 - [x] 创新层设计：`docs/innovation-layer.md`

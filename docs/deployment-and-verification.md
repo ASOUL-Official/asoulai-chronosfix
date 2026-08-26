@@ -111,7 +111,17 @@ python cloud_skill_demo.py --output evidence/cloud-skill-sls-dry-run.json
 
 在线 Demo：<https://asoul-official.github.io/asoulai-chronosfix/>。
 
-核心流水线生成的 `github-*` 文件是 local-draft，不写 GitHub API。公开 Issue #1 / PR #2 是 documentation-only 迁移证据，不证明自动修复 PR 或真实 Check Run。Pages 页面是静态演示，事实以可重放 evidence 为准。
+核心流水线生成的 `github-*` 文件是 local-draft，不写 GitHub API。公开 Issue #1 / PR #2 是 documentation-only 迁移证据，不证明自动修复 PR 或真实 Check Run。另有真实工程验收 PR #3：它运行三版本 Python CI 并上传验收 Artifact，但不代表真实 AgentTeams Controller 或云 Skill 已执行。Pages 页面是静态演示，事实以可重放 evidence 为准。
+
+真实 PR #3：<https://github.com/ASOUL-Official/asoulai-chronosfix/pull/3>。
+
+## 8.1 一键复赛验收
+
+```powershell
+python scripts/run_semifinal_acceptance.py --output output/semifinal-acceptance
+```
+
+验收器在隔离临时目录执行 8 项检查，并将最终 JSON/Markdown 写入指定目录：36 项测试、严格 JSON/JSONL、公开 Draft 2020-12 Schema、AgentTeams v1beta1 清单、已审批通过分支、无人审批阻断分支、12 场景评测、Repair Cockpit JavaScript 语法。通过分支应为 `quality_gate=passed` + `release_decision=approved`；未审批分支应为 `quality_gate=passed` + `release_decision=blocked-awaiting-human`。
 
 ## 9. 建议验收顺序
 
@@ -122,3 +132,4 @@ python cloud_skill_demo.py --output evidence/cloud-skill-sls-dry-run.json
 5. 核对 AgentTeams v1beta1 清单及其 Controller 未运行边界。
 6. 核对官方 SLS Skill dry-run。
 7. 最后打开 Repair Cockpit 与 PPT/PDF。
+8. 需要真实工程证据时查看 PR #3 的 Checks 与 Artifact；需要真实 Runtime 证据时仍须单独安装并授权 AgentTeams Controller。
