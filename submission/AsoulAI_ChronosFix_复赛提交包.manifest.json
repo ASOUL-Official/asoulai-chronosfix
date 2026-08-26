@@ -352,8 +352,8 @@
     },
     {
       "path": "repair-cockpit/index.html",
-      "size": 4962,
-      "sha256": "18d58105e9335633a4b2dd144cf86bfad8ad9996bb5f7bd35429d9e5f7fdec29"
+      "size": 4972,
+      "sha256": "255b5aa89c7889ad47c5f6abd7995a8e8041042770d35336fc36c7bfa4b889c4"
     },
     {
       "path": "repair-cockpit/scripts/build_demo_data.py",
@@ -637,6 +637,6 @@
     }
   ],
   "archive": "AsoulAI_ChronosFix_复赛提交包.zip",
-  "archive_size": 1020144,
-  "archive_sha256": "678501ffb41dd033aa4d8fe9280366f43da5b76815b4301855841ab06d529c5a"
+  "archive_size": 1020152,
+  "archive_sha256": "d540ce3ca55addc56585e8962d95f0982ccac06f7bb403134efaa83dccf6e4cc"
 }
