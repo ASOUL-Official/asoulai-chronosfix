@@ -3,7 +3,7 @@
   "team": "AsoulAI",
   "work": "ChronosFix",
   "direction": "新智基座方向三：软件研发全流程协同",
-  "file_count": 123,
+  "file_count": 125,
   "files": [
     {
       "path": ".gitattributes",
@@ -17,8 +17,8 @@
     },
     {
       "path": ".github/workflows/verify.yml",
-      "size": 1616,
-      "sha256": "dad95aeecad68b1ec56e3487dde51f160073f4ae277ada845313e4fd50d301c2"
+      "size": 2099,
+      "sha256": "65eb0925125a1e6adf0884f331e55c0db027ad96dfc4453edc894dc213583af9"
     },
     {
       "path": ".gitignore",
@@ -32,18 +32,18 @@
     },
     {
       "path": "README.md",
-      "size": 9131,
-      "sha256": "1b41c5a181e710a578c374eb0e822a4ccb568b064bb87d15ff75756facb8493a"
+      "size": 9362,
+      "sha256": "d4e4e9e5ed33b74443e852aed4cd591c58c8eb94fc7375cc8992a8f59a86b1ea"
     },
     {
       "path": "SBOM.json",
-      "size": 2880,
-      "sha256": "2309ffba4e52120ff58bac9078cd9ccb98b28b2b90fc7757c68beac28ed2405f"
+      "size": 3604,
+      "sha256": "1cc0d0332e411b717c61d39836a7c1fc7b8d999bbf83117f307a5a2dc7d3de1c"
     },
     {
       "path": "THIRD_PARTY_NOTICES.md",
-      "size": 2337,
-      "sha256": "105d23e493bacde977fd8a5b3fcec21f60a75fdd00277981baa56379d6d3b082"
+      "size": 2662,
+      "sha256": "4880f7221c75b2a987f868d25bb040fadb3ec564675013875769e43d4c5d437e"
     },
     {
       "path": "agentteams/chronosfix-team.yaml",
@@ -162,8 +162,8 @@
     },
     {
       "path": "docs/measurement-plan.md",
-      "size": 4214,
-      "sha256": "15fefdcdd8d7d6a53ca41a8e64c6e955a4e94c44177bdb47bc3e597c29462a04"
+      "size": 4867,
+      "sha256": "b949e567acece2dc5d2c78f69ba307fe57b272f6c3aa661684e296d93e0a23b0"
     },
     {
       "path": "docs/official-baseline.md",
@@ -322,8 +322,8 @@
     },
     {
       "path": "pyproject.toml",
-      "size": 1111,
-      "sha256": "8334f8d5b5b96ceeb8f9aae123fd4fc2fa14e6c336c18dbbee9c7696cefb56e0"
+      "size": 1141,
+      "sha256": "332ddb4112f5e812615d14266759136f94199ac1cf788cf7c3107aff68ee02b9"
     },
     {
       "path": "repair-cockpit/README.md",
@@ -431,9 +431,19 @@
       "sha256": "3671c6ecfbea36af32ba213f2d7b036e5dcb6a2ff7fe773b844b7ccb6269a5cc"
     },
     {
+      "path": "scripts/run_semifinal_acceptance.py",
+      "size": 8848,
+      "sha256": "1bfefc30a39bca0020671421721ef0670cdc5381b301c43574f1509844a660eb"
+    },
+    {
       "path": "scripts/validate_json_artifacts.py",
       "size": 3763,
       "sha256": "6228e712f8be24a45a11efb0c9e1663b83be4a7c4ea9d1e0ccd34e30cc5cc4ce"
+    },
+    {
+      "path": "scripts/validate_scenario_schema.py",
+      "size": 2245,
+      "sha256": "6bf5a6cf8ca4e7dac63aae0a4f48e3c93c1b3251adf5e123f0df99e8ea863893"
     },
     {
       "path": "src/chronosfix/__init__.py",
@@ -567,8 +577,8 @@
     },
     {
       "path": "submission/submission-checklist.md",
-      "size": 5122,
-      "sha256": "3c1a2b6489bb7b02cc6a7de5b8d53f5efde95391605e2e92dbbfaa25cad546f4"
+      "size": 5266,
+      "sha256": "33fb08f845fd500d25cf8d9e1944642518cf600cb81e9888e6a8508b23cda074"
     },
     {
       "path": "submission/work-intro-500.txt",
@@ -622,6 +632,6 @@
     }
   ],
   "archive": "AsoulAI_ChronosFix_复赛提交包.zip",
-  "archive_size": 1008481,
-  "archive_sha256": "2032608c80560bfa17f99c0aab1fa3fd01b8f91501f81be528162a30a49d7e45"
+  "archive_size": 1013694,
+  "archive_sha256": "8670c9ad84c8a01976316f999e607a3abea39bda76d4cb00dfde3cb90bf479a3"
 }

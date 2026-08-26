@@ -54,5 +54,17 @@ jobs:
           agentteams/runtime/chronosfix-resources.yaml
           --output "${{ runner.temp }}/agentteams-manifest-validation.json"
 
+      - name: Run complete semifinal acceptance chain
+        run: >-
+          python scripts/run_semifinal_acceptance.py
+          --output "${{ runner.temp }}/chronosfix-semifinal-acceptance"
+
+      - name: Upload semifinal acceptance evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: chronosfix-semifinal-acceptance-${{ matrix.python-version }}
+          path: ${{ runner.temp }}/chronosfix-semifinal-acceptance/
+          if-no-files-found: error
+
       - name: Verify tests did not mutate tracked evidence
         run: git diff --exit-code -- .

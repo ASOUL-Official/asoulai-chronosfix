@@ -24,6 +24,9 @@ The workflow references below are the actual major-version tags configured in
 | actions/upload-pages-artifact | `v3` | Package the static Repair Cockpit site for Pages | MIT | <https://github.com/actions/upload-pages-artifact> |
 | actions/deploy-pages | `v4` | Publish the packaged static artifact to GitHub Pages | MIT | <https://github.com/actions/deploy-pages> |
 
+| jsonschema | `>=4.21,<5` (optional validation extra) | Validate the public Draft 2020-12 scenario contract | MIT | <https://github.com/python-jsonschema/jsonschema> |
+| actions/upload-artifact | `v4` | Preserve semifinal acceptance JSON/Markdown as workflow evidence | MIT | <https://github.com/actions/upload-artifact> |
+
 ## Declared external integration targets
 
 AgentTeams and Alibaba Cloud Skills are external integration targets described by

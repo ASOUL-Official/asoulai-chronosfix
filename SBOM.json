@@ -49,6 +49,20 @@
       ]
     },
     {
+      "type": "library",
+      "bom-ref": "validation:jsonschema@>=4.21,<5",
+      "name": "jsonschema",
+      "version": ">=4.21,<5",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
       "type": "application",
       "bom-ref": "pkg:github/actions/checkout@v4",
       "name": "actions/checkout",
@@ -122,12 +136,30 @@
         }
       ],
       "purl": "pkg:github/actions/deploy-pages@v4"
+    },
+    {
+      "type": "application",
+      "bom-ref": "pkg:github/actions/upload-artifact@v4",
+      "name": "actions/upload-artifact",
+      "version": "v4",
+      "scope": "excluded",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:github/actions/upload-artifact@v4"
     }
   ],
   "dependencies": [
     {
       "ref": "pkg:pypi/chronosfix@0.1.0",
-      "dependsOn": []
+      "dependsOn": [
+        "validation:pyyaml@>=6.0.2,<7",
+        "validation:jsonschema@>=4.21,<5"
+      ]
     }
   ]
 }
