@@ -60,6 +60,8 @@
 - [x] GitHub 审计事件：`evidence/github-review-audit.jsonl`
 - [x] 证据包：`evidence/proof-bundle.json`
 - [x] 证明报告：`evidence/proof-report.md`
+- [x] 一键复赛验收器：`scripts/run_semifinal_acceptance.py`
+- [x] 公开场景 Schema 验证器：`scripts/validate_scenario_schema.py`
 
 ## 当前 Demo 已覆盖
 

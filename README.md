@@ -39,6 +39,7 @@ python demo.py --approve --approver "AsoulAI Release Owner" --approval-reason "S
 python evaluate.py --output output/evaluation
 python agentteams/run_chronosfix_team.py --approve --approver "AsoulAI Release Owner" --approval-reason "Semifinal evidence review" --output output/agentteams-latest
 python scripts/build_submission_package.py
+python scripts/run_semifinal_acceptance.py --output output/semifinal-acceptance
 ```
 
 验证未审批分支：
@@ -138,6 +139,7 @@ A-CFX 面向中大型研发组织、云厂商/DevOps 平台和高审计行业，
 - `schemas/`：机器可读 JSON Schema。
 - `agentteams/`：本地兼容入口、Worker Skill、v1beta1 正式资源和离线校验工具。
 - `evidence/`：主场景证据、AgentTeams 清单校验和官方 SLS Skill dry-run。
+- `scripts/run_semifinal_acceptance.py`：一键复赛验收器；隔离执行测试、Schema、AgentTeams、通过/阻断分支和 12 场景评测。
 - `repair-cockpit/`：静态可视化 Demo。
 - `docs/`：架构、接口、安全、评测、部署、商业与合规说明。
 - `submission/`：复赛 PPT/PDF、500 字简介、提交清单，以及带 SHA-256 清单的完整提交压缩包。

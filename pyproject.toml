@@ -22,7 +22,10 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-validation = ["PyYAML>=6.0.2,<7"]
+validation = [
+  "PyYAML>=6.0.2,<7",
+  "jsonschema>=4.21,<5",
+]
 
 [project.urls]
 Repository = "https://github.com/ASOUL-Official/asoulai-chronosfix"
