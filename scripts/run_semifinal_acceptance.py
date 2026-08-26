@@ -18,12 +18,32 @@ def read_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def read_json_if_exists(path: Path) -> dict[str, Any]:
+    if not path.is_file():
+        return {}
+    try:
+        return read_json(path)
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def nested(data: dict[str, Any], *keys: str) -> Any:
+    value: Any = data
+    for key in keys:
+        if not isinstance(value, dict) or key not in value:
+            return None
+        value = value[key]
+    return value
+
+
 def git_head() -> str | None:
     completed = subprocess.run(
         ["git", "rev-parse", "HEAD"],
         cwd=ROOT,
         capture_output=True,
         text=True,
+        encoding="utf-8",
+        errors="replace",
         check=False,
     )
     return completed.stdout.strip() or None if completed.returncode == 0 else None
@@ -36,7 +56,15 @@ def run_check(
     expected_exit_codes: tuple[int, ...] = (0,),
 ) -> dict[str, Any]:
     started = time.perf_counter()
-    completed = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, check=False)
+    completed = subprocess.run(
+        command,
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        check=False,
+    )
     duration_ms = round((time.perf_counter() - started) * 1000, 3)
     return {
         "name": name,
@@ -162,29 +190,29 @@ def run(output_dir: Path) -> dict[str, Any]:
             run_check("repair-cockpit-javascript-syntax", ["node", "--check", "repair-cockpit/app.js"]),
         ]
 
-        approved = read_json(approved_dir / "proof-bundle.json")
-        blocked = read_json(blocked_dir / "proof-bundle.json")
-        evaluation = read_json(evaluation_dir / "evaluation-summary.json")
-        agentteams = read_json(agentteams_report)
-        scenarios = read_json(scenario_report)
-        summary = evaluation["summary"]
+        approved = read_json_if_exists(approved_dir / "proof-bundle.json")
+        blocked = read_json_if_exists(blocked_dir / "proof-bundle.json")
+        evaluation = read_json_if_exists(evaluation_dir / "evaluation-summary.json")
+        agentteams = read_json_if_exists(agentteams_report)
+        scenarios = read_json_if_exists(scenario_report)
+        summary = nested(evaluation, "summary") or {}
 
         assertions = [
-            assertion("approved.quality_gate", approved["quality_gate"], "passed"),
-            assertion("approved.release_decision", approved["release_decision"], "approved"),
-            assertion("approved.release_ready", approved["gate_result"]["release_ready"], True),
-            assertion("blocked.quality_gate", blocked["quality_gate"], "passed"),
-            assertion("blocked.human_approval", blocked["gate_result"]["human_approval"], "missing-or-invalid"),
-            assertion("blocked.release_decision", blocked["release_decision"], "blocked-awaiting-human"),
-            assertion("evaluation.total_cases", summary["total_cases"], 12),
-            assertion("evaluation.supported_diagnosis", summary["supported_diagnosis_correct"], 9),
-            assertion("evaluation.expectation_met", summary["expectation_met_cases"], 10),
-            assertion("evaluation.correct_abstentions", summary["correct_abstentions"], 1),
-            assertion("evaluation.unexpected_assertions", summary["unexpected_assertion_cases"], 0),
-            assertion("agentteams.valid", agentteams["valid"], True),
-            assertion("agentteams.workers", agentteams["counts"]["Worker"], 8),
-            assertion("scenario_schema.valid", scenarios["valid"], True),
-            assertion("scenario_schema.scenario_count", scenarios["scenario_count"], 12),
+            assertion("approved.quality_gate", nested(approved, "quality_gate"), "passed"),
+            assertion("approved.release_decision", nested(approved, "release_decision"), "approved"),
+            assertion("approved.release_ready", nested(approved, "gate_result", "release_ready"), True),
+            assertion("blocked.quality_gate", nested(blocked, "quality_gate"), "passed"),
+            assertion("blocked.human_approval", nested(blocked, "gate_result", "human_approval"), "missing-or-invalid"),
+            assertion("blocked.release_decision", nested(blocked, "release_decision"), "blocked-awaiting-human"),
+            assertion("evaluation.total_cases", nested(summary, "total_cases"), 12),
+            assertion("evaluation.supported_diagnosis", nested(summary, "supported_diagnosis_correct"), 9),
+            assertion("evaluation.expectation_met", nested(summary, "expectation_met_cases"), 10),
+            assertion("evaluation.correct_abstentions", nested(summary, "correct_abstentions"), 1),
+            assertion("evaluation.unexpected_assertions", nested(summary, "unexpected_assertion_cases"), 0),
+            assertion("agentteams.valid", nested(agentteams, "valid"), True),
+            assertion("agentteams.workers", nested(agentteams, "counts", "Worker"), 8),
+            assertion("scenario_schema.valid", nested(scenarios, "valid"), True),
+            assertion("scenario_schema.scenario_count", nested(scenarios, "scenario_count"), 12),
         ]
 
     report = {

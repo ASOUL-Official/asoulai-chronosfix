@@ -21,11 +21,11 @@ AsoulAI ChronosFix（A-CFX）面向 GOAI 新智基座 Agent Infra「方向三：
 | RiskGate | 质量门禁与人工审批分离；中高风险要求具名审批，人工不能覆盖失败质量检查 | 已接企业发布审批系统 |
 | 评测集 | 12 个合成样例：9 Golden、2 Badcase、1 Insufficient Evidence | 真实企业事故准确率 |
 | AgentTeams | `agentteams.io/v1beta1` Manager/Worker/Team/Human 正式资源已离线校验 | AgentTeams Controller / Matrix 已执行 |
-| 官方云 Skill | `alibabacloud-sls-query` 只读适配器完成契约测试和 dry-run | 已成功查询真实阿里云 SLS |
+| 官方云 Skill | `alibabacloud-sls-query` 只读适配器完成契约测试和 dry-run，当前未执行真实云查询 | 真实 SLS 查询已完成 |
 | GitHub 协作 | 核心流水线生成本地 Issue/PR/diff/checks 草案；公开 Issue #1 / PR #2 为 documentation-only 迁移证据 | 已由程序写入真实修复 PR 或 GitHub Check Run |
-| 其他官方组件 | Nacos、Higress、PolarDB、UnifiedModel、RocketMQ、AgentLoop 等已定义接口和迁移边界 | 已全部部署 |
+| 其他官方组件 | Nacos、Higress、PolarDB、UnifiedModel、RocketMQ、LoongSuite、AgentScope Studio、AgentLoop 已完成接口映射与迁移边界设计 | 已部署并接入生产 |
 
-详细边界见 [`agentteams/runtime/runtime-status.md`](agentteams/runtime/runtime-status.md)。
+逐条参赛要求、证据位置和准确评审表述见 [`docs/official-requirements-audit.md`](docs/official-requirements-audit.md)；运行边界见 [`agentteams/runtime/runtime-status.md`](agentteams/runtime/runtime-status.md)。
 
 ## 可复现运行
 

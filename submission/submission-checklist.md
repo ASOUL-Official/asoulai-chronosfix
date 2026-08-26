@@ -19,6 +19,7 @@
 ## 方案完整度材料
 
 - [x] 最新参赛指南要求映射：`docs/semifinal-guide-matrix.md`
+- [x] 官方复赛要求逐条审计：`docs/official-requirements-audit.md`
 - [x] 官方推荐 Agent Infra 映射：`docs/official-infra-mapping.md`
 - [x] 带证明的软件变更基础设施底层逻辑：`docs/proof-carrying-change.md`
 - [x] 真实 AgentTeams runtime 接入判断：`docs/agentteams-runtime-integration.md`
@@ -61,7 +62,7 @@
 - [x] GitHub 审计事件：`evidence/github-review-audit.jsonl`
 - [x] 证据包：`evidence/proof-bundle.json`
 - [x] 证明报告：`evidence/proof-report.md`
-- [x] 一键复赛验收器：`scripts/run_semifinal_acceptance.py`
+- [x] 一键复赛验收器：`scripts/run_semifinal_acceptance.py`（显式 UTF-8，兼容 Windows 中文环境）
 - [x] 公开场景 Schema 验证器：`scripts/validate_scenario_schema.py`
 
 ## 当前 Demo 已覆盖

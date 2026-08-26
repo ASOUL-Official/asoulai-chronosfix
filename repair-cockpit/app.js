@@ -25,6 +25,13 @@ const shortId = (value, length = 16) => {
   return value.length > length ? `${value.slice(0, length)}…` : value;
 };
 const list = (values) => (values?.length ? values.join("、") : "—");
+const blockerLabel = (blocker) => {
+  if (typeof blocker === "string") return blocker;
+  if (blocker && typeof blocker === "object") {
+    return blocker.message ?? blocker.code ?? JSON.stringify(blocker);
+  }
+  return String(blocker ?? "unknown blocker");
+};
 
 function statusClass(value) {
   const normalized = String(value ?? "").toLowerCase();
@@ -380,7 +387,7 @@ function renderGate(scenario) {
     </div>
     <div class="blocker-row ${mode.blockers.length ? "has-blockers" : ""}">
       <strong>${mode.release_ready ? "满足离线放行条件" : "Fail closed：当前不可发布"}</strong>
-      <span>${escapeHtml(mode.blockers.length ? mode.blockers.join("；") : "无阻断项")}</span>
+      <span>${escapeHtml(mode.blockers.length ? mode.blockers.map(blockerLabel).join("；") : "无阻断项")}</span>
     </div>
   `;
 }
@@ -407,17 +414,41 @@ function renderEvidence(scenario) {
   }
   const passport = scenario.passport;
   const integrity = passport.integrity ?? {};
+  const mode = currentMode();
+  const isBlockedBranch = mode && !mode.release_ready;
+  const riskClaims = isBlockedBranch
+    ? [
+        `当前演示分支：quality_gate=${mode.quality_gate}，human_approval=${mode.human_approval}，release_decision=${mode.release_decision}。`,
+        "因审批证据缺失或质量门禁失败，证据护照保持 draft，不构成发布许可。",
+        ...(mode.blockers ?? []).map((blocker) => `阻断项：${blockerLabel(blocker)}`),
+      ]
+    : passport.risk_claims;
   return `
+    ${
+      isBlockedBranch
+        ? `
+          <div class="passport-branch-warning">
+            <span>DRAFT PASSPORT · FAIL CLOSED</span>
+            <strong>当前分支不会复用已批准运行的审批摘要</strong>
+            <p>因果、验证和回滚证据仍可供评审，但 approval digest 必须与具名审批人、理由和策略版本重新绑定。</p>
+          </div>
+        `
+        : ""
+    }
     <div class="passport-grid">
       ${claimBlock("因果声明", passport.causal_claims)}
       ${claimBlock("验证声明", passport.verification_claims)}
-      ${claimBlock("风险声明", passport.risk_claims)}
+      ${claimBlock("风险声明", riskClaims)}
       ${claimBlock("回滚声明", passport.rollback_claims)}
     </div>
     <div class="integrity-grid">
       <div><span>scenario_sha256</span><code>${escapeHtml(shortId(integrity.scenario_sha256, 24))}</code></div>
       <div><span>patch_sha256</span><code>${escapeHtml(shortId(integrity.patch_changes_sha256, 24))}</code></div>
-      <div><span>approval_digest</span><code>${escapeHtml(shortId(integrity.approval_input_digest, 24))}</code></div>
+      <div><span>approval_digest</span><code>${
+        isBlockedBranch
+          ? "not-issued · current branch blocked"
+          : escapeHtml(shortId(integrity.approval_input_digest, 24))
+      }</code></div>
       <div><span>policy</span><code>${escapeHtml(integrity.policy_version ?? "pending")}</code></div>
     </div>
     ${renderLinkCards()}

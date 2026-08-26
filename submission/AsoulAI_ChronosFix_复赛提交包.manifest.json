@@ -3,7 +3,7 @@
   "team": "AsoulAI",
   "work": "ChronosFix",
   "direction": "新智基座方向三：软件研发全流程协同",
-  "file_count": 125,
+  "file_count": 126,
   "files": [
     {
       "path": ".gitattributes",
@@ -32,8 +32,8 @@
     },
     {
       "path": "README.md",
-      "size": 9509,
-      "sha256": "d14148dfc7ec2ca3b1a21ab1e2212b5280d32011ad1df133b2ef6811781378b2"
+      "size": 9719,
+      "sha256": "58fc8dcb504529c8585f836dd0f0463929fd6a13c9bb4d13eeb7a22c5a60d43b"
     },
     {
       "path": "SBOM.json",
@@ -174,6 +174,11 @@
       "path": "docs/official-infra-mapping.md",
       "size": 5338,
       "sha256": "88fbf1c98a156e562fad811cf585080258e717b56f573c08acfc8054e3cb1934"
+    },
+    {
+      "path": "docs/official-requirements-audit.md",
+      "size": 8005,
+      "sha256": "b9059e668d8442b1ccb304449d1fb611b6ce12b38282208f24d1aa2b2a29c976"
     },
     {
       "path": "docs/open-source-compliance.md",
@@ -332,8 +337,8 @@
     },
     {
       "path": "repair-cockpit/app.js",
-      "size": 22881,
-      "sha256": "c04c86d6213271c93f73ae6b5da98cff7d46e670ea2eb4c427aa276bf63c7fde"
+      "size": 24187,
+      "sha256": "3fc846d96ed91be682db68089a9991ebd7464e2551b798425d4585850f281de2"
     },
     {
       "path": "repair-cockpit/data/.gitkeep",
@@ -347,8 +352,8 @@
     },
     {
       "path": "repair-cockpit/index.html",
-      "size": 4969,
-      "sha256": "dabebef5b474ee44eb89318533449cdb09af821fb1347b2657bc73ca8eed2860"
+      "size": 4962,
+      "sha256": "18d58105e9335633a4b2dd144cf86bfad8ad9996bb5f7bd35429d9e5f7fdec29"
     },
     {
       "path": "repair-cockpit/scripts/build_demo_data.py",
@@ -357,8 +362,8 @@
     },
     {
       "path": "repair-cockpit/styles.css",
-      "size": 27697,
-      "sha256": "3acf2ab021286f53428e06bf537c2dc0ce15a45b719a3f7d695e06548b88c131"
+      "size": 28208,
+      "sha256": "c35d3cf8950f04324fb5a994225019f0786f4bc6a8bdf3473959bc43cb38fdb2"
     },
     {
       "path": "scenarios/api-timeout-amplifier/scenario.json",
@@ -432,8 +437,8 @@
     },
     {
       "path": "scripts/run_semifinal_acceptance.py",
-      "size": 9071,
-      "sha256": "469ea980ef5626a85cec3b68a38f93b90d5ab008acb8645b996d41c79f08ee0d"
+      "size": 9802,
+      "sha256": "56c0e93923c8513c53a760b1c9e45b2b764acae889ed0ad179f1305755b40fbc"
     },
     {
       "path": "scripts/validate_json_artifacts.py",
@@ -562,13 +567,13 @@
     },
     {
       "path": "submission/ChronosFix_复赛方案.pdf",
-      "size": 722150,
-      "sha256": "672c3a9b40c8339273b2ea02f26279d25662ede73355b179828fca022ee3949b"
+      "size": 721463,
+      "sha256": "ac0012ba1b2a668cd30a5c5920d67a601d55ee7ffddb6e9d567e29fa36b6080a"
     },
     {
       "path": "submission/ChronosFix_复赛方案.pptx",
-      "size": 106593,
-      "sha256": "413487b4512cc0c4971393d2e856a6c277a42c19ea326d15818b93d88c814135"
+      "size": 106626,
+      "sha256": "af73511f58a5fdbe51f3e126232c51535fb281c163a52d07e358b9eeff34795c"
     },
     {
       "path": "submission/ppt-outline.md",
@@ -577,8 +582,8 @@
     },
     {
       "path": "submission/submission-checklist.md",
-      "size": 5434,
-      "sha256": "cc85631d437f69dd21c6e8b648db40b09d293b4618926482032c15bb870c7217"
+      "size": 5557,
+      "sha256": "3e05b9aae899d4b6f173e54603eac24a07cc46ed8dcef0bb8d38bf6304f24e39"
     },
     {
       "path": "submission/work-intro-500.txt",
@@ -627,11 +632,11 @@
     },
     {
       "path": "提交入口说明.md",
-      "size": 5584,
-      "sha256": "5bc201fbe040d0bf50fde077ca39e7aed65e9ca33df912afc295f62410b7102d"
+      "size": 5683,
+      "sha256": "7a1a71d5fe44e4a1f5b69ee210f85e131b2ce20672de408bbda7eccee973d01d"
     }
   ],
   "archive": "AsoulAI_ChronosFix_复赛提交包.zip",
-  "archive_size": 1015339,
-  "archive_sha256": "879c7987ca1c9a02ef0176c580dc33415b311d4cbb616b25c2e5b3b3e85571e6"
+  "archive_size": 1020144,
+  "archive_sha256": "678501ffb41dd033aa4d8fe9280366f43da5b76815b4301855841ab06d529c5a"
 }
