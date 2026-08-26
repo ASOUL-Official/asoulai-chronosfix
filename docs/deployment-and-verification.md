@@ -1,6 +1,6 @@
 # 部署、运行与验证说明
 
-A-CFX 核心流水线使用 Python 标准库，支持离线复现。AgentTeams 清单校验需要 PyYAML；真实 AgentTeams Controller、真实 SLS 查询及其他云组件不属于默认本地运行。
+A-CFX 核心流水线使用 Python 标准库，支持离线复现。公开 Schema 校验需要 `jsonschema`，AgentTeams 清单校验需要 `PyYAML`；真实 AgentTeams Controller、真实 SLS 查询及其他云组件不属于默认本地运行。
 
 ## 1. 环境
 
@@ -9,10 +9,17 @@ A-CFX 核心流水线使用 Python 标准库，支持离线复现。AgentTeams �
 | Python | 3.10+ |
 | 系统 | Windows / macOS / Linux |
 | 核心依赖 | Python 标准库 |
+| 完整验收可选依赖 | `PyYAML>=6.0.2,<7`、`jsonschema>=4.21,<5` |
 | 网络 | 核心流水线和评测不需要网络 |
 | 数据 | 合成事故数据，不含企业生产数据或密钥 |
 
 所有命令均从仓库根目录运行，不依赖提交者机器的绝对路径。
+
+运行完整验收前安装可选依赖：
+
+```powershell
+python -m pip install -e ".[validation]"
+```
 
 ## 2. 自动化测试
 

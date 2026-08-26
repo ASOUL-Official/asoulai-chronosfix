@@ -32,8 +32,8 @@
     },
     {
       "path": "README.md",
-      "size": 9719,
-      "sha256": "58fc8dcb504529c8585f836dd0f0463929fd6a13c9bb4d13eeb7a22c5a60d43b"
+      "size": 10016,
+      "sha256": "024d8c66b8b67d3be227f7d100cec47cf5322e5bfa4777c70618a38fb8595185"
     },
     {
       "path": "SBOM.json",
@@ -127,8 +127,8 @@
     },
     {
       "path": "docs/deployment-and-verification.md",
-      "size": 5161,
-      "sha256": "522e81f53e8ca2126f470593c2eaaa39618d1d9b52406a379b95354d68bdafd5"
+      "size": 5383,
+      "sha256": "3d492679554d5848794f581a2a1851dd80f93d84eeb699eb39c913b5b70f3099"
     },
     {
       "path": "docs/evaluation-corpus-results.md",
@@ -182,8 +182,8 @@
     },
     {
       "path": "docs/open-source-compliance.md",
-      "size": 1448,
-      "sha256": "a32c34c2603d2178894cd1071221cfcc5441fb0cd20ad292e7054851851a6195"
+      "size": 1518,
+      "sha256": "154462bd2772989cb9d1f447d8c4fe04444daf9b8a6db5800abca194639861e8"
     },
     {
       "path": "docs/originality-check.md",
@@ -637,6 +637,6 @@
     }
   ],
   "archive": "AsoulAI_ChronosFix_复赛提交包.zip",
-  "archive_size": 1020152,
-  "archive_sha256": "d540ce3ca55addc56585e8962d95f0982ccac06f7bb403134efaa83dccf6e4cc"
+  "archive_size": 1020431,
+  "archive_sha256": "acd38cf96848cf29d921f236acd36222e96dc6818fcde99f4aa4035edccb7e60"
 }

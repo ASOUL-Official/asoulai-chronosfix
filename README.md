@@ -31,6 +31,14 @@ AsoulAI ChronosFix（A-CFX）面向 GOAI 新智基座 Agent Infra「方向三：
 
 环境：Python 3.10+，核心闭环不依赖第三方 Python 包，也不需要云账号。
 
+如果要运行公开 Schema、AgentTeams 清单和“一键复赛验收器”，先安装可选验证依赖（`PyYAML` + `jsonschema`）：
+
+```powershell
+python -m pip install -e ".[validation]"
+```
+
+只运行 `demo.py`、`evaluate.py` 或 36 项单元测试时无需安装这些可选依赖。
+
 ```powershell
 git clone https://github.com/ASOUL-Official/asoulai-chronosfix.git
 cd asoulai-chronosfix

@@ -17,7 +17,7 @@
 
 ## 许可证
 
-仓库已采用 Apache-2.0。核心流水线只依赖 Python 标准库；AgentTeams 清单校验可选依赖 PyYAML。`SBOM.json` 与 `THIRD_PARTY_NOTICES.md` 记录当前依赖、上游资源及许可证边界；后续新增 Runtime、MCP 或云 SDK 时必须同步更新。
+仓库已采用 Apache-2.0。核心流水线只依赖 Python 标准库；完整公开验收的 Schema 校验和 AgentTeams 清单校验分别使用可选依赖 `jsonschema` 与 `PyYAML`。`SBOM.json` 与 `THIRD_PARTY_NOTICES.md` 记录当前依赖、上游资源及许可证边界；后续新增 Runtime、MCP 或云 SDK 时必须同步更新。
 
 ## 数据与隐私
 
