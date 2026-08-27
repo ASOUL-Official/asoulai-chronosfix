@@ -5,6 +5,17 @@ const view = {
   scenarioId: null,
   mode: "approved",
   stepIndex: 0,
+  demo: {
+    events: [],
+    revisionDelta: 0,
+    attemptDelta: 0,
+    taskOverrides: {},
+    forcePaused: false,
+    staleApproval: false,
+    forceQualityFailure: false,
+    forceToolDenied: false,
+    log: [],
+  },
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -55,6 +66,223 @@ function currentScenario() {
 function currentMode() {
   const scenario = currentScenario();
   return scenario.modes?.[view.mode] ?? null;
+}
+
+function resetDemoState() {
+  view.demo = {
+    events: [],
+    revisionDelta: 0,
+    attemptDelta: 0,
+    taskOverrides: {},
+    forcePaused: false,
+    staleApproval: false,
+    forceQualityFailure: false,
+    forceToolDenied: false,
+    log: [],
+  };
+}
+
+function effectiveMode() {
+  const mode = currentMode();
+  if (!mode) return null;
+  const next = {
+    ...mode,
+    blockers: [...(mode.blockers ?? [])],
+    quality_blockers: [...(mode.quality_blockers ?? [])],
+    approval_blockers: [...(mode.approval_blockers ?? [])],
+  };
+  if (view.demo.forceQualityFailure || view.demo.forceToolDenied) {
+    next.quality_gate = "failed";
+    next.release_decision = "blocked-quality";
+    next.release_ready = false;
+    next.quality_blockers.push(
+      view.demo.forceToolDenied ? "注入的工具调用被最小权限策略拒绝" : "注入的工具验证失败：重试已耗尽",
+    );
+    next.blockers.push("quality_gate=failed");
+  }
+  if (view.demo.forcePaused || view.demo.staleApproval) {
+    next.human_approval = "pending";
+    next.release_decision = "blocked-awaiting-human";
+    next.release_ready = false;
+    next.approval_blockers.push(
+      view.demo.staleApproval ? "approval_revision_stale：需要绑定最新 revision" : "等待人工 checkpoint",
+    );
+    next.blockers.push(view.demo.staleApproval ? "approval_revision_stale" : "human_approval=pending");
+  }
+  return next;
+}
+
+function effectiveCoordination(coordination) {
+  if (!coordination) return null;
+  const tasks = (coordination.tasks ?? []).map((task) => ({
+    ...task,
+    status: view.demo.taskOverrides[task.task_id] ?? task.status,
+  }));
+  return {
+    ...coordination,
+    revision: coordination.revision + view.demo.revisionDelta,
+    status: view.demo.forceQualityFailure || view.demo.forceToolDenied
+      ? "BLOCKED_RETRY_EXHAUSTED"
+      : view.demo.forcePaused || view.demo.staleApproval
+        ? "PAUSED_AWAITING_HUMAN"
+        : coordination.status,
+    tasks,
+    attempts: [...(coordination.attempts ?? []), ...Array.from({ length: view.demo.attemptDelta }, (_, index) => ({
+      task_id: "injected-worker-check",
+      attempt: index + 1,
+      worker: "demo-injector",
+      status: "FAILED",
+      error: "local simulation",
+    }))],
+    events: [...(coordination.events ?? []), ...view.demo.events],
+  };
+}
+
+function addDemoEvent(eventType, message, options = {}) {
+  const revisionDelta = options.revisionDelta ?? 1;
+  view.demo.revisionDelta += revisionDelta;
+  const coordination = currentScenario().coordination;
+  const revision = (coordination?.revision ?? 0) + view.demo.revisionDelta;
+  view.demo.events.push({
+    event_type: eventType,
+    revision,
+    task_id: options.task_id,
+    worker: options.worker,
+    source: "demo-injector",
+    message,
+    idempotency_key: `demo-${eventType}-${Date.now()}-${view.demo.events.length}`,
+  });
+  view.demo.log.unshift({
+    eventType,
+    revision,
+    message,
+    timestamp: new Date().toLocaleTimeString("zh-CN", { hour12: false }),
+  });
+}
+
+function renderInjectionLog() {
+  const target = $("#injector-log");
+  if (!target) return;
+  target.innerHTML = view.demo.log.length
+    ? view.demo.log
+        .slice(0, 4)
+        .map(
+          (item) => `
+            <div class="inject-log-row">
+              <span>r${escapeHtml(item.revision)}</span>
+              <strong>${escapeHtml(item.eventType)}</strong>
+              <small>${escapeHtml(item.message)} · ${escapeHtml(item.timestamp)}</small>
+            </div>
+          `,
+        )
+        .join("")
+    : `<span class="inject-empty">尚未注入事件；点击按钮观察共享状态如何改变。</span>`;
+}
+
+function applyInjection(type) {
+  const scenario = currentScenario();
+  if (type === "reset") {
+    resetDemoState();
+    renderInjectionLog();
+    renderScenario();
+    return;
+  }
+  if (scenario.runtime_scope !== "pipeline-and-evaluation" || !scenario.coordination) {
+    view.demo.log.unshift({
+      eventType: "blocked",
+      revision: 0,
+      message: "evaluation-only 样例不会进入控制面",
+      timestamp: new Date().toLocaleTimeString("zh-CN", { hour12: false }),
+    });
+    renderInjectionLog();
+    return;
+  }
+  switch (type) {
+    case "new-evidence":
+      addDemoEvent("evidence_observed", "发现配置漂移证据，动态注册审计任务", {
+        task_id: "dynamic-config-audit",
+        worker: "timeline-analyst-01",
+      });
+      view.demo.taskOverrides["dynamic-config-audit"] = "COMPLETED · EVIDENCE-TRIGGERED";
+      break;
+    case "worker-timeout":
+      addDemoEvent("task_failed", "注入 timeline Worker 超时", {
+        task_id: "timeline",
+        worker: "timeline-analyst-01",
+      });
+      addDemoEvent("task_reassigned", "按 capability 重派到备用 Worker", {
+        task_id: "timeline",
+        worker: "timeline-analyst-02",
+      });
+      view.demo.attemptDelta += 1;
+      view.demo.taskOverrides.timeline = "COMPLETED · REASSIGNED";
+      break;
+    case "duplicate-evidence":
+      addDemoEvent("evidence_deduplicated", "重复 evidence 被幂等键拦截；revision 不变", {
+        revisionDelta: 0,
+        task_id: "dynamic-config-audit",
+      });
+      break;
+    case "pause":
+      addDemoEvent("human_pause", "中风险补丁进入人工 checkpoint", { task_id: "risk-gate" });
+      view.demo.forcePaused = true;
+      break;
+    case "stale-approval":
+      addDemoEvent("approval_invalidated", "新证据使旧 approval revision 自动失效", { task_id: "risk-gate" });
+      view.demo.staleApproval = true;
+      view.demo.forcePaused = true;
+      break;
+    case "resume":
+      if (!view.demo.forcePaused && !view.demo.staleApproval) {
+        view.demo.log.unshift({
+          eventType: "resume_blocked",
+          revision: (scenario.coordination?.revision ?? 0) + view.demo.revisionDelta,
+          message: "没有暂停中的 checkpoint，恢复请求被忽略",
+          timestamp: new Date().toLocaleTimeString("zh-CN", { hour12: false }),
+        });
+        break;
+      }
+      if (view.demo.staleApproval) {
+        addDemoEvent("approval_rebound", "人工重新确认最新 revision 的审批摘要");
+        view.demo.staleApproval = false;
+      }
+      addDemoEvent("human_resume", "人工确认最新证据后恢复任务", { task_id: "risk-gate" });
+      view.demo.forcePaused = false;
+      break;
+    case "tool-denied":
+      addDemoEvent("tool_permission_denied", "只读工具调用被最小权限策略拒绝，系统拒绝继续", {
+        task_id: "dynamic-config-audit",
+        worker: "timeline-analyst-01",
+      });
+      view.demo.forceToolDenied = true;
+      view.demo.taskOverrides["dynamic-config-audit"] = "BLOCKED · PERMISSION DENIED";
+      break;
+    case "worker-crash":
+      addDemoEvent("worker_crashed", "Worker 进程崩溃，租约失效", {
+        task_id: "hypotheses",
+        worker: "hypothesis-scientist-01",
+      });
+      addDemoEvent("task_reassigned", "控制面重新分派到备用 Worker", {
+        task_id: "hypotheses",
+        worker: "hypothesis-scientist-02",
+      });
+      view.demo.attemptDelta += 1;
+      view.demo.taskOverrides.hypotheses = "COMPLETED · CRASH RECOVERED";
+      break;
+    case "retry-exhausted":
+      addDemoEvent("retry_exhausted", "RiskGate Worker 重试耗尽，系统 fail-closed", {
+        task_id: "risk-gate",
+        worker: "release-auditor-01",
+      });
+      view.demo.attemptDelta += 2;
+      view.demo.forceQualityFailure = true;
+      view.demo.taskOverrides["risk-gate"] = "BLOCKED · RETRY EXHAUSTED";
+      break;
+    default:
+      return;
+  }
+  renderInjectionLog();
+  renderScenario();
 }
 
 function renderExternalLinks() {
@@ -135,7 +363,7 @@ function setStatus(element, value) {
 
 function renderGateAndIdentity() {
   const scenario = currentScenario();
-  const mode = currentMode();
+  const mode = effectiveMode();
   const isPipeline = scenario.runtime_scope === "pipeline-and-evaluation";
 
   const human = mode?.human_approval ?? "pending";
@@ -281,7 +509,7 @@ function renderCausal(scenario) {
 }
 
 function renderCoordination(scenario) {
-  const coordination = scenario.coordination;
+  const coordination = effectiveCoordination(scenario.coordination);
   if (!coordination) {
     return `
       <div class="blocked-stage">
@@ -296,12 +524,18 @@ function renderCoordination(scenario) {
   const tasks = coordination.tasks ?? [];
   const count = (type) => events.filter((event) => event.event_type === type).length;
   const eventLabel = {
+    evidence_observed: "新证据触发",
     task_reassigned: "Worker 重派",
+    task_failed: "Worker 失败",
     evidence_deduplicated: "证据去重",
     task_deduplicated: "任务幂等回放",
     human_pause: "人工暂停",
     approval_invalidated: "旧审批失效",
+    approval_rebound: "审批重新绑定",
     human_resume: "人工恢复",
+    tool_permission_denied: "权限拒绝",
+    worker_crashed: "Worker 崩溃",
+    retry_exhausted: "重试耗尽",
   };
   return `
     <div class="section-head">
@@ -340,7 +574,7 @@ function renderCoordination(scenario) {
       </section>
     </div>
     <div class="scope-note">
-      <strong>演示证据：</strong>timeline 首次超时后重派备用 Worker；配置 evidence 重复投递被去重；补丁完成后进入人工 checkpoint，新增 SLO 证据使旧 approval revision 失效，绑定最新 revision 后恢复。${escapeHtml(coordination.boundary_note ?? "")}
+      <strong>演示证据：</strong>timeline 首次超时后重派备用 Worker；配置 evidence 重复投递被去重；补丁完成后进入人工 checkpoint，新增 SLO 证据使旧 approval revision 失效，绑定最新 revision 后恢复。${view.demo.events.length ? "当前状态已叠加浏览器本地注入事件。" : ""}${escapeHtml(coordination.boundary_note ?? "")}
     </div>
   `;
 }
@@ -405,7 +639,7 @@ function renderPatch(scenario) {
 }
 
 function renderGate(scenario) {
-  const mode = currentMode();
+  const mode = effectiveMode();
   if (!mode) {
     return `
       <div class="blocked-stage">
@@ -479,7 +713,7 @@ function renderEvidence(scenario) {
   }
   const passport = scenario.passport;
   const integrity = passport.integrity ?? {};
-  const mode = currentMode();
+  const mode = effectiveMode();
   const isBlockedBranch = mode && !mode.release_ready;
   const riskClaims = isBlockedBranch
     ? [
@@ -668,7 +902,15 @@ function renderScenario() {
 function bindControls() {
   $("#scenario-select").addEventListener("change", (event) => {
     view.scenarioId = event.target.value;
+    resetDemoState();
+    renderInjectionLog();
     renderScenario();
+  });
+
+  $("#injector-actions").addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-inject]");
+    if (!button) return;
+    applyInjection(button.dataset.inject);
   });
 
   $("#decision-switch").querySelectorAll("button").forEach((button) => {
@@ -710,6 +952,7 @@ async function init() {
     renderExternalLinks();
     renderTruthStrip();
     renderScenarioOptions();
+    renderInjectionLog();
     renderJudgeSteps();
     renderScenario();
     bindControls();

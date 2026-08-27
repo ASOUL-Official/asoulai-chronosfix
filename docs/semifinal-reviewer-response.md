@@ -17,7 +17,7 @@
 | Skill 可发现/加载 | implemented | 9 个独立 `agentteams/skills/*/SKILL.md` + `skill_registry.py` | 在真实 Worker workspace 加载并调用 |
 | 防重复执行 | implemented | evidence event 去重、task idempotency key、lost-ack replay | RocketMQ 重复投递/重启恢复实测 |
 | 统一可观测 | implemented locally | 18 个业务 Span + 独立协调事件、run/trace/revision 关联 | AgentLoop/Studio 或 OTLP 外部导入 |
-| 异常注入 | implemented locally | Worker timeout、重复 evidence、stale approval、retry/reassign | 加工具权限拒绝、进程崩溃和重试耗尽演示 |
+| 异常注入 | implemented locally | Repair Cockpit 提供新证据、Worker timeout/崩溃、重复 evidence、stale approval、权限拒绝、人工暂停/恢复与 retry exhausted 的可点击本地模拟 | 决赛接真实沙箱进程、租约和外部权限系统 |
 | 权限控制 | implemented contract | L0-L3、只读/隔离/人工审批、fail-closed | 云 RAM、GitHub App、沙箱账号实测 |
 | 真实工具沙箱 | designed | deterministic simulator 与 local draft 只证明隔离契约 | 接容器化仓库/CI 沙箱，不写生产 |
 | 版本、灰度、回滚 | rollback implemented; rollout designed | machine-readable rollback 往返验证；部署策略文档 | 真实 staging canary 与自动回滚证据 |
@@ -54,6 +54,8 @@
 没有真实测量前，PPT、Demo 和 README 不得声称生产 MTTR 降幅、准确率或商业 ROI。
 
 ## 4. 下一阶段优先级
+
+本轮新增 `evidence/release-manifest.json`，将源码指纹、Demo 数据、主场景证据、PPT/PDF 与提交包输入统一绑定；校验入口为 `scripts/validate_release_manifest.py`。
 
 P0：在 AgentTeams Controller/Matrix 跑一次动态任务图，保存 Worker load Skill、失败重派和 Human 恢复记录。  
 P1：选择一个公开事故或授权脱敏事故，完成上述人工 baseline 对照。  

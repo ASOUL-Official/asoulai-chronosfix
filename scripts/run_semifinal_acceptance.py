@@ -209,6 +209,10 @@ def run(output_dir: Path) -> dict[str, Any]:
                 "repair-cockpit-javascript-syntax",
                 [node_executable(), "--check", "repair-cockpit/app.js"],
             ),
+            run_check(
+                "release-manifest-cross-artifact-consistency",
+                [python, "scripts/validate_release_manifest.py"],
+            ),
         ]
 
         approved = read_json_if_exists(approved_dir / "proof-bundle.json")

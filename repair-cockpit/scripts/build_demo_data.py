@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
+import argparse
 import json
 from pathlib import Path
 import subprocess
@@ -212,8 +213,8 @@ def build_demo_data() -> dict[str, Any]:
             },
         ],
         "revision": {
-            "commit": "pending",
-            "kind": "local-draft",
+            "commit": head or "unknown",
+            "kind": "evidence-source",
             "base_commit": head,
         },
         "evaluation": evaluation,
@@ -231,7 +232,10 @@ def build_demo_data() -> dict[str, Any]:
 
 
 def main() -> int:
-    output_path = DEMO_ROOT / "data" / "demo-data.json"
+    parser = argparse.ArgumentParser(description="Build the offline Repair Cockpit evidence dataset.")
+    parser.add_argument("--output", type=Path, default=DEMO_ROOT / "data" / "demo-data.json")
+    args = parser.parse_args()
+    output_path = args.output.resolve()
     output_path.parent.mkdir(parents=True, exist_ok=True)
     payload = build_demo_data()
     output_path.write_text(

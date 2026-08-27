@@ -53,6 +53,29 @@
             </div>
           </div>
           <p class="control-note" id="scenario-note"></p>
+          <section class="injector" id="injector" aria-label="本地异常注入控制台">
+            <div class="injector-head">
+              <div>
+                <span class="field-label">运行时异常注入</span>
+                <small>让评委亲手改变协同状态</small>
+              </div>
+              <span class="injector-badge">LOCAL SIMULATION</span>
+            </div>
+            <div class="injector-actions" id="injector-actions">
+              <button type="button" data-inject="new-evidence">＋新证据</button>
+              <button type="button" data-inject="worker-timeout">Worker 超时</button>
+              <button type="button" data-inject="duplicate-evidence">重复 evidence</button>
+              <button type="button" data-inject="pause">人工暂停</button>
+              <button type="button" data-inject="stale-approval">旧审批失效</button>
+              <button type="button" data-inject="resume">人工恢复</button>
+              <button type="button" data-inject="tool-denied">工具权限拒绝</button>
+              <button type="button" data-inject="worker-crash">Worker 崩溃</button>
+              <button type="button" data-inject="retry-exhausted">重试耗尽</button>
+              <button class="secondary" type="button" data-inject="reset">重置演示</button>
+            </div>
+            <p class="injector-note" id="injector-note">仅在浏览器本地模拟控制面事件，不调用真实 AgentTeams、云资源或生产系统。</p>
+            <div class="injector-log" id="injector-log" aria-live="polite"></div>
+          </section>
         </div>
       </section>
 

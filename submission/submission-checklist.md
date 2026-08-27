@@ -15,6 +15,7 @@
 - [x] 评审入口说明：`提交入口说明.md`
 - [x] 完整提交压缩包：`submission/AsoulAI_ChronosFix_复赛提交包.zip`
 - [x] 提交包 SHA-256 清单：`submission/AsoulAI_ChronosFix_复赛提交包.manifest.json`
+- [x] Release Manifest：`evidence/release-manifest.json`（源码指纹、Demo、证据、PPT/PDF 交叉绑定）
 
 ## 方案完整度材料
 
@@ -78,6 +79,7 @@
 - [x] 3 个 Skill 候选沉淀。
 - [x] 18 段真实计时 Trace Span。
 - [x] 1 个可交互修复驾驶舱。
+- [x] 10 个本地异常注入动作：新证据、超时、崩溃、去重、暂停、旧审批失效、恢复、权限拒绝、重试耗尽与重置。
 - [x] 1 条 Proof-Carrying Software Change Chain。
 - [x] 1 条研发质量资产商业飞轮。
 - [x] 中风险补丁人工审批门禁。

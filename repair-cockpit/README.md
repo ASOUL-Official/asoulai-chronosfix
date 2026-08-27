@@ -44,16 +44,28 @@ GitHub Pages 会直接按静态资源方式加载，无需后端。
 6. 点击“证据护照”，展示 SHA-256、回滚契约以及真实仓库、Issue、PR、评测链接。
 7. 点击“评测与沉淀”，展示 9 个 Golden 和 3 个边界样例；再选择 Badcase，说明失败不会进入补丁或发布流程。
 
+### 现场异常注入
+
+右侧“运行时异常注入”控制台是浏览器内的本地控制面模拟，可连续点击并观察 revision、任务图、事件流和三态门禁变化：
+
+- 新证据、重复 evidence：验证动态任务注册与幂等去重；
+- Worker 超时、Worker 崩溃：验证 capability 重派与失败 attempt；
+- 人工暂停、旧审批失效、人工恢复：验证 checkpoint 和最新 revision 绑定；
+- 工具权限拒绝、重试耗尽：验证最小权限与 fail-closed。
+
+这些按钮不会调用真实 AgentTeams、云 API、GitHub 或生产系统；它们用于现场解释控制面契约，真实外部执行状态仍以 `evidence/` 与文档中的边界声明为准。
+
 ## 状态边界
 
 - `offline-validated`：核心流水线在确定性合成场景中离线执行并留下证据。
 - `dry-run`：GitHub 修复流当前生成本地草案；公开 Issue #1 / PR #2 仅作为真实协作证据。
 - `pending`：不宣称已经连接真实 AgentTeams Controller Runtime、阿里云 Skills 或生产云资源。
-- 页面中的 `commit=pending` 表示本地补丁草案尚未形成真实提交，避免使用虚构 SHA。
+- 页面中的 `commit=evidence-source` 表示 Demo 数据绑定到证据生成时的源码快照；真实补丁提交仍保持 `local-draft`，避免使用虚构 SHA。
 
 ## 静态检查
 
 ```powershell
 node --check repair-cockpit/app.js
 python -m json.tool repair-cockpit/data/demo-data.json > $null
+python scripts/validate_release_manifest.py
 ```

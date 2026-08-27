@@ -455,6 +455,120 @@ select:focus-visible {
   color: #e4f5ff;
 }
 
+.injector {
+  margin-top: 16px;
+  padding-top: 15px;
+  border-top: 1px solid var(--line);
+}
+
+.injector-head {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.injector-head small {
+  display: block;
+  margin-top: -3px;
+  color: #7f95aa;
+  font-size: 9px;
+}
+
+.injector-badge {
+  padding: 4px 7px;
+  border: 1px solid rgba(255, 182, 91, 0.28);
+  border-radius: 999px;
+  color: var(--orange);
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 8px;
+  white-space: nowrap;
+}
+
+.injector-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.injector-actions button {
+  min-height: 30px;
+  padding: 6px 7px;
+  border: 1px solid rgba(94, 231, 245, 0.22);
+  border-radius: 8px;
+  color: #cfeff4;
+  background: rgba(94, 231, 245, 0.05);
+  font-size: 9px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 150ms ease;
+}
+
+.injector-actions button:hover,
+.injector-actions button:focus-visible {
+  border-color: var(--cyan);
+  color: #fff;
+  background: rgba(94, 231, 245, 0.14);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.injector-actions button.secondary {
+  border-color: rgba(186, 166, 255, 0.28);
+  color: #d8cfff;
+  background: rgba(186, 166, 255, 0.06);
+}
+
+.injector-note {
+  margin: 9px 0 0;
+  color: #7f95aa;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.injector-log {
+  display: grid;
+  gap: 5px;
+  max-height: 112px;
+  margin-top: 8px;
+  overflow: auto;
+}
+
+.inject-log-row {
+  display: grid;
+  grid-template-columns: 25px auto 1fr;
+  gap: 6px;
+  align-items: baseline;
+  padding: 6px 7px;
+  border: 1px solid rgba(94, 231, 245, 0.12);
+  border-radius: 7px;
+  background: rgba(0, 0, 0, 0.14);
+}
+
+.inject-log-row span {
+  color: var(--cyan);
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 8px;
+}
+
+.inject-log-row strong {
+  color: #eaf7ff;
+  font-size: 8px;
+}
+
+.inject-log-row small,
+.inject-empty {
+  color: #8398ac;
+  font-size: 8px;
+  line-height: 1.35;
+}
+
+.inject-empty {
+  display: block;
+  padding: 6px 2px 0;
+}
+
 .gate-strip {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
