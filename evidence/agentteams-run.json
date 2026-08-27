@@ -239,16 +239,16 @@
     }
   ],
   "state_tracking": {
-    "run_id": "run-a9200f31746c4282b5b3730433ee7c4c",
-    "trace_id": "df6e0a1449a041bab5a0008ccf5c1436",
+    "run_id": "run-cd233db619aa4b7fa4f6248727b0f874",
+    "trace_id": "68e1ddebd0634d00ae98a2befb0ed02d",
     "span_count": 18,
     "quality_gate": "passed",
     "release_decision": "approved",
     "approval_record": {
       "status": "approved",
-      "approver": "AsoulAI Release Owner",
-      "reason": "Semifinal reviewer-feedback dynamic coordination evidence",
-      "timestamp": "2026-08-27T03:46:15.564196+00:00",
+      "approver": "AsoulAI-Release-Owner",
+      "reason": "Finals-grade-acceptance",
+      "timestamp": "2026-08-27T09:36:17.488076+00:00",
       "policy_version": "chronosfix-riskgate/v1",
       "is_human": true,
       "state_revision": 36,
@@ -298,8 +298,8 @@
   "human_gate": {
     "condition": "medium/high risk patch",
     "decision": "approved",
-    "approver": "AsoulAI Release Owner",
-    "timestamp": "2026-08-27T03:46:15.564196+00:00",
+    "approver": "AsoulAI-Release-Owner",
+    "timestamp": "2026-08-27T09:36:17.488076+00:00",
     "rollback_contract": "恢复 db.pool.maxSize=8 配置快照",
     "rollback_verified": true
   }

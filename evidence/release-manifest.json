@@ -1,0 +1,68 @@
+{
+  "schema": "chronosfix.release-manifest/v1",
+  "release_id": "acfx-f702d75a1a22",
+  "generated_at": "2026-08-27T09:36:59.756665+00:00",
+  "source_commit": "f702d75a1a22dd78f0e287696ebf41cbe2085a45",
+  "source_fingerprint": "8624c27519a77980e86e58a81a9e721d352f745f791d486b599bbcd7c93326e3",
+  "source_commit_semantics": "Evidence is tied to git HEAD plus this reproducible working-tree source fingerprint.",
+  "artifacts": {
+    "repair-cockpit/data/demo-data.json": {
+      "bytes": 1290562,
+      "sha256": "ab6f96419f562d967e5fa317e61ce44036b2349209e332f85b970297c8308899"
+    },
+    "evidence/trace.jsonl": {
+      "bytes": 29302,
+      "sha256": "7f562a52220e06b8fbbbb42f379078b7f1129d06c5d446759bf5d1d8327ddaa8"
+    },
+    "evidence/run-log.jsonl": {
+      "bytes": 8370,
+      "sha256": "179b663bf3a95f47dd34ea2efaf3e6c7ec1386f83c11dc457f3210d2331979d1"
+    },
+    "evidence/run-manifest.json": {
+      "bytes": 4874,
+      "sha256": "6212634af3757c76681550252fc869475c911dcbd7685a75b19a004b695d7b52"
+    },
+    "evidence/coordination.json": {
+      "bytes": 29024,
+      "sha256": "66b7106c45a2be6e4af974c915b653f35fc3e6880a1a5fb25918b5a7d779023b"
+    },
+    "evidence/engineering-metrics.json": {
+      "bytes": 3487,
+      "sha256": "4f02b2e77ca28cdc362ab59bd08a77f089a75615ee393430148e6dd97551041b"
+    },
+    "evidence/proof-bundle.json": {
+      "bytes": 54647,
+      "sha256": "5fbbe371185b50a057299c41a4fb7f66a00a439e7dff685c90c43f62200ff64a"
+    },
+    "evidence/agentteams-run.json": {
+      "bytes": 7875,
+      "sha256": "3321a109a8501b9b552a6e2debcbfe61f9ce301bdddeb6628e6a06483dce383f"
+    },
+    "evidence/evaluation-report.md": {
+      "bytes": 2139,
+      "sha256": "01fcbb0aadc08ac304133fb5c5b49cf0ec4e53841391a9c2928a8b7a23d8c958"
+    },
+    "submission/ChronosFix_复赛方案.pptx": {
+      "bytes": 106682,
+      "sha256": "12d50184d8331fe1c710c904a744a2dc6d7ccc0d62f2ceae699599c1664755f1"
+    },
+    "submission/ChronosFix_复赛方案.pdf": {
+      "bytes": 1171278,
+      "sha256": "c438c1c37fc18aada0701a7eff0ae39adbabcc6e21be7091a3b6d141edfaa807"
+    }
+  },
+  "counts": {
+    "evaluation_cases": 12,
+    "supported_golden_cases": 9,
+    "evidence_passport_claims": 14,
+    "trace_spans": 18,
+    "agentteams_resources": 11,
+    "unit_and_contract_tests": 40
+  },
+  "truth_boundary": {
+    "agentteams_controller_executed": false,
+    "cloud_skills": "dry-run",
+    "evaluation_data": "deterministic-synthetic",
+    "production_accuracy_or_roi_claimed": false
+  }
+}
