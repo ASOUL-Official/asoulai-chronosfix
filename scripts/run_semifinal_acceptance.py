@@ -4,6 +4,7 @@ import argparse
 from datetime import datetime, timezone
 import json
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -12,6 +13,23 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def node_executable() -> str:
+    discovered = shutil.which("node")
+    if discovered:
+        return discovered
+    bundled = (
+        Path.home()
+        / ".cache"
+        / "codex-runtimes"
+        / "codex-primary-runtime"
+        / "dependencies"
+        / "node"
+        / "bin"
+        / "node.exe"
+    )
+    return str(bundled) if bundled.is_file() else "node"
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -146,7 +164,7 @@ def run(output_dir: Path) -> dict[str, Any]:
 
         checks = [
             run_check(
-                "36-unit-and-contract-tests",
+                "40-unit-and-contract-tests",
                 [python, "-m", "unittest", "discover", "-s", "tests", "-p", "test_*.py", "-q"],
             ),
             run_check("strict-json-jsonl-validation", [python, "scripts/validate_json_artifacts.py", "."]),
@@ -187,7 +205,10 @@ def run(output_dir: Path) -> dict[str, Any]:
                 "twelve-scenario-golden-badcase-evaluation",
                 [python, "evaluate.py", "--output", str(evaluation_dir)],
             ),
-            run_check("repair-cockpit-javascript-syntax", ["node", "--check", "repair-cockpit/app.js"]),
+            run_check(
+                "repair-cockpit-javascript-syntax",
+                [node_executable(), "--check", "repair-cockpit/app.js"],
+            ),
         ]
 
         approved = read_json_if_exists(approved_dir / "proof-bundle.json")
@@ -201,9 +222,16 @@ def run(output_dir: Path) -> dict[str, Any]:
             assertion("approved.quality_gate", nested(approved, "quality_gate"), "passed"),
             assertion("approved.release_decision", nested(approved, "release_decision"), "approved"),
             assertion("approved.release_ready", nested(approved, "gate_result", "release_ready"), True),
+            assertion("approved.coordination.status", nested(approved, "coordination", "status"), "COMPLETED"),
+            assertion("approved.coordination.revision", nested(approved, "coordination", "revision"), 36),
             assertion("blocked.quality_gate", nested(blocked, "quality_gate"), "passed"),
             assertion("blocked.human_approval", nested(blocked, "gate_result", "human_approval"), "missing-or-invalid"),
             assertion("blocked.release_decision", nested(blocked, "release_decision"), "blocked-awaiting-human"),
+            assertion(
+                "blocked.coordination.status",
+                nested(blocked, "coordination", "status"),
+                "PAUSED_AWAITING_HUMAN",
+            ),
             assertion("evaluation.total_cases", nested(summary, "total_cases"), 12),
             assertion("evaluation.supported_diagnosis", nested(summary, "supported_diagnosis_correct"), 9),
             assertion("evaluation.expectation_met", nested(summary, "expectation_met_cases"), 10),

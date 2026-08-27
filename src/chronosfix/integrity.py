@@ -57,6 +57,7 @@ def build_approval_input_digest(
     scenario_hash: str,
     patch_id: str | None,
     patch_hash: str | None,
+    state_revision: int | None = None,
     gate_policy: str = POLICY_VERSION,
 ) -> str:
     return sha256_json(
@@ -65,6 +66,7 @@ def build_approval_input_digest(
             "scenario_sha256": scenario_hash,
             "patch_id": patch_id,
             "patch_sha256": patch_hash,
+            "state_revision": state_revision,
             "gate_policy": gate_policy,
         }
     )
@@ -125,6 +127,14 @@ def write_run_manifest(
         "trace": {
             "span_count": len(trace_records),
             "schema": "chronosfix.trace/v1",
+        },
+        "coordination": {
+            "schema": "chronosfix.dynamic-coordination/v1",
+            "status": getattr(state, "orchestration_status", "unknown"),
+            "state_revision": getattr(state, "state_revision", 0),
+            "task_count": len(getattr(state, "task_graph", [])),
+            "attempt_count": len(getattr(state, "task_attempts", [])),
+            "event_count": len(getattr(state, "orchestration_events", [])),
         },
         "environment": {
             "python": sys.version.split()[0],

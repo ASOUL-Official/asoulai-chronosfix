@@ -8,7 +8,7 @@
 | 底层逻辑清晰 | 以带证明的软件变更链统一事故证据、反事实根因、缺陷基因、RiskGate、GitHub PR、证据护照和 Skill 沉淀 | `docs/proof-carrying-change.md` |
 | 至少 3 个不同职能 Agent | 8 个 Worker：Commander、Timeline、Hypothesis、Universe、Patch、Verifier、Auditor、Curator | `docs/agent-identity.md` |
 | AgentTeams 为协同基座 | 1 Manager、8 Worker、1 Team、1 Human；共享 Incident State、人类审批与 Worker Skill 分工 | `agentteams/runtime/chronosfix-resources.yaml` |
-| 多 Agent 闭环 | 证据输入、任务拆解、上下文传递、工具调用、反事实实验、补丁竞赛、风险审批、证据沉淀、Skill 沉淀 | `evidence/trace.jsonl` |
+| 多 Agent 闭环 | 证据驱动任务插入、capability 调度、Worker 重派、revision 共享状态、人工暂停/恢复、反事实实验、补丁竞赛、风险审批和 Skill 沉淀 | `evidence/coordination.json`、`evidence/trace.jsonl` |
 | Skill 必选 | 9 个业务 Skill + 1 个官方 SLS 只读 Skill Adapter，共 10 个稳定契约 | `docs/skill-specs.md` |
 | MCP 或等价契约 | 当前使用本地适配器；生产迁移为 Git/CI/日志/配置中心/工单 MCP Server | `docs/architecture.md` |
 | RAG/上下文增强 | 当前实现 Incident State、证据索引、Trace 回放；后续接入历史事故、Runbook 与代码知识库检索 | `evidence/proof-bundle.json` |

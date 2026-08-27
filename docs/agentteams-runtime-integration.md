@@ -8,7 +8,7 @@ ChronosFix 已完成 AgentTeams **正式资源层**接入，但尚未完成 **Co
 |---|---|---|
 | 资源规范 | 使用 `agentteams.io/v1beta1` | `agentteams/runtime/chronosfix-resources.yaml` |
 | 角色拓扑 | 1 Manager、8 Worker、1 Team、1 Human；Team 恰好一个 `team_leader` | `evidence/agentteams-manifest-validation.json` |
-| Worker Skill | 本地确定性引擎封装为 `chronosfix-local-engine` | `agentteams/skills/chronosfix-local-engine/SKILL.md` |
+| Worker Skill | 9 个独立可发现 Skill + `chronosfix-local-engine` 离线聚合 fallback | `agentteams/skills/*/SKILL.md`、`coordination.json` skill registry |
 | 本地协同证据 | 生成 AgentTeams-compatible transcript | `agentteams/run_chronosfix_team.py`、`evidence/agentteams-run.json` |
 | Controller / Matrix | **未安装、未执行** | 无真实 Controller 日志或 Matrix 记录 |
 | Manager/Worker 模型推理 | **未执行** | 尚未配置模型 API Key |

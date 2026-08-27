@@ -52,6 +52,7 @@ def _run_fixture(scenario_path: Path, approved: bool) -> dict[str, Any]:
         bundle = _read_json(output_dir / "proof-bundle.json")
         metrics = _read_json(output_dir / "engineering-metrics.json")
         checks = _read_json(output_dir / "github-pr-checks.json")
+        coordination = _read_json(output_dir / "coordination.json")
     return {
         "run_id": bundle["run_id"],
         "trace_id": metrics["trace_id"],
@@ -73,6 +74,7 @@ def _run_fixture(scenario_path: Path, approved: bool) -> dict[str, Any]:
             "trace_spans": metrics["trace_spans"],
             "rollback_verified": metrics["rollback_verified"],
         },
+        "coordination": coordination,
     }
 
 
@@ -115,6 +117,7 @@ def _build_golden_case(
         "selected_patch": bundle["selected_patch"],
         "passport": bundle["evidence_passport"],
         "skills": bundle["skill_candidates"],
+        "coordination": approved["coordination"],
         "modes": {
             "approved": approved,
             "blocked": blocked,
@@ -142,6 +145,7 @@ def _build_evaluation_case(
         "selected_patch": None,
         "passport": None,
         "skills": [],
+        "coordination": None,
         "modes": {},
     }
 
@@ -169,8 +173,8 @@ def build_demo_data() -> dict[str, Any]:
             "team": "AsoulAI",
             "name": "ChronosFix",
             "short_name": "A-CFX",
-            "title": "AsoulAI ChronosFix Repair Cockpit",
-            "subtitle": "从生产事故到 PR 准入的因果变更治理驾驶舱",
+            "title": "AsoulAI ChronosFix（A-CFX）：软件故障时间机器",
+            "subtitle": "让每一次软件变更都携带可验证的证据",
         },
         "links": [
             {
@@ -216,11 +220,12 @@ def build_demo_data() -> dict[str, Any]:
         "cases": cases,
         "judge_steps": [
             {"id": "incident", "number": "01", "label": "事故事实"},
-            {"id": "causal", "number": "02", "label": "因果证明"},
-            {"id": "patch", "number": "03", "label": "故障族验证"},
-            {"id": "gate", "number": "04", "label": "三态门禁"},
-            {"id": "evidence", "number": "05", "label": "证据护照"},
-            {"id": "learning", "number": "06", "label": "评测与沉淀"},
+            {"id": "coordination", "number": "02", "label": "动态协同"},
+            {"id": "causal", "number": "03", "label": "因果证明"},
+            {"id": "patch", "number": "04", "label": "故障族验证"},
+            {"id": "gate", "number": "05", "label": "三态门禁"},
+            {"id": "evidence", "number": "06", "label": "证据护照"},
+            {"id": "learning", "number": "07", "label": "评测与沉淀"},
         ],
     }
 

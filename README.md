@@ -1,4 +1,6 @@
-# AsoulAI ChronosFix（A-CFX）：带证明的软件变更基础设施
+# AsoulAI ChronosFix（A-CFX）：软件故障时间机器
+
+**让每一次软件变更都携带可验证的证据。**
 
 队伍名称：**AsoulAI**
 
@@ -18,6 +20,7 @@ AsoulAI ChronosFix（A-CFX）面向 GOAI 新智基座 Agent Infra「方向三：
 | 能力 | 当前状态 | 不应误解为 |
 |---|---|---|
 | ChronosFix 核心流水线 | Python 标准库本地可运行，自动生成 Trace、日志、指标、PR 草案和证据包 | 真实生产环境修复结果 |
+| 动态协同控制面 | 新证据插入任务、capability 调度、Worker 超时重派、事件/任务幂等、revision checkpoint 和人工暂停/恢复均有 `coordination.json` 证据 | AgentTeams Controller / Matrix 已执行 |
 | RiskGate | 质量门禁与人工审批分离；中高风险要求具名审批，人工不能覆盖失败质量检查 | 已接企业发布审批系统 |
 | 评测集 | 12 个合成样例：9 Golden、2 Badcase、1 Insufficient Evidence | 真实企业事故准确率 |
 | AgentTeams | `agentteams.io/v1beta1` Manager/Worker/Team/Human 正式资源已离线校验 | AgentTeams Controller / Matrix 已执行 |
@@ -37,7 +40,7 @@ AsoulAI ChronosFix（A-CFX）面向 GOAI 新智基座 Agent Infra「方向三：
 python -m pip install -e ".[validation]"
 ```
 
-只运行 `demo.py`、`evaluate.py` 或 36 项单元测试时无需安装这些可选依赖。
+只运行 `demo.py`、`evaluate.py` 或 40 项单元测试时无需安装这些可选依赖。
 
 ```powershell
 git clone https://github.com/ASOUL-Official/asoulai-chronosfix.git
@@ -70,6 +73,7 @@ python demo.py --output output/no-approval
 - 质量门禁 `passed`，具名人工审批后发布决策 `approved`；
 - 回滚字段已恢复到场景基线并通过机器校验；
 - 18 个 Trace Span，带 `run_id`、`trace_id`、父子关系和实测 duration；
+- 6 个动态任务、8 次 Worker attempt、2 次失败重派、2 条去重证据，以及 revision 绑定的人工暂停/恢复；
 - 端到端 `elapsed_ms` 为本地 wall-clock 实测；证据覆盖率与步骤完成率明确标记为派生指标；
 - `run-manifest.json` 使用 SHA-256 绑定输入场景、补丁、回滚、审批摘要和输出文件。
 
@@ -96,10 +100,10 @@ RiskGate 输出两个独立维度：
 
 仓库提供两层材料：
 
-1. [`agentteams/run_chronosfix_team.py`](agentteams/run_chronosfix_team.py) 调用本地确定性内核并输出 AgentTeams-compatible transcript。输出明确标记 `agentteams_runtime_executed: false`。
-2. [`agentteams/runtime/chronosfix-resources.yaml`](agentteams/runtime/chronosfix-resources.yaml) 使用 `agentteams.io/v1beta1`，包含 1 Manager、8 Worker、1 Team、1 Human；Team 通过 `workerMembers` 关联成员且恰好一个 `team_leader`。离线校验结果见 [`evidence/agentteams-manifest-validation.json`](evidence/agentteams-manifest-validation.json)。
+1. [`agentteams/run_chronosfix_team.py`](agentteams/run_chronosfix_team.py) 调用动态确定性内核并输出 AgentTeams-compatible transcript。核心计算由 task graph 驱动，包含证据触发插入、capability dispatch、失败重派、幂等去重和 revision checkpoint；输出仍明确标记 `agentteams_runtime_executed: false`。
+2. [`agentteams/runtime/chronosfix-resources.yaml`](agentteams/runtime/chronosfix-resources.yaml) 使用 `agentteams.io/v1beta1`，包含 1 Manager、8 Worker、1 Team、1 Human；9 个业务 Skill 已拆为运行时可发现的 `agentteams/skills/*/SKILL.md`。离线校验结果见 [`evidence/agentteams-manifest-validation.json`](evidence/agentteams-manifest-validation.json)。
 
-AgentTeams Controller 尚未安装，因此仓库当前没有 Controller、Matrix 房间或真实 Manager/Worker 推理协作记录。完整状态、固定版本和接入步骤见 [`docs/agentteams-runtime-integration.md`](docs/agentteams-runtime-integration.md)。
+AgentTeams Controller 尚未安装，因此仓库当前没有 Controller、Matrix 房间或真实 Manager/Worker 推理协作记录。本地控制面证据见 `coordination.json`；评委反馈闭环与剩余门槛见 [`docs/semifinal-reviewer-response.md`](docs/semifinal-reviewer-response.md)。
 
 ## 官方云 Skill
 

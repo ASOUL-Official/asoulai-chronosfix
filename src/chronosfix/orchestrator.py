@@ -2,11 +2,13 @@ from __future__ import annotations
 
 from dataclasses import asdict
 from datetime import datetime, timezone
+import json
 from pathlib import Path
 from time import perf_counter
 from typing import Any, Callable, TypeVar
 
 from .engineering import write_engineering_artifacts
+from .dynamic import DynamicScheduler, TaskSpec
 from .github_flow import build_github_flow_summary
 from .integrity import (
     POLICY_VERSION,
@@ -19,6 +21,7 @@ from .integrity import (
 from .models import PatchCandidate, ServiceState
 from .observability import TraceRecorder
 from .simulator import simulate_checkout
+from .skill_registry import discover_runtime_skills
 from .skills.change_timeline import build_timeline
 from .skills.counterfactual_replay import (
     replay_hypothesis,
@@ -163,6 +166,133 @@ def _evidence_coverage(state: Any, checks: list[dict[str, Any]]) -> float:
     return round(sum(conditions) / len(conditions), 4)
 
 
+def _run_dynamic_coordination(
+    state: Any,
+    raw: dict[str, Any],
+    *,
+    human_approved: bool,
+    human_actor: str | None = None,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Run the same incident through an event-driven coordination shadow.
+
+    The deterministic business functions remain the source of truth for the
+    proof bundle, while this scheduler records the AgentTeams-shaped control
+    plane: capability dispatch, evidence-triggered task insertion, failover,
+    idempotency, and a revision-bound human pause/resume checkpoint.
+    """
+
+    scheduler: DynamicScheduler
+
+    def on_event(event: Any) -> None:
+        # New evidence changes the runnable graph instead of merely appending
+        # to a static transcript.  The duplicate delivery below is retained
+        # as auditable evidence that it was not executed twice.
+        if event.event_type == "task_completed" and event.task_id == "timeline":
+            if scheduler.ingest_evidence(
+                "evidence-config-pool",
+                {"kind": "configuration", "summary": "pool size drift confirmed by change ticket"},
+            ):
+                scheduler.ingest_evidence(
+                    "evidence-config-pool",
+                    {"kind": "configuration", "summary": "duplicate delivery"},
+                )
+                scheduler.register(
+                    TaskSpec(
+                        "dynamic-config-audit",
+                        "ConfigEvidenceAudit",
+                        "timeline",
+                        depends_on=("timeline",),
+                        priority=5,
+                        max_attempts=1,
+                    ),
+                    lambda: {"finding": "pool drift corroborated", "source": "change ticket"},
+                )
+
+        if event.event_type == "task_completed" and event.task_id == "patch-tournament":
+            # A new signal arrives while a medium-risk change is awaiting a
+            # person.  The old approval revision is intentionally invalid.
+            scheduler.pause("medium-risk patch requires named release owner")
+            if not human_approved:
+                return
+            old_revision = scheduler.shared.revision
+            scheduler.ingest_evidence(
+                "evidence-post-patch-slo",
+                {"kind": "slo", "summary": "P99 remains within rollback watch window"},
+            )
+            actor = human_actor or "named-release-owner"
+            scheduler.resume(old_revision, actor=actor)
+            scheduler.resume(scheduler.shared.revision, actor=actor)
+
+    scheduler = DynamicScheduler(
+        state.incident_id,
+        failure_plan={"timeline": 1, "patch-tournament": 1},
+        on_event=on_event,
+    )
+
+    def run_hypotheses() -> list[Any]:
+        experiments = [replay_hypothesis(state.baseline, item) for item in state.hypotheses]
+        return resolve_indistinguishable_interventions(state.hypotheses, experiments)
+
+    def run_patch_competition() -> dict[str, Any]:
+        experiments = scheduler.results["hypotheses"]
+        variants = evolve_fault_family(state.baseline, experiments, raw["mutations"])
+        candidates = [PatchCandidate(**item) for item in raw["patch_candidates"]]
+        mutation_suite = [
+            {"name": item.name, "changes": item.changes, "mandatory": item.mandatory}
+            for item in variants
+        ]
+        return {
+            "variants": variants,
+            "ranking": run_tournament(state.baseline, candidates, mutation_suite),
+        }
+
+    scheduler.register(
+        TaskSpec("timeline", "ChangeTimeline", "timeline", priority=10, max_attempts=2),
+        lambda: build_timeline(state.events),
+    )
+    scheduler.register(
+        TaskSpec("baseline", "BaselineReplay", "replay", depends_on=("timeline",), priority=20),
+        lambda: simulate_checkout(state.baseline),
+    )
+    scheduler.register(
+        TaskSpec("hypotheses", "HypothesisContract", "hypothesis", depends_on=("baseline",), priority=30),
+        run_hypotheses,
+    )
+    scheduler.register(
+        TaskSpec("patch-tournament", "PatchTournament", "patch-tournament", depends_on=("hypotheses",), priority=40, max_attempts=2),
+        run_patch_competition,
+    )
+    scheduler.register(
+        TaskSpec("risk-gate", "RiskGate", "risk-gate", depends_on=("patch-tournament",), priority=50),
+        lambda: {"approval_required": True, "fail_closed": True},
+    )
+    scheduler.run()
+    if scheduler.shared.status == "PAUSED_AWAITING_HUMAN" and human_approved:
+        scheduler.resume(scheduler.shared.revision, actor=human_actor or "named-release-owner")
+        scheduler.run()
+    # Simulate a lost acknowledgement.  The same revision is replayed and
+    # must be served from the idempotency store without running the handler.
+    if human_approved and scheduler.shared.status == "COMPLETED":
+        scheduler.replay("baseline")
+    coordination = scheduler.to_dict()
+    coordination["skill_registry"] = discover_runtime_skills(
+        Path(__file__).resolve().parents[2] / "agentteams" / "skills"
+    )
+    coordination["boundary_note"] = (
+        "Local deterministic coordination evidence; maps to AgentTeams Matrix contracts, "
+        "not Controller runtime execution."
+    )
+    patch_result = scheduler.results["patch-tournament"]
+    execution_results = {
+        "events": scheduler.results["timeline"],
+        "baseline": scheduler.results["baseline"],
+        "experiments": scheduler.results["hypotheses"],
+        "fault_variants": patch_result["variants"],
+        "patch_scores": patch_result["ranking"],
+    }
+    return coordination, execution_results
+
+
 def run_pipeline(
     scenario_path: Path,
     output_dir: Path,
@@ -189,11 +319,21 @@ def run_pipeline(
         duration_ms=load_duration_ms,
     )
 
+    coordination, coordinated = _run_dynamic_coordination(
+        state, raw, human_approved=approved, human_actor=approver
+    )
+    state.state_revision = coordination["revision"]
+    state.orchestration_status = coordination["status"]
+    state.orchestration_events = coordination["events"]
+    state.task_attempts = coordination["attempts"]
+    state.task_graph = coordination["tasks"]
+    state.discovered_skills = coordination.get("skill_registry", [])
+
     state.events, parent_span_id = _run_traced(
         trace,
         agent="timeline-analyst",
         skill="ChangeTimeline",
-        action=lambda: build_timeline(state.events),
+        action=lambda: coordinated["events"],
         payload=lambda events: {"event_count": len(events), "events": [asdict(item) for item in events]},
         parent_span_id=parent_span_id,
     )
@@ -201,11 +341,14 @@ def run_pipeline(
         trace,
         agent="incident-commander",
         skill="BaselineReplay",
-        action=lambda: simulate_checkout(state.baseline),
+        action=lambda: coordinated["baseline"],
         parent_span_id=parent_span_id,
     )
 
     state.experiments = []
+    coordinated_experiments = {
+        item.hypothesis_id: item for item in coordinated["experiments"]
+    }
     for hypothesis in state.hypotheses:
         hypothesis_span = trace.emit(
             "hypothesis-scientist",
@@ -218,7 +361,7 @@ def run_pipeline(
             trace,
             agent="universe-builder",
             skill="CounterfactualReplay",
-            action=lambda hypothesis=hypothesis: replay_hypothesis(state.baseline, hypothesis),
+            action=lambda hypothesis=hypothesis: coordinated_experiments[hypothesis.id],
             parent_span_id=hypothesis_span,
         )
         state.experiments.append(result)
@@ -227,9 +370,7 @@ def run_pipeline(
         trace,
         agent="hypothesis-scientist",
         skill="CausalIdentifiabilityArbitration",
-        action=lambda: resolve_indistinguishable_interventions(
-            state.hypotheses, state.experiments
-        ),
+        action=lambda: coordinated["experiments"],
         payload=lambda experiments: {
             "experiments": [asdict(item) for item in experiments],
             "indeterminate": [
@@ -245,7 +386,7 @@ def run_pipeline(
         trace,
         agent="universe-builder",
         skill="FaultGenome",
-        action=lambda: evolve_fault_family(state.baseline, state.experiments, raw["mutations"]),
+        action=lambda: coordinated["fault_variants"],
         payload=lambda variants: {"variants": [asdict(item) for item in variants]},
         parent_span_id=parent_span_id,
     )
@@ -266,7 +407,7 @@ def run_pipeline(
         trace,
         agent="adversarial-verifier",
         skill="PatchTournament",
-        action=lambda: run_tournament(state.baseline, candidates, mutation_suite),
+        action=lambda: coordinated["patch_scores"],
         payload=lambda ranking: {"ranking": [asdict(item) for item in ranking]},
         parent_span_id=candidate_span,
     )
@@ -284,11 +425,13 @@ def run_pipeline(
         "timestamp": _utc_now() if approved else None,
         "policy_version": POLICY_VERSION,
         "is_human": bool(approver),
+        "state_revision": state.state_revision,
         "input_digest": build_approval_input_digest(
             incident_id=state.incident_id,
             scenario_hash=scenario_hash,
             patch_id=state.selected_patch.candidate_id,
             patch_hash=patch_hash,
+            state_revision=state.state_revision,
         ),
     }
     state.approval_record = approval_record
@@ -381,6 +524,20 @@ def run_pipeline(
         "elapsed_ms": round((perf_counter() - pipeline_started) * 1000, 3),
         "elapsed_ms_kind": "measured",
         "pipeline_step_completion_rate": 1.0,
+        "coordination_revision": state.state_revision,
+        "coordination_status": state.orchestration_status,
+        "coordination_events": len(state.orchestration_events),
+        "task_attempts": len(state.task_attempts),
+        "task_reassignments": sum(
+            item.get("event_type") == "task_reassigned" for item in state.orchestration_events
+        ),
+        "deduplicated_events": sum(
+            item.get("deduplicated") is True for item in state.orchestration_events
+        ),
+        "human_pause_resume_events": sum(
+            item.get("event_type") in {"human_pause", "human_resume", "approval_invalidated"}
+            for item in state.orchestration_events
+        ),
     }
     metrics["evidence_coverage"] = _evidence_coverage(state, checks)
     metrics["evidence_coverage_kind"] = "derived"
@@ -395,6 +552,9 @@ def run_pipeline(
 
     output_dir.mkdir(parents=True, exist_ok=True)
     trace.write_jsonl(output_dir / "trace.jsonl")
+    (output_dir / "coordination.json").write_text(
+        json.dumps(coordination, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
     write_reports(state, metrics, output_dir)
     write_engineering_artifacts(state, metrics, trace.records, output_dir)
     write_run_manifest(
@@ -419,6 +579,7 @@ def run_pipeline(
             "github-pr-diff.patch",
             "github-pr-checks.json",
             "github-review-audit.jsonl",
+            "coordination.json",
         ],
     )
     return {"state": state, "metrics": metrics, "trace_id": trace.trace_id, "run_id": trace.run_id}

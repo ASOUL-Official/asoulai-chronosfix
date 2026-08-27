@@ -1,10 +1,10 @@
 # ChronosFix 证据化修复报告：INC-2026-0816-001
 
 **故障：** 订单创建接口在午间流量下出现高失败率与长尾延迟
-**Run ID：** run-1dc8539cfe9b40abb4ec1504e50ca512
+**Run ID：** run-a9200f31746c4282b5b3730433ee7c4c
 **质量门禁：** passed
 **发布决策：** approved
-**Trace ID：** 2c59718376e24a778d34af02a6c2a85a
+**Trace ID：** df6e0a1449a041bab5a0008ccf5c1436
 
 ## 0. 结论摘要
 
@@ -73,12 +73,12 @@
 ### 完整性摘要
 
 - `schema_version`：`chronosfix.evidence-integrity/v1`
-- `run_id`：`run-1dc8539cfe9b40abb4ec1504e50ca512`
-- `trace_id`：`2c59718376e24a778d34af02a6c2a85a`
+- `run_id`：`run-a9200f31746c4282b5b3730433ee7c4c`
+- `trace_id`：`df6e0a1449a041bab5a0008ccf5c1436`
 - `scenario_sha256`：`f287e45a9a2e5804892cbd402649aa1e0a1ae6a02bbd42fb72b717239e543867`
 - `patch_changes_sha256`：`58f3873074175c6dec959b17d7f8a93f6ab723e6c0574435a0bded0c18012d9b`
 - `rollback_changes_sha256`：`ac7b4fde845a552d4b2ecf3f91112c3187d0c036e78dd27b1355f495a77892ed`
-- `approval_input_digest`：`2bd548b7d8a9cb07d0124b9a0e365a605ef7d170a935ab1f5bbd411967d0fbb6`
+- `approval_input_digest`：`cfd6506285827bf2cbdb5052a34584fe287c9bcbd3dca5f164427f73c16b2027`
 - `policy_version`：`chronosfix-riskgate/v1`
 
 证据声明总数：14。
@@ -95,5 +95,14 @@
 选择 **恢复连接池 24 并增加容量验证门禁**，因为它在正确性、风险和实施成本的综合评分中排名第一。
 发布前必须保留回滚点：恢复 db.pool.maxSize=8 配置快照。
 机器可验证回滚字段：`{'pool_size': 8}`；验证结果：`True`。
-具名审批人：`AsoulAI Release Owner`；审批时间：`2026-08-25T08:35:10.809777+00:00`。
+具名审批人：`AsoulAI Release Owner`；审批时间：`2026-08-27T03:46:15.564196+00:00`。
 全部 Agent、Skill、实验、审批和报告动作均写入 `trace.jsonl`，可用于复盘和审计。
+
+## 7. 动态协同控制面
+
+共享状态 revision：`36`；任务数：`6`；
+事件数：`38`；Worker attempts：`8`。
+
+控制面按新证据插入配置审计任务；首次 Worker 超时后按 capability 重派到备用 Worker；
+重复 evidence event 只保留去重事件；中风险补丁在 checkpoint 暂停，新增 SLO 证据会使旧审批 revision 失效，
+只有绑定最新 revision 的恢复事件才会继续 RiskGate。该记录是 AgentTeams Matrix 兼容的本地证据，不冒充 Controller 执行。

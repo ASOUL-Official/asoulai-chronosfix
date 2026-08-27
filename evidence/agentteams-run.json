@@ -19,6 +19,9 @@
     "matrix_room_equivalent": "repair-cockpit transparent evidence room",
     "shared_state": [
       "incident_id",
+      "state_revision",
+      "task_graph",
+      "orchestration_events",
       "timeline",
       "hypotheses",
       "counterfactual_experiments",
@@ -236,22 +239,46 @@
     }
   ],
   "state_tracking": {
-    "run_id": "run-1dc8539cfe9b40abb4ec1504e50ca512",
-    "trace_id": "2c59718376e24a778d34af02a6c2a85a",
+    "run_id": "run-a9200f31746c4282b5b3730433ee7c4c",
+    "trace_id": "df6e0a1449a041bab5a0008ccf5c1436",
     "span_count": 18,
     "quality_gate": "passed",
     "release_decision": "approved",
     "approval_record": {
       "status": "approved",
       "approver": "AsoulAI Release Owner",
-      "reason": "Semifinal evidence review",
-      "timestamp": "2026-08-25T08:35:10.809777+00:00",
+      "reason": "Semifinal reviewer-feedback dynamic coordination evidence",
+      "timestamp": "2026-08-27T03:46:15.564196+00:00",
       "policy_version": "chronosfix-riskgate/v1",
       "is_human": true,
-      "input_digest": "2bd548b7d8a9cb07d0124b9a0e365a605ef7d170a935ab1f5bbd411967d0fbb6"
+      "state_revision": 36,
+      "input_digest": "cfd6506285827bf2cbdb5052a34584fe287c9bcbd3dca5f164427f73c16b2027"
     },
     "selected_patch": "P-RESTORE-POOL",
     "selected_patch_score": 0.9195,
+    "coordination": {
+      "status": "COMPLETED",
+      "revision": 36,
+      "task_count": 6,
+      "event_count": 38,
+      "attempt_count": 8,
+      "reassignments": 2,
+      "deduplicated_events": 2,
+      "human_pause_resume_events": 3,
+      "runtime_discovered_skills": [
+        "change-timeline",
+        "chronosfix-local-engine",
+        "counterfactual-replay",
+        "evidence-fusion",
+        "evidence-passport",
+        "fault-genome",
+        "patch-tournament",
+        "proof-report",
+        "risk-gate",
+        "skill-forge"
+      ],
+      "evidence_artifact": "coordination.json"
+    },
     "artifacts": [
       "trace.jsonl",
       "run-log.jsonl",
@@ -264,14 +291,15 @@
       "github-pr.md",
       "github-pr-diff.patch",
       "github-pr-checks.json",
-      "run-manifest.json"
+      "run-manifest.json",
+      "coordination.json"
     ]
   },
   "human_gate": {
     "condition": "medium/high risk patch",
     "decision": "approved",
     "approver": "AsoulAI Release Owner",
-    "timestamp": "2026-08-25T08:35:10.809777+00:00",
+    "timestamp": "2026-08-27T03:46:15.564196+00:00",
     "rollback_contract": "恢复 db.pool.maxSize=8 配置快照",
     "rollback_verified": true
   }

@@ -27,7 +27,7 @@ python -m pip install -e ".[validation]"
 python -m unittest discover -s tests -p "test_*.py" -q
 ```
 
-测试覆盖场景 Schema、RiskGate fail-closed、具名审批、PR 草案一致性、回滚、run manifest/哈希、Trace 唯一性、12 例评测和官方 SLS Skill dry-run。
+测试覆盖场景 Schema、动态任务调度、Worker 重派、幂等去重、revision 暂停/恢复、RiskGate fail-closed、具名审批、PR 草案一致性、回滚、run manifest/哈希、Trace 唯一性、12 例评测和官方 SLS Skill dry-run。
 
 ## 3. 主场景证据运行
 
@@ -128,7 +128,7 @@ python cloud_skill_demo.py --output evidence/cloud-skill-sls-dry-run.json
 python scripts/run_semifinal_acceptance.py --output output/semifinal-acceptance
 ```
 
-验收器在隔离临时目录执行 8 项检查，并将最终 JSON/Markdown 写入指定目录：36 项测试、严格 JSON/JSONL、公开 Draft 2020-12 Schema、AgentTeams v1beta1 清单、已审批通过分支、无人审批阻断分支、12 场景评测、Repair Cockpit JavaScript 语法。通过分支应为 `quality_gate=passed` + `release_decision=approved`；未审批分支应为 `quality_gate=passed` + `release_decision=blocked-awaiting-human`。
+验收器在隔离临时目录执行 8 项检查，并将最终 JSON/Markdown 写入指定目录：40 项测试、严格 JSON/JSONL、公开 Draft 2020-12 Schema、AgentTeams v1beta1 清单、已审批通过分支、无人审批阻断分支、12 场景评测、Repair Cockpit JavaScript 语法。通过分支应为 `quality_gate=passed` + `release_decision=approved`；未审批分支应为 `quality_gate=passed` + `release_decision=blocked-awaiting-human`。
 
 ## 9. 建议验收顺序
 

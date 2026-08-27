@@ -5,6 +5,13 @@ description: Run the deterministic ChronosFix incident-to-PR evidence pipeline a
 
 # ChronosFix Local Engine
 
+This bundle is the compatibility entry point.  Workers should prefer the
+runtime-discovered Skills in the same directory (`evidence-fusion`,
+`change-timeline`, `counterfactual-replay`, `fault-genome`,
+`patch-tournament`, `risk-gate`, `evidence-passport`, `skill-forge` and
+`proof-report`) when Matrix dispatches a single capability.  The local engine
+remains available as an atomic fallback for offline acceptance.
+
 Use this Skill when an incident scenario must be replayed through the ChronosFix local engineering kernel.
 
 ## Preconditions

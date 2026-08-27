@@ -40,11 +40,12 @@
   "approval_record": {
     "status": "approved",
     "approver": "AsoulAI Release Owner",
-    "reason": "Semifinal evidence review",
-    "timestamp": "2026-08-25T08:35:10.809777+00:00",
+    "reason": "Semifinal reviewer-feedback dynamic coordination evidence",
+    "timestamp": "2026-08-27T03:46:15.564196+00:00",
     "policy_version": "chronosfix-riskgate/v1",
     "is_human": true,
-    "input_digest": "2bd548b7d8a9cb07d0124b9a0e365a605ef7d170a935ab1f5bbd411967d0fbb6"
+    "state_revision": 36,
+    "input_digest": "cfd6506285827bf2cbdb5052a34584fe287c9bcbd3dca5f164427f73c16b2027"
   },
   "selected_patch": {
     "candidate_id": "P-RESTORE-POOL",
@@ -147,7 +148,7 @@
         "executed": true,
         "conclusion": "success",
         "exit_code": 0,
-        "run_id": "run-1dc8539cfe9b40abb4ec1504e50ca512",
+        "run_id": "run-a9200f31746c4282b5b3730433ee7c4c",
         "evidence": "experiment results persisted in proof-bundle.json",
         "summary": "1 primary cause(s) reached the intervention threshold.",
         "source": "metrics.validation_checks"
@@ -158,7 +159,7 @@
         "executed": true,
         "conclusion": "success",
         "exit_code": 0,
-        "run_id": "run-1dc8539cfe9b40abb4ec1504e50ca512",
+        "run_id": "run-a9200f31746c4282b5b3730433ee7c4c",
         "evidence": "selected_patch.results in proof-bundle.json",
         "summary": "8 mandatory variants evaluated; worst failure rate 6.2%.",
         "source": "metrics.validation_checks"
@@ -169,7 +170,7 @@
         "executed": true,
         "conclusion": "success",
         "exit_code": 0,
-        "run_id": "run-1dc8539cfe9b40abb4ec1504e50ca512",
+        "run_id": "run-a9200f31746c4282b5b3730433ee7c4c",
         "evidence": "patch changes followed by rollback_changes compared with baseline",
         "summary": "Rollback restores the complete baseline state.",
         "source": "metrics.validation_checks"
@@ -209,12 +210,12 @@
     "missing_claims": [],
     "integrity": {
       "schema_version": "chronosfix.evidence-integrity/v1",
-      "run_id": "run-1dc8539cfe9b40abb4ec1504e50ca512",
-      "trace_id": "2c59718376e24a778d34af02a6c2a85a",
+      "run_id": "run-a9200f31746c4282b5b3730433ee7c4c",
+      "trace_id": "df6e0a1449a041bab5a0008ccf5c1436",
       "scenario_sha256": "f287e45a9a2e5804892cbd402649aa1e0a1ae6a02bbd42fb72b717239e543867",
       "patch_changes_sha256": "58f3873074175c6dec959b17d7f8a93f6ab723e6c0574435a0bded0c18012d9b",
       "rollback_changes_sha256": "ac7b4fde845a552d4b2ecf3f91112c3187d0c036e78dd27b1355f495a77892ed",
-      "approval_input_digest": "2bd548b7d8a9cb07d0124b9a0e365a605ef7d170a935ab1f5bbd411967d0fbb6",
+      "approval_input_digest": "cfd6506285827bf2cbdb5052a34584fe287c9bcbd3dca5f164427f73c16b2027",
       "policy_version": "chronosfix-riskgate/v1"
     }
   },

@@ -46,7 +46,7 @@
 
 PR #3 的 GitHub Actions 在 Python 3.10、3.11、3.12 上全部通过，并上传 `chronosfix-semifinal-acceptance-*` Artifact。Artifact 内容包含 8 项自动检查和 15 项关键断言：
 
-- 36 项测试、严格 JSON/JSONL、公开 Draft 2020-12 Schema；
+- 40 项测试、严格 JSON/JSONL、公开 Draft 2020-12 Schema；
 - AgentTeams v1beta1 清单（1 Manager、8 Worker、1 Team、1 Human）；
 - 已审批分支 `approved` 与无人审批分支 `blocked-awaiting-human`；
 - 12 场景、9/9 支持范围诊断、1/1 正确拒答、10/12 达成预期；

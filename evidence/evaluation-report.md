@@ -3,7 +3,7 @@
 ## 1. 自动化验证摘要
 
 - 事故样例：INC-2026-0816-001 / 订单创建接口在午间流量下出现高失败率与长尾延迟
-- Run ID：run-1dc8539cfe9b40abb4ec1504e50ca512
+- Run ID：run-a9200f31746c4282b5b3730433ee7c4c
 - Agent/Skill Trace Span：18
 - 流水线步骤完成率（由 Trace 推导）：100.0%
 - 根因假设数：3
@@ -28,10 +28,11 @@
 | GitHub Issue/PR 本地草案链路 | `github-issue.md`、`github-pr.md`、`github-pr-diff.patch`、`github-pr-checks.json`、`github-review-audit.jsonl` |
 | 完整性绑定 | `run-manifest.json` 与 Evidence Passport SHA-256 摘要 |
 | Skill 复用 | `SkillForge` 输出 3 个 Skill Candidate |
+| 动态协同控制面 | `coordination.json`：任务图、state revision、证据驱动插入、Worker 重派、幂等去重、暂停/恢复 |
 
 ## 3. 失败处理分支
 
-运行 `python demo.py --output output/no-approval` 时不传 `--approve`，健康但中风险的补丁会返回 `blocked-awaiting-human`。若任一强制变体、回滚或执行检查失败，则优先返回 `blocked-quality-gate`，人工不能覆盖质量失败。
+运行 `python demo.py --output output/no-approval` 时不传 `--approve`，健康但中风险的补丁会返回 `blocked-awaiting-human`。若任一强制变体、回滚或执行检查失败，则优先返回 `blocked-quality-gate`，人工不能覆盖质量失败。动态控制面会在同一次运行中注入一次 Worker 超时并重派，重复 evidence 事件去重，并记录 revision 绑定的暂停/恢复。
 
 ## 4. 开放 / 开源复现
 

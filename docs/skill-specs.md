@@ -35,13 +35,17 @@ ChronosFix 提供 10 个稳定 Skill 契约：核心流水线包含 9 个业务 
 
 ## AgentTeams Worker Skill
 
-`agentteams/skills/chronosfix-local-engine/SKILL.md` 将本地确定性内核包装为 Worker Skill，规定：
+`agentteams/skills/` 现在包含 9 个独立、运行时可发现的业务 Skill，以及一个用于离线验收的 `chronosfix-local-engine` 聚合入口。`src/chronosfix/skill_registry.py` 在运行时读取每个 `SKILL.md` 的 name、description、version 和权限，发现结果写入 `coordination.json`。AgentTeams Worker 根据自身 capability 只加载所需 Skill；聚合入口仅作为离线兼容 fallback。
+
+Skill 规定：
 
 - 合成数据必须标注；
 - 输出 run/trace/quality/release 状态；
 - 不把本地 transcript 称为 Controller/Matrix 证据；
 - 不绕过 RiskGate；
 - 生成 run manifest。
+
+动态任务执行由 `src/chronosfix/dynamic.py` 记录 task graph、attempt、lease、idempotency key、state revision、重派和人工 checkpoint。当前记录仍是本地兼容证据，真实 Controller/Matrix 加载证据尚待部署。
 
 AgentTeams v1beta1 正式资源已经离线校验，但 Worker 尚未在真实 Controller 中执行。
 

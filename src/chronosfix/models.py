@@ -140,3 +140,11 @@ class IncidentState:
     run_id: str = ""
     scenario_path: str = ""
     evidence_index: list[str] = field(default_factory=list)
+    # Event-driven coordination evidence.  These fields are deliberately
+    # additive so older scenario fixtures and callers remain compatible.
+    state_revision: int = 0
+    orchestration_status: str = "RUNNING"
+    orchestration_events: list[dict[str, Any]] = field(default_factory=list)
+    task_attempts: list[dict[str, Any]] = field(default_factory=list)
+    task_graph: list[dict[str, Any]] = field(default_factory=list)
+    discovered_skills: list[dict[str, Any]] = field(default_factory=list)

@@ -26,7 +26,7 @@
 | 可执行 AgentTeams 代码包 | `agentteams/run_chronosfix_team.py`、`agentteams/runtime/chronosfix-resources.yaml`、`agentteams/runtime/validate_resources.py`、依赖锁和样例输出 | 部分完成 | 提供本地可执行入口、正式 v1beta1 资源声明和离线校验；真实 Controller / Matrix 执行留待决赛接入 |
 | 可运行 Demo / Demo 视频 | 在线 Repair Cockpit、`repair-cockpit/index.html`、`docs/demo-video-script.md` | 已完成 | 可运行完整离线场景链路，包含通过、无人审批阻断、质量门禁失败、证据不足和 Badcase 分支 |
 | 样例输入输出、日志、Trace、Metrics | `scenarios/`、`evidence/run-log.jsonl`、`evidence/trace.jsonl`、`evidence/engineering-metrics.json` | 已完成 | 产物由同一 `run_id` 绑定，Metrics 区分 measured / derived |
-| 评测结果和自动化验证证据 | `evidence/evaluation-report.md`、`evidence/evaluation-corpus/`、`scripts/run_semifinal_acceptance.py` | 已完成 | 12 个合成场景、36 项测试、严格 JSON/JSONL、Schema、资源校验和 CI 验收均可重跑 |
+| 评测结果和自动化验证证据 | `evidence/evaluation-report.md`、`evidence/evaluation-corpus/`、`scripts/run_semifinal_acceptance.py` | 已完成 | 12 个合成场景、40 项测试、严格 JSON/JSONL、Schema、资源校验和 CI 验收均可重跑 |
 
 ## 技术要求逐条核对
 

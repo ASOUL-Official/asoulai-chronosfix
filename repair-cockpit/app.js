@@ -35,7 +35,7 @@ const blockerLabel = (blocker) => {
 
 function statusClass(value) {
   const normalized = String(value ?? "").toLowerCase();
-  if (["approved", "passed", "success", "correct", "offline-validated"].includes(normalized)) {
+  if (["approved", "passed", "success", "correct", "completed", "offline-validated"].includes(normalized)) {
     return "is-pass";
   }
   if (
@@ -44,7 +44,7 @@ function statusClass(value) {
   ) {
     return "is-block";
   }
-  if (["pending", "dry-run", "abstain"].includes(normalized)) return "is-pending";
+  if (["pending", "paused_awaiting_human", "dry-run", "abstain"].includes(normalized)) return "is-pending";
   return "is-neutral";
 }
 
@@ -276,6 +276,71 @@ function renderCausal(scenario) {
       期望主因 ${escapeHtml(list(evaluation.expected_primary_causes))}；观测主因
       ${escapeHtml(list(evaluation.observed_primary_causes))}；结果
       <span class="status-pill ${statusClass(evaluation.status)}">${escapeHtml(evaluation.status)}</span>。
+    </div>
+  `;
+}
+
+function renderCoordination(scenario) {
+  const coordination = scenario.coordination;
+  if (!coordination) {
+    return `
+      <div class="blocked-stage">
+        <span>evaluation-only</span>
+        <h3>此样例未进入动态协同控制面</h3>
+        <p>边界样例会在生成补丁前停止，避免把未建模根因包装成成功。</p>
+      </div>
+    `;
+  }
+  const events = coordination.events ?? [];
+  const attempts = coordination.attempts ?? [];
+  const tasks = coordination.tasks ?? [];
+  const count = (type) => events.filter((event) => event.event_type === type).length;
+  const eventLabel = {
+    task_reassigned: "Worker 重派",
+    evidence_deduplicated: "证据去重",
+    task_deduplicated: "任务幂等回放",
+    human_pause: "人工暂停",
+    approval_invalidated: "旧审批失效",
+    human_resume: "人工恢复",
+  };
+  return `
+    <div class="section-head">
+      <div>
+        <span class="micro-label">AGENTTEAMS MATRIX · LOCAL COMPATIBLE EVIDENCE</span>
+        <h3>任务会随着证据变化，而不是按固定剧本走完</h3>
+      </div>
+      <span class="case-badge golden">REV ${escapeHtml(coordination.revision)}</span>
+    </div>
+    <div class="metric-row">
+      ${metricCard("共享状态 revision", coordination.revision, "每次状态写入递增")}
+      ${metricCard("任务 / attempts", `${tasks.length} / ${attempts.length}`, "含失败重派")}
+      ${metricCard("Worker 重派", count("task_reassigned"), "timeout -> backup")}
+      ${metricCard("去重事件", count("evidence_deduplicated") + count("task_deduplicated"), "幂等保护")}
+    </div>
+    <div class="coordination-grid">
+      <section class="task-board">
+        <div class="card-topline"><span>动态任务图</span><strong>${escapeHtml(coordination.status)}</strong></div>
+        ${tasks.map((task) => `
+          <article class="task-row ${statusClass(task.status)}">
+            <span>${escapeHtml(task.task_id)}</span>
+            <small>${escapeHtml(task.skill)} · ${escapeHtml(task.capability)}</small>
+            <b>${escapeHtml(task.status)}</b>
+          </article>
+        `).join("")}
+      </section>
+      <section class="event-feed">
+        <div class="card-topline"><span>事件流 · 可回放</span><strong>${events.length} events</strong></div>
+        ${events.filter((event) => eventLabel[event.event_type]).map((event) => `
+          <article class="event-row">
+            <span>r${escapeHtml(event.revision)}</span>
+            <div><strong>${escapeHtml(eventLabel[event.event_type])}</strong><small>${escapeHtml(event.worker ?? event.task_id ?? "control-plane")}</small></div>
+            <code>${escapeHtml(event.event_type)}</code>
+          </article>
+        `).join("")}
+      </section>
+    </div>
+    <div class="scope-note">
+      <strong>演示证据：</strong>timeline 首次超时后重派备用 Worker；配置 evidence 重复投递被去重；补丁完成后进入人工 checkpoint，新增 SLO 证据使旧 approval revision 失效，绑定最新 revision 后恢复。${escapeHtml(coordination.boundary_note ?? "")}
     </div>
   `;
 }
@@ -555,6 +620,7 @@ function renderLearning(scenario) {
 
 const stepCopy = {
   incident: "把 Issue、Git、依赖、配置、流量与告警合并到同一个可追踪事故窗口。",
+  coordination: "根据新证据动态插入任务，按 capability 选择 Worker；失败重派、重复去重、人工暂停和恢复都留下可回放事件。",
   causal: "逐一撤销可疑变量并重放，区分主因、放大因素与已证伪假设。",
   patch: "候选补丁必须通过同源故障族；健康失败就停，不靠人工强行放行。",
   gate: "把人类授权、自动质量门禁和最终发布决策明确拆成三个状态。",
@@ -575,6 +641,7 @@ function renderStage() {
 
   const renderers = {
     incident: renderIncident,
+    coordination: renderCoordination,
     causal: renderCausal,
     patch: renderPatch,
     gate: renderGate,

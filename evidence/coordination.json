@@ -1,0 +1,922 @@
+{
+  "schema_version": "chronosfix.dynamic-coordination/v1",
+  "incident_id": "INC-2026-0816-001",
+  "status": "COMPLETED",
+  "revision": 36,
+  "checkpoint_revision": 28,
+  "shared_state": {
+    "timeline": {
+      "status": "COMPLETED",
+      "worker": "timeline-analyst-02",
+      "attempt": 2,
+      "result_digest": "5f9d5b5a10d7cff11bfa45f92897e4ebbc4728cf05cac4faefd3f9c37ef20fbe"
+    },
+    "dynamic-config-audit": {
+      "status": "COMPLETED",
+      "worker": "timeline-analyst-01",
+      "attempt": 1,
+      "result_digest": "6196c4664cf49419b7e55ed5fe9921f87c1b70ca6160241e7c22194b8d660c3b"
+    },
+    "baseline": {
+      "status": "COMPLETED",
+      "worker": "universe-builder-01",
+      "attempt": 1,
+      "result_digest": "dae35d3d4b3b2bdef9ff28336c2e2fd2ccfa0da416004f567d08dd5abf2cb522"
+    },
+    "hypotheses": {
+      "status": "COMPLETED",
+      "worker": "hypothesis-scientist-01",
+      "attempt": 1,
+      "result_digest": "6d8d15480432abb47ddb0362a35400c279cd5f6fb9d15f2cce1e88a126511611"
+    },
+    "patch-tournament": {
+      "status": "COMPLETED",
+      "worker": "adversarial-verifier-01",
+      "attempt": 2,
+      "result_digest": "a02db2cf040a2831d0bd024b5140d03afd3cbf9e65f439d65090b8d53bfe7fd8"
+    },
+    "risk-gate": {
+      "status": "COMPLETED",
+      "worker": "release-auditor-01",
+      "attempt": 1,
+      "result_digest": "c612cb54e38ad5b5468e28a79ed30f5f4e91aa3935c0d525ca113940f551dd1a"
+    }
+  },
+  "tasks": [
+    {
+      "task_id": "timeline",
+      "skill": "ChangeTimeline",
+      "capability": "timeline",
+      "depends_on": [],
+      "priority": 10,
+      "max_attempts": 2,
+      "timeout_ms": 5000,
+      "status": "COMPLETED"
+    },
+    {
+      "task_id": "baseline",
+      "skill": "BaselineReplay",
+      "capability": "replay",
+      "depends_on": [
+        "timeline"
+      ],
+      "priority": 20,
+      "max_attempts": 2,
+      "timeout_ms": 5000,
+      "status": "COMPLETED"
+    },
+    {
+      "task_id": "hypotheses",
+      "skill": "HypothesisContract",
+      "capability": "hypothesis",
+      "depends_on": [
+        "baseline"
+      ],
+      "priority": 30,
+      "max_attempts": 2,
+      "timeout_ms": 5000,
+      "status": "COMPLETED"
+    },
+    {
+      "task_id": "patch-tournament",
+      "skill": "PatchTournament",
+      "capability": "patch-tournament",
+      "depends_on": [
+        "hypotheses"
+      ],
+      "priority": 40,
+      "max_attempts": 2,
+      "timeout_ms": 5000,
+      "status": "COMPLETED"
+    },
+    {
+      "task_id": "risk-gate",
+      "skill": "RiskGate",
+      "capability": "risk-gate",
+      "depends_on": [
+        "patch-tournament"
+      ],
+      "priority": 50,
+      "max_attempts": 2,
+      "timeout_ms": 5000,
+      "status": "COMPLETED"
+    },
+    {
+      "task_id": "dynamic-config-audit",
+      "skill": "ConfigEvidenceAudit",
+      "capability": "timeline",
+      "depends_on": [
+        "timeline"
+      ],
+      "priority": 5,
+      "max_attempts": 1,
+      "timeout_ms": 5000,
+      "status": "COMPLETED"
+    }
+  ],
+  "attempts": [
+    {
+      "task_id": "timeline",
+      "attempt": 1,
+      "worker": "timeline-analyst-01",
+      "status": "FAILED",
+      "idempotency_key": "6c6396fba3002343f31e199c2dadc353209988ee0d10afecbe35e5483ec2fbc9",
+      "started_at": "2026-08-27T03:46:15.556682+00:00",
+      "ended_at": "2026-08-27T03:46:15.556682+00:00",
+      "duration_ms": null,
+      "error": "TimeoutError: injected worker timeout for timeline",
+      "reassigned_from": null
+    },
+    {
+      "task_id": "timeline",
+      "attempt": 2,
+      "worker": "timeline-analyst-02",
+      "status": "COMPLETED",
+      "idempotency_key": "5b379e3d7fe94566207fc1cb40e291158aa30295590c69f0cbf8d01cd14de9f1",
+      "started_at": "2026-08-27T03:46:15.556682+00:00",
+      "ended_at": "2026-08-27T03:46:15.556682+00:00",
+      "duration_ms": null,
+      "error": null,
+      "reassigned_from": "timeline-analyst-01"
+    },
+    {
+      "task_id": "dynamic-config-audit",
+      "attempt": 1,
+      "worker": "timeline-analyst-01",
+      "status": "COMPLETED",
+      "idempotency_key": "14677155045ca4960206a2b02d5b6f71591eb6bcf78870ca11003e43ba11392a",
+      "started_at": "2026-08-27T03:46:15.557683+00:00",
+      "ended_at": "2026-08-27T03:46:15.557683+00:00",
+      "duration_ms": null,
+      "error": null,
+      "reassigned_from": null
+    },
+    {
+      "task_id": "baseline",
+      "attempt": 1,
+      "worker": "universe-builder-01",
+      "status": "COMPLETED",
+      "idempotency_key": "a43dabe00190a030540992b336f8933e97173592c01862bf9ccc59a3272a194a",
+      "started_at": "2026-08-27T03:46:15.557683+00:00",
+      "ended_at": "2026-08-27T03:46:15.557683+00:00",
+      "duration_ms": null,
+      "error": null,
+      "reassigned_from": null
+    },
+    {
+      "task_id": "hypotheses",
+      "attempt": 1,
+      "worker": "hypothesis-scientist-01",
+      "status": "COMPLETED",
+      "idempotency_key": "0d06d0aef53063398647cb26616dd65fd066809e5865e4f60b08bdc63f541be5",
+      "started_at": "2026-08-27T03:46:15.557683+00:00",
+      "ended_at": "2026-08-27T03:46:15.557683+00:00",
+      "duration_ms": null,
+      "error": null,
+      "reassigned_from": null
+    },
+    {
+      "task_id": "patch-tournament",
+      "attempt": 1,
+      "worker": "adversarial-verifier-01",
+      "status": "FAILED",
+      "idempotency_key": "9f7ffca99e3b8f63cb046a572c6e43daa6967bf308abe874684e138ed9658417",
+      "started_at": "2026-08-27T03:46:15.557683+00:00",
+      "ended_at": "2026-08-27T03:46:15.557683+00:00",
+      "duration_ms": null,
+      "error": "TimeoutError: injected worker timeout for patch-tournament",
+      "reassigned_from": null
+    },
+    {
+      "task_id": "patch-tournament",
+      "attempt": 2,
+      "worker": "adversarial-verifier-01",
+      "status": "COMPLETED",
+      "idempotency_key": "1435fef806e01c7f0f82172978057f61a40f414eaa9f8ad108c1546fba8a548c",
+      "started_at": "2026-08-27T03:46:15.557683+00:00",
+      "ended_at": "2026-08-27T03:46:15.558682+00:00",
+      "duration_ms": null,
+      "error": null,
+      "reassigned_from": "adversarial-verifier-01"
+    },
+    {
+      "task_id": "risk-gate",
+      "attempt": 1,
+      "worker": "release-auditor-01",
+      "status": "COMPLETED",
+      "idempotency_key": "180b4d1ce7bcca50a89017fb6930a23be458d84a91e6fc0b33f600b2c5d29126",
+      "started_at": "2026-08-27T03:46:15.558682+00:00",
+      "ended_at": "2026-08-27T03:46:15.558682+00:00",
+      "duration_ms": null,
+      "error": null,
+      "reassigned_from": null
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "event_id": "evt-0001",
+      "event_type": "task_registered",
+      "timestamp": "2026-08-27T03:46:15.556682+00:00",
+      "revision": 1,
+      "task_id": "timeline",
+      "worker": null,
+      "payload": {
+        "skill": "ChangeTimeline",
+        "capability": "timeline",
+        "depends_on": [],
+        "priority": 10,
+        "max_attempts": 2
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 2,
+      "event_id": "evt-0002",
+      "event_type": "task_registered",
+      "timestamp": "2026-08-27T03:46:15.556682+00:00",
+      "revision": 2,
+      "task_id": "baseline",
+      "worker": null,
+      "payload": {
+        "skill": "BaselineReplay",
+        "capability": "replay",
+        "depends_on": [
+          "timeline"
+        ],
+        "priority": 20,
+        "max_attempts": 2
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 3,
+      "event_id": "evt-0003",
+      "event_type": "task_registered",
+      "timestamp": "2026-08-27T03:46:15.556682+00:00",
+      "revision": 3,
+      "task_id": "hypotheses",
+      "worker": null,
+      "payload": {
+        "skill": "HypothesisContract",
+        "capability": "hypothesis",
+        "depends_on": [
+          "baseline"
+        ],
+        "priority": 30,
+        "max_attempts": 2
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 4,
+      "event_id": "evt-0004",
+      "event_type": "task_registered",
+      "timestamp": "2026-08-27T03:46:15.556682+00:00",
+      "revision": 4,
+      "task_id": "patch-tournament",
+      "worker": null,
+      "payload": {
+        "skill": "PatchTournament",
+        "capability": "patch-tournament",
+        "depends_on": [
+          "hypotheses"
+        ],
+        "priority": 40,
+        "max_attempts": 2
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 5,
+      "event_id": "evt-0005",
+      "event_type": "task_registered",
+      "timestamp": "2026-08-27T03:46:15.556682+00:00",
+      "revision": 5,
+      "task_id": "risk-gate",
+      "worker": null,
+      "payload": {
+        "skill": "RiskGate",
+        "capability": "risk-gate",
+        "depends_on": [
+          "patch-tournament"
+        ],
+        "priority": 50,
+        "max_attempts": 2
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 6,
+      "event_id": "evt-0006",
+      "event_type": "task_dispatched",
+      "timestamp": "2026-08-27T03:46:15.556682+00:00",
+      "revision": 6,
+      "task_id": "timeline",
+      "worker": "timeline-analyst-01",
+      "payload": {
+        "attempt": 1,
+        "lease_ms": 5000,
+        "idempotency_key": "6c6396fba3002343f31e199c2dadc353209988ee0d10afecbe35e5483ec2fbc9",
+        "reassigned_from": null
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 7,
+      "event_id": "evt-0007",
+      "event_type": "task_failed",
+      "timestamp": "2026-08-27T03:46:15.556682+00:00",
+      "revision": 7,
+      "task_id": "timeline",
+      "worker": "timeline-analyst-01",
+      "payload": {
+        "attempt": 1,
+        "error": "TimeoutError: injected worker timeout for timeline"
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 8,
+      "event_id": "evt-0008",
+      "event_type": "task_reassigned",
+      "timestamp": "2026-08-27T03:46:15.556682+00:00",
+      "revision": 8,
+      "task_id": "timeline",
+      "worker": "timeline-analyst-02",
+      "payload": {
+        "failed_worker": "timeline-analyst-01",
+        "next_attempt": 2
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 9,
+      "event_id": "evt-0009",
+      "event_type": "task_dispatched",
+      "timestamp": "2026-08-27T03:46:15.556682+00:00",
+      "revision": 9,
+      "task_id": "timeline",
+      "worker": "timeline-analyst-02",
+      "payload": {
+        "attempt": 2,
+        "lease_ms": 5000,
+        "idempotency_key": "5b379e3d7fe94566207fc1cb40e291158aa30295590c69f0cbf8d01cd14de9f1",
+        "reassigned_from": "timeline-analyst-01"
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 10,
+      "event_id": "evt-0010",
+      "event_type": "state_updated",
+      "timestamp": "2026-08-27T03:46:15.557683+00:00",
+      "revision": 10,
+      "task_id": null,
+      "worker": null,
+      "payload": {
+        "key": "timeline",
+        "value": {
+          "status": "COMPLETED",
+          "worker": "timeline-analyst-02",
+          "attempt": 2,
+          "result_digest": "5f9d5b5a10d7cff11bfa45f92897e4ebbc4728cf05cac4faefd3f9c37ef20fbe"
+        },
+        "source": "timeline-analyst-02"
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 11,
+      "event_id": "evt-0011",
+      "event_type": "task_completed",
+      "timestamp": "2026-08-27T03:46:15.557683+00:00",
+      "revision": 11,
+      "task_id": "timeline",
+      "worker": "timeline-analyst-02",
+      "payload": {
+        "attempt": 2,
+        "idempotency_key": "5b379e3d7fe94566207fc1cb40e291158aa30295590c69f0cbf8d01cd14de9f1",
+        "result_digest": "5f9d5b5a10d7cff11bfa45f92897e4ebbc4728cf05cac4faefd3f9c37ef20fbe"
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 12,
+      "event_id": "evidence-config-pool",
+      "event_type": "evidence_observed",
+      "timestamp": "2026-08-27T03:46:15.557683+00:00",
+      "revision": 12,
+      "task_id": null,
+      "worker": null,
+      "payload": {
+        "source_event_id": "evidence-config-pool",
+        "kind": "configuration",
+        "summary": "pool size drift confirmed by change ticket"
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 13,
+      "event_id": "dedup-evidence-config-pool",
+      "event_type": "evidence_deduplicated",
+      "timestamp": "2026-08-27T03:46:15.557683+00:00",
+      "revision": 12,
+      "task_id": null,
+      "worker": null,
+      "payload": {
+        "source_event_id": "evidence-config-pool"
+      },
+      "deduplicated": true
+    },
+    {
+      "sequence": 14,
+      "event_id": "evt-0014",
+      "event_type": "task_registered",
+      "timestamp": "2026-08-27T03:46:15.557683+00:00",
+      "revision": 13,
+      "task_id": "dynamic-config-audit",
+      "worker": null,
+      "payload": {
+        "skill": "ConfigEvidenceAudit",
+        "capability": "timeline",
+        "depends_on": [
+          "timeline"
+        ],
+        "priority": 5,
+        "max_attempts": 1
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 15,
+      "event_id": "evt-0015",
+      "event_type": "task_dispatched",
+      "timestamp": "2026-08-27T03:46:15.557683+00:00",
+      "revision": 14,
+      "task_id": "dynamic-config-audit",
+      "worker": "timeline-analyst-01",
+      "payload": {
+        "attempt": 1,
+        "lease_ms": 5000,
+        "idempotency_key": "14677155045ca4960206a2b02d5b6f71591eb6bcf78870ca11003e43ba11392a",
+        "reassigned_from": null
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 16,
+      "event_id": "evt-0016",
+      "event_type": "state_updated",
+      "timestamp": "2026-08-27T03:46:15.557683+00:00",
+      "revision": 15,
+      "task_id": null,
+      "worker": null,
+      "payload": {
+        "key": "dynamic-config-audit",
+        "value": {
+          "status": "COMPLETED",
+          "worker": "timeline-analyst-01",
+          "attempt": 1,
+          "result_digest": "6196c4664cf49419b7e55ed5fe9921f87c1b70ca6160241e7c22194b8d660c3b"
+        },
+        "source": "timeline-analyst-01"
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 17,
+      "event_id": "evt-0017",
+      "event_type": "task_completed",
+      "timestamp": "2026-08-27T03:46:15.557683+00:00",
+      "revision": 16,
+      "task_id": "dynamic-config-audit",
+      "worker": "timeline-analyst-01",
+      "payload": {
+        "attempt": 1,
+        "idempotency_key": "14677155045ca4960206a2b02d5b6f71591eb6bcf78870ca11003e43ba11392a",
+        "result_digest": "6196c4664cf49419b7e55ed5fe9921f87c1b70ca6160241e7c22194b8d660c3b"
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 18,
+      "event_id": "evt-0018",
+      "event_type": "task_dispatched",
+      "timestamp": "2026-08-27T03:46:15.557683+00:00",
+      "revision": 17,
+      "task_id": "baseline",
+      "worker": "universe-builder-01",
+      "payload": {
+        "attempt": 1,
+        "lease_ms": 5000,
+        "idempotency_key": "a43dabe00190a030540992b336f8933e97173592c01862bf9ccc59a3272a194a",
+        "reassigned_from": null
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 19,
+      "event_id": "evt-0019",
+      "event_type": "state_updated",
+      "timestamp": "2026-08-27T03:46:15.557683+00:00",
+      "revision": 18,
+      "task_id": null,
+      "worker": null,
+      "payload": {
+        "key": "baseline",
+        "value": {
+          "status": "COMPLETED",
+          "worker": "universe-builder-01",
+          "attempt": 1,
+          "result_digest": "dae35d3d4b3b2bdef9ff28336c2e2fd2ccfa0da416004f567d08dd5abf2cb522"
+        },
+        "source": "universe-builder-01"
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 20,
+      "event_id": "evt-0020",
+      "event_type": "task_completed",
+      "timestamp": "2026-08-27T03:46:15.557683+00:00",
+      "revision": 19,
+      "task_id": "baseline",
+      "worker": "universe-builder-01",
+      "payload": {
+        "attempt": 1,
+        "idempotency_key": "a43dabe00190a030540992b336f8933e97173592c01862bf9ccc59a3272a194a",
+        "result_digest": "dae35d3d4b3b2bdef9ff28336c2e2fd2ccfa0da416004f567d08dd5abf2cb522"
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 21,
+      "event_id": "evt-0021",
+      "event_type": "task_dispatched",
+      "timestamp": "2026-08-27T03:46:15.557683+00:00",
+      "revision": 20,
+      "task_id": "hypotheses",
+      "worker": "hypothesis-scientist-01",
+      "payload": {
+        "attempt": 1,
+        "lease_ms": 5000,
+        "idempotency_key": "0d06d0aef53063398647cb26616dd65fd066809e5865e4f60b08bdc63f541be5",
+        "reassigned_from": null
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 22,
+      "event_id": "evt-0022",
+      "event_type": "state_updated",
+      "timestamp": "2026-08-27T03:46:15.557683+00:00",
+      "revision": 21,
+      "task_id": null,
+      "worker": null,
+      "payload": {
+        "key": "hypotheses",
+        "value": {
+          "status": "COMPLETED",
+          "worker": "hypothesis-scientist-01",
+          "attempt": 1,
+          "result_digest": "6d8d15480432abb47ddb0362a35400c279cd5f6fb9d15f2cce1e88a126511611"
+        },
+        "source": "hypothesis-scientist-01"
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 23,
+      "event_id": "evt-0023",
+      "event_type": "task_completed",
+      "timestamp": "2026-08-27T03:46:15.557683+00:00",
+      "revision": 22,
+      "task_id": "hypotheses",
+      "worker": "hypothesis-scientist-01",
+      "payload": {
+        "attempt": 1,
+        "idempotency_key": "0d06d0aef53063398647cb26616dd65fd066809e5865e4f60b08bdc63f541be5",
+        "result_digest": "6d8d15480432abb47ddb0362a35400c279cd5f6fb9d15f2cce1e88a126511611"
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 24,
+      "event_id": "evt-0024",
+      "event_type": "task_dispatched",
+      "timestamp": "2026-08-27T03:46:15.557683+00:00",
+      "revision": 23,
+      "task_id": "patch-tournament",
+      "worker": "adversarial-verifier-01",
+      "payload": {
+        "attempt": 1,
+        "lease_ms": 5000,
+        "idempotency_key": "9f7ffca99e3b8f63cb046a572c6e43daa6967bf308abe874684e138ed9658417",
+        "reassigned_from": null
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 25,
+      "event_id": "evt-0025",
+      "event_type": "task_failed",
+      "timestamp": "2026-08-27T03:46:15.557683+00:00",
+      "revision": 24,
+      "task_id": "patch-tournament",
+      "worker": "adversarial-verifier-01",
+      "payload": {
+        "attempt": 1,
+        "error": "TimeoutError: injected worker timeout for patch-tournament"
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 26,
+      "event_id": "evt-0026",
+      "event_type": "task_reassigned",
+      "timestamp": "2026-08-27T03:46:15.557683+00:00",
+      "revision": 25,
+      "task_id": "patch-tournament",
+      "worker": "adversarial-verifier-01",
+      "payload": {
+        "failed_worker": "adversarial-verifier-01",
+        "next_attempt": 2
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 27,
+      "event_id": "evt-0027",
+      "event_type": "task_dispatched",
+      "timestamp": "2026-08-27T03:46:15.557683+00:00",
+      "revision": 26,
+      "task_id": "patch-tournament",
+      "worker": "adversarial-verifier-01",
+      "payload": {
+        "attempt": 2,
+        "lease_ms": 5000,
+        "idempotency_key": "1435fef806e01c7f0f82172978057f61a40f414eaa9f8ad108c1546fba8a548c",
+        "reassigned_from": "adversarial-verifier-01"
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 28,
+      "event_id": "evt-0028",
+      "event_type": "state_updated",
+      "timestamp": "2026-08-27T03:46:15.558682+00:00",
+      "revision": 27,
+      "task_id": null,
+      "worker": null,
+      "payload": {
+        "key": "patch-tournament",
+        "value": {
+          "status": "COMPLETED",
+          "worker": "adversarial-verifier-01",
+          "attempt": 2,
+          "result_digest": "a02db2cf040a2831d0bd024b5140d03afd3cbf9e65f439d65090b8d53bfe7fd8"
+        },
+        "source": "adversarial-verifier-01"
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 29,
+      "event_id": "evt-0029",
+      "event_type": "task_completed",
+      "timestamp": "2026-08-27T03:46:15.558682+00:00",
+      "revision": 28,
+      "task_id": "patch-tournament",
+      "worker": "adversarial-verifier-01",
+      "payload": {
+        "attempt": 2,
+        "idempotency_key": "1435fef806e01c7f0f82172978057f61a40f414eaa9f8ad108c1546fba8a548c",
+        "result_digest": "a02db2cf040a2831d0bd024b5140d03afd3cbf9e65f439d65090b8d53bfe7fd8"
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 30,
+      "event_id": "evt-0030",
+      "event_type": "human_pause",
+      "timestamp": "2026-08-27T03:46:15.558682+00:00",
+      "revision": 29,
+      "task_id": null,
+      "worker": null,
+      "payload": {
+        "reason": "medium-risk patch requires named release owner",
+        "checkpoint_revision": 28
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 31,
+      "event_id": "evidence-post-patch-slo",
+      "event_type": "evidence_observed",
+      "timestamp": "2026-08-27T03:46:15.558682+00:00",
+      "revision": 30,
+      "task_id": null,
+      "worker": null,
+      "payload": {
+        "source_event_id": "evidence-post-patch-slo",
+        "kind": "slo",
+        "summary": "P99 remains within rollback watch window"
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 32,
+      "event_id": "evt-0032",
+      "event_type": "approval_invalidated",
+      "timestamp": "2026-08-27T03:46:15.558682+00:00",
+      "revision": 31,
+      "task_id": null,
+      "worker": null,
+      "payload": {
+        "actor": "AsoulAI Release Owner",
+        "approved_revision": 29,
+        "current_revision": 30,
+        "checkpoint_revision": 28
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 33,
+      "event_id": "evt-0033",
+      "event_type": "human_resume",
+      "timestamp": "2026-08-27T03:46:15.558682+00:00",
+      "revision": 32,
+      "task_id": null,
+      "worker": null,
+      "payload": {
+        "actor": "AsoulAI Release Owner",
+        "resumed_revision": 31
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 34,
+      "event_id": "evt-0034",
+      "event_type": "task_dispatched",
+      "timestamp": "2026-08-27T03:46:15.558682+00:00",
+      "revision": 33,
+      "task_id": "risk-gate",
+      "worker": "release-auditor-01",
+      "payload": {
+        "attempt": 1,
+        "lease_ms": 5000,
+        "idempotency_key": "180b4d1ce7bcca50a89017fb6930a23be458d84a91e6fc0b33f600b2c5d29126",
+        "reassigned_from": null
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 35,
+      "event_id": "evt-0035",
+      "event_type": "state_updated",
+      "timestamp": "2026-08-27T03:46:15.558682+00:00",
+      "revision": 34,
+      "task_id": null,
+      "worker": null,
+      "payload": {
+        "key": "risk-gate",
+        "value": {
+          "status": "COMPLETED",
+          "worker": "release-auditor-01",
+          "attempt": 1,
+          "result_digest": "c612cb54e38ad5b5468e28a79ed30f5f4e91aa3935c0d525ca113940f551dd1a"
+        },
+        "source": "release-auditor-01"
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 36,
+      "event_id": "evt-0036",
+      "event_type": "task_completed",
+      "timestamp": "2026-08-27T03:46:15.558682+00:00",
+      "revision": 35,
+      "task_id": "risk-gate",
+      "worker": "release-auditor-01",
+      "payload": {
+        "attempt": 1,
+        "idempotency_key": "180b4d1ce7bcca50a89017fb6930a23be458d84a91e6fc0b33f600b2c5d29126",
+        "result_digest": "c612cb54e38ad5b5468e28a79ed30f5f4e91aa3935c0d525ca113940f551dd1a"
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 37,
+      "event_id": "evt-0037",
+      "event_type": "scheduler_completed",
+      "timestamp": "2026-08-27T03:46:15.558682+00:00",
+      "revision": 36,
+      "task_id": null,
+      "worker": null,
+      "payload": {
+        "completed_tasks": 6
+      },
+      "deduplicated": false
+    },
+    {
+      "sequence": 38,
+      "event_id": "evt-0038",
+      "event_type": "task_deduplicated",
+      "timestamp": "2026-08-27T03:46:15.558682+00:00",
+      "revision": 36,
+      "task_id": "baseline",
+      "worker": "universe-builder-01",
+      "payload": {
+        "idempotency_key": "a43dabe00190a030540992b336f8933e97173592c01862bf9ccc59a3272a194a",
+        "input_revision": 36,
+        "result_digest": "dae35d3d4b3b2bdef9ff28336c2e2fd2ccfa0da416004f567d08dd5abf2cb522"
+      },
+      "deduplicated": true
+    }
+  ],
+  "idempotency_records": 6,
+  "skill_registry": [
+    {
+      "name": "change-timeline",
+      "description": "Order incident evidence and expose change windows for dynamic task routing.",
+      "path": "D:/1/全球AI大赛/chronosfix/agentteams/skills/change-timeline/SKILL.md",
+      "version": "0.1.0",
+      "loadable": true,
+      "permission": "read-only"
+    },
+    {
+      "name": "chronosfix-local-engine",
+      "description": "Run the deterministic ChronosFix incident-to-PR evidence pipeline and return auditable run, gate and artifact metadata.",
+      "path": "D:/1/全球AI大赛/chronosfix/agentteams/skills/chronosfix-local-engine/SKILL.md",
+      "version": "0.1.0",
+      "loadable": true,
+      "permission": "least-privilege"
+    },
+    {
+      "name": "counterfactual-replay",
+      "description": "Replay falsifiable interventions in an isolated deterministic simulator.",
+      "path": "D:/1/全球AI大赛/chronosfix/agentteams/skills/counterfactual-replay/SKILL.md",
+      "version": "0.1.0",
+      "loadable": true,
+      "permission": "isolated-simulation"
+    },
+    {
+      "name": "evidence-fusion",
+      "description": "Merge approved incident evidence into a shared, read-only Incident State.",
+      "path": "D:/1/全球AI大赛/chronosfix/agentteams/skills/evidence-fusion/SKILL.md",
+      "version": "0.1.0",
+      "loadable": true,
+      "permission": "read-only"
+    },
+    {
+      "name": "evidence-passport",
+      "description": "Bind causal, verification, risk and rollback claims to an integrity digest.",
+      "path": "D:/1/全球AI大赛/chronosfix/agentteams/skills/evidence-passport/SKILL.md",
+      "version": "0.1.0",
+      "loadable": true,
+      "permission": "write-evidence-artifacts"
+    },
+    {
+      "name": "fault-genome",
+      "description": "Evolve mandatory and exploratory fault variants from proven causes.",
+      "path": "D:/1/全球AI大赛/chronosfix/agentteams/skills/fault-genome/SKILL.md",
+      "version": "0.1.0",
+      "loadable": true,
+      "permission": "isolated-simulation"
+    },
+    {
+      "name": "patch-tournament",
+      "description": "Compete candidate changes on a shared fault-family verification suite.",
+      "path": "D:/1/全球AI大赛/chronosfix/agentteams/skills/patch-tournament/SKILL.md",
+      "version": "0.1.0",
+      "loadable": true,
+      "permission": "isolated-simulation"
+    },
+    {
+      "name": "proof-report",
+      "description": "Produce structured reports, manifests and trace-linked evidence artifacts.",
+      "path": "D:/1/全球AI大赛/chronosfix/agentteams/skills/proof-report/SKILL.md",
+      "version": "0.1.0",
+      "loadable": true,
+      "permission": "write-evidence-artifacts"
+    },
+    {
+      "name": "risk-gate",
+      "description": "Enforce fail-closed quality, approval and release decisions.",
+      "path": "D:/1/全球AI大赛/chronosfix/agentteams/skills/risk-gate/SKILL.md",
+      "version": "0.1.0",
+      "loadable": true,
+      "permission": "human-approval-required"
+    },
+    {
+      "name": "skill-forge",
+      "description": "Distill evaluated incident patterns into reviewable, versioned Skill candidates.",
+      "path": "D:/1/全球AI大赛/chronosfix/agentteams/skills/skill-forge/SKILL.md",
+      "version": "0.1.0",
+      "loadable": true,
+      "permission": "write-evidence-artifacts"
+    }
+  ],
+  "boundary_note": "Local deterministic coordination evidence; maps to AgentTeams Matrix contracts, not Controller runtime execution."
+}

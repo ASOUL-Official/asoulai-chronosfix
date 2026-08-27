@@ -31,7 +31,7 @@ spec:
   agents: |
     - 将任务拆成时间线、假设、回放、补丁、对抗验证和发布审计。
     - 只汇总 Worker 的可引用证据，不自行伪造结论。
-  skills: [chronosfix-local-engine]
+  skills: [evidence-fusion, change-timeline, proof-report]
 ---
 apiVersion: agentteams.io/v1beta1
 kind: Worker
@@ -49,7 +49,7 @@ spec:
   agents: |
     - 使用官方 alibabacloud-sls-query Skill 时只允许 GetIndex 与 GetLogsV2。
     - 凭据只能来自 Aliyun CLI Profile，不得进入聊天或证据文件。
-  skills: [chronosfix-local-engine, alibabacloud-sls-query]
+  skills: [evidence-fusion, change-timeline, alibabacloud-sls-query]
 ---
 apiVersion: agentteams.io/v1beta1
 kind: Worker
@@ -66,7 +66,7 @@ spec:
     每个结论都必须给出可执行干预和拒答条件。
   agents: |
     - 从共享 Incident State 登记假设，不把时间相关性当作因果性。
-  skills: [chronosfix-local-engine]
+  skills: [evidence-fusion, counterfactual-replay]
 ---
 apiVersion: agentteams.io/v1beta1
 kind: Worker
@@ -83,7 +83,7 @@ spec:
     所有实验仅在隔离回放环境执行，并保留输入、输出和模型边界。
   agents: |
     - 执行反事实回放并生成故障族，未知变量必须标注 unsupported。
-  skills: [chronosfix-local-engine]
+  skills: [counterfactual-replay, fault-genome]
 ---
 apiVersion: agentteams.io/v1beta1
 kind: Worker
@@ -100,7 +100,7 @@ spec:
     不生成与 selected_patch.changes 不一致的变更草案。
   agents: |
     - 每个补丁必须同时携带 machine-readable rollback_changes。
-  skills: [chronosfix-local-engine]
+  skills: [patch-tournament]
 ---
 apiVersion: agentteams.io/v1beta1
 kind: Worker
@@ -117,7 +117,7 @@ spec:
     失败样例必须保留，不能从准确率分母中静默删除。
   agents: |
     - 运行所有强制故障变体，并分别报告 Golden、Badcase 和拒答结果。
-  skills: [chronosfix-local-engine]
+  skills: [patch-tournament, counterfactual-replay]
 ---
 apiVersion: agentteams.io/v1beta1
 kind: Worker
@@ -135,7 +135,7 @@ spec:
   agents: |
     - 核验主因、强制变体、missing claims、回滚、Checks 和具名审批。
     - 输出 quality_gate 与 release_decision 两个独立状态。
-  skills: [chronosfix-local-engine]
+  skills: [risk-gate, evidence-passport]
 ---
 apiVersion: agentteams.io/v1beta1
 kind: Worker
@@ -152,7 +152,7 @@ spec:
     只有通过评测并声明权限边界的模式才能进入 Skill 候选库。
   agents: |
     - 记录来源事故、评测案例、安全边界、版本和回滚策略。
-  skills: [chronosfix-local-engine]
+  skills: [skill-forge, proof-report]
 ---
 apiVersion: agentteams.io/v1beta1
 kind: Team

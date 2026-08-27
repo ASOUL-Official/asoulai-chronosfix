@@ -46,6 +46,15 @@ def write_reports(state: IncidentState, metrics: dict, output_dir: Path) -> None
         "gate_result": state.gate_result,
         "approval_record": state.approval_record,
         "evidence_index": state.evidence_index,
+        "coordination": {
+            "schema_version": "chronosfix.dynamic-coordination/v1",
+            "status": state.orchestration_status,
+            "revision": state.state_revision,
+            "tasks": state.task_graph,
+            "attempts": state.task_attempts,
+            "events": state.orchestration_events,
+            "skill_registry": state.discovered_skills,
+        },
         "metrics": metrics,
     }
     (output_dir / "proof-bundle.json").write_text(
@@ -147,8 +156,22 @@ def write_reports(state: IncidentState, metrics: dict, output_dir: Path) -> None
                 f"发布前必须保留回滚点：{selected.rollback}。",
                 f"机器可验证回滚字段：`{selected.rollback_changes}`；验证结果：`{metrics.get('rollback_verified')}`。",
                 f"具名审批人：`{state.approval_record.get('approver')}`；审批时间：`{state.approval_record.get('timestamp')}`。",
-                "全部 Agent、Skill、实验、审批和报告动作均写入 `trace.jsonl`，可用于复盘和审计。",
+        "全部 Agent、Skill、实验、审批和报告动作均写入 `trace.jsonl`，可用于复盘和审计。",
             ]
         )
+
+    lines.extend(
+        [
+            "",
+            "## 7. 动态协同控制面",
+            "",
+            f"共享状态 revision：`{state.state_revision}`；任务数：`{len(state.task_graph)}`；",
+            f"事件数：`{len(state.orchestration_events)}`；Worker attempts：`{len(state.task_attempts)}`。",
+            "",
+            "控制面按新证据插入配置审计任务；首次 Worker 超时后按 capability 重派到备用 Worker；",
+            "重复 evidence event 只保留去重事件；中风险补丁在 checkpoint 暂停，新增 SLO 证据会使旧审批 revision 失效，",
+            "只有绑定最新 revision 的恢复事件才会继续 RiskGate。该记录是 AgentTeams Matrix 兼容的本地证据，不冒充 Controller 执行。",
+        ]
+    )
 
     (output_dir / "proof-report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")

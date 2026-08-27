@@ -14,9 +14,11 @@ fi
 git -C "${UPSTREAM_DIR}" fetch --depth 1 origin "${UPSTREAM_COMMIT}"
 git -C "${UPSTREAM_DIR}" checkout --detach "${UPSTREAM_COMMIT}"
 
-install -d "${MANAGER_WORKSPACE}/worker-skills/chronosfix-local-engine"
-cp -a "${REPO_ROOT}/agentteams/skills/chronosfix-local-engine/." \
-  "${MANAGER_WORKSPACE}/worker-skills/chronosfix-local-engine/"
+for skill_dir in "${REPO_ROOT}"/agentteams/skills/*; do
+  skill_name="$(basename "${skill_dir}")"
+  install -d "${MANAGER_WORKSPACE}/worker-skills/${skill_name}"
+  cp -a "${skill_dir}/." "${MANAGER_WORKSPACE}/worker-skills/${skill_name}/"
+done
 
 install -d "${MANAGER_WORKSPACE}/worker-skills/alibabacloud-sls-query"
 cp -a "${UPSTREAM_DIR}/skills/storage/sls/alibabacloud-sls-query/." \
