@@ -12,6 +12,7 @@ from typing import Any
 import uuid
 
 from .catalog import LOGICAL_WORKERS, WorkerInstance, capable_instances
+from .recommender import recommend_agent_composition
 from .store import RuntimeStore, utc_now
 
 
@@ -525,6 +526,32 @@ class LocalController:
         except RuntimeError:
             pass
         return self.snapshot(run_id)
+
+    def recommend(self, run_id: str, *, objective: str = "prove-and-repair") -> dict[str, Any]:
+        """Let the local Manager choose a replayable Agent/Skill composition."""
+
+        snapshot = self.snapshot(run_id)
+        scenario = json.loads(self.scenario_path(snapshot["run"]["scenario_id"]).read_text(encoding="utf-8"))
+        recommendation = recommend_agent_composition(
+            scenario,
+            evidence=[item["payload"] for item in snapshot["evidence"]],
+            objective=objective,
+        )
+        self.store.append_event(
+            run_id,
+            "agent_plan_recommended",
+            event_id=self._event_id("agent-plan"),
+            task_id="incident-pipeline",
+            worker="chronosfix-incident-commander#01",
+            payload={
+                "decision_id": recommendation["decision_id"],
+                "strategy": recommendation["strategy"],
+                "confidence": recommendation["confidence"],
+                "composition": recommendation["composition"],
+                "stop_before": recommendation["stop_before"],
+            },
+        )
+        return {"recommendation": recommendation, "snapshot": self.snapshot(run_id)}
 
     def snapshot(self, run_id: str) -> dict[str, Any]:
         return self.store.snapshot(run_id)

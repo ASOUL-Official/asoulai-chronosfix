@@ -19,6 +19,7 @@ def build(output: Path) -> dict:
 
     golden = controller.create_run("checkout-timeout", auto_approve=True)
     run_id = golden["run"]["run_id"]
+    golden_plan = controller.recommend(run_id, objective="judge-and-compose")
     failover = controller.trigger_failover(run_id, "timeout")
     evidence = controller.ingest_evidence(
         run_id,
@@ -26,6 +27,7 @@ def build(output: Path) -> dict:
         {"kind": "configuration", "summary": "pool size drift confirmed during acceptance"},
     )
     badcase = controller.create_run("conflicting-counterfactuals", auto_approve=False)
+    badcase_plan = controller.recommend(badcase["run"]["run_id"], objective="judge-and-compose")
 
     failover_task = next(item for item in failover["tasks"] if item["task_id"].startswith("live-timeout-"))
     attempts = [item for item in failover["attempts"] if item["task_id"] == failover_task["task_id"]]
@@ -44,6 +46,9 @@ def build(output: Path) -> dict:
             and any(item["status"] == "STALE" for item in evidence["approvals"])
             and badcase["run"]["status"] == "ABSTAINED"
             and badcase_task_ids == ["counterfactual-evaluation"]
+            and len(golden_plan["recommendation"]["composition"]) > len(badcase_plan["recommendation"]["composition"])
+            and golden_plan["recommendation"]["stop_before"] == "无"
+            and badcase_plan["recommendation"]["stop_before"] == "PatchTournament / RiskGate"
         ),
         "boundaries": controller.health()["boundaries"],
         "golden_run": {
@@ -52,6 +57,7 @@ def build(output: Path) -> dict:
             "initial_release_decision": golden["run"]["release_decision"],
             "after_evidence_release_decision": evidence["run"]["release_decision"],
             "matrix_database": str(controller.database),
+            "agent_recommendation": golden_plan["recommendation"],
         },
         "worker_failover": {
             "task_id": failover_task["task_id"],
@@ -74,6 +80,7 @@ def build(output: Path) -> dict:
             "status": badcase["run"]["status"],
             "release_decision": badcase["run"]["release_decision"],
             "registered_tasks": badcase_task_ids,
+            "agent_recommendation": badcase_plan["recommendation"],
         },
     }
     (output / "local-controller-evidence.json").write_text(

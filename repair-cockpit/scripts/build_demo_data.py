@@ -19,6 +19,7 @@ sys.path.insert(0, str(SRC_ROOT))
 
 from chronosfix.evaluation import evaluate_corpus  # noqa: E402
 from chronosfix.orchestrator import run_pipeline  # noqa: E402
+from chronosfix.runtime.recommender import recommend_agent_composition  # noqa: E402
 
 
 def _read_json(path: Path) -> dict[str, Any]:
@@ -119,6 +120,7 @@ def _build_golden_case(
         "passport": bundle["evidence_passport"],
         "skills": bundle["skill_candidates"],
         "coordination": approved["coordination"],
+        "agent_recommendation": recommend_agent_composition(_read_json(scenario_path)),
         "modes": {
             "approved": approved,
             "blocked": blocked,
@@ -147,6 +149,7 @@ def _build_evaluation_case(
         "passport": None,
         "skills": [],
         "coordination": None,
+        "agent_recommendation": recommend_agent_composition(raw),
         "modes": {},
     }
 

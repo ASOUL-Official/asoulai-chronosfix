@@ -11,6 +11,7 @@ const view = {
     health: null,
     runId: null,
     snapshot: null,
+    recommendation: null,
     lastEvidenceId: null,
     busy: false,
   },
@@ -304,6 +305,78 @@ function renderInjectionLog() {
         )
         .join("")
     : `<span class="inject-empty">尚未注入事件；点击按钮观察共享状态如何改变。</span>`;
+}
+
+function renderAgentRecommendation() {
+  const target = $("#recommendation-panel");
+  const note = $("#planner-note");
+  if (!target) return;
+  const scenario = currentScenario();
+  const recommendation = view.runtime.recommendation ?? scenario?.agent_recommendation;
+  if (!recommendation) {
+    target.innerHTML = `<span class="recommendation-empty">尚未生成组合；Agent 会根据证据决定是否继续进入补丁阶段。</span>`;
+    return;
+  }
+  if (note) {
+    note.textContent = view.runtime.recommendation
+      ? "本次推荐已写入本地 Matrix 事件，可按 decision_id 回放。"
+      : "当前展示静态证据包中的同口径推荐；启动本地 Controller 后可重新计算。";
+  }
+  const confidence = typeof recommendation.confidence === "number"
+    ? `${Math.round(recommendation.confidence * 100)}%`
+    : "—";
+  const composition = recommendation.composition ?? [];
+  target.innerHTML = `
+    <div class="recommendation-summary">
+      <div><span>策略</span><strong>${escapeHtml(recommendation.strategy)}</strong></div>
+      <div><span>信心</span><strong>${escapeHtml(confidence)}</strong></div>
+      <div><span>停止条件</span><strong>${escapeHtml(recommendation.stop_before ?? "—")}</strong></div>
+    </div>
+    <p class="recommendation-rationale">${escapeHtml(recommendation.rationale)}</p>
+    <div class="recommendation-signals">
+      <span>触发信号</span>
+      <code>${escapeHtml(list(recommendation.observed_signals))}</code>
+      <code>decision_id=${escapeHtml(recommendation.decision_id)}</code>
+    </div>
+    <ol class="composition-list">
+      ${composition
+        .map(
+          (item) => `
+            <li>
+              <b>${escapeHtml(String(item.order).padStart(2, "0"))}</b>
+              <div><strong>${escapeHtml(item.role)} · ${escapeHtml(item.agent)}</strong><small>${escapeHtml(item.skill)} · ${escapeHtml(item.reason)}</small></div>
+            </li>
+          `,
+        )
+        .join("")}
+    </ol>
+    <small class="recommendation-boundary">${escapeHtml(recommendation.boundary_note)}</small>
+  `;
+}
+
+async function requestAgentRecommendation() {
+  const scenario = currentScenario();
+  if (view.runtime.available) {
+    if (!view.runtime.runId) await startLiveRun(false);
+    const result = await apiRequest(`/runs/${view.runtime.runId}/recommendation`, {
+      method: "POST",
+      body: JSON.stringify({ objective: "judge-and-compose" }),
+    });
+    view.runtime.recommendation = result.recommendation;
+    applyRuntimeSnapshot(result.snapshot);
+    renderAgentRecommendation();
+    return;
+  }
+  view.runtime.recommendation = scenario.agent_recommendation ?? null;
+  if (view.runtime.recommendation) {
+    addDemoEvent(
+      "agent_plan_recommended",
+      `Agent 按证据自由组合 ${view.runtime.recommendation.composition.length} 个角色`,
+      { task_id: "incident-pipeline", worker: "chronosfix-manager" },
+    );
+  }
+  renderAgentRecommendation();
+  renderInjectionLog();
 }
 
 function setInjectionBusy(busy) {
@@ -1140,12 +1213,14 @@ function renderStage() {
 function renderScenario() {
   renderGateAndIdentity();
   renderStage();
+  renderAgentRecommendation();
 }
 
 function bindControls() {
   $("#scenario-select").addEventListener("change", async (event) => {
     view.scenarioId = event.target.value;
     resetDemoState();
+    view.runtime.recommendation = null;
     renderInjectionLog();
     renderScenario();
     if (view.runtime.available) {
@@ -1170,6 +1245,19 @@ function bindControls() {
     const button = event.target.closest("button[data-inject]");
     if (!button) return;
     applyInjection(button.dataset.inject);
+  });
+
+  $("#recommend-plan").addEventListener("click", async () => {
+    const button = $("#recommend-plan");
+    button.disabled = true;
+    try {
+      await requestAgentRecommendation();
+    } catch (error) {
+      const target = $("#recommendation-panel");
+      if (target) target.innerHTML = `<span class="recommendation-empty is-error">推荐失败：${escapeHtml(error.message)}</span>`;
+    } finally {
+      button.disabled = false;
+    }
   });
 
   $("#decision-switch").querySelectorAll("button").forEach((button) => {

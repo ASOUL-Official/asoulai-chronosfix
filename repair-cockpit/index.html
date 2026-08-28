@@ -77,6 +77,20 @@
             <p class="injector-note" id="injector-note">正在探测可执行本地 Controller；不可用时将明确回退到静态证据。</p>
             <div class="injector-log" id="injector-log" aria-live="polite"></div>
           </section>
+          <section class="agent-planner" id="agent-planner" aria-label="Agent 自主判断与自由组合">
+            <div class="injector-head">
+              <div>
+                <span class="field-label">Agent 自主判断与自由组合</span>
+                <small>根据当前证据选择最小充分协作队列</small>
+              </div>
+              <span class="planner-badge">EVIDENCE-DRIVEN</span>
+            </div>
+            <div class="planner-controls">
+              <p class="planner-note" id="planner-note">推荐不是固定脚本；点击后由 Manager 读取当前场景和新增证据。</p>
+              <button class="planner-button" id="recommend-plan" type="button">Agent 判断并组合</button>
+            </div>
+            <div class="recommendation-panel" id="recommendation-panel" aria-live="polite"></div>
+          </section>
         </div>
       </section>
 

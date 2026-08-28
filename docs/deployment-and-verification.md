@@ -128,7 +128,7 @@ python cloud_skill_demo.py --output evidence/cloud-skill-sls-dry-run.json
 python scripts/run_semifinal_acceptance.py --output output/semifinal-acceptance
 ```
 
-验收器在隔离临时目录执行 14 项检查，并将最终 JSON/Markdown 写入指定目录：54 项测试、严格 JSON/JSONL、公开 Draft 2020-12 Schema、AgentTeams v1beta1 清单、已审批通过分支、无人审批阻断分支、12 场景评测、Repair Cockpit JavaScript 语法、真实本地 Controller/Worker、隔离补丁沙箱、DSSE 变更证明、公开事故来源校验和本地基础设施契约。通过分支应为 `quality_gate=passed` + `release_decision=approved`；未审批分支应为 `quality_gate=passed` + `release_decision=blocked-awaiting-human`。
+验收器在隔离临时目录执行 14 项检查，并将最终 JSON/Markdown 写入指定目录：57 项测试、严格 JSON/JSONL、公开 Draft 2020-12 Schema、AgentTeams v1beta1 清单、已审批通过分支、无人审批阻断分支、12 场景评测、Repair Cockpit JavaScript 语法、真实本地 Controller/Worker、隔离补丁沙箱、DSSE 变更证明、公开事故来源校验和本地基础设施契约。通过分支应为 `quality_gate=passed` + `release_decision=approved`；未审批分支应为 `quality_gate=passed` + `release_decision=blocked-awaiting-human`。
 
 ## 9. 建议验收顺序
 

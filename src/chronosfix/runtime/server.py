@@ -85,6 +85,13 @@ class RuntimeHandler(SimpleHTTPRequestHandler):
                 self.send_json(self.controller.deny_tool(run_id))
             elif action == "actions/retry-exhausted":
                 self.send_json(self.controller.retry_exhausted(run_id))
+            elif action == "recommendation":
+                self.send_json(
+                    self.controller.recommend(
+                        run_id,
+                        objective=str(payload.get("objective", "prove-and-repair")),
+                    )
+                )
             elif action == "approvals":
                 self.send_json(
                     self.controller.approve(

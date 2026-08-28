@@ -40,7 +40,7 @@ AsoulAI ChronosFix（A-CFX）面向 GOAI 新智基座 Agent Infra「方向三：
 python -m pip install -e ".[validation]"
 ```
 
-只运行 `demo.py`、`evaluate.py` 或 54 项单元测试时无需安装这些可选依赖。
+只运行 `demo.py`、`evaluate.py` 或 57 项单元测试时无需安装这些可选依赖。
 
 ```powershell
 git clone https://github.com/ASOUL-Official/asoulai-chronosfix.git
