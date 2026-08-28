@@ -1,0 +1,35 @@
+{
+  "schema": "chronosfix.human-baseline-protocol/v1",
+  "study_id": "acfx-human-baseline-2026",
+  "study_status": "awaiting-human-observations",
+  "objective": "Compare unaided human incident review with the executable ChronosFix evidence workflow on identical inputs.",
+  "minimum_completed_participants": 2,
+  "privacy": {
+    "participant_identifier": "pseudonymous code only",
+    "collect_name": false,
+    "collect_email": false,
+    "collect_employer": false
+  },
+  "controls": {
+    "same_incident_input": true,
+    "answer_key_hidden_until_submission": true,
+    "order_randomized": true,
+    "raw_timing_retained": true,
+    "small_sample_claim_boundary": "Report descriptive observations only; do not claim statistical significance."
+  },
+  "tasks": [
+    "identify the most likely primary cause",
+    "list supporting evidence",
+    "propose a reversible change",
+    "define rollback conditions",
+    "decide diagnose or abstain"
+  ],
+  "metrics": [
+    "time_to_first_hypothesis_seconds",
+    "time_to_reviewable_change_seconds",
+    "primary_cause_match",
+    "abstention_correctness",
+    "rollback_completeness",
+    "evidence_items_cited"
+  ]
+}

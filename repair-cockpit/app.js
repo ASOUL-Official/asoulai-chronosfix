@@ -1,10 +1,19 @@
 const DATA_URL = "./data/demo-data.json";
+const API_BASE = "./api";
 
 const view = {
   data: null,
   scenarioId: null,
   mode: "approved",
   stepIndex: 0,
+  runtime: {
+    available: false,
+    health: null,
+    runId: null,
+    snapshot: null,
+    lastEvidenceId: null,
+    busy: false,
+  },
   demo: {
     events: [],
     revisionDelta: 0,
@@ -46,7 +55,7 @@ const blockerLabel = (blocker) => {
 
 function statusClass(value) {
   const normalized = String(value ?? "").toLowerCase();
-  if (["approved", "passed", "success", "correct", "completed", "offline-validated"].includes(normalized)) {
+  if (["approved", "passed", "success", "correct", "completed", "executed", "offline-validated"].includes(normalized)) {
     return "is-pass";
   }
   if (
@@ -66,6 +75,100 @@ function currentScenario() {
 function currentMode() {
   const scenario = currentScenario();
   return scenario.modes?.[view.mode] ?? null;
+}
+
+async function apiRequest(path, options = {}) {
+  const response = await fetch(`${API_BASE}${path}`, {
+    cache: "no-store",
+    headers: { "Content-Type": "application/json", ...(options.headers ?? {}) },
+    ...options,
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    const error = new Error(payload.error ?? `HTTP ${response.status}`);
+    error.status = response.status;
+    error.payload = payload;
+    throw error;
+  }
+  return payload;
+}
+
+function runtimeEventMessage(event) {
+  const payload = event.payload ?? {};
+  const identity = [event.task_id, event.worker].filter(Boolean).join(" · ");
+  return (
+    payload.summary ??
+    payload.reason ??
+    payload.error ??
+    (identity || event.event_type)
+  );
+}
+
+function applyRuntimeSnapshot(snapshot) {
+  view.runtime.snapshot = snapshot;
+  view.runtime.runId = snapshot.run.run_id;
+  const baseRevision = currentScenario().coordination?.revision ?? 0;
+  view.demo.events = snapshot.events.map((event) => ({ ...event, source: "local-controller" }));
+  view.demo.revisionDelta = Math.max(0, snapshot.run.revision - baseRevision);
+  view.demo.attemptDelta = snapshot.attempts.length;
+  view.demo.taskOverrides = Object.fromEntries(
+    snapshot.tasks.map((task) => [task.task_id, task.status]),
+  );
+  view.demo.forcePaused = snapshot.run.status === "PAUSED_AWAITING_HUMAN";
+  view.demo.staleApproval = snapshot.approvals.some((approval) => approval.status === "STALE");
+  view.demo.forceQualityFailure = snapshot.run.quality_gate === "failed";
+  view.demo.forceToolDenied = snapshot.run.status === "BLOCKED_PERMISSION_DENIED";
+  view.demo.log = snapshot.events
+    .slice(-8)
+    .reverse()
+    .map((event) => ({
+      eventType: event.event_type,
+      revision: event.revision,
+      message: runtimeEventMessage(event),
+      timestamp: new Date(event.timestamp).toLocaleTimeString("zh-CN", { hour12: false }),
+    }));
+  renderInjectionLog();
+  renderTruthStrip();
+  renderScenario();
+}
+
+async function detectRuntime() {
+  try {
+    view.runtime.health = await apiRequest("/health");
+    view.runtime.available = view.runtime.health.status === "ok";
+  } catch (_error) {
+    view.runtime.available = false;
+  }
+  const badge = $(".injector-badge");
+  const note = $("#injector-note");
+  if (badge) badge.textContent = view.runtime.available ? "LIVE LOCAL CONTROLLER" : "STATIC EVIDENCE FALLBACK";
+  if (note) {
+    note.textContent = view.runtime.available
+      ? "按钮调用 127.0.0.1 本地 Controller；Worker 以独立进程运行，事件持久化到 SQLite Matrix 房间。"
+      : "当前为静态托管回退，只展示已生成证据；启动本地 Controller 后按钮才会执行真实进程。";
+  }
+  const heroNote = $("#runtime-boundary-note");
+  if (heroNote) {
+    heroNote.innerHTML = view.runtime.available
+      ? "当前连接 <code>chronosfix-local-controller/v1</code>：本地执行真实，官方 AgentTeams Controller / Matrix 仍明确标记为未部署。"
+      : "页面数据来自 <code>data/demo-data.json</code>；当前为静态证据回退，不声称运行了 Controller 或 Worker。";
+  }
+}
+
+async function startLiveRun(render = true) {
+  if (!view.runtime.available) return null;
+  view.runtime.busy = true;
+  try {
+    const snapshot = await apiRequest("/runs", {
+      method: "POST",
+      body: JSON.stringify({ scenario_id: view.scenarioId, auto_approve: true }),
+    });
+    applyRuntimeSnapshot(snapshot);
+    if (render) renderScenario();
+    return snapshot;
+  } finally {
+    view.runtime.busy = false;
+  }
 }
 
 function resetDemoState() {
@@ -91,6 +194,17 @@ function effectiveMode() {
     quality_blockers: [...(mode.quality_blockers ?? [])],
     approval_blockers: [...(mode.approval_blockers ?? [])],
   };
+  const runtimeRun = view.runtime.snapshot?.run;
+  if (view.runtime.available && runtimeRun?.scenario_id === view.scenarioId) {
+    const approved = view.runtime.snapshot.approvals.some((item) => item.status === "APPROVED");
+    next.run_id = runtimeRun.run_id;
+    next.trace_id = runtimeRun.trace_id;
+    next.human_approval = approved ? "approved" : "pending";
+    next.quality_gate = runtimeRun.quality_gate;
+    next.release_decision = runtimeRun.release_decision;
+    next.release_ready = runtimeRun.release_decision === "approved";
+    next.blockers = next.release_ready ? [] : [runtimeRun.release_decision];
+  }
   if (view.demo.forceQualityFailure || view.demo.forceToolDenied) {
     next.quality_gate = "failed";
     next.release_decision = "blocked-quality";
@@ -114,6 +228,19 @@ function effectiveMode() {
 
 function effectiveCoordination(coordination) {
   if (!coordination) return null;
+  const runtimeSnapshot = view.runtime.snapshot;
+  if (view.runtime.available && runtimeSnapshot?.run?.scenario_id === view.scenarioId) {
+    return {
+      ...coordination,
+      revision: runtimeSnapshot.run.revision,
+      status: runtimeSnapshot.run.status,
+      tasks: runtimeSnapshot.tasks,
+      attempts: runtimeSnapshot.attempts,
+      events: runtimeSnapshot.events,
+      boundary_note:
+        "Real local Controller/worker/SQLite execution; official AgentTeams Controller and Matrix protocol are not claimed.",
+    };
+  }
   const tasks = (coordination.tasks ?? []).map((task) => ({
     ...task,
     status: view.demo.taskOverrides[task.task_id] ?? task.status,
@@ -179,7 +306,101 @@ function renderInjectionLog() {
     : `<span class="inject-empty">尚未注入事件；点击按钮观察共享状态如何改变。</span>`;
 }
 
-function applyInjection(type) {
+function setInjectionBusy(busy) {
+  view.runtime.busy = busy;
+  $("#injector-actions")?.querySelectorAll("button").forEach((button) => {
+    button.disabled = busy;
+  });
+}
+
+async function runLiveInjection(type) {
+  if (type === "reset") {
+    await startLiveRun();
+    return;
+  }
+  if (currentScenario().runtime_scope !== "pipeline-and-evaluation") {
+    view.demo.log.unshift({
+      eventType: "blocked",
+      revision: view.runtime.snapshot?.run?.revision ?? 0,
+      message: "evaluation-only 样例已真实执行拒答，不允许追加补丁或门禁动作",
+      timestamp: new Date().toLocaleTimeString("zh-CN", { hour12: false }),
+    });
+    renderInjectionLog();
+    return;
+  }
+  if (!view.runtime.runId) await startLiveRun(false);
+  const runId = view.runtime.runId;
+  let snapshot;
+  switch (type) {
+    case "new-evidence": {
+      const eventId = `live-evidence-${Date.now()}`;
+      view.runtime.lastEvidenceId = eventId;
+      snapshot = await apiRequest(`/runs/${runId}/evidence`, {
+        method: "POST",
+        body: JSON.stringify({
+          event_id: eventId,
+          evidence: { kind: "configuration", summary: "现场发现连接池配置漂移证据" },
+        }),
+      });
+      break;
+    }
+    case "duplicate-evidence": {
+      const eventId = view.runtime.lastEvidenceId ?? `live-evidence-${Date.now()}`;
+      if (!view.runtime.lastEvidenceId) {
+        await apiRequest(`/runs/${runId}/evidence`, {
+          method: "POST",
+          body: JSON.stringify({
+            event_id: eventId,
+            evidence: { kind: "configuration", summary: "幂等演示首个 evidence" },
+          }),
+        });
+        view.runtime.lastEvidenceId = eventId;
+      }
+      snapshot = await apiRequest(`/runs/${runId}/evidence`, {
+        method: "POST",
+        body: JSON.stringify({
+          event_id: eventId,
+          evidence: { kind: "configuration", summary: "相同 event_id 的重复投递" },
+        }),
+      });
+      break;
+    }
+    case "worker-timeout":
+    case "worker-crash":
+    case "stale-approval":
+    case "pause":
+    case "resume":
+    case "tool-denied":
+    case "retry-exhausted":
+      snapshot = await apiRequest(`/runs/${runId}/actions/${type}`, {
+        method: "POST",
+        body: JSON.stringify({ approver: "AsoulAI Release Owner" }),
+      });
+      break;
+    default:
+      return;
+  }
+  applyRuntimeSnapshot(snapshot);
+}
+
+async function applyInjection(type) {
+  if (view.runtime.available) {
+    setInjectionBusy(true);
+    try {
+      await runLiveInjection(type);
+    } catch (error) {
+      view.demo.log.unshift({
+        eventType: error.status === 409 ? "approval_rejected_stale" : "runtime_error",
+        revision: view.runtime.snapshot?.run?.revision ?? 0,
+        message: error.message,
+        timestamp: new Date().toLocaleTimeString("zh-CN", { hour12: false }),
+      });
+      renderInjectionLog();
+    } finally {
+      setInjectionBusy(false);
+    }
+    return;
+  }
   const scenario = currentScenario();
   if (type === "reset") {
     resetDemoState();
@@ -298,7 +519,22 @@ function renderExternalLinks() {
 }
 
 function renderTruthStrip() {
-  $("#truth-strip").innerHTML = view.data.truthful_status
+  const statuses = view.runtime.available
+    ? [
+        {
+          label: "本地 Controller",
+          value: "executed",
+          detail: "独立 Worker 进程 + SQLite Matrix 事件房间；刷新后状态可恢复。",
+        },
+        {
+          label: "官方 AgentTeams",
+          value: "not-executed",
+          detail: "本地兼容运行不冒充官方 Controller / Matrix 部署。",
+        },
+        ...view.data.truthful_status.filter((item) => !item.label.toLowerCase().includes("agentteams")),
+      ]
+    : view.data.truthful_status;
+  $("#truth-strip").innerHTML = statuses
     .map(
       (item) => `
         <article class="truth-item">
@@ -373,11 +609,18 @@ function renderGateAndIdentity() {
   setStatus($("#quality-gate"), quality);
   setStatus($("#release-decision"), decision);
 
-  $("#run-id").textContent = mode?.run_id ?? "pending · evaluation-only";
-  $("#trace-id").textContent = mode?.trace_id ?? "pending · no pipeline trace";
+  const runtimeRun = view.runtime.snapshot?.run;
+  $("#run-id").textContent = runtimeRun?.scenario_id === view.scenarioId
+    ? runtimeRun.run_id
+    : mode?.run_id ?? "pending · evaluation-only";
+  $("#trace-id").textContent = runtimeRun?.scenario_id === view.scenarioId
+    ? runtimeRun.trace_id
+    : mode?.trace_id ?? "pending · no pipeline trace";
   const revision = view.data.revision;
   const base = revision.base_commit ? ` · base ${shortId(revision.base_commit, 10)}` : "";
-  $("#commit-id").textContent = `${revision.commit} · ${revision.kind}${base}`;
+  $("#commit-id").textContent = view.runtime.available
+    ? `${revision.commit} · executable-local-runtime${base}`
+    : `${revision.commit} · ${revision.kind}${base}`;
   $("#commit-id").title = revision.base_commit ?? "No patch commit was created by this dry-run.";
 
   $("#scenario-note").innerHTML = isPipeline
@@ -900,11 +1143,27 @@ function renderScenario() {
 }
 
 function bindControls() {
-  $("#scenario-select").addEventListener("change", (event) => {
+  $("#scenario-select").addEventListener("change", async (event) => {
     view.scenarioId = event.target.value;
     resetDemoState();
     renderInjectionLog();
     renderScenario();
+    if (view.runtime.available) {
+      setInjectionBusy(true);
+      try {
+        await startLiveRun();
+      } catch (error) {
+        view.demo.log.unshift({
+          eventType: "runtime_error",
+          revision: 0,
+          message: error.message,
+          timestamp: new Date().toLocaleTimeString("zh-CN", { hour12: false }),
+        });
+        renderInjectionLog();
+      } finally {
+        setInjectionBusy(false);
+      }
+    }
   });
 
   $("#injector-actions").addEventListener("click", (event) => {
@@ -947,6 +1206,8 @@ async function init() {
     view.scenarioId = preferred?.id ?? view.data.cases[0]?.id;
     if (!view.scenarioId) throw new Error("JSON 中没有评测场景");
 
+    await detectRuntime();
+
     $("#product-title").textContent = view.data.product.title;
     $("#product-subtitle").textContent = view.data.product.subtitle;
     renderExternalLinks();
@@ -957,10 +1218,19 @@ async function init() {
     renderScenario();
     bindControls();
 
+    if (view.runtime.available) {
+      setInjectionBusy(true);
+      try {
+        await startLiveRun();
+      } finally {
+        setInjectionBusy(false);
+      }
+    }
+
     const stamp = new Date(view.data.generated_at);
-    $("#data-stamp").textContent = `JSON 生成时间：${stamp.toLocaleString("zh-CN", {
-      hour12: false,
-    })}`;
+    $("#data-stamp").textContent = view.runtime.available
+      ? `本地 Controller 在线 · 静态基线生成时间：${stamp.toLocaleString("zh-CN", { hour12: false })}`
+      : `JSON 生成时间：${stamp.toLocaleString("zh-CN", { hour12: false })}`;
     $("#loading-screen").hidden = true;
     $("#app").hidden = false;
   } catch (error) {

@@ -13,6 +13,7 @@ from dataclasses import asdict, dataclass, field, is_dataclass
 from datetime import datetime, timezone
 import hashlib
 import json
+from time import perf_counter
 from typing import Any, Callable
 
 
@@ -107,15 +108,16 @@ class DynamicScheduler:
         self.workers = sorted(
             workers
             or [
-                WorkerSpec("timeline-analyst-01", ("timeline",)),
-                WorkerSpec("timeline-analyst-02", ("timeline",), priority=110),
-                WorkerSpec("hypothesis-scientist-01", ("hypothesis",)),
-                WorkerSpec("universe-builder-01", ("replay", "fault-genome")),
-                WorkerSpec("patch-engineer-01", ("patch-contract",)),
-                WorkerSpec("patch-engineer-02", ("patch-contract",), priority=110),
-                WorkerSpec("adversarial-verifier-01", ("patch-tournament",)),
-                WorkerSpec("release-auditor-01", ("risk-gate", "evidence")),
-                WorkerSpec("skill-curator-01", ("skill",)),
+                WorkerSpec("chronosfix-timeline-analyst#01", ("timeline", "evidence")),
+                WorkerSpec("chronosfix-timeline-analyst#02", ("timeline", "evidence"), priority=110),
+                WorkerSpec("chronosfix-hypothesis-scientist#01", ("hypothesis",)),
+                WorkerSpec("chronosfix-hypothesis-scientist#02", ("hypothesis",), priority=110),
+                WorkerSpec("chronosfix-universe-builder#01", ("replay", "fault-genome")),
+                WorkerSpec("chronosfix-patch-engineer#01", ("patch-contract",)),
+                WorkerSpec("chronosfix-adversarial-verifier#01", ("patch-tournament",)),
+                WorkerSpec("chronosfix-adversarial-verifier#02", ("patch-tournament",), priority=110),
+                WorkerSpec("chronosfix-release-auditor#01", ("risk-gate", "attestation")),
+                WorkerSpec("chronosfix-skill-curator#01", ("skill",)),
             ],
             key=lambda item: (item.priority, item.name),
         )
@@ -207,7 +209,7 @@ class DynamicScheduler:
 
     def pause(self, reason: str) -> int:
         self.shared.status = "PAUSED_AWAITING_HUMAN"
-        self.shared.checkpoint_revision = self.shared.revision
+        self.shared.checkpoint_revision = self.shared.revision + 1
         self._emit(
             "human_pause",
             payload={"reason": reason, "checkpoint_revision": self.shared.checkpoint_revision},
@@ -289,8 +291,12 @@ class DynamicScheduler:
                 )
                 return
 
-            previous_worker = self.attempts[-1].worker if self.attempts else None
+            previous_worker = next(
+                (item.worker for item in reversed(self.attempts) if item.task_id == spec.task_id),
+                None,
+            )
             started = _now()
+            started_clock = perf_counter()
             attempt = TaskAttempt(
                 task_id=spec.task_id,
                 attempt=attempt_no,
@@ -320,6 +326,7 @@ class DynamicScheduler:
             except Exception as exc:  # fail closed, then retry on the next worker
                 attempt.status = "FAILED"
                 attempt.ended_at = _now()
+                attempt.duration_ms = round((perf_counter() - started_clock) * 1000, 3)
                 attempt.error = f"{type(exc).__name__}: {exc}"
                 self._emit(
                     "task_failed",
@@ -347,6 +354,7 @@ class DynamicScheduler:
                 return
             attempt.status = "COMPLETED"
             attempt.ended_at = _now()
+            attempt.duration_ms = round((perf_counter() - started_clock) * 1000, 3)
             self.results[spec.task_id] = result
             self._seen_idempotency[idempotency_key] = result
             self._last_idempotency[spec.task_id] = idempotency_key

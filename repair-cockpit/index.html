@@ -8,14 +8,14 @@
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%235ee7f5'/%3E%3Cpath d='M18 43 29 18h7l11 25h-8l-2-6H27l-2 6zm11-12h6l-3-9z' fill='%2307111f'/%3E%3C/svg%3E" />
     <meta
       name="description"
-      content="AsoulAI ChronosFix 复赛评委模式：用真实 JSON 证据展示事故、因果证明、故障族验证、三态门禁、证据护照与 Golden/Badcase 评测。"
+      content="AsoulAI ChronosFix 复赛评委模式：连接本地 Controller 时真实执行 Worker、失败重派、动态证据与审批失效；静态托管时明确回退到证据包。"
     />
     <link rel="stylesheet" href="./styles.css?v=dynamic-20260827" />
   </head>
   <body>
     <div class="loading-screen" id="loading-screen" role="status" aria-live="polite">
       <div class="loading-mark">A-CFX</div>
-      <p>正在读取离线证据包…</p>
+      <p>正在探测本地 Controller 并读取证据基线…</p>
     </div>
 
     <main class="shell" id="app" hidden>
@@ -37,7 +37,7 @@
           <p class="eyebrow">JUDGE MODE · 90 秒完整链路</p>
           <h2 id="hero-title">先证明根因，再允许变更进入 PR</h2>
           <p class="hero-subtitle" id="product-subtitle"></p>
-          <p class="hero-note">
+          <p class="hero-note" id="runtime-boundary-note">
             页面数据来自 <code>data/demo-data.json</code>；绿色只代表离线合成验证通过，不代表已经连接真实 AgentTeams Controller、云资源或生产发布系统。
           </p>
         </div>
@@ -59,7 +59,7 @@
                 <span class="field-label">运行时异常注入</span>
                 <small>让评委亲手改变协同状态</small>
               </div>
-              <span class="injector-badge">LOCAL SIMULATION</span>
+              <span class="injector-badge">RUNTIME PROBING</span>
             </div>
             <div class="injector-actions" id="injector-actions">
               <button type="button" data-inject="new-evidence">＋新证据</button>
@@ -73,7 +73,7 @@
               <button type="button" data-inject="retry-exhausted">重试耗尽</button>
               <button class="secondary" type="button" data-inject="reset">重置演示</button>
             </div>
-            <p class="injector-note" id="injector-note">仅在浏览器本地模拟控制面事件，不调用真实 AgentTeams、云资源或生产系统。</p>
+            <p class="injector-note" id="injector-note">正在探测可执行本地 Controller；不可用时将明确回退到静态证据。</p>
             <div class="injector-log" id="injector-log" aria-live="polite"></div>
           </section>
         </div>
@@ -134,6 +134,6 @@
       </section>
     </template>
 
-    <script src="./app.js?v=dynamic-20260827" defer></script>
+    <script src="./app.js?v=controller-20260828" defer></script>
   </body>
 </html>

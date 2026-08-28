@@ -1,0 +1,76 @@
+{
+  "schema": "chronosfix.public-incident/v1",
+  "incident_id": "PUBLIC-CLOUDFLARE-2019-WAF-REGEX",
+  "title": "Cloudflare 2019 WAF rule deployment outage",
+  "source": {
+    "publisher": "Cloudflare",
+    "url": "https://blog.cloudflare.com/cloudflare-outage/",
+    "title": "Cloudflare outage caused by bad software deploy (updated)",
+    "published_at": "2019-07-02T15:50:00Z",
+    "observed_modified_at": "2026-07-15T13:14:10.294Z",
+    "accessed_at": "2026-08-28",
+    "authority": "first-party-public-postmortem",
+    "use_scope": "factual summary and attribution; no full article reproduction"
+  },
+  "official_facts": [
+    {
+      "fact_id": "fact-01",
+      "summary": "The global outage began at 13:42 UTC and Cloudflare-proxied domains returned HTTP 502 responses.",
+      "source_section": "postmortem opening and incident timeline"
+    },
+    {
+      "fact_id": "fact-02",
+      "summary": "A single misconfigured WAF managed rule was deployed during a routine rules deployment.",
+      "source_section": "root cause"
+    },
+    {
+      "fact_id": "fact-03",
+      "summary": "A regular expression in the rule drove CPU utilization to 100 percent on machines worldwide.",
+      "source_section": "technical root cause"
+    },
+    {
+      "fact_id": "fact-04",
+      "summary": "At the worst point, traffic dropped by 82 percent.",
+      "source_section": "impact"
+    },
+    {
+      "fact_id": "fact-05",
+      "summary": "The WAF rules were deployed globally in one operation rather than through the normal progressive deployment process.",
+      "source_section": "deployment analysis"
+    },
+    {
+      "fact_id": "fact-06",
+      "summary": "Cloudflare understood the event by 14:02 UTC and a global WAF ruleset termination restored traffic at 14:09 UTC.",
+      "source_section": "incident timeline"
+    },
+    {
+      "fact_id": "fact-07",
+      "summary": "After reviewing and rolling back the offending rules and testing the fix, Cloudflare re-enabled the managed rulesets at 14:52 UTC.",
+      "source_section": "recovery timeline"
+    }
+  ],
+  "chronosfix_inferences": [
+    {
+      "inference_id": "inference-01",
+      "summary": "A progressive rollout gate could have reduced blast radius.",
+      "basis": ["fact-05"],
+      "classification": "project-inference-not-source-claim"
+    },
+    {
+      "inference_id": "inference-02",
+      "summary": "A catastrophic-backtracking performance test is a relevant adversarial validation candidate for WAF rule changes.",
+      "basis": ["fact-02", "fact-03"],
+      "classification": "project-inference-not-source-claim"
+    }
+  ],
+  "synthetic_reconstruction": {
+    "enabled": false,
+    "reason": "The source is retained as a provenance-backed public incident; no unverified production metrics are synthesized.",
+    "pipeline_claim": "public-incident-provenance-only"
+  },
+  "privacy": {
+    "personal_data_included": false,
+    "credentials_included": false,
+    "customer_logs_included": false
+  }
+}

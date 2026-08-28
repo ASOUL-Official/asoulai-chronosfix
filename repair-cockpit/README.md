@@ -1,6 +1,18 @@
 # AsoulAI ChronosFix Repair Cockpit
 
-这是 ChronosFix 的复赛评委模式 Demo。页面不在 `app.js` 中维护业务结果，而是读取由工程证据生成的 `data/demo-data.json`。
+这是 ChronosFix 的复赛评委模式 Demo。页面同时支持可执行本地 Controller 与 GitHub Pages 静态证据回退。
+
+## 可执行本地模式（现场答辩推荐）
+
+在已安装项目包的环境中运行：
+
+```powershell
+python -m chronosfix.runtime.server --host 127.0.0.1 --port 8000
+```
+
+然后访问 `http://127.0.0.1:8000/`。页面会显示 `LIVE LOCAL CONTROLLER`：异常注入按钮通过 HTTP API 调用真实 Controller，Worker 在独立子进程中执行，PID、实测时长、失败重派、证据、审批和事件持久化到 SQLite Matrix 房间。
+
+本地模式的真实边界是：`local_controller_executed=true`、`local_worker_processes_executed=true`；它不冒充官方环境，仍明确保持 `agentteams_official_controller_executed=false`、`matrix_protocol_executed=false`。
 
 ## 生成最新 Demo 数据
 
@@ -18,7 +30,7 @@ python repair-cockpit/scripts/build_demo_data.py
 - 汇总 `run_id`、`trace_id`、三态门禁、故障族结果、证据护照与评测口径；
 - 只把前端需要的字段写入 `repair-cockpit/data/demo-data.json`。
 
-## 本地打开
+## 静态证据回退
 
 浏览器通常禁止 `file://` 页面读取相邻 JSON，因此请在项目根目录启动静态服务：
 
@@ -32,7 +44,7 @@ python -m http.server 8000 --directory repair-cockpit
 http://localhost:8000/
 ```
 
-GitHub Pages 会直接按静态资源方式加载，无需后端。
+GitHub Pages 会直接按静态资源方式加载，无需后端，并显示 `STATIC EVIDENCE FALLBACK`。此模式只展示已生成证据，不把前端状态变化表述为真实 Worker 执行。
 
 ## 90 秒评委动线
 
@@ -46,14 +58,14 @@ GitHub Pages 会直接按静态资源方式加载，无需后端。
 
 ### 现场异常注入
 
-右侧“运行时异常注入”控制台是浏览器内的本地控制面模拟，可连续点击并观察 revision、任务图、事件流和三态门禁变化：
+右侧“运行时异常注入”控制台在本地 Controller 在线时执行真实进程与持久化状态，可连续点击并观察 revision、任务图、事件流和三态门禁变化：
 
 - 新证据、重复 evidence：验证动态任务注册与幂等去重；
 - Worker 超时、Worker 崩溃：验证 capability 重派与失败 attempt；
 - 人工暂停、旧审批失效、人工恢复：验证 checkpoint 和最新 revision 绑定；
 - 工具权限拒绝、重试耗尽：验证最小权限与 fail-closed。
 
-这些按钮不会调用真实 AgentTeams、云 API、GitHub 或生产系统；它们用于现场解释控制面契约，真实外部执行状态仍以 `evidence/` 与文档中的边界声明为准。
+这些按钮调用真实本地 Controller，但不会调用官方 AgentTeams、云 API、GitHub 写接口或生产系统。外部系统状态仍以 `evidence/` 与文档中的边界声明为准。
 
 ## 状态边界
 

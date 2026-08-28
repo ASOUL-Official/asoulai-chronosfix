@@ -1,0 +1,13 @@
+diff --git a/checkout_service.py b/checkout_service.py
+index c90d483..75caa5a 100644
+--- a/checkout_service.py
++++ b/checkout_service.py
+@@ -3,7 +3,7 @@ from __future__ import annotations
+ from dataclasses import dataclass
+ 
+ 
+-DEFAULT_POOL_SIZE = 20
++DEFAULT_POOL_SIZE = 64
+ 
+ 
+ @dataclass(frozen=True)

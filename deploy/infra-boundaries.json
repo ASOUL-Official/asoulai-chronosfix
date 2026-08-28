@@ -1,0 +1,20 @@
+{
+  "schema": "chronosfix.infra-boundaries/v1",
+  "local_executable_fallbacks": {
+    "unified_model": "SQLite incidents/evidence/revision CAS",
+    "event_bus": "SQLite topic/idempotency/retry/DLQ",
+    "version_registry": "SQLite Skill/Policy publish and rollback",
+    "tool_gateway": "local authentication/allowlist/rate-limit/trace correlation",
+    "trace_export": "OTLP JSON conversion and durable export record"
+  },
+  "official_runtime_execution": {
+    "rocketmq": false,
+    "polardb": false,
+    "unifiedmodel_cloud_provider": false,
+    "nacos": false,
+    "higress": false,
+    "agentloop": false,
+    "agentscope_studio": false
+  },
+  "claim_boundary": "Local providers execute the same contracts for reproducible acceptance; they are not evidence that named cloud products were deployed."
+}

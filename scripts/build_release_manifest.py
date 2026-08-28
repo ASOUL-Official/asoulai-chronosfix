@@ -19,9 +19,18 @@ TRACKED_ARTIFACTS = [
     "evidence/engineering-metrics.json",
     "evidence/proof-bundle.json",
     "evidence/agentteams-run.json",
+    "evidence/local-controller-evidence.json",
+    "evidence/local-infra-evidence.json",
+    "evidence/patch-sandbox-run.json",
+    "evidence/change-attestation-verification.json",
+    "evidence/public-incident-validation.json",
+    "evidence/human-baseline-summary.json",
+    "evidence/infra-boundaries.json",
     "evidence/evaluation-report.md",
     "submission/ChronosFix_复赛方案.pptx",
     "submission/ChronosFix_复赛方案.pdf",
+    "submission/ChronosFix_90秒答辩版.pptx",
+    "submission/ChronosFix_90秒答辩版.pdf",
 ]
 
 SOURCE_INPUTS = [
@@ -32,6 +41,11 @@ SOURCE_INPUTS = [
     "repair-cockpit/index.html",
     "repair-cockpit/styles.css",
     "repair-cockpit/scripts/build_demo_data.py",
+    "pyproject.toml",
+    "ci_sandbox",
+    "public-incidents",
+    "baseline",
+    "deploy",
 ]
 
 
@@ -47,8 +61,26 @@ def git_head() -> str:
     return completed.stdout.strip() if completed.returncode == 0 else "unknown"
 
 
+def canonical_file_bytes(path: Path) -> bytes:
+    """Return checkout-independent bytes for source and evidence identity.
+
+    Git may materialize text files with CRLF on Windows and LF on Linux.
+    Release identity must describe the same source revision on both systems,
+    so text inputs are normalized to LF while binary inputs remain byte exact.
+    """
+
+    raw = path.read_bytes()
+    if b"\0" in raw:
+        return raw
+    try:
+        raw.decode("utf-8")
+    except UnicodeDecodeError:
+        return raw
+    return raw.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+
+
 def sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return hashlib.sha256(canonical_file_bytes(path)).hexdigest()
 
 
 def source_fingerprint() -> str:
@@ -67,7 +99,7 @@ def source_fingerprint() -> str:
     for path in sorted(paths, key=lambda item: item.relative_to(ROOT).as_posix()):
         digest.update(path.relative_to(ROOT).as_posix().encode("utf-8"))
         digest.update(b"\0")
-        digest.update(path.read_bytes())
+        digest.update(canonical_file_bytes(path))
         digest.update(b"\0")
     return digest.hexdigest()
 
@@ -79,9 +111,12 @@ def build() -> dict:
         path = ROOT / relative
         if not path.is_file():
             raise FileNotFoundError(relative)
+        identity_bytes = canonical_file_bytes(path)
         artifacts[relative] = {
-            "bytes": path.stat().st_size,
+            "bytes": len(identity_bytes),
             "sha256": sha256(path),
+            "identity_mode": "canonical-lf-text-or-raw-binary",
+            "materialized_bytes": path.stat().st_size,
         }
 
     manifest = {
@@ -98,10 +133,13 @@ def build() -> dict:
             "evidence_passport_claims": 14,
             "trace_spans": 18,
             "agentteams_resources": 11,
-            "unit_and_contract_tests": 40,
+            "unit_and_contract_tests": 54,
         },
         "truth_boundary": {
             "agentteams_controller_executed": False,
+            "local_controller_executed": True,
+            "local_worker_processes_executed": True,
+            "local_matrix_event_log_executed": True,
             "cloud_skills": "dry-run",
             "evaluation_data": "deterministic-synthetic",
             "production_accuracy_or_roi_claimed": False,

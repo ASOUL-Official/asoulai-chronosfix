@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from chronosfix.orchestrator import run_pipeline
+from chronosfix.runtime.controller import LocalController
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -35,6 +36,11 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--approver", help="Named human approver; required with --approve.")
     parser.add_argument("--approval-reason", help="Reason stored in the approval audit record.")
+    parser.add_argument(
+        "--local-controller",
+        action="store_true",
+        help="Run the executable local Controller with real worker subprocesses and SQLite Matrix state.",
+    )
     return parser
 
 
@@ -42,6 +48,32 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.approve and not args.approver:
         raise SystemExit("--approve requires --approver")
+    if args.local_controller:
+        controller_root = args.output / "local-controller"
+        controller = LocalController(
+            controller_root / "matrix.sqlite3",
+            controller_root / "runs",
+            python_executable=sys.executable,
+        )
+        snapshot = controller.create_run(args.scenario.parent.name, auto_approve=args.approve)
+        summary = {
+            "team": "chronosfix-incident-response",
+            "execution_mode": "executable-local-controller",
+            "local_controller_executed": True,
+            "local_worker_processes_executed": True,
+            "local_matrix_event_log_executed": True,
+            "agentteams_official_controller_executed": False,
+            "matrix_protocol_executed": False,
+            "run_id": snapshot["run"]["run_id"],
+            "trace_id": snapshot["run"]["trace_id"],
+            "status": snapshot["run"]["status"],
+            "quality_gate": snapshot["run"]["quality_gate"],
+            "release_decision": snapshot["run"]["release_decision"],
+            "worker_attempts": snapshot["attempts"],
+            "matrix_database": str(controller.database),
+        }
+        print(json.dumps(summary, ensure_ascii=False, indent=2))
+        return 0 if snapshot["run"]["release_decision"] == "approved" else 2
     result = run_pipeline(
         args.scenario,
         args.output,

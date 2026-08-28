@@ -140,7 +140,10 @@ def write_markdown(report: dict[str, Any], path: Path) -> None:
             "## 证据边界",
             "",
             "- 本报告证明本地/CI 环境中的确定性工程闭环可复现。",
-            "- AgentTeams 结果是 v1beta1 资源离线校验，不是 Controller Runtime 执行记录。",
+            "- 本地 Controller、独立 Worker 子进程和 SQLite Matrix 事件房间已经真实执行；不冒充官方 AgentTeams Controller / Matrix。",
+            "- 真实代码补丁在临时 Git checkout 中完成补丁前失败、补丁后通过和回滚恢复；本地未宣称 OS 级网络命名空间。",
+            "- Proof-Carrying Change 使用 DSSE + Ed25519 验签；签名身份是本地临时密钥，不冒充 Sigstore keyless 身份。",
+            "- 公开事故只使用首方公开复盘，并把官方事实与项目推断分开。",
             "- 云 Skill 保持 dry-run；评测数据为合成数据，不外推生产准确率或商业 ROI。",
             "- 通过分支和无人审批阻断分支均由同一验收器实际执行。",
             "",
@@ -160,11 +163,16 @@ def run(output_dir: Path) -> dict[str, Any]:
         blocked_dir = work / "blocked"
         evaluation_dir = work / "evaluation"
         agentteams_report = work / "agentteams-validation.json"
+        local_controller_dir = work / "local-controller"
+        patch_sandbox_dir = work / "patch-sandbox"
+        attestation_dir = work / "attestation"
+        public_incident_report = work / "public-incident-validation.json"
+        local_infra_dir = work / "local-infra"
         scenario_report = work / "scenario-schema-validation.json"
 
         checks = [
             run_check(
-                "40-unit-and-contract-tests",
+                "unit-and-contract-tests",
                 [python, "-m", "unittest", "discover", "-s", "tests", "-p", "test_*.py", "-q"],
             ),
             run_check("strict-json-jsonl-validation", [python, "scripts/validate_json_artifacts.py", "."]),
@@ -181,6 +189,45 @@ def run(output_dir: Path) -> dict[str, Any]:
                     "--output",
                     str(agentteams_report),
                 ],
+            ),
+            run_check(
+                "executable-local-controller-worker-matrix",
+                [
+                    python,
+                    "scripts/run_local_controller_evidence.py",
+                    "--output",
+                    str(local_controller_dir),
+                ],
+            ),
+            run_check(
+                "real-code-patch-isolated-ci-sandbox",
+                [python, "scripts/run_patch_sandbox.py", "--output", str(patch_sandbox_dir)],
+            ),
+            run_check(
+                "proof-carrying-change-dsse-attestation",
+                [
+                    python,
+                    "scripts/build_change_attestation.py",
+                    "--output",
+                    str(attestation_dir),
+                    "--subject",
+                    str(patch_sandbox_dir / "patch-sandbox-run.json"),
+                    "--subject",
+                    str(local_controller_dir / "local-controller-evidence.json"),
+                ],
+            ),
+            run_check(
+                "first-party-public-incident-provenance",
+                [
+                    python,
+                    "scripts/validate_public_incident.py",
+                    "--output",
+                    str(public_incident_report),
+                ],
+            ),
+            run_check(
+                "durable-local-production-infra-contracts",
+                [python, "scripts/run_local_infra_evidence.py", "--output", str(local_infra_dir)],
             ),
             run_check(
                 "approved-proof-carrying-change-chain",
@@ -219,6 +266,11 @@ def run(output_dir: Path) -> dict[str, Any]:
         blocked = read_json_if_exists(blocked_dir / "proof-bundle.json")
         evaluation = read_json_if_exists(evaluation_dir / "evaluation-summary.json")
         agentteams = read_json_if_exists(agentteams_report)
+        local_controller = read_json_if_exists(local_controller_dir / "local-controller-evidence.json")
+        patch_sandbox = read_json_if_exists(patch_sandbox_dir / "patch-sandbox-run.json")
+        attestation = read_json_if_exists(attestation_dir / "change-attestation-verification.json")
+        public_incident = read_json_if_exists(public_incident_report)
+        local_infra = read_json_if_exists(local_infra_dir / "local-infra-evidence.json")
         scenarios = read_json_if_exists(scenario_report)
         summary = nested(evaluation, "summary") or {}
 
@@ -243,6 +295,67 @@ def run(output_dir: Path) -> dict[str, Any]:
             assertion("evaluation.unexpected_assertions", nested(summary, "unexpected_assertion_cases"), 0),
             assertion("agentteams.valid", nested(agentteams, "valid"), True),
             assertion("agentteams.workers", nested(agentteams, "counts", "Worker"), 8),
+            assertion("local_controller.passed", nested(local_controller, "passed"), True),
+            assertion(
+                "local_controller.executed",
+                nested(local_controller, "boundaries", "local_controller_executed"),
+                True,
+            ),
+            assertion(
+                "local_controller.official_boundary",
+                nested(local_controller, "boundaries", "agentteams_official_controller_executed"),
+                False,
+            ),
+            assertion(
+                "local_controller.failover_pid",
+                nested(local_controller, "worker_failover", "different_pid"),
+                True,
+            ),
+            assertion(
+                "local_controller.badcase",
+                nested(local_controller, "badcase_refusal", "status"),
+                "ABSTAINED",
+            ),
+            assertion("patch_sandbox.passed", nested(patch_sandbox, "passed"), True),
+            assertion(
+                "patch_sandbox.before_fails",
+                nested(patch_sandbox, "before_tests", "exit_code"),
+                1,
+            ),
+            assertion(
+                "patch_sandbox.after_passes",
+                nested(patch_sandbox, "after_tests", "exit_code"),
+                0,
+            ),
+            assertion(
+                "patch_sandbox.rollback_clean",
+                nested(patch_sandbox, "rollback_clean"),
+                True,
+            ),
+            assertion("attestation.passed", nested(attestation, "passed"), True),
+            assertion(
+                "attestation.signature_valid",
+                nested(attestation, "verification", "valid"),
+                True,
+            ),
+            assertion(
+                "attestation.tamper_rejected",
+                nested(attestation, "tamper_test", "verification_valid"),
+                False,
+            ),
+            assertion("public_incident.valid", nested(public_incident, "valid"), True),
+            assertion("public_incident.fact_count", nested(public_incident, "official_fact_count"), 7),
+            assertion("local_infra.passed", nested(local_infra, "passed"), True),
+            assertion(
+                "local_infra.event_bus",
+                nested(local_infra, "boundaries", "local_durable_event_bus_executed"),
+                True,
+            ),
+            assertion(
+                "local_infra.rocketmq_boundary",
+                nested(local_infra, "boundaries", "rocketmq_broker_executed"),
+                False,
+            ),
             assertion("scenario_schema.valid", nested(scenarios, "valid"), True),
             assertion("scenario_schema.scenario_count", nested(scenarios, "scenario_count"), 12),
         ]
@@ -256,6 +369,8 @@ def run(output_dir: Path) -> dict[str, Any]:
         "checks": checks,
         "assertions": assertions,
         "boundaries": {
+            "local_controller_executed": True,
+            "local_worker_processes_executed": True,
             "agentteams_runtime_executed": False,
             "cloud_skill_execution": "dry-run",
             "evaluation_data": "deterministic-synthetic",
@@ -275,7 +390,19 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--output", type=Path, default=ROOT / "output" / "semifinal-acceptance")
     args = parser.parse_args(argv)
     report = run(args.output.resolve())
-    print(json.dumps({"passed": report["passed"], "output": str(args.output.resolve())}, ensure_ascii=False))
+    failed_checks = [item["name"] for item in report["checks"] if not item["passed"]]
+    failed_assertions = [item["name"] for item in report["assertions"] if not item["passed"]]
+    print(
+        json.dumps(
+            {
+                "passed": report["passed"],
+                "output": str(args.output.resolve()),
+                "failed_checks": failed_checks,
+                "failed_assertions": failed_assertions,
+            },
+            ensure_ascii=False,
+        )
+    )
     return 0 if report["passed"] else 1
 
 

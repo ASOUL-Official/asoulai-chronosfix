@@ -18,11 +18,29 @@ SOURCE_INPUTS = [
     "repair-cockpit/index.html",
     "repair-cockpit/styles.css",
     "repair-cockpit/scripts/build_demo_data.py",
+    "pyproject.toml",
+    "ci_sandbox",
+    "public-incidents",
+    "baseline",
+    "deploy",
 ]
 
 
+def canonical_file_bytes(path: Path) -> bytes:
+    """Normalize UTF-8 text line endings for cross-platform identity."""
+
+    raw = path.read_bytes()
+    if b"\0" in raw:
+        return raw
+    try:
+        raw.decode("utf-8")
+    except UnicodeDecodeError:
+        return raw
+    return raw.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+
+
 def sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return hashlib.sha256(canonical_file_bytes(path)).hexdigest()
 
 
 def source_fingerprint() -> str:
@@ -41,7 +59,7 @@ def source_fingerprint() -> str:
     for item in sorted(paths, key=lambda path: path.relative_to(ROOT).as_posix()):
         digest.update(item.relative_to(ROOT).as_posix().encode("utf-8"))
         digest.update(b"\0")
-        digest.update(item.read_bytes())
+        digest.update(canonical_file_bytes(item))
         digest.update(b"\0")
     return digest.hexdigest()
 
@@ -72,7 +90,7 @@ def validate(path: Path) -> dict:
         actual = sha256(target)
         if actual != expected.get("sha256"):
             errors.append(f"sha256 mismatch: {relative}")
-        if target.stat().st_size != expected.get("bytes"):
+        if len(canonical_file_bytes(target)) != expected.get("bytes"):
             errors.append(f"byte-size mismatch: {relative}")
 
     demo = json.loads((ROOT / "repair-cockpit/data/demo-data.json").read_text(encoding="utf-8"))

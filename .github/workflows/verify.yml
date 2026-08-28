@@ -60,6 +60,7 @@ jobs:
           --output "${{ runner.temp }}/chronosfix-semifinal-acceptance"
 
       - name: Upload semifinal acceptance evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: chronosfix-semifinal-acceptance-${{ matrix.python-version }}
