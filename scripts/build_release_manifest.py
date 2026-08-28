@@ -125,7 +125,7 @@ def build() -> dict:
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "source_commit": source_commit,
         "source_fingerprint": source_fingerprint(),
-        "source_commit_semantics": "Evidence is tied to git HEAD plus this reproducible working-tree source fingerprint.",
+        "source_commit_semantics": "Evidence and the online Demo are tied to this reproducible source anchor commit plus the working-tree source fingerprint; a later artifact commit only packages these outputs.",
         "artifacts": artifacts,
         "counts": {
             "evaluation_cases": 12,

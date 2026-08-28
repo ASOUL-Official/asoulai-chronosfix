@@ -70,7 +70,7 @@ GitHub Pages 会直接按静态资源方式加载，无需后端，并显示 `ST
 ## 状态边界
 
 - `offline-validated`：核心流水线在确定性合成场景中离线执行并留下证据。
-- `dry-run`：GitHub 修复流当前生成本地草案；公开 Issue #1 / PR #2 仅作为真实协作证据。
+- `dry-run`：GitHub 修复流当前生成本地草案；公开 PR #3 证明工程分支、CI 与工件验收，自动修复 PR 仍未由程序写入。
 - `pending`：不宣称已经连接真实 AgentTeams Controller Runtime、阿里云 Skills 或生产云资源。
 - 页面中的 `commit=evidence-source` 表示 Demo 数据绑定到证据生成时的源码快照；真实补丁提交仍保持 `local-draft`，避免使用虚构 SHA。
 

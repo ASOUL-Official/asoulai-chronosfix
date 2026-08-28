@@ -531,7 +531,7 @@ function renderTruthStrip() {
           value: "not-executed",
           detail: "本地兼容运行不冒充官方 Controller / Matrix 部署。",
         },
-        ...view.data.truthful_status.filter((item) => !item.label.toLowerCase().includes("agentteams")),
+        ...view.data.truthful_status.filter((item) => !/(agentteams|controller)/i.test(item.label)),
       ]
     : view.data.truthful_status;
   $("#truth-strip").innerHTML = statuses
