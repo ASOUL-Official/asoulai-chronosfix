@@ -52,7 +52,10 @@ def source_fingerprint() -> str:
             paths.extend(
                 path
                 for path in candidate.rglob("*")
-                if path.is_file() and "__pycache__" not in path.parts and path.suffix.lower() != ".pyc"
+                if path.is_file()
+                and "__pycache__" not in path.parts
+                and not any(part.endswith(".egg-info") for part in path.parts)
+                and path.suffix.lower() != ".pyc"
             )
         elif candidate.is_file():
             paths.append(candidate)
