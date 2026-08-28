@@ -5,14 +5,14 @@ new file mode 100644
 @@ -0,0 +1,75 @@
 +{
 +  "approval": {
-+    "approver": "AsoulAI Release Reviewer",
++    "approver": "AsoulAI Release Owner",
 +    "input_digest": "cfd6506285827bf2cbdb5052a34584fe287c9bcbd3dca5f164427f73c16b2027",
 +    "is_human": true,
 +    "policy_version": "chronosfix-riskgate/v1",
-+    "reason": "Online semifinal source-anchor refresh after CI fingerprint fix",
++    "reason": "Semifinal evidence review",
 +    "state_revision": 36,
 +    "status": "approved",
-+    "timestamp": "2026-08-28T09:14:23.403065+00:00"
++    "timestamp": "2026-08-28T10:23:55.312381+00:00"
 +  },
 +  "decision": {
 +    "quality_gate": "passed",
@@ -37,7 +37,7 @@ new file mode 100644
 +    "rollback_contract": "恢复 db.pool.maxSize=8 配置快照",
 +    "title": "恢复连接池 24 并增加容量验证门禁"
 +  },
-+  "run_id": "run-1955e5f9a6ad460d8a26c16771a71b11",
++  "run_id": "run-144187310e8e4d54a91d873f53355a18",
 +  "scenario_path": "scenarios/checkout-timeout/scenario.json",
 +  "schema_version": "chronosfix.change-contract/v1",
 +  "validation_checks": [
@@ -46,21 +46,21 @@ new file mode 100644
 +      "evidence": "experiment results persisted in proof-bundle.json",
 +      "executed": true,
 +      "name": "counterfactual-replay",
-+      "run_id": "run-1955e5f9a6ad460d8a26c16771a71b11"
++      "run_id": "run-144187310e8e4d54a91d873f53355a18"
 +    },
 +    {
 +      "conclusion": "success",
 +      "evidence": "selected_patch.results in proof-bundle.json",
 +      "executed": true,
 +      "name": "fault-gene-suite",
-+      "run_id": "run-1955e5f9a6ad460d8a26c16771a71b11"
++      "run_id": "run-144187310e8e4d54a91d873f53355a18"
 +    },
 +    {
 +      "conclusion": "success",
 +      "evidence": "patch changes followed by rollback_changes compared with baseline",
 +      "executed": true,
 +      "name": "rollback-contract",
-+      "run_id": "run-1955e5f9a6ad460d8a26c16771a71b11"
++      "run_id": "run-144187310e8e4d54a91d873f53355a18"
 +    },
 +    {
 +      "conclusion": "success",

@@ -1,8 +1,8 @@
 {
   "schema_version": "chronosfix.run-manifest/v1",
-  "generated_at": "2026-08-28T09:14:23.565291+00:00",
-  "run_id": "run-1955e5f9a6ad460d8a26c16771a71b11",
-  "trace_id": "179ed7d3c53b4325910864f73a89e355",
+  "generated_at": "2026-08-28T10:23:55.431765+00:00",
+  "run_id": "run-144187310e8e4d54a91d873f53355a18",
+  "trace_id": "33a2b674dfed4968921df4a926db41f3",
   "incident_id": "INC-2026-0816-001",
   "scenario": {
     "path": "scenarios/checkout-timeout/scenario.json",
@@ -38,15 +38,15 @@
         "rollback_verified": true,
         "required_checks_executed": true,
         "approval_status": "approved",
-        "approver": "AsoulAI Release Reviewer",
+        "approver": "AsoulAI Release Owner",
         "legacy_boolean_approval": true
       }
     },
     "approval_record": {
       "status": "approved",
-      "approver": "AsoulAI Release Reviewer",
-      "reason": "Online semifinal source-anchor refresh after CI fingerprint fix",
-      "timestamp": "2026-08-28T09:14:23.403065+00:00",
+      "approver": "AsoulAI Release Owner",
+      "reason": "Semifinal evidence review",
+      "timestamp": "2026-08-28T10:23:55.312381+00:00",
       "policy_version": "chronosfix-riskgate/v1",
       "is_human": true,
       "state_revision": 36,
@@ -54,7 +54,7 @@
     }
   },
   "measurements": {
-    "elapsed_ms": 147.975,
+    "elapsed_ms": 105.451,
     "elapsed_ms_kind": "measured",
     "evidence_coverage": 1.0,
     "evidence_coverage_kind": "derived",
@@ -76,39 +76,39 @@
   "environment": {
     "python": "3.13.9",
     "platform": "Windows-11-10.0.26200-SP0",
-    "git_commit": "c8b9d263d561e4e81aa0ad78af4c8813d4dc2278"
+    "git_commit": "cd43a4f43e5a5ed8e4082d37b108adff9ba76bee"
   },
   "artifacts": {
     "trace.jsonl": {
-      "sha256": "0825ffc5393ce26ab1f0e02c8278fb1cfad011c4f75d7aaaab022f642d58e1aa",
-      "bytes": 29305
+      "sha256": "6d380945c268681d0f798bd663884a1ae09049b5a0bdc6bb3d5121382157bbbe",
+      "bytes": 29303
     },
     "run-log.jsonl": {
-      "sha256": "6f80ce21ebeb3a18da0e2aa31f926a733015f9e4ea922b8a4d9d3e69569fdbe5",
-      "bytes": 8370
+      "sha256": "42fa4c3a8e9d54e659724eec478c04114082c3d0ed5caf546366e66fc655fe3b",
+      "bytes": 8371
     },
     "proof-bundle.json": {
-      "sha256": "1e1237bc5a54c9b11aa0ab45ae91be4ebf6ca2d7bb14d9721ed026af33b4a92b",
-      "bytes": 55202
+      "sha256": "76710444255baee1f57eb49a05dd8a90280bac4f32e5015d9a6955ddce7d8fc5",
+      "bytes": 55151
     },
     "proof-report.md": {
-      "sha256": "de16abd726006678e22edb6dc56b6e64f7ca41a863dd50eea8bd5b4dd9fb2ea1",
-      "bytes": 7375
+      "sha256": "877fde4af5615e89ab6f99af7cf46020133713bcf85deaafb7102d623cf83ad1",
+      "bytes": 7372
     },
     "engineering-metrics.json": {
-      "sha256": "5b23bb39976bc32d881d48be9d37543f55ed69e2e288829d358bb1d1581346bb",
+      "sha256": "a66b4ae63fbd7a896bb6418c0f17b32ea31f9f01f96260055a030a555a3e4930",
       "bytes": 3487
     },
     "agentteams-run.json": {
-      "sha256": "267e814c6c4f2c4929fa7344de30684f0a15f2b28f18a859e5fe174f1efec7ff",
-      "bytes": 7921
+      "sha256": "ea8f1bdcee59cda0d5d37ffecc4e8e1a5464687012bdbc232abd62f08ef99869",
+      "bytes": 7877
     },
     "evaluation-report.md": {
-      "sha256": "85fdbd3b76684df1c4397eefc91d951dfbf4fc16bdfab2d23b2d1e090b2cbc43",
+      "sha256": "503c5ac1f1d585456234c2ad7a89ce0c47a52761d5d4be48ccf95e31e3c884ac",
       "bytes": 2139
     },
     "github-issue.json": {
-      "sha256": "5b6abca3b5efd1095db87abbd2cb56bc65f1754bea1b9fd01382a62c2f9d3086",
+      "sha256": "e502945569f24075a696fc23462aa7576497dc2386aad91995227f84e7e5639c",
       "bytes": 2561
     },
     "github-issue.md": {
@@ -116,28 +116,28 @@
       "bytes": 1395
     },
     "github-pr.json": {
-      "sha256": "38331cda2af42a5f883e11d02777952bf34d0d0cf5e07c7d2a54087fc0effc21",
-      "bytes": 8254
+      "sha256": "a1f09673dfba24a4158241e55de5bf94e210ab4e78e033b1dee1f537afaa7578",
+      "bytes": 8210
     },
     "github-pr.md": {
       "sha256": "9a143d376e32a6726850c473b3587c9108be756f59c3d7b81ea853b1b57f15c8",
       "bytes": 1804
     },
     "github-pr-diff.patch": {
-      "sha256": "a9f6fabf4689012adcb72cb7f0da200fb16b76aec3238f3cc315f9964c722d7e",
-      "bytes": 2517
+      "sha256": "b50ba1e8d2f7aa67f7858f9db158e9519024fab9fd87f2cb05bd9db37d0f0e0b",
+      "bytes": 2476
     },
     "github-pr-checks.json": {
-      "sha256": "6e7c6a6bd25ee7685daa80425821bd5f9f54f3a553bb38de462da97ff8ca4366",
-      "bytes": 2425
+      "sha256": "39495435c66a018e884c1a662c1db6bb1e75579ee7e029fa740eed37383cbeae",
+      "bytes": 2381
     },
     "github-review-audit.jsonl": {
-      "sha256": "10734f7acbae6d4a804d2955cf3f7cb8a64f2d2e0e255aa471ddf5b5105c2387",
-      "bytes": 3517
+      "sha256": "a6e7bdb4734004d76d59158f0e6599e43016c0d84b6e9226487be26b1f3e13e0",
+      "bytes": 3476
     },
     "coordination.json": {
-      "sha256": "11e625159d9f38fbacf8f5d73d082150d30434270b9c65d622f698f6a59e86c1",
-      "bytes": 29599
+      "sha256": "a93f08734d1da778f4358417993ef5e25252219cde9ccfb4d3e3ba2c834239df",
+      "bytes": 29592
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "schema": "chronosfix.local-controller-evidence/v1",
-  "generated_at": "2026-08-28T06:12:06.271580+00:00",
+  "generated_at": "2026-08-28T10:24:16.401374+00:00",
   "passed": true,
   "boundaries": {
     "local_controller_executed": true,
@@ -10,42 +10,147 @@
     "matrix_protocol_executed": false
   },
   "golden_run": {
-    "run_id": "acfx-local-20260828T061200-ef1d30f982",
-    "trace_id": "67309be9aafe4eb9ace73af1d0aa4c39",
+    "run_id": "acfx-local-20260828T102411-fb2d731895",
+    "trace_id": "b8435432a62546dab3c97926013d4aa8",
     "initial_release_decision": "approved",
     "after_evidence_release_decision": "blocked-awaiting-human",
-    "matrix_database": "D:\\1\\全球AI大赛\\chronosfix\\output\\local-controller-evidence\\matrix.sqlite3"
+    "matrix_database": "D:\\1\\全球AI大赛\\chronosfix\\output\\local-controller-evidence\\matrix.sqlite3",
+    "agent_recommendation": {
+      "schema": "chronosfix.agent-recommendation/v1",
+      "decision_id": "f4c16a87ccd01daf",
+      "planner": "chronosfix-manager",
+      "planner_mode": "evidence-driven-deterministic",
+      "official_agentteams_executed": false,
+      "objective": "judge-and-compose",
+      "strategy": "按证据动态拼接完整修复链",
+      "confidence": 0.93,
+      "observed_signals": [
+        "commit",
+        "dependency",
+        "configuration",
+        "traffic",
+        "incident"
+      ],
+      "rationale": "Agent 根据已观测信号和可用候选补丁选择最小充分队列；每个角色的输入来自上游结果。",
+      "stop_before": "无",
+      "free_combination": true,
+      "composition": [
+        {
+          "order": 1,
+          "agent": "incident-commander",
+          "worker": "chronosfix-incident-commander#01",
+          "role": "事故指挥",
+          "skill": "EvidenceFusion",
+          "capability": "incident-control",
+          "reason": "先建立共享事故上下文，再决定后续是否需要更多角色。",
+          "depends_on": []
+        },
+        {
+          "order": 2,
+          "agent": "timeline-analyst",
+          "worker": "chronosfix-timeline-analyst#01",
+          "role": "证据时间线",
+          "skill": "ChangeTimeline",
+          "capability": "evidence",
+          "reason": "读取当前时间线与新增证据，补齐可验证的输入边界。",
+          "depends_on": [
+            "incident-commander"
+          ]
+        },
+        {
+          "order": 3,
+          "agent": "hypothesis-scientist",
+          "worker": "chronosfix-hypothesis-scientist#01",
+          "role": "假设科学家",
+          "skill": "CounterfactualReplay",
+          "capability": "hypothesis",
+          "reason": "当前存在可检验假设，先用反事实结果判断是否可唯一归因。",
+          "depends_on": [
+            "timeline-analyst"
+          ]
+        },
+        {
+          "order": 4,
+          "agent": "universe-builder",
+          "worker": "chronosfix-universe-builder#01",
+          "role": "反事实实验",
+          "skill": "FaultGenome",
+          "capability": "replay",
+          "reason": "已满足可诊断范围，构造反事实与故障族验证空间。",
+          "depends_on": [
+            "hypothesis-scientist"
+          ]
+        },
+        {
+          "order": 5,
+          "agent": "patch-engineer",
+          "worker": "chronosfix-patch-engineer#01",
+          "role": "补丁工程",
+          "skill": "PatchTournament",
+          "capability": "patch-contract",
+          "reason": "已有候选变更，比较修复收益、风险和回滚契约。",
+          "depends_on": [
+            "universe-builder"
+          ]
+        },
+        {
+          "order": 6,
+          "agent": "adversarial-verifier",
+          "worker": "chronosfix-adversarial-verifier#01",
+          "role": "对抗验证",
+          "skill": "FaultGenome",
+          "capability": "patch-tournament",
+          "reason": "对候选补丁执行同源故障族和回滚验证，避免只在单一样例上通过。",
+          "depends_on": [
+            "patch-engineer"
+          ]
+        },
+        {
+          "order": 7,
+          "agent": "release-auditor",
+          "worker": "chronosfix-release-auditor#01",
+          "role": "发布审计",
+          "skill": "RiskGate",
+          "capability": "risk-gate",
+          "reason": "只有质量门禁通过且审批绑定最新 revision 才允许发布决策。",
+          "depends_on": [
+            "adversarial-verifier"
+          ]
+        }
+      ],
+      "boundary_note": "本地 Manager 依据证据生成可回放组合；不冒充官方 AgentTeams Controller 推理轨迹。"
+    }
   },
   "worker_failover": {
-    "task_id": "live-timeout-58919f32",
+    "task_id": "live-timeout-668d87bd",
     "attempts": [
       {
-        "task_id": "live-timeout-58919f32",
+        "task_id": "live-timeout-668d87bd",
         "attempt": 1,
         "logical_worker": "chronosfix-timeline-analyst",
         "instance_id": "chronosfix-timeline-analyst#01",
-        "pid": 46208,
+        "pid": 5852,
         "status": "FAILED",
-        "started_at": "2026-08-28T06:12:01.990371+00:00",
-        "ended_at": "2026-08-28T06:12:03.345251+00:00",
-        "duration_ms": 1354.878,
+        "started_at": "2026-08-28T10:24:12.740318+00:00",
+        "ended_at": "2026-08-28T10:24:14.077550+00:00",
+        "duration_ms": 1337.236,
         "exit_code": 1,
         "error": "lease expired after 0.250s",
         "result_digest": null
       },
       {
-        "task_id": "live-timeout-58919f32",
+        "task_id": "live-timeout-668d87bd",
         "attempt": 2,
         "logical_worker": "chronosfix-timeline-analyst",
         "instance_id": "chronosfix-timeline-analyst#02",
-        "pid": 38844,
+        "pid": 6648,
         "status": "COMPLETED",
-        "started_at": "2026-08-28T06:12:03.378172+00:00",
-        "ended_at": "2026-08-28T06:12:04.173421+00:00",
-        "duration_ms": 795.253,
+        "started_at": "2026-08-28T10:24:14.093921+00:00",
+        "ended_at": "2026-08-28T10:24:14.542117+00:00",
+        "duration_ms": 448.2,
         "exit_code": 0,
         "error": null,
-        "result_digest": "42ab47f6777d0d20f14f2a2b7558fe1487a54fb8a4cdabbb96f56b2095d811bf"
+        "result_digest": "bb182e6df210ca3c21e03a6838cf36a8806365aaf9ed71e01e1116c869a00eac"
       }
     ],
     "different_pid": true,
@@ -58,7 +163,7 @@
       "skill": "ConfigEvidenceAudit",
       "capability": "evidence",
       "status": "COMPLETED",
-      "created_revision": 14,
+      "created_revision": 15,
       "result": {
         "finding": "new evidence accepted and audited",
         "kind": "configuration",
@@ -71,42 +176,42 @@
     "events": [
       {
         "sequence": 4,
-        "event_id": "task-completed-58900724e3e949ee",
+        "event_id": "task-completed-68fa9fe5512a475d",
         "event_type": "task_completed",
         "revision": 4,
         "task_id": "incident-pipeline",
         "worker": "chronosfix-incident-commander#01",
-        "timestamp": "2026-08-28T06:12:01.947952+00:00",
+        "timestamp": "2026-08-28T10:24:12.685107+00:00",
         "payload": {
           "attempt": 1,
-          "duration_ms": 1706.082,
-          "pid": 52624,
-          "result_digest": "60a0e9a14881c0a6026b67bbcbc26f3f9138c228c5ac70752dc19d1b262543d1"
-        }
-      },
-      {
-        "sequence": 12,
-        "event_id": "task-completed-c66c1bc565414b10",
-        "event_type": "task_completed",
-        "revision": 12,
-        "task_id": "live-timeout-58919f32",
-        "worker": "chronosfix-timeline-analyst#02",
-        "timestamp": "2026-08-28T06:12:04.184023+00:00",
-        "payload": {
-          "attempt": 2,
-          "duration_ms": 795.253,
-          "pid": 38844,
-          "result_digest": "42ab47f6777d0d20f14f2a2b7558fe1487a54fb8a4cdabbb96f56b2095d811bf"
+          "duration_ms": 1053.557,
+          "pid": 37116,
+          "result_digest": "8819a1ffdf6a07266ed7499c40151ddaf3ca4d846fe98f1ef77047b635a75a74"
         }
       },
       {
         "sequence": 13,
+        "event_id": "task-completed-05f6b5f0867747dc",
+        "event_type": "task_completed",
+        "revision": 13,
+        "task_id": "live-timeout-668d87bd",
+        "worker": "chronosfix-timeline-analyst#02",
+        "timestamp": "2026-08-28T10:24:14.551228+00:00",
+        "payload": {
+          "attempt": 2,
+          "duration_ms": 448.2,
+          "pid": 6648,
+          "result_digest": "bb182e6df210ca3c21e03a6838cf36a8806365aaf9ed71e01e1116c869a00eac"
+        }
+      },
+      {
+        "sequence": 14,
         "event_id": "acceptance-live-evidence-001",
         "event_type": "evidence_observed",
-        "revision": 13,
+        "revision": 14,
         "task_id": null,
         "worker": null,
-        "timestamp": "2026-08-28T06:12:04.197193+00:00",
+        "timestamp": "2026-08-28T10:24:14.562554+00:00",
         "payload": {
           "digest": "3c11e4a79bdb0d8bc9da587739011a3c7549fca0b8d46970750c1d8fe30ab3cb",
           "kind": "configuration",
@@ -114,42 +219,96 @@
         }
       },
       {
-        "sequence": 14,
-        "event_id": "approval-invalidated-54699e9b94f642e4",
+        "sequence": 15,
+        "event_id": "approval-invalidated-8d9d6155881940e6",
         "event_type": "approval_invalidated",
-        "revision": 14,
+        "revision": 15,
         "task_id": "risk-gate",
         "worker": "chronosfix-release-auditor#01",
-        "timestamp": "2026-08-28T06:12:04.205526+00:00",
+        "timestamp": "2026-08-28T10:24:14.570060+00:00",
         "payload": {
-          "current_revision": 13,
+          "current_revision": 14,
           "source_event_id": "acceptance-live-evidence-001",
           "stale_approvals": 1
         }
       },
       {
-        "sequence": 17,
-        "event_id": "task-completed-91746c7cbb894016",
+        "sequence": 18,
+        "event_id": "task-completed-da83e83310414b2f",
         "event_type": "task_completed",
-        "revision": 17,
+        "revision": 18,
         "task_id": "dynamic-evidence-audit-ence-001",
         "worker": "chronosfix-timeline-analyst#01",
-        "timestamp": "2026-08-28T06:12:05.554468+00:00",
+        "timestamp": "2026-08-28T10:24:15.889475+00:00",
         "payload": {
           "attempt": 1,
-          "duration_ms": 1321.858,
-          "pid": 26556,
+          "duration_ms": 1293.47,
+          "pid": 47732,
           "result_digest": "c00c8bdfc131139b67a68808ac002a2c2262d4ab436b6560265217e15be9410c"
         }
       }
     ]
   },
   "badcase_refusal": {
-    "run_id": "acfx-local-20260828T061205-94812d1c47",
+    "run_id": "acfx-local-20260828T102415-d82b3da017",
     "status": "ABSTAINED",
     "release_decision": "blocked-insufficient-evidence",
     "registered_tasks": [
       "counterfactual-evaluation"
-    ]
+    ],
+    "agent_recommendation": {
+      "schema": "chronosfix.agent-recommendation/v1",
+      "decision_id": "5d4316a4a53f5a4f",
+      "planner": "chronosfix-manager",
+      "planner_mode": "evidence-driven-deterministic",
+      "official_agentteams_executed": false,
+      "objective": "judge-and-compose",
+      "strategy": "证据不足时缩短队列并拒答",
+      "confidence": 0.62,
+      "observed_signals": [
+        "configuration",
+        "incident"
+      ],
+      "rationale": "Agent 判断当前证据无法安全支持唯一根因，因此只组合上下文、证据和假设验证角色；不生成补丁，不进入 RiskGate。",
+      "stop_before": "PatchTournament / RiskGate",
+      "free_combination": true,
+      "composition": [
+        {
+          "order": 1,
+          "agent": "incident-commander",
+          "worker": "chronosfix-incident-commander#01",
+          "role": "事故指挥",
+          "skill": "EvidenceFusion",
+          "capability": "incident-control",
+          "reason": "先建立共享事故上下文，再决定后续是否需要更多角色。",
+          "depends_on": []
+        },
+        {
+          "order": 2,
+          "agent": "timeline-analyst",
+          "worker": "chronosfix-timeline-analyst#01",
+          "role": "证据时间线",
+          "skill": "ChangeTimeline",
+          "capability": "evidence",
+          "reason": "读取当前时间线与新增证据，补齐可验证的输入边界。",
+          "depends_on": [
+            "incident-commander"
+          ]
+        },
+        {
+          "order": 3,
+          "agent": "hypothesis-scientist",
+          "worker": "chronosfix-hypothesis-scientist#01",
+          "role": "假设科学家",
+          "skill": "CounterfactualReplay",
+          "capability": "hypothesis",
+          "reason": "当前存在可检验假设，先用反事实结果判断是否可唯一归因。",
+          "depends_on": [
+            "timeline-analyst"
+          ]
+        }
+      ],
+      "boundary_note": "本地 Manager 依据证据生成可回放组合；不冒充官方 AgentTeams Controller 推理轨迹。"
+    }
   }
 }

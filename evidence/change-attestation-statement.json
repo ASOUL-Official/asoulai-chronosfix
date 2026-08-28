@@ -4,22 +4,22 @@
     {
       "name": "patch-sandbox-run.json",
       "digest": {
-        "sha256": "ce55c573ca18eef93a6137c64d10438715512e1b9f3eb572a91d5426e0c40331"
+        "sha256": "0e1f90b142a8412ca9ccbed9842f8da67b1f11cb440efdfbfede52cc9dbe835a"
       },
-      "bytes": 9321
+      "bytes": 9327
     },
     {
       "name": "local-controller-evidence.json",
       "digest": {
-        "sha256": "57bccef2507aed3a8d3203531866a1ba37d9ee9d477e328e00d9b87163c2cab8"
+        "sha256": "f129c14df88c1f4e304be21303048b2391ac01ff095240d7fba0449772a696fe"
       },
-      "bytes": 5370
+      "bytes": 11434
     }
   ],
   "predicateType": "https://asoul.ai/chronosfix/ProofCarryingChange/v1",
   "predicate": {
-    "generatedAt": "2026-08-28T09:14:44.020968+00:00",
-    "sourceCommit": "c8b9d263d561e4e81aa0ad78af4c8813d4dc2278",
+    "generatedAt": "2026-08-28T10:26:03.266300+00:00",
+    "sourceCommit": "cd43a4f43e5a5ed8e4082d37b108adff9ba76bee",
     "changeClass": "causal-software-repair",
     "riskGate": "evidence-and-human-approval-required",
     "verification": {},

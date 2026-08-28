@@ -1,64 +1,64 @@
 {
   "schema": "chronosfix.release-manifest/v1",
-  "release_id": "acfx-c8b9d263d561",
-  "generated_at": "2026-08-28T09:15:37.331047+00:00",
-  "source_commit": "c8b9d263d561e4e81aa0ad78af4c8813d4dc2278",
-  "source_fingerprint": "ecda4d2a6a806b3751e5760097497a7a6ccedc9ee243909405daf72c2495e7fb",
+  "release_id": "acfx-cd43a4f43e5a",
+  "generated_at": "2026-08-28T10:26:17.320643+00:00",
+  "source_commit": "cd43a4f43e5a5ed8e4082d37b108adff9ba76bee",
+  "source_fingerprint": "7a57fd91da44b8103f5f905710d32b268a8ffa6ee527932d4df352316fd1c0d3",
   "source_commit_semantics": "Evidence and the online Demo are tied to this reproducible source anchor commit plus the working-tree source fingerprint; a later artifact commit only packages these outputs.",
   "artifacts": {
     "repair-cockpit/data/demo-data.json": {
-      "bytes": 1272038,
-      "sha256": "3db16ea7376c1cf20a49fdf4b8ee40ebd8e77e383f4408d35ba7987650af9f32",
+      "bytes": 1314576,
+      "sha256": "adcd7d05ee9aabc3f21df76faf4239e135127c8d00beef44a31cea58d2d92bbf",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 1305458
+      "materialized_bytes": 1349099
     },
     "evidence/trace.jsonl": {
-      "bytes": 29287,
-      "sha256": "d4e4e6716c831f4e7d07454c072992a8614ed5a75b2f476943d81b3971fbe74c",
+      "bytes": 29285,
+      "sha256": "75235a7cacded34d534fe253a037eacf061117a66a53e7e4f8c6a66f7eb23296",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 29305
+      "materialized_bytes": 29303
     },
     "evidence/run-log.jsonl": {
-      "bytes": 8352,
-      "sha256": "103ade80b77efa0ded6493018c5559726a338021f65f61bcbf79a8b94c5ef3aa",
+      "bytes": 8353,
+      "sha256": "8674d5404f7cc47495b78f4fa8dd84e92444ab882dcfb7d413a4bbdfe4fa2b42",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 8370
+      "materialized_bytes": 8371
     },
     "evidence/run-manifest.json": {
-      "bytes": 4778,
-      "sha256": "a2999927f658a50e52938b494aa87ef4da779dc1093cfd4cb6531104df2c0c1c",
+      "bytes": 4734,
+      "sha256": "b76b1658705d0da0b9a9c056418eba41efeaec2e19c90c490a95febb914b3ddc",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 4920
+      "materialized_bytes": 4876
     },
     "evidence/coordination.json": {
-      "bytes": 28678,
-      "sha256": "a976ec858368fa480181deec4278626dda8aafee568e21c7958ccc47726275cf",
+      "bytes": 28671,
+      "sha256": "45301c14ee2cf2d0d542c70481073ffaa727b34e2d314945873e35d1935b6fcb",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 29599
+      "materialized_bytes": 29592
     },
     "evidence/engineering-metrics.json": {
       "bytes": 3375,
-      "sha256": "bfa373b75d02eb3abe0ad0baa2e73b42c97fe0e53cba13abb7e25c88f9ca48d1",
+      "sha256": "a5f56cb7b7b55d1cf038a1e3b23b8349d7f792f2ed92bfdb79642d556050c230",
       "identity_mode": "canonical-lf-text-or-raw-binary",
       "materialized_bytes": 3487
     },
     "evidence/proof-bundle.json": {
-      "bytes": 53466,
-      "sha256": "2fcfb3890d7f7f017b7956fb62b37b6f69cc4d19a3acbbee95e7800be4a4db56",
+      "bytes": 53415,
+      "sha256": "c1682e22439baa89c2374d251b5b8f3fcd94223a1d7abb7a481e8aef1ccab0d9",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 55202
+      "materialized_bytes": 55151
     },
     "evidence/agentteams-run.json": {
-      "bytes": 7616,
-      "sha256": "653d56667ec7d3a57b79447be7442747a5ef3b7fc3655278e92dc3605a2f37cb",
+      "bytes": 7572,
+      "sha256": "b454fd2b4ebe43844d56707c2bb40e04f33be6e2c74f18fa9e7db9ce97d0d8ad",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 7921
+      "materialized_bytes": 7877
     },
     "evidence/local-controller-evidence.json": {
-      "bytes": 5215,
-      "sha256": "5c9d2768db8913e99823f4ba3ee76f8660cd7920dbdb3af6438782bed37a6dc7",
+      "bytes": 11120,
+      "sha256": "a7daa922c30529dafa88000e4493f68618b0c1cdfdaa64230b0107e434426bc1",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 5370
+      "materialized_bytes": 11434
     },
     "evidence/local-infra-evidence.json": {
       "bytes": 20069,
@@ -67,16 +67,16 @@
       "materialized_bytes": 20656
     },
     "evidence/patch-sandbox-run.json": {
-      "bytes": 9009,
-      "sha256": "41541ec58babfb989676a5474c2e472d4f42f6dae858aa09d5f90b5ed0893624",
+      "bytes": 9015,
+      "sha256": "9064197ae4c937849232440050ec20fd196e131bf54a07cb405a30fb6f851d4f",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 9321
+      "materialized_bytes": 9327
     },
     "evidence/change-attestation-verification.json": {
-      "bytes": 4213,
-      "sha256": "bdfd99e87e80c0d37e42e61aec98b9ac2679a5f0da2a1a64731da66326463c8d",
+      "bytes": 4215,
+      "sha256": "e9dfc27a9b8029f2ef97a20a2b00e3f878e8cf30efb5cbcf772056f6ad4c4b23",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 4307
+      "materialized_bytes": 4309
     },
     "evidence/public-incident-validation.json": {
       "bytes": 424,
@@ -98,33 +98,33 @@
     },
     "evidence/evaluation-report.md": {
       "bytes": 2100,
-      "sha256": "a4dfe8eb25f49ca5e958d4e13ad00af0fedd0c1253b2288aa5370c7e0022e4ea",
+      "sha256": "bd8933caa5cece63ba4cbae2ccbc8d09a65bfb132952c4421ca45dfbd5901f41",
       "identity_mode": "canonical-lf-text-or-raw-binary",
       "materialized_bytes": 2139
     },
     "submission/ChronosFix_复赛方案.pptx": {
-      "bytes": 106682,
-      "sha256": "12d50184d8331fe1c710c904a744a2dc6d7ccc0d62f2ceae699599c1664755f1",
+      "bytes": 106657,
+      "sha256": "a2a2a33f5ebb9b4726c2c74c7cc9f75c420ab6b44d796171c8b945d29005e4b1",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 106682
+      "materialized_bytes": 106657
     },
     "submission/ChronosFix_复赛方案.pdf": {
-      "bytes": 720454,
-      "sha256": "688c808c1e101dd94eee459ef0ec2acdb9dbcd79a4c873f5d890bcb5e78319ce",
+      "bytes": 719965,
+      "sha256": "6a4e352164c259477d5c5eefe53835eaaebaa9b3f5d72dd023b141caae764759",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 720454
+      "materialized_bytes": 719965
     },
     "submission/ChronosFix_90秒答辩版.pptx": {
-      "bytes": 38847,
-      "sha256": "3395d9a9b4198fcd96443bd82f36119926e07119fe16f4b1c3001d5c0fae6e3b",
+      "bytes": 38866,
+      "sha256": "77fe9351ca3bc24684c3b0ad04c14e851dde5bebf6e70f6c52ebb8827d1460cc",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 38847
+      "materialized_bytes": 38866
     },
     "submission/ChronosFix_90秒答辩版.pdf": {
-      "bytes": 432973,
-      "sha256": "80d8e4ee7592ac2490fe9e9c9d84a601348b5aa7473d4bc2c5ee58f741c85581",
+      "bytes": 432422,
+      "sha256": "77a6ee54f5f4a53a25cf70c970bf3418ff5536705e5be0d596e349416f941048",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 432973
+      "materialized_bytes": 432422
     }
   },
   "counts": {
@@ -133,7 +133,7 @@
     "evidence_passport_claims": 14,
     "trace_spans": 18,
     "agentteams_resources": 11,
-    "unit_and_contract_tests": 54
+    "unit_and_contract_tests": 57
   },
   "truth_boundary": {
     "agentteams_controller_executed": false,
