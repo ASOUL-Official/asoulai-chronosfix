@@ -3,7 +3,7 @@
   "team": "AsoulAI",
   "work": "ChronosFix",
   "direction": "新智基座方向三：软件研发全流程协同",
-  "file_count": 181,
+  "file_count": 184,
   "files": [
     {
       "path": ".gitattributes",
@@ -307,13 +307,28 @@
     },
     {
       "path": "evidence/agentteams-run.json",
-      "size": 7875,
-      "sha256": "3321a109a8501b9b552a6e2debcbfe61f9ce301bdddeb6628e6a06483dce383f"
+      "size": 7896,
+      "sha256": "6b1417b6fc90d518762b33e5fee0afb083ed5a04f859f6744d9973e57943f665"
+    },
+    {
+      "path": "evidence/change-attestation-public-key.json",
+      "size": 180,
+      "sha256": "420a6512dbd5ff73dbc09a9eebe3b7461f22c6c46f7d227ae2034687850ed1a0"
+    },
+    {
+      "path": "evidence/change-attestation-statement.json",
+      "size": 1071,
+      "sha256": "aa60a5bdd2938513ece79c738fb2a8169a7c0e93d07dd6632a97601f57e665e5"
     },
     {
       "path": "evidence/change-attestation-verification.json",
       "size": 4307,
-      "sha256": "860c324b5006132274f21914b21a3d5c6190515c42477992028ace876b346640"
+      "sha256": "59a7e620f0c5c39c6b9a3f3f31267a4d18718a2e342c903f7b4fdd6207742801"
+    },
+    {
+      "path": "evidence/change-attestation.dsse.json",
+      "size": 1421,
+      "sha256": "3eb76339f8c31ba1357f415c7386579b28d9624e9b86f0cb5864aefd8f6eaaad"
     },
     {
       "path": "evidence/cloud-skill-sls-dry-run.json",
@@ -322,13 +337,13 @@
     },
     {
       "path": "evidence/coordination.json",
-      "size": 29024,
-      "sha256": "66b7106c45a2be6e4af974c915b653f35fc3e6880a1a5fb25918b5a7d779023b"
+      "size": 29598,
+      "sha256": "8e1466f0bb0ac074633763bcda135aa33274ac72e48894bdaf831c515d9dfc4e"
     },
     {
       "path": "evidence/engineering-metrics.json",
       "size": 3487,
-      "sha256": "673523f338fa673d880ffd4d27d9e38ef5f29249345d764777799a9e912a233e"
+      "sha256": "5bcd8bdde2e95ed03a9c0d04ee350a8ae97a050d566476b2ca1d5a336873f321"
     },
     {
       "path": "evidence/evaluation-corpus/evaluation-cases.csv",
@@ -348,12 +363,12 @@
     {
       "path": "evidence/evaluation-report.md",
       "size": 2139,
-      "sha256": "01fcbb0aadc08ac304133fb5c5b49cf0ec4e53841391a9c2928a8b7a23d8c958"
+      "sha256": "aad70d5c549053e055b62fa949110913333b9082fa2b5b9efe43ec145eda343d"
     },
     {
       "path": "evidence/github-issue.json",
       "size": 2561,
-      "sha256": "09886bde5b39d87eb6ccce7a2df1f80cd4170584ae414f99be9249b9d379bb99"
+      "sha256": "05f8a9cb1676edfb5694716dba6dbb725d05a2e91b6ce788829a15f6bc89ab7c"
     },
     {
       "path": "evidence/github-issue.md",
@@ -362,18 +377,18 @@
     },
     {
       "path": "evidence/github-pr-checks.json",
-      "size": 2379,
-      "sha256": "e02671c3b8b86a1614fd1e8f1eeec656f207acfb4fb2a3968ee3fd9b038cccbc"
+      "size": 2400,
+      "sha256": "214908249f80739852f8d5210b5b04fd4811e15d606855906c2386d1eff879f6"
     },
     {
       "path": "evidence/github-pr-diff.patch",
-      "size": 2474,
-      "sha256": "de7ebc640715594ca56c61d23bca0f913705e2b5e2a02cf018b92be5cbdbe9d4"
+      "size": 2492,
+      "sha256": "dd886352afbbdd2720b46262295801a7ab5654d74240292cf3cc78f2c5e5430a"
     },
     {
       "path": "evidence/github-pr.json",
-      "size": 8208,
-      "sha256": "32ee16ff7eb0025e329b709673f59e4d126c3012d519fcf5977bc4f674fe9878"
+      "size": 8229,
+      "sha256": "a98082680c0f9423bd8894b997a1800d48de50d19bac5c2921ecec79f747360f"
     },
     {
       "path": "evidence/github-pr.md",
@@ -382,8 +397,8 @@
     },
     {
       "path": "evidence/github-review-audit.jsonl",
-      "size": 3474,
-      "sha256": "7a01b338bbd12044ef3d4eed22eb950b97818cb1cebd82aecbc16cea08f81145"
+      "size": 3492,
+      "sha256": "9c5a390fa1393a8dc420f8251e61c212b9ead82c27f05ce3cf56a7646420212c"
     },
     {
       "path": "evidence/human-baseline-summary.json",
@@ -412,13 +427,13 @@
     },
     {
       "path": "evidence/proof-bundle.json",
-      "size": 54647,
-      "sha256": "85ad5631b38ede45e66f6801ba02d19390f3529501ff44026d5a839826875ae5"
+      "size": 55176,
+      "sha256": "c93d21682af4c2d5c5efb81513c2240d9b881f633334e502646d0e33a47e3b38"
     },
     {
       "path": "evidence/proof-report.md",
-      "size": 7372,
-      "sha256": "9eabe46d87f347afa2713b3de9d8c7b6f3cbc7bfe4a156b1f55841a366b003f9"
+      "size": 7375,
+      "sha256": "bc198f992e6e5dba408632bf141fddf674b88d7b69232698557499a88c1a3d7a"
     },
     {
       "path": "evidence/public-incident-validation.json",
@@ -427,23 +442,23 @@
     },
     {
       "path": "evidence/release-manifest.json",
-      "size": 6147,
-      "sha256": "e169463a65bf4632196246d6a914eb1f853c70265c81b0148092936cd4ebce59"
+      "size": 6144,
+      "sha256": "d46b613f965bc6289257b1298f313ecaf13fae6cdaa5cd21ed0533b6775e7817"
     },
     {
       "path": "evidence/run-log.jsonl",
       "size": 8370,
-      "sha256": "179b663bf3a95f47dd34ea2efaf3e6c7ec1386f83c11dc457f3210d2331979d1"
+      "sha256": "411edeaafc29bb88e91cd3d5a30be1f272fafa0297c7c01c0126a25c5724f61e"
     },
     {
       "path": "evidence/run-manifest.json",
-      "size": 4874,
-      "sha256": "5255bdfef6bfb22e9b5b33bd47b1eb1f6488e64bb356a7b6ef0a0b1112f2cbca"
+      "size": 4895,
+      "sha256": "bf17d91a6861e5dfa03eb2af7a02236feb021ba41381905486dce428b8af08da"
     },
     {
       "path": "evidence/trace.jsonl",
-      "size": 29302,
-      "sha256": "f5e05d49deea1676240d8e28270d5a856fc7e97591c18fac774a3b48d549f0aa"
+      "size": 29305,
+      "sha256": "f5539e4d96e6528b3851793d194e9a87bed31f4388d7404b0d0f702b71c3890f"
     },
     {
       "path": "public-incidents/cloudflare-2019-waf-regex/incident.json",
@@ -457,13 +472,13 @@
     },
     {
       "path": "repair-cockpit/README.md",
-      "size": 4124,
-      "sha256": "5d71028383b0ab3cc194636a8b16ce07bc517c6ab293abb66dc60c8cb08e4d13"
+      "size": 4165,
+      "sha256": "bcb23178d64b37befa28a421f8b31b2ac70e74de5cf11fed0604b4011f1a8d05"
     },
     {
       "path": "repair-cockpit/app.js",
-      "size": 45505,
-      "sha256": "321d6e6ce604a136e917b2174dc862fed2ed810ce2a74fcd512bedac226d6779"
+      "size": 45501,
+      "sha256": "7fa4bea37a6183d754aa9f96e14290a11397fb51da49c72a16fa85e063a97cd3"
     },
     {
       "path": "repair-cockpit/data/.gitkeep",
@@ -472,23 +487,23 @@
     },
     {
       "path": "repair-cockpit/data/demo-data.json",
-      "size": 1290560,
-      "sha256": "c1ad5619047ab18d50e40ba2d6b90f7f698088f8e6daf6385d8eb097c417998e"
+      "size": 1305461,
+      "sha256": "173dd25004d323a9a3ca4a55ee24332cf11c46e8a79b177930a05b6eb384e399"
     },
     {
       "path": "repair-cockpit/index.html",
-      "size": 6743,
-      "sha256": "350e05772c42a5763fb9ff1c8fd47facae1accd5ae5293e332f04d498354a264"
+      "size": 6811,
+      "sha256": "392bb9a3530cebd6fbbcbe265588ca2a295177a5c5d21bdbbded3faeaeb12f7d"
     },
     {
       "path": "repair-cockpit/scripts/build_demo_data.py",
-      "size": 9430,
-      "sha256": "f1374e689c65abad418b39289015b6a9f7d143c6bbe6e45ab6ef3263bd894367"
+      "size": 9679,
+      "sha256": "54814844a88af18cd8f266fe3619af37a80a33355aee9d009392ad6f28b0b257"
     },
     {
       "path": "repair-cockpit/styles.css",
-      "size": 31437,
-      "sha256": "992f81358d78c3e74b096c5740af4527433853e93ccb6eba2fcafeb604c9f2f4"
+      "size": 31682,
+      "sha256": "ac0b84955a63f32ff074f41f80895a83ecf0ae17bd0ac872c5e9bce505884415"
     },
     {
       "path": "scenarios/api-timeout-amplifier/scenario.json",
@@ -567,8 +582,8 @@
     },
     {
       "path": "scripts/build_release_manifest.py",
-      "size": 4957,
-      "sha256": "f9bf6b0d73894d6efd501ebdfef1437f4ffcc83aeaabbf1f37bae635637a0199"
+      "size": 5047,
+      "sha256": "4b0cb3c5a8830842e5551f821b3f11d9a7fbecbe146356005cac1325ff38d35c"
     },
     {
       "path": "scripts/build_submission_package.py",
@@ -907,11 +922,11 @@
     },
     {
       "path": "提交入口说明.md",
-      "size": 5683,
-      "sha256": "1d845882e1e055fb1217befbd1eba53a80c9a10be2047ee4d9fc76cb61068c46"
+      "size": 6689,
+      "sha256": "dec3eec3bb9a7d355f1fa802a3da75a7f6896159f1e7a189677c9df719054c7b"
     }
   ],
   "archive": "AsoulAI_ChronosFix_复赛提交包.zip",
-  "archive_size": 1641262,
-  "archive_sha256": "7336a756f68faee9f6c831393483bb2451a8e2c34bdda6151e65c2d6553da146"
+  "archive_size": 1645984,
+  "archive_sha256": "1f49300b0a2d5ad29a2ae495f39395ef01adc2ccf303f442d72485939a73d005"
 }

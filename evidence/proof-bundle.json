@@ -1,6 +1,6 @@
 {
   "schema_version": "chronosfix.proof-bundle/v1",
-  "run_id": "run-cd233db619aa4b7fa4f6248727b0f874",
+  "run_id": "run-f509492109e848089d1f0741cbe2ac77",
   "incident_id": "INC-2026-0816-001",
   "scenario_path": "scenarios/checkout-timeout/scenario.json",
   "title": "订单创建接口在午间流量下出现高失败率与长尾延迟",
@@ -640,8 +640,8 @@
     "missing_claims": [],
     "integrity": {
       "schema_version": "chronosfix.evidence-integrity/v1",
-      "run_id": "run-cd233db619aa4b7fa4f6248727b0f874",
-      "trace_id": "68e1ddebd0634d00ae98a2befb0ed02d",
+      "run_id": "run-f509492109e848089d1f0741cbe2ac77",
+      "trace_id": "d9d1549527d34b2094ceac8be14002f0",
       "scenario_sha256": "f287e45a9a2e5804892cbd402649aa1e0a1ae6a02bbd42fb72b717239e543867",
       "patch_changes_sha256": "58f3873074175c6dec959b17d7f8a93f6ab723e6c0574435a0bded0c18012d9b",
       "rollback_changes_sha256": "ac7b4fde845a552d4b2ecf3f91112c3187d0c036e78dd27b1355f495a77892ed",
@@ -760,15 +760,15 @@
       "rollback_verified": true,
       "required_checks_executed": true,
       "approval_status": "approved",
-      "approver": "AsoulAI-Release-Owner",
+      "approver": "AsoulAI Release Reviewer",
       "legacy_boolean_approval": true
     }
   },
   "approval_record": {
     "status": "approved",
-    "approver": "AsoulAI-Release-Owner",
-    "reason": "Finals-grade-acceptance",
-    "timestamp": "2026-08-27T09:36:17.488076+00:00",
+    "approver": "AsoulAI Release Reviewer",
+    "reason": "Online semifinal source-anchor refresh",
+    "timestamp": "2026-08-28T08:50:54.351030+00:00",
     "policy_version": "chronosfix-riskgate/v1",
     "is_human": true,
     "state_revision": 36,
@@ -861,96 +861,96 @@
       {
         "task_id": "timeline",
         "attempt": 1,
-        "worker": "timeline-analyst-01",
+        "worker": "chronosfix-timeline-analyst#01",
         "status": "FAILED",
         "idempotency_key": "6c6396fba3002343f31e199c2dadc353209988ee0d10afecbe35e5483ec2fbc9",
-        "started_at": "2026-08-27T09:36:17.482179+00:00",
-        "ended_at": "2026-08-27T09:36:17.482195+00:00",
-        "duration_ms": null,
+        "started_at": "2026-08-28T08:50:54.345056+00:00",
+        "ended_at": "2026-08-28T08:50:54.345070+00:00",
+        "duration_ms": 0.014,
         "error": "TimeoutError: injected worker timeout for timeline",
         "reassigned_from": null
       },
       {
         "task_id": "timeline",
         "attempt": 2,
-        "worker": "timeline-analyst-02",
+        "worker": "chronosfix-timeline-analyst#02",
         "status": "COMPLETED",
         "idempotency_key": "5b379e3d7fe94566207fc1cb40e291158aa30295590c69f0cbf8d01cd14de9f1",
-        "started_at": "2026-08-27T09:36:17.482224+00:00",
-        "ended_at": "2026-08-27T09:36:17.482236+00:00",
-        "duration_ms": null,
+        "started_at": "2026-08-28T08:50:54.345101+00:00",
+        "ended_at": "2026-08-28T08:50:54.345112+00:00",
+        "duration_ms": 0.01,
         "error": null,
-        "reassigned_from": "timeline-analyst-01"
+        "reassigned_from": "chronosfix-timeline-analyst#01"
       },
       {
         "task_id": "dynamic-config-audit",
         "attempt": 1,
-        "worker": "timeline-analyst-01",
+        "worker": "chronosfix-timeline-analyst#01",
         "status": "COMPLETED",
         "idempotency_key": "14677155045ca4960206a2b02d5b6f71591eb6bcf78870ca11003e43ba11392a",
-        "started_at": "2026-08-27T09:36:17.482364+00:00",
-        "ended_at": "2026-08-27T09:36:17.482371+00:00",
-        "duration_ms": null,
+        "started_at": "2026-08-28T08:50:54.345222+00:00",
+        "ended_at": "2026-08-28T08:50:54.345229+00:00",
+        "duration_ms": 0.007,
         "error": null,
         "reassigned_from": null
       },
       {
         "task_id": "baseline",
         "attempt": 1,
-        "worker": "universe-builder-01",
+        "worker": "chronosfix-universe-builder#01",
         "status": "COMPLETED",
         "idempotency_key": "a43dabe00190a030540992b336f8933e97173592c01862bf9ccc59a3272a194a",
-        "started_at": "2026-08-27T09:36:17.482396+00:00",
-        "ended_at": "2026-08-27T09:36:17.482411+00:00",
-        "duration_ms": null,
+        "started_at": "2026-08-28T08:50:54.345254+00:00",
+        "ended_at": "2026-08-28T08:50:54.345267+00:00",
+        "duration_ms": 0.013,
         "error": null,
         "reassigned_from": null
       },
       {
         "task_id": "hypotheses",
         "attempt": 1,
-        "worker": "hypothesis-scientist-01",
+        "worker": "chronosfix-hypothesis-scientist#01",
         "status": "COMPLETED",
         "idempotency_key": "0d06d0aef53063398647cb26616dd65fd066809e5865e4f60b08bdc63f541be5",
-        "started_at": "2026-08-27T09:36:17.482445+00:00",
-        "ended_at": "2026-08-27T09:36:17.482512+00:00",
-        "duration_ms": null,
+        "started_at": "2026-08-28T08:50:54.345299+00:00",
+        "ended_at": "2026-08-28T08:50:54.345413+00:00",
+        "duration_ms": 0.117,
         "error": null,
         "reassigned_from": null
       },
       {
         "task_id": "patch-tournament",
         "attempt": 1,
-        "worker": "adversarial-verifier-01",
+        "worker": "chronosfix-adversarial-verifier#01",
         "status": "FAILED",
         "idempotency_key": "9f7ffca99e3b8f63cb046a572c6e43daa6967bf308abe874684e138ed9658417",
-        "started_at": "2026-08-27T09:36:17.482567+00:00",
-        "ended_at": "2026-08-27T09:36:17.482574+00:00",
-        "duration_ms": null,
+        "started_at": "2026-08-28T08:50:54.345499+00:00",
+        "ended_at": "2026-08-28T08:50:54.345510+00:00",
+        "duration_ms": 0.017,
         "error": "TimeoutError: injected worker timeout for patch-tournament",
         "reassigned_from": null
       },
       {
         "task_id": "patch-tournament",
         "attempt": 2,
-        "worker": "adversarial-verifier-01",
+        "worker": "chronosfix-adversarial-verifier#02",
         "status": "COMPLETED",
         "idempotency_key": "1435fef806e01c7f0f82172978057f61a40f414eaa9f8ad108c1546fba8a548c",
-        "started_at": "2026-08-27T09:36:17.482591+00:00",
-        "ended_at": "2026-08-27T09:36:17.483061+00:00",
-        "duration_ms": null,
+        "started_at": "2026-08-28T08:50:54.345563+00:00",
+        "ended_at": "2026-08-28T08:50:54.346142+00:00",
+        "duration_ms": 0.582,
         "error": null,
-        "reassigned_from": "adversarial-verifier-01"
+        "reassigned_from": "chronosfix-adversarial-verifier#01"
       },
       {
         "task_id": "risk-gate",
         "attempt": 1,
-        "worker": "release-auditor-01",
+        "worker": "chronosfix-release-auditor#01",
         "status": "COMPLETED",
         "idempotency_key": "180b4d1ce7bcca50a89017fb6930a23be458d84a91e6fc0b33f600b2c5d29126",
-        "started_at": "2026-08-27T09:36:17.483396+00:00",
-        "ended_at": "2026-08-27T09:36:17.483403+00:00",
-        "duration_ms": null,
+        "started_at": "2026-08-28T08:50:54.346491+00:00",
+        "ended_at": "2026-08-28T08:50:54.346497+00:00",
+        "duration_ms": 0.006,
         "error": null,
         "reassigned_from": null
       }
@@ -960,7 +960,7 @@
         "sequence": 1,
         "event_id": "evt-0001",
         "event_type": "task_registered",
-        "timestamp": "2026-08-27T09:36:17.482069+00:00",
+        "timestamp": "2026-08-28T08:50:54.344945+00:00",
         "revision": 1,
         "task_id": "timeline",
         "worker": null,
@@ -977,7 +977,7 @@
         "sequence": 2,
         "event_id": "evt-0002",
         "event_type": "task_registered",
-        "timestamp": "2026-08-27T09:36:17.482084+00:00",
+        "timestamp": "2026-08-28T08:50:54.344957+00:00",
         "revision": 2,
         "task_id": "baseline",
         "worker": null,
@@ -996,7 +996,7 @@
         "sequence": 3,
         "event_id": "evt-0003",
         "event_type": "task_registered",
-        "timestamp": "2026-08-27T09:36:17.482091+00:00",
+        "timestamp": "2026-08-28T08:50:54.344964+00:00",
         "revision": 3,
         "task_id": "hypotheses",
         "worker": null,
@@ -1015,7 +1015,7 @@
         "sequence": 4,
         "event_id": "evt-0004",
         "event_type": "task_registered",
-        "timestamp": "2026-08-27T09:36:17.482097+00:00",
+        "timestamp": "2026-08-28T08:50:54.344969+00:00",
         "revision": 4,
         "task_id": "patch-tournament",
         "worker": null,
@@ -1034,7 +1034,7 @@
         "sequence": 5,
         "event_id": "evt-0005",
         "event_type": "task_registered",
-        "timestamp": "2026-08-27T09:36:17.482102+00:00",
+        "timestamp": "2026-08-28T08:50:54.344974+00:00",
         "revision": 5,
         "task_id": "risk-gate",
         "worker": null,
@@ -1053,10 +1053,10 @@
         "sequence": 6,
         "event_id": "evt-0006",
         "event_type": "task_dispatched",
-        "timestamp": "2026-08-27T09:36:17.482187+00:00",
+        "timestamp": "2026-08-28T08:50:54.345065+00:00",
         "revision": 6,
         "task_id": "timeline",
-        "worker": "timeline-analyst-01",
+        "worker": "chronosfix-timeline-analyst#01",
         "payload": {
           "attempt": 1,
           "lease_ms": 5000,
@@ -1069,10 +1069,10 @@
         "sequence": 7,
         "event_id": "evt-0007",
         "event_type": "task_failed",
-        "timestamp": "2026-08-27T09:36:17.482200+00:00",
+        "timestamp": "2026-08-28T08:50:54.345076+00:00",
         "revision": 7,
         "task_id": "timeline",
-        "worker": "timeline-analyst-01",
+        "worker": "chronosfix-timeline-analyst#01",
         "payload": {
           "attempt": 1,
           "error": "TimeoutError: injected worker timeout for timeline"
@@ -1083,12 +1083,12 @@
         "sequence": 8,
         "event_id": "evt-0008",
         "event_type": "task_reassigned",
-        "timestamp": "2026-08-27T09:36:17.482206+00:00",
+        "timestamp": "2026-08-28T08:50:54.345082+00:00",
         "revision": 8,
         "task_id": "timeline",
-        "worker": "timeline-analyst-02",
+        "worker": "chronosfix-timeline-analyst#02",
         "payload": {
-          "failed_worker": "timeline-analyst-01",
+          "failed_worker": "chronosfix-timeline-analyst#01",
           "next_attempt": 2
         },
         "deduplicated": false
@@ -1097,15 +1097,15 @@
         "sequence": 9,
         "event_id": "evt-0009",
         "event_type": "task_dispatched",
-        "timestamp": "2026-08-27T09:36:17.482228+00:00",
+        "timestamp": "2026-08-28T08:50:54.345106+00:00",
         "revision": 9,
         "task_id": "timeline",
-        "worker": "timeline-analyst-02",
+        "worker": "chronosfix-timeline-analyst#02",
         "payload": {
           "attempt": 2,
           "lease_ms": 5000,
           "idempotency_key": "5b379e3d7fe94566207fc1cb40e291158aa30295590c69f0cbf8d01cd14de9f1",
-          "reassigned_from": "timeline-analyst-01"
+          "reassigned_from": "chronosfix-timeline-analyst#01"
         },
         "deduplicated": false
       },
@@ -1113,7 +1113,7 @@
         "sequence": 10,
         "event_id": "evt-0010",
         "event_type": "state_updated",
-        "timestamp": "2026-08-27T09:36:17.482314+00:00",
+        "timestamp": "2026-08-28T08:50:54.345183+00:00",
         "revision": 10,
         "task_id": null,
         "worker": null,
@@ -1121,11 +1121,11 @@
           "key": "timeline",
           "value": {
             "status": "COMPLETED",
-            "worker": "timeline-analyst-02",
+            "worker": "chronosfix-timeline-analyst#02",
             "attempt": 2,
             "result_digest": "5f9d5b5a10d7cff11bfa45f92897e4ebbc4728cf05cac4faefd3f9c37ef20fbe"
           },
-          "source": "timeline-analyst-02"
+          "source": "chronosfix-timeline-analyst#02"
         },
         "deduplicated": false
       },
@@ -1133,10 +1133,10 @@
         "sequence": 11,
         "event_id": "evt-0011",
         "event_type": "task_completed",
-        "timestamp": "2026-08-27T09:36:17.482318+00:00",
+        "timestamp": "2026-08-28T08:50:54.345187+00:00",
         "revision": 11,
         "task_id": "timeline",
-        "worker": "timeline-analyst-02",
+        "worker": "chronosfix-timeline-analyst#02",
         "payload": {
           "attempt": 2,
           "idempotency_key": "5b379e3d7fe94566207fc1cb40e291158aa30295590c69f0cbf8d01cd14de9f1",
@@ -1148,7 +1148,7 @@
         "sequence": 12,
         "event_id": "evidence-config-pool",
         "event_type": "evidence_observed",
-        "timestamp": "2026-08-27T09:36:17.482323+00:00",
+        "timestamp": "2026-08-28T08:50:54.345192+00:00",
         "revision": 12,
         "task_id": null,
         "worker": null,
@@ -1163,7 +1163,7 @@
         "sequence": 13,
         "event_id": "dedup-evidence-config-pool",
         "event_type": "evidence_deduplicated",
-        "timestamp": "2026-08-27T09:36:17.482326+00:00",
+        "timestamp": "2026-08-28T08:50:54.345195+00:00",
         "revision": 12,
         "task_id": null,
         "worker": null,
@@ -1176,7 +1176,7 @@
         "sequence": 14,
         "event_id": "evt-0014",
         "event_type": "task_registered",
-        "timestamp": "2026-08-27T09:36:17.482332+00:00",
+        "timestamp": "2026-08-28T08:50:54.345201+00:00",
         "revision": 13,
         "task_id": "dynamic-config-audit",
         "worker": null,
@@ -1195,10 +1195,10 @@
         "sequence": 15,
         "event_id": "evt-0015",
         "event_type": "task_dispatched",
-        "timestamp": "2026-08-27T09:36:17.482368+00:00",
+        "timestamp": "2026-08-28T08:50:54.345225+00:00",
         "revision": 14,
         "task_id": "dynamic-config-audit",
-        "worker": "timeline-analyst-01",
+        "worker": "chronosfix-timeline-analyst#01",
         "payload": {
           "attempt": 1,
           "lease_ms": 5000,
@@ -1211,7 +1211,7 @@
         "sequence": 16,
         "event_id": "evt-0016",
         "event_type": "state_updated",
-        "timestamp": "2026-08-27T09:36:17.482383+00:00",
+        "timestamp": "2026-08-28T08:50:54.345240+00:00",
         "revision": 15,
         "task_id": null,
         "worker": null,
@@ -1219,11 +1219,11 @@
           "key": "dynamic-config-audit",
           "value": {
             "status": "COMPLETED",
-            "worker": "timeline-analyst-01",
+            "worker": "chronosfix-timeline-analyst#01",
             "attempt": 1,
             "result_digest": "6196c4664cf49419b7e55ed5fe9921f87c1b70ca6160241e7c22194b8d660c3b"
           },
-          "source": "timeline-analyst-01"
+          "source": "chronosfix-timeline-analyst#01"
         },
         "deduplicated": false
       },
@@ -1231,10 +1231,10 @@
         "sequence": 17,
         "event_id": "evt-0017",
         "event_type": "task_completed",
-        "timestamp": "2026-08-27T09:36:17.482385+00:00",
+        "timestamp": "2026-08-28T08:50:54.345243+00:00",
         "revision": 16,
         "task_id": "dynamic-config-audit",
-        "worker": "timeline-analyst-01",
+        "worker": "chronosfix-timeline-analyst#01",
         "payload": {
           "attempt": 1,
           "idempotency_key": "14677155045ca4960206a2b02d5b6f71591eb6bcf78870ca11003e43ba11392a",
@@ -1246,10 +1246,10 @@
         "sequence": 18,
         "event_id": "evt-0018",
         "event_type": "task_dispatched",
-        "timestamp": "2026-08-27T09:36:17.482399+00:00",
+        "timestamp": "2026-08-28T08:50:54.345257+00:00",
         "revision": 17,
         "task_id": "baseline",
-        "worker": "universe-builder-01",
+        "worker": "chronosfix-universe-builder#01",
         "payload": {
           "attempt": 1,
           "lease_ms": 5000,
@@ -1262,7 +1262,7 @@
         "sequence": 19,
         "event_id": "evt-0019",
         "event_type": "state_updated",
-        "timestamp": "2026-08-27T09:36:17.482427+00:00",
+        "timestamp": "2026-08-28T08:50:54.345282+00:00",
         "revision": 18,
         "task_id": null,
         "worker": null,
@@ -1270,11 +1270,11 @@
           "key": "baseline",
           "value": {
             "status": "COMPLETED",
-            "worker": "universe-builder-01",
+            "worker": "chronosfix-universe-builder#01",
             "attempt": 1,
             "result_digest": "dae35d3d4b3b2bdef9ff28336c2e2fd2ccfa0da416004f567d08dd5abf2cb522"
           },
-          "source": "universe-builder-01"
+          "source": "chronosfix-universe-builder#01"
         },
         "deduplicated": false
       },
@@ -1282,10 +1282,10 @@
         "sequence": 20,
         "event_id": "evt-0020",
         "event_type": "task_completed",
-        "timestamp": "2026-08-27T09:36:17.482430+00:00",
+        "timestamp": "2026-08-28T08:50:54.345285+00:00",
         "revision": 19,
         "task_id": "baseline",
-        "worker": "universe-builder-01",
+        "worker": "chronosfix-universe-builder#01",
         "payload": {
           "attempt": 1,
           "idempotency_key": "a43dabe00190a030540992b336f8933e97173592c01862bf9ccc59a3272a194a",
@@ -1297,10 +1297,10 @@
         "sequence": 21,
         "event_id": "evt-0021",
         "event_type": "task_dispatched",
-        "timestamp": "2026-08-27T09:36:17.482448+00:00",
+        "timestamp": "2026-08-28T08:50:54.345302+00:00",
         "revision": 20,
         "task_id": "hypotheses",
-        "worker": "hypothesis-scientist-01",
+        "worker": "chronosfix-hypothesis-scientist#01",
         "payload": {
           "attempt": 1,
           "lease_ms": 5000,
@@ -1313,7 +1313,7 @@
         "sequence": 22,
         "event_id": "evt-0022",
         "event_type": "state_updated",
-        "timestamp": "2026-08-27T09:36:17.482549+00:00",
+        "timestamp": "2026-08-28T08:50:54.345471+00:00",
         "revision": 21,
         "task_id": null,
         "worker": null,
@@ -1321,11 +1321,11 @@
           "key": "hypotheses",
           "value": {
             "status": "COMPLETED",
-            "worker": "hypothesis-scientist-01",
+            "worker": "chronosfix-hypothesis-scientist#01",
             "attempt": 1,
             "result_digest": "6d8d15480432abb47ddb0362a35400c279cd5f6fb9d15f2cce1e88a126511611"
           },
-          "source": "hypothesis-scientist-01"
+          "source": "chronosfix-hypothesis-scientist#01"
         },
         "deduplicated": false
       },
@@ -1333,10 +1333,10 @@
         "sequence": 23,
         "event_id": "evt-0023",
         "event_type": "task_completed",
-        "timestamp": "2026-08-27T09:36:17.482553+00:00",
+        "timestamp": "2026-08-28T08:50:54.345476+00:00",
         "revision": 22,
         "task_id": "hypotheses",
-        "worker": "hypothesis-scientist-01",
+        "worker": "chronosfix-hypothesis-scientist#01",
         "payload": {
           "attempt": 1,
           "idempotency_key": "0d06d0aef53063398647cb26616dd65fd066809e5865e4f60b08bdc63f541be5",
@@ -1348,10 +1348,10 @@
         "sequence": 24,
         "event_id": "evt-0024",
         "event_type": "task_dispatched",
-        "timestamp": "2026-08-27T09:36:17.482570+00:00",
+        "timestamp": "2026-08-28T08:50:54.345505+00:00",
         "revision": 23,
         "task_id": "patch-tournament",
-        "worker": "adversarial-verifier-01",
+        "worker": "chronosfix-adversarial-verifier#01",
         "payload": {
           "attempt": 1,
           "lease_ms": 5000,
@@ -1364,10 +1364,10 @@
         "sequence": 25,
         "event_id": "evt-0025",
         "event_type": "task_failed",
-        "timestamp": "2026-08-27T09:36:17.482577+00:00",
+        "timestamp": "2026-08-28T08:50:54.345524+00:00",
         "revision": 24,
         "task_id": "patch-tournament",
-        "worker": "adversarial-verifier-01",
+        "worker": "chronosfix-adversarial-verifier#01",
         "payload": {
           "attempt": 1,
           "error": "TimeoutError: injected worker timeout for patch-tournament"
@@ -1378,12 +1378,12 @@
         "sequence": 26,
         "event_id": "evt-0026",
         "event_type": "task_reassigned",
-        "timestamp": "2026-08-27T09:36:17.482582+00:00",
+        "timestamp": "2026-08-28T08:50:54.345530+00:00",
         "revision": 25,
         "task_id": "patch-tournament",
-        "worker": "adversarial-verifier-01",
+        "worker": "chronosfix-adversarial-verifier#02",
         "payload": {
-          "failed_worker": "adversarial-verifier-01",
+          "failed_worker": "chronosfix-adversarial-verifier#01",
           "next_attempt": 2
         },
         "deduplicated": false
@@ -1392,15 +1392,15 @@
         "sequence": 27,
         "event_id": "evt-0027",
         "event_type": "task_dispatched",
-        "timestamp": "2026-08-27T09:36:17.482594+00:00",
+        "timestamp": "2026-08-28T08:50:54.345568+00:00",
         "revision": 26,
         "task_id": "patch-tournament",
-        "worker": "adversarial-verifier-01",
+        "worker": "chronosfix-adversarial-verifier#02",
         "payload": {
           "attempt": 2,
           "lease_ms": 5000,
           "idempotency_key": "1435fef806e01c7f0f82172978057f61a40f414eaa9f8ad108c1546fba8a548c",
-          "reassigned_from": "adversarial-verifier-01"
+          "reassigned_from": "chronosfix-adversarial-verifier#01"
         },
         "deduplicated": false
       },
@@ -1408,7 +1408,7 @@
         "sequence": 28,
         "event_id": "evt-0028",
         "event_type": "state_updated",
-        "timestamp": "2026-08-27T09:36:17.483358+00:00",
+        "timestamp": "2026-08-28T08:50:54.346447+00:00",
         "revision": 27,
         "task_id": null,
         "worker": null,
@@ -1416,11 +1416,11 @@
           "key": "patch-tournament",
           "value": {
             "status": "COMPLETED",
-            "worker": "adversarial-verifier-01",
+            "worker": "chronosfix-adversarial-verifier#02",
             "attempt": 2,
             "result_digest": "a02db2cf040a2831d0bd024b5140d03afd3cbf9e65f439d65090b8d53bfe7fd8"
           },
-          "source": "adversarial-verifier-01"
+          "source": "chronosfix-adversarial-verifier#02"
         },
         "deduplicated": false
       },
@@ -1428,10 +1428,10 @@
         "sequence": 29,
         "event_id": "evt-0029",
         "event_type": "task_completed",
-        "timestamp": "2026-08-27T09:36:17.483363+00:00",
+        "timestamp": "2026-08-28T08:50:54.346452+00:00",
         "revision": 28,
         "task_id": "patch-tournament",
-        "worker": "adversarial-verifier-01",
+        "worker": "chronosfix-adversarial-verifier#02",
         "payload": {
           "attempt": 2,
           "idempotency_key": "1435fef806e01c7f0f82172978057f61a40f414eaa9f8ad108c1546fba8a548c",
@@ -1443,13 +1443,13 @@
         "sequence": 30,
         "event_id": "evt-0030",
         "event_type": "human_pause",
-        "timestamp": "2026-08-27T09:36:17.483368+00:00",
+        "timestamp": "2026-08-28T08:50:54.346457+00:00",
         "revision": 29,
         "task_id": null,
         "worker": null,
         "payload": {
           "reason": "medium-risk patch requires named release owner",
-          "checkpoint_revision": 28
+          "checkpoint_revision": 29
         },
         "deduplicated": false
       },
@@ -1457,7 +1457,7 @@
         "sequence": 31,
         "event_id": "evidence-post-patch-slo",
         "event_type": "evidence_observed",
-        "timestamp": "2026-08-27T09:36:17.483371+00:00",
+        "timestamp": "2026-08-28T08:50:54.346461+00:00",
         "revision": 30,
         "task_id": null,
         "worker": null,
@@ -1472,15 +1472,15 @@
         "sequence": 32,
         "event_id": "evt-0032",
         "event_type": "approval_invalidated",
-        "timestamp": "2026-08-27T09:36:17.483375+00:00",
+        "timestamp": "2026-08-28T08:50:54.346465+00:00",
         "revision": 31,
         "task_id": null,
         "worker": null,
         "payload": {
-          "actor": "AsoulAI-Release-Owner",
+          "actor": "AsoulAI Release Reviewer",
           "approved_revision": 29,
           "current_revision": 30,
-          "checkpoint_revision": 28
+          "checkpoint_revision": 29
         },
         "deduplicated": false
       },
@@ -1488,12 +1488,12 @@
         "sequence": 33,
         "event_id": "evt-0033",
         "event_type": "human_resume",
-        "timestamp": "2026-08-27T09:36:17.483379+00:00",
+        "timestamp": "2026-08-28T08:50:54.346468+00:00",
         "revision": 32,
         "task_id": null,
         "worker": null,
         "payload": {
-          "actor": "AsoulAI-Release-Owner",
+          "actor": "AsoulAI Release Reviewer",
           "resumed_revision": 31
         },
         "deduplicated": false
@@ -1502,10 +1502,10 @@
         "sequence": 34,
         "event_id": "evt-0034",
         "event_type": "task_dispatched",
-        "timestamp": "2026-08-27T09:36:17.483400+00:00",
+        "timestamp": "2026-08-28T08:50:54.346494+00:00",
         "revision": 33,
         "task_id": "risk-gate",
-        "worker": "release-auditor-01",
+        "worker": "chronosfix-release-auditor#01",
         "payload": {
           "attempt": 1,
           "lease_ms": 5000,
@@ -1518,7 +1518,7 @@
         "sequence": 35,
         "event_id": "evt-0035",
         "event_type": "state_updated",
-        "timestamp": "2026-08-27T09:36:17.483410+00:00",
+        "timestamp": "2026-08-28T08:50:54.346506+00:00",
         "revision": 34,
         "task_id": null,
         "worker": null,
@@ -1526,11 +1526,11 @@
           "key": "risk-gate",
           "value": {
             "status": "COMPLETED",
-            "worker": "release-auditor-01",
+            "worker": "chronosfix-release-auditor#01",
             "attempt": 1,
             "result_digest": "c612cb54e38ad5b5468e28a79ed30f5f4e91aa3935c0d525ca113940f551dd1a"
           },
-          "source": "release-auditor-01"
+          "source": "chronosfix-release-auditor#01"
         },
         "deduplicated": false
       },
@@ -1538,10 +1538,10 @@
         "sequence": 36,
         "event_id": "evt-0036",
         "event_type": "task_completed",
-        "timestamp": "2026-08-27T09:36:17.483415+00:00",
+        "timestamp": "2026-08-28T08:50:54.346509+00:00",
         "revision": 35,
         "task_id": "risk-gate",
-        "worker": "release-auditor-01",
+        "worker": "chronosfix-release-auditor#01",
         "payload": {
           "attempt": 1,
           "idempotency_key": "180b4d1ce7bcca50a89017fb6930a23be458d84a91e6fc0b33f600b2c5d29126",
@@ -1553,7 +1553,7 @@
         "sequence": 37,
         "event_id": "evt-0037",
         "event_type": "scheduler_completed",
-        "timestamp": "2026-08-27T09:36:17.483421+00:00",
+        "timestamp": "2026-08-28T08:50:54.346515+00:00",
         "revision": 36,
         "task_id": null,
         "worker": null,
@@ -1566,10 +1566,10 @@
         "sequence": 38,
         "event_id": "evt-0038",
         "event_type": "task_deduplicated",
-        "timestamp": "2026-08-27T09:36:17.483440+00:00",
+        "timestamp": "2026-08-28T08:50:54.346535+00:00",
         "revision": 36,
         "task_id": "baseline",
-        "worker": "universe-builder-01",
+        "worker": "chronosfix-universe-builder#01",
         "payload": {
           "idempotency_key": "a43dabe00190a030540992b336f8933e97173592c01862bf9ccc59a3272a194a",
           "input_revision": 36,
@@ -1662,10 +1662,10 @@
     ]
   },
   "metrics": {
-    "run_id": "run-cd233db619aa4b7fa4f6248727b0f874",
-    "trace_id": "68e1ddebd0634d00ae98a2befb0ed02d",
+    "run_id": "run-f509492109e848089d1f0741cbe2ac77",
+    "trace_id": "d9d1549527d34b2094ceac8be14002f0",
     "scenario_path": "scenarios/checkout-timeout/scenario.json",
-    "git_commit": "eee0c4a4fd9595826eefec519cf9057da9ed666b",
+    "git_commit": "455ac1b54f869c614763a3675c6f5a59ac197f1a",
     "baseline_failure_rate": 0.4872,
     "baseline_p99_ms": 606.96,
     "hypotheses_tested": 3,
@@ -1693,7 +1693,7 @@
         "executed": true,
         "conclusion": "success",
         "exit_code": 0,
-        "run_id": "run-cd233db619aa4b7fa4f6248727b0f874",
+        "run_id": "run-f509492109e848089d1f0741cbe2ac77",
         "evidence": "experiment results persisted in proof-bundle.json",
         "summary": "1 primary cause(s) reached the intervention threshold."
       },
@@ -1703,7 +1703,7 @@
         "executed": true,
         "conclusion": "success",
         "exit_code": 0,
-        "run_id": "run-cd233db619aa4b7fa4f6248727b0f874",
+        "run_id": "run-f509492109e848089d1f0741cbe2ac77",
         "evidence": "selected_patch.results in proof-bundle.json",
         "summary": "8 mandatory variants evaluated; worst failure rate 6.2%."
       },
@@ -1713,7 +1713,7 @@
         "executed": true,
         "conclusion": "success",
         "exit_code": 0,
-        "run_id": "run-cd233db619aa4b7fa4f6248727b0f874",
+        "run_id": "run-f509492109e848089d1f0741cbe2ac77",
         "evidence": "patch changes followed by rollback_changes compared with baseline",
         "summary": "Rollback restores the complete baseline state."
       }
@@ -1721,7 +1721,7 @@
     "quality_gate": "passed",
     "release_decision": "approved",
     "trace_spans": 18,
-    "elapsed_ms": 202.511,
+    "elapsed_ms": 153.172,
     "elapsed_ms_kind": "measured",
     "pipeline_step_completion_rate": 1.0,
     "coordination_revision": 36,

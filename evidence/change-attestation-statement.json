@@ -1,0 +1,33 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "patch-sandbox-run.json",
+      "digest": {
+        "sha256": "ce55c573ca18eef93a6137c64d10438715512e1b9f3eb572a91d5426e0c40331"
+      },
+      "bytes": 9321
+    },
+    {
+      "name": "local-controller-evidence.json",
+      "digest": {
+        "sha256": "57bccef2507aed3a8d3203531866a1ba37d9ee9d477e328e00d9b87163c2cab8"
+      },
+      "bytes": 5370
+    }
+  ],
+  "predicateType": "https://asoul.ai/chronosfix/ProofCarryingChange/v1",
+  "predicate": {
+    "generatedAt": "2026-08-28T08:51:24.401384+00:00",
+    "sourceCommit": "455ac1b54f869c614763a3675c6f5a59ac197f1a",
+    "changeClass": "causal-software-repair",
+    "riskGate": "evidence-and-human-approval-required",
+    "verification": {},
+    "boundaries": {
+      "signatureIdentity": "local-ephemeral-ed25519",
+      "trustedTimestamp": false,
+      "sigstoreKeyless": false,
+      "claim": "DSSE signature and subject integrity are verified; external identity trust is not claimed."
+    }
+  }
+}
