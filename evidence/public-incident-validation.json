@@ -1,0 +1,11 @@
+{
+  "schema": "chronosfix.public-incident-validation/v1",
+  "generated_at": "2026-08-28T06:18:26.175956+00:00",
+  "path": "D:\\1\\全球AI大赛\\chronosfix\\public-incidents\\cloudflare-2019-waf-regex\\incident.json",
+  "incident_id": "PUBLIC-CLOUDFLARE-2019-WAF-REGEX",
+  "source_url": "https://blog.cloudflare.com/cloudflare-outage/",
+  "official_fact_count": 7,
+  "inference_count": 2,
+  "valid": true,
+  "errors": []
+}

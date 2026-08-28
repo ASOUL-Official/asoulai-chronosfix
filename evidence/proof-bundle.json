@@ -1665,7 +1665,7 @@
     "run_id": "run-cd233db619aa4b7fa4f6248727b0f874",
     "trace_id": "68e1ddebd0634d00ae98a2befb0ed02d",
     "scenario_path": "scenarios/checkout-timeout/scenario.json",
-    "git_commit": "f702d75a1a22dd78f0e287696ebf41cbe2085a45",
+    "git_commit": "eee0c4a4fd9595826eefec519cf9057da9ed666b",
     "baseline_failure_rate": 0.4872,
     "baseline_p99_ms": 606.96,
     "hypotheses_tested": 3,

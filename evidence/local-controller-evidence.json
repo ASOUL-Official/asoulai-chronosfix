@@ -1,0 +1,155 @@
+{
+  "schema": "chronosfix.local-controller-evidence/v1",
+  "generated_at": "2026-08-28T06:12:06.271580+00:00",
+  "passed": true,
+  "boundaries": {
+    "local_controller_executed": true,
+    "local_worker_processes_executed": true,
+    "local_matrix_event_log_executed": true,
+    "agentteams_official_controller_executed": false,
+    "matrix_protocol_executed": false
+  },
+  "golden_run": {
+    "run_id": "acfx-local-20260828T061200-ef1d30f982",
+    "trace_id": "67309be9aafe4eb9ace73af1d0aa4c39",
+    "initial_release_decision": "approved",
+    "after_evidence_release_decision": "blocked-awaiting-human",
+    "matrix_database": "D:\\1\\全球AI大赛\\chronosfix\\output\\local-controller-evidence\\matrix.sqlite3"
+  },
+  "worker_failover": {
+    "task_id": "live-timeout-58919f32",
+    "attempts": [
+      {
+        "task_id": "live-timeout-58919f32",
+        "attempt": 1,
+        "logical_worker": "chronosfix-timeline-analyst",
+        "instance_id": "chronosfix-timeline-analyst#01",
+        "pid": 46208,
+        "status": "FAILED",
+        "started_at": "2026-08-28T06:12:01.990371+00:00",
+        "ended_at": "2026-08-28T06:12:03.345251+00:00",
+        "duration_ms": 1354.878,
+        "exit_code": 1,
+        "error": "lease expired after 0.250s",
+        "result_digest": null
+      },
+      {
+        "task_id": "live-timeout-58919f32",
+        "attempt": 2,
+        "logical_worker": "chronosfix-timeline-analyst",
+        "instance_id": "chronosfix-timeline-analyst#02",
+        "pid": 38844,
+        "status": "COMPLETED",
+        "started_at": "2026-08-28T06:12:03.378172+00:00",
+        "ended_at": "2026-08-28T06:12:04.173421+00:00",
+        "duration_ms": 795.253,
+        "exit_code": 0,
+        "error": null,
+        "result_digest": "42ab47f6777d0d20f14f2a2b7558fe1487a54fb8a4cdabbb96f56b2095d811bf"
+      }
+    ],
+    "different_pid": true,
+    "different_instance": true
+  },
+  "dynamic_evidence": {
+    "event_id": "acceptance-live-evidence-001",
+    "task": {
+      "task_id": "dynamic-evidence-audit-ence-001",
+      "skill": "ConfigEvidenceAudit",
+      "capability": "evidence",
+      "status": "COMPLETED",
+      "created_revision": 14,
+      "result": {
+        "finding": "new evidence accepted and audited",
+        "kind": "configuration",
+        "result_digest": "3c11e4a79bdb0d8bc9da587739011a3c7549fca0b8d46970750c1d8fe30ab3cb"
+      }
+    },
+    "approval_statuses": [
+      "STALE"
+    ],
+    "events": [
+      {
+        "sequence": 4,
+        "event_id": "task-completed-58900724e3e949ee",
+        "event_type": "task_completed",
+        "revision": 4,
+        "task_id": "incident-pipeline",
+        "worker": "chronosfix-incident-commander#01",
+        "timestamp": "2026-08-28T06:12:01.947952+00:00",
+        "payload": {
+          "attempt": 1,
+          "duration_ms": 1706.082,
+          "pid": 52624,
+          "result_digest": "60a0e9a14881c0a6026b67bbcbc26f3f9138c228c5ac70752dc19d1b262543d1"
+        }
+      },
+      {
+        "sequence": 12,
+        "event_id": "task-completed-c66c1bc565414b10",
+        "event_type": "task_completed",
+        "revision": 12,
+        "task_id": "live-timeout-58919f32",
+        "worker": "chronosfix-timeline-analyst#02",
+        "timestamp": "2026-08-28T06:12:04.184023+00:00",
+        "payload": {
+          "attempt": 2,
+          "duration_ms": 795.253,
+          "pid": 38844,
+          "result_digest": "42ab47f6777d0d20f14f2a2b7558fe1487a54fb8a4cdabbb96f56b2095d811bf"
+        }
+      },
+      {
+        "sequence": 13,
+        "event_id": "acceptance-live-evidence-001",
+        "event_type": "evidence_observed",
+        "revision": 13,
+        "task_id": null,
+        "worker": null,
+        "timestamp": "2026-08-28T06:12:04.197193+00:00",
+        "payload": {
+          "digest": "3c11e4a79bdb0d8bc9da587739011a3c7549fca0b8d46970750c1d8fe30ab3cb",
+          "kind": "configuration",
+          "summary": "pool size drift confirmed during acceptance"
+        }
+      },
+      {
+        "sequence": 14,
+        "event_id": "approval-invalidated-54699e9b94f642e4",
+        "event_type": "approval_invalidated",
+        "revision": 14,
+        "task_id": "risk-gate",
+        "worker": "chronosfix-release-auditor#01",
+        "timestamp": "2026-08-28T06:12:04.205526+00:00",
+        "payload": {
+          "current_revision": 13,
+          "source_event_id": "acceptance-live-evidence-001",
+          "stale_approvals": 1
+        }
+      },
+      {
+        "sequence": 17,
+        "event_id": "task-completed-91746c7cbb894016",
+        "event_type": "task_completed",
+        "revision": 17,
+        "task_id": "dynamic-evidence-audit-ence-001",
+        "worker": "chronosfix-timeline-analyst#01",
+        "timestamp": "2026-08-28T06:12:05.554468+00:00",
+        "payload": {
+          "attempt": 1,
+          "duration_ms": 1321.858,
+          "pid": 26556,
+          "result_digest": "c00c8bdfc131139b67a68808ac002a2c2262d4ab436b6560265217e15be9410c"
+        }
+      }
+    ]
+  },
+  "badcase_refusal": {
+    "run_id": "acfx-local-20260828T061205-94812d1c47",
+    "status": "ABSTAINED",
+    "release_decision": "blocked-insufficient-evidence",
+    "registered_tasks": [
+      "counterfactual-evaluation"
+    ]
+  }
+}

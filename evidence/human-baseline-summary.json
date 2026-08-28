@@ -1,0 +1,9 @@
+{
+  "schema": "chronosfix.human-baseline-summary/v1",
+  "study_id": "acfx-human-baseline-2026",
+  "completed_participants": 0,
+  "minimum_completed_participants": 2,
+  "study_status": "awaiting-human-observations",
+  "median_elapsed_seconds": null,
+  "claim_boundary": "Report descriptive observations only; do not claim statistical significance."
+}

@@ -1,0 +1,94 @@
+{
+  "schema": "chronosfix.proof-carrying-change-attestation/v1",
+  "passed": true,
+  "statement": {
+    "_type": "https://in-toto.io/Statement/v1",
+    "subject": [
+      {
+        "name": "patch-sandbox-run.json",
+        "digest": {
+          "sha256": "ce55c573ca18eef93a6137c64d10438715512e1b9f3eb572a91d5426e0c40331"
+        },
+        "bytes": 9321
+      },
+      {
+        "name": "local-controller-evidence.json",
+        "digest": {
+          "sha256": "57bccef2507aed3a8d3203531866a1ba37d9ee9d477e328e00d9b87163c2cab8"
+        },
+        "bytes": 5370
+      }
+    ],
+    "predicateType": "https://asoul.ai/chronosfix/ProofCarryingChange/v1",
+    "predicate": {
+      "generatedAt": "2026-08-28T06:43:10.920439+00:00",
+      "sourceCommit": "eee0c4a4fd9595826eefec519cf9057da9ed666b",
+      "changeClass": "causal-software-repair",
+      "riskGate": "evidence-and-human-approval-required",
+      "verification": {},
+      "boundaries": {
+        "signatureIdentity": "local-ephemeral-ed25519",
+        "trustedTimestamp": false,
+        "sigstoreKeyless": false,
+        "claim": "DSSE signature and subject integrity are verified; external identity trust is not claimed."
+      }
+    }
+  },
+  "envelope": {
+    "payloadType": "application/vnd.in-toto+json",
+    "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiYm91bmRhcmllcyI6eyJjbGFpbSI6IkRTU0Ugc2lnbmF0dXJlIGFuZCBzdWJqZWN0IGludGVncml0eSBhcmUgdmVyaWZpZWQ7IGV4dGVybmFsIGlkZW50aXR5IHRydXN0IGlzIG5vdCBjbGFpbWVkLiIsInNpZ25hdHVyZUlkZW50aXR5IjoibG9jYWwtZXBoZW1lcmFsLWVkMjU1MTkiLCJzaWdzdG9yZUtleWxlc3MiOmZhbHNlLCJ0cnVzdGVkVGltZXN0YW1wIjpmYWxzZX0sImNoYW5nZUNsYXNzIjoiY2F1c2FsLXNvZnR3YXJlLXJlcGFpciIsImdlbmVyYXRlZEF0IjoiMjAyNi0wOC0yOFQwNjo0MzoxMC45MjA0MzkrMDA6MDAiLCJyaXNrR2F0ZSI6ImV2aWRlbmNlLWFuZC1odW1hbi1hcHByb3ZhbC1yZXF1aXJlZCIsInNvdXJjZUNvbW1pdCI6ImVlZTBjNGE0ZmQ5NTk1ODI2ZWVmZWM1MTljZjkwNTdkYTllZDY2NmIiLCJ2ZXJpZmljYXRpb24iOnt9fSwicHJlZGljYXRlVHlwZSI6Imh0dHBzOi8vYXNvdWwuYWkvY2hyb25vc2ZpeC9Qcm9vZkNhcnJ5aW5nQ2hhbmdlL3YxIiwic3ViamVjdCI6W3siYnl0ZXMiOjkzMjEsImRpZ2VzdCI6eyJzaGEyNTYiOiJjZTU1YzU3M2NhMThlZWY5M2E2MTM3YzY0ZDEwNDM4NzE1NTEyZTFiOWYzZWI1NzJhOTFkNTQyNmUwYzQwMzMxIn0sIm5hbWUiOiJwYXRjaC1zYW5kYm94LXJ1bi5qc29uIn0seyJieXRlcyI6NTM3MCwiZGlnZXN0Ijp7InNoYTI1NiI6IjU3YmNjZWYyNTA3YWVkM2E4ZDMyMDM1MzE4NjZhMWJhMzdkOWVlOWQ0NzdlMzI4ZTAwZDliODcxNjNjMmNhYjgifSwibmFtZSI6ImxvY2FsLWNvbnRyb2xsZXItZXZpZGVuY2UuanNvbiJ9XX0=",
+    "signatures": [
+      {
+        "keyid": "73f377cbf15aba8d3f0b6513717cc4a81e0866f09dff9fababa24e87bc5b46d8",
+        "sig": "b/xYRmFrtxjhQv9+TAMeb57FSexGnT6e/R9j47AeVy5k62ny5tzCwqpq9hq2D3u9JTM982njD81Spc6/I+NjBg=="
+      }
+    ]
+  },
+  "public_key": {
+    "keyid": "73f377cbf15aba8d3f0b6513717cc4a81e0866f09dff9fababa24e87bc5b46d8",
+    "keyType": "ed25519",
+    "publicKeyBase64": "8b5Lc+jVLwOC+8BGz7goh5/typLxs/Xi4dCA2iiO/PU="
+  },
+  "verification": {
+    "valid": true,
+    "statement": {
+      "_type": "https://in-toto.io/Statement/v1",
+      "predicate": {
+        "boundaries": {
+          "claim": "DSSE signature and subject integrity are verified; external identity trust is not claimed.",
+          "signatureIdentity": "local-ephemeral-ed25519",
+          "sigstoreKeyless": false,
+          "trustedTimestamp": false
+        },
+        "changeClass": "causal-software-repair",
+        "generatedAt": "2026-08-28T06:43:10.920439+00:00",
+        "riskGate": "evidence-and-human-approval-required",
+        "sourceCommit": "eee0c4a4fd9595826eefec519cf9057da9ed666b",
+        "verification": {}
+      },
+      "predicateType": "https://asoul.ai/chronosfix/ProofCarryingChange/v1",
+      "subject": [
+        {
+          "bytes": 9321,
+          "digest": {
+            "sha256": "ce55c573ca18eef93a6137c64d10438715512e1b9f3eb572a91d5426e0c40331"
+          },
+          "name": "patch-sandbox-run.json"
+        },
+        {
+          "bytes": 5370,
+          "digest": {
+            "sha256": "57bccef2507aed3a8d3203531866a1ba37d9ee9d477e328e00d9b87163c2cab8"
+          },
+          "name": "local-controller-evidence.json"
+        }
+      ]
+    },
+    "error": null
+  },
+  "tamper_test": {
+    "payload_modified": true,
+    "verification_valid": false,
+    "error": "InvalidSignature: "
+  }
+}

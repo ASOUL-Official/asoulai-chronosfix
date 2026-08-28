@@ -76,7 +76,7 @@
   "environment": {
     "python": "3.13.9",
     "platform": "Windows-11-10.0.26200-SP0",
-    "git_commit": "f702d75a1a22dd78f0e287696ebf41cbe2085a45"
+    "git_commit": "eee0c4a4fd9595826eefec519cf9057da9ed666b"
   },
   "artifacts": {
     "trace.jsonl": {

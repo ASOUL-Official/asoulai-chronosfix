@@ -1,0 +1,312 @@
+{
+  "schema": "chronosfix.patch-sandbox/v1",
+  "generated_at": "2026-08-28T06:12:14.630292+00:00",
+  "passed": true,
+  "base_commit": "a9106fcf746c69d2701676bb115b63d273a7e89d",
+  "patch": {
+    "paths": [
+      "checkout_service.py"
+    ],
+    "bytes": 304,
+    "sha256": "45d1b58f8aa59332dd3510fe169227431925ecf73c5390a9af2e099ff3c32550"
+  },
+  "isolation_policy": {
+    "temporary_git_checkout": true,
+    "shell_interpolation": false,
+    "python_isolated_mode": true,
+    "credentials_forwarded": false,
+    "proxy_fail_closed": true,
+    "process_timeout_seconds": 20,
+    "path_allowlist": [
+      "checkout_service.py"
+    ],
+    "os_network_namespace_enforced": false,
+    "boundary_note": "Process/filesystem isolation is executed locally; CI may add a container network namespace."
+  },
+  "security_negative_test": {
+    "path_traversal_patch_blocked": true
+  },
+  "before_tests": {
+    "command": [
+      "D:\\tools\\python.exe",
+      "-I",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      ".",
+      "-p",
+      "test_*.py",
+      "-v"
+    ],
+    "exit_code": 1,
+    "expected_exit_codes": [
+      1
+    ],
+    "passed": true,
+    "duration_ms": 575.98,
+    "stdout": "",
+    "stderr": "test_normal_traffic_remains_healthy (test_checkout_service.CheckoutPeakTests.test_normal_traffic_remains_healthy) ... ok\ntest_peak_traffic_stays_below_risk_gate_threshold (test_checkout_service.CheckoutPeakTests.test_peak_traffic_stays_below_risk_gate_threshold) ... FAIL\n\n======================================================================\nFAIL: test_peak_traffic_stays_below_risk_gate_threshold (test_checkout_service.CheckoutPeakTests.test_peak_traffic_stays_below_risk_gate_threshold)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"C:\\Users\\LIUZHA~1\\AppData\\Local\\Temp\\chronosfix-patch-sandbox-ga2rbxpp\\checkout\\test_checkout_service.py\", line 11, in test_peak_traffic_stays_below_risk_gate_threshold\n    self.assertGreaterEqual(DEFAULT_POOL_SIZE, 48)\n    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 20 not greater than or equal to 48\n\n----------------------------------------------------------------------\nRan 2 tests in 0.001s\n\nFAILED (failures=1)\n"
+  },
+  "after_tests": {
+    "command": [
+      "D:\\tools\\python.exe",
+      "-I",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      ".",
+      "-p",
+      "test_*.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "expected_exit_codes": [
+      0
+    ],
+    "passed": true,
+    "duration_ms": 567.12,
+    "stdout": "",
+    "stderr": "test_normal_traffic_remains_healthy (test_checkout_service.CheckoutPeakTests.test_normal_traffic_remains_healthy) ... ok\ntest_peak_traffic_stays_below_risk_gate_threshold (test_checkout_service.CheckoutPeakTests.test_peak_traffic_stays_below_risk_gate_threshold) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n"
+  },
+  "applied_diff_sha256": "075a48864b98f0bc3830fbe9c8fb646ad902553c0cbb6376a0e95c48c5cd6ed2",
+  "rollback_clean": true,
+  "checks": [
+    {
+      "command": [
+        "git",
+        "init",
+        "-q"
+      ],
+      "exit_code": 0,
+      "expected_exit_codes": [
+        0
+      ],
+      "passed": true,
+      "duration_ms": 292.96,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "config",
+        "core.autocrlf",
+        "false"
+      ],
+      "exit_code": 0,
+      "expected_exit_codes": [
+        0
+      ],
+      "passed": true,
+      "duration_ms": 271.247,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "config",
+        "user.email",
+        "sandbox@chronosfix.local"
+      ],
+      "exit_code": 0,
+      "expected_exit_codes": [
+        0
+      ],
+      "passed": true,
+      "duration_ms": 258.118,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "config",
+        "user.name",
+        "ChronosFix Sandbox"
+      ],
+      "exit_code": 0,
+      "expected_exit_codes": [
+        0
+      ],
+      "passed": true,
+      "duration_ms": 259.29,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "add",
+        "."
+      ],
+      "exit_code": 0,
+      "expected_exit_codes": [
+        0
+      ],
+      "passed": true,
+      "duration_ms": 269.749,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "commit",
+        "-qm",
+        "sandbox base"
+      ],
+      "exit_code": 0,
+      "expected_exit_codes": [
+        0
+      ],
+      "passed": true,
+      "duration_ms": 399.087,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "expected_exit_codes": [
+        0
+      ],
+      "passed": true,
+      "duration_ms": 294.65,
+      "stdout": "a9106fcf746c69d2701676bb115b63d273a7e89d\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "D:\\tools\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        ".",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "exit_code": 1,
+      "expected_exit_codes": [
+        1
+      ],
+      "passed": true,
+      "duration_ms": 575.98,
+      "stdout": "",
+      "stderr": "test_normal_traffic_remains_healthy (test_checkout_service.CheckoutPeakTests.test_normal_traffic_remains_healthy) ... ok\ntest_peak_traffic_stays_below_risk_gate_threshold (test_checkout_service.CheckoutPeakTests.test_peak_traffic_stays_below_risk_gate_threshold) ... FAIL\n\n======================================================================\nFAIL: test_peak_traffic_stays_below_risk_gate_threshold (test_checkout_service.CheckoutPeakTests.test_peak_traffic_stays_below_risk_gate_threshold)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"C:\\Users\\LIUZHA~1\\AppData\\Local\\Temp\\chronosfix-patch-sandbox-ga2rbxpp\\checkout\\test_checkout_service.py\", line 11, in test_peak_traffic_stays_below_risk_gate_threshold\n    self.assertGreaterEqual(DEFAULT_POOL_SIZE, 48)\n    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 20 not greater than or equal to 48\n\n----------------------------------------------------------------------\nRan 2 tests in 0.001s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "command": [
+        "git",
+        "apply",
+        "--check",
+        "candidate.patch"
+      ],
+      "exit_code": 0,
+      "expected_exit_codes": [
+        0
+      ],
+      "passed": true,
+      "duration_ms": 1183.293,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "apply",
+        "candidate.patch"
+      ],
+      "exit_code": 0,
+      "expected_exit_codes": [
+        0
+      ],
+      "passed": true,
+      "duration_ms": 293.727,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--",
+        "checkout_service.py"
+      ],
+      "exit_code": 0,
+      "expected_exit_codes": [
+        0
+      ],
+      "passed": true,
+      "duration_ms": 254.457,
+      "stdout": "diff --git a/checkout_service.py b/checkout_service.py\nindex 58b5c7c..a9f5178 100644\n--- a/checkout_service.py\n+++ b/checkout_service.py\n@@ -3,7 +3,7 @@ from __future__ import annotations\n from dataclasses import dataclass\n \n \n-DEFAULT_POOL_SIZE = 20\n+DEFAULT_POOL_SIZE = 64\n \n \n @dataclass(frozen=True)\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "D:\\tools\\python.exe",
+        "-I",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        ".",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "expected_exit_codes": [
+        0
+      ],
+      "passed": true,
+      "duration_ms": 567.12,
+      "stdout": "",
+      "stderr": "test_normal_traffic_remains_healthy (test_checkout_service.CheckoutPeakTests.test_normal_traffic_remains_healthy) ... ok\ntest_peak_traffic_stays_below_risk_gate_threshold (test_checkout_service.CheckoutPeakTests.test_peak_traffic_stays_below_risk_gate_threshold) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n"
+    },
+    {
+      "command": [
+        "git",
+        "apply",
+        "-R",
+        "candidate.patch"
+      ],
+      "exit_code": 0,
+      "expected_exit_codes": [
+        0
+      ],
+      "passed": true,
+      "duration_ms": 1205.324,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "exit_code": 0,
+      "expected_exit_codes": [
+        0
+      ],
+      "passed": true,
+      "duration_ms": 259.157,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}
