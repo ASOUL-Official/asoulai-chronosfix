@@ -239,16 +239,16 @@
     }
   ],
   "state_tracking": {
-    "run_id": "run-f509492109e848089d1f0741cbe2ac77",
-    "trace_id": "d9d1549527d34b2094ceac8be14002f0",
+    "run_id": "run-1955e5f9a6ad460d8a26c16771a71b11",
+    "trace_id": "179ed7d3c53b4325910864f73a89e355",
     "span_count": 18,
     "quality_gate": "passed",
     "release_decision": "approved",
     "approval_record": {
       "status": "approved",
       "approver": "AsoulAI Release Reviewer",
-      "reason": "Online semifinal source-anchor refresh",
-      "timestamp": "2026-08-28T08:50:54.351030+00:00",
+      "reason": "Online semifinal source-anchor refresh after CI fingerprint fix",
+      "timestamp": "2026-08-28T09:14:23.403065+00:00",
       "policy_version": "chronosfix-riskgate/v1",
       "is_human": true,
       "state_revision": 36,
@@ -299,7 +299,7 @@
     "condition": "medium/high risk patch",
     "decision": "approved",
     "approver": "AsoulAI Release Reviewer",
-    "timestamp": "2026-08-28T08:50:54.351030+00:00",
+    "timestamp": "2026-08-28T09:14:23.403065+00:00",
     "rollback_contract": "恢复 db.pool.maxSize=8 配置快照",
     "rollback_verified": true
   }

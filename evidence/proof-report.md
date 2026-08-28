@@ -1,10 +1,10 @@
 # ChronosFix 证据化修复报告：INC-2026-0816-001
 
 **故障：** 订单创建接口在午间流量下出现高失败率与长尾延迟
-**Run ID：** run-f509492109e848089d1f0741cbe2ac77
+**Run ID：** run-1955e5f9a6ad460d8a26c16771a71b11
 **质量门禁：** passed
 **发布决策：** approved
-**Trace ID：** d9d1549527d34b2094ceac8be14002f0
+**Trace ID：** 179ed7d3c53b4325910864f73a89e355
 
 ## 0. 结论摘要
 
@@ -73,8 +73,8 @@
 ### 完整性摘要
 
 - `schema_version`：`chronosfix.evidence-integrity/v1`
-- `run_id`：`run-f509492109e848089d1f0741cbe2ac77`
-- `trace_id`：`d9d1549527d34b2094ceac8be14002f0`
+- `run_id`：`run-1955e5f9a6ad460d8a26c16771a71b11`
+- `trace_id`：`179ed7d3c53b4325910864f73a89e355`
 - `scenario_sha256`：`f287e45a9a2e5804892cbd402649aa1e0a1ae6a02bbd42fb72b717239e543867`
 - `patch_changes_sha256`：`58f3873074175c6dec959b17d7f8a93f6ab723e6c0574435a0bded0c18012d9b`
 - `rollback_changes_sha256`：`ac7b4fde845a552d4b2ecf3f91112c3187d0c036e78dd27b1355f495a77892ed`
@@ -95,7 +95,7 @@
 选择 **恢复连接池 24 并增加容量验证门禁**，因为它在正确性、风险和实施成本的综合评分中排名第一。
 发布前必须保留回滚点：恢复 db.pool.maxSize=8 配置快照。
 机器可验证回滚字段：`{'pool_size': 8}`；验证结果：`True`。
-具名审批人：`AsoulAI Release Reviewer`；审批时间：`2026-08-28T08:50:54.351030+00:00`。
+具名审批人：`AsoulAI Release Reviewer`；审批时间：`2026-08-28T09:14:23.403065+00:00`。
 全部 Agent、Skill、实验、审批和报告动作均写入 `trace.jsonl`，可用于复盘和审计。
 
 ## 7. 动态协同控制面

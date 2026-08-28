@@ -21,8 +21,8 @@
     ],
     "predicateType": "https://asoul.ai/chronosfix/ProofCarryingChange/v1",
     "predicate": {
-      "generatedAt": "2026-08-28T08:51:24.401384+00:00",
-      "sourceCommit": "455ac1b54f869c614763a3675c6f5a59ac197f1a",
+      "generatedAt": "2026-08-28T09:14:44.020968+00:00",
+      "sourceCommit": "c8b9d263d561e4e81aa0ad78af4c8813d4dc2278",
       "changeClass": "causal-software-repair",
       "riskGate": "evidence-and-human-approval-required",
       "verification": {},
@@ -36,18 +36,18 @@
   },
   "envelope": {
     "payloadType": "application/vnd.in-toto+json",
-    "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiYm91bmRhcmllcyI6eyJjbGFpbSI6IkRTU0Ugc2lnbmF0dXJlIGFuZCBzdWJqZWN0IGludGVncml0eSBhcmUgdmVyaWZpZWQ7IGV4dGVybmFsIGlkZW50aXR5IHRydXN0IGlzIG5vdCBjbGFpbWVkLiIsInNpZ25hdHVyZUlkZW50aXR5IjoibG9jYWwtZXBoZW1lcmFsLWVkMjU1MTkiLCJzaWdzdG9yZUtleWxlc3MiOmZhbHNlLCJ0cnVzdGVkVGltZXN0YW1wIjpmYWxzZX0sImNoYW5nZUNsYXNzIjoiY2F1c2FsLXNvZnR3YXJlLXJlcGFpciIsImdlbmVyYXRlZEF0IjoiMjAyNi0wOC0yOFQwODo1MToyNC40MDEzODQrMDA6MDAiLCJyaXNrR2F0ZSI6ImV2aWRlbmNlLWFuZC1odW1hbi1hcHByb3ZhbC1yZXF1aXJlZCIsInNvdXJjZUNvbW1pdCI6IjQ1NWFjMWI1NGY4NjljNjE0NzYzYTM2NzVjNmY1YTU5YWMxOTdmMWEiLCJ2ZXJpZmljYXRpb24iOnt9fSwicHJlZGljYXRlVHlwZSI6Imh0dHBzOi8vYXNvdWwuYWkvY2hyb25vc2ZpeC9Qcm9vZkNhcnJ5aW5nQ2hhbmdlL3YxIiwic3ViamVjdCI6W3siYnl0ZXMiOjkzMjEsImRpZ2VzdCI6eyJzaGEyNTYiOiJjZTU1YzU3M2NhMThlZWY5M2E2MTM3YzY0ZDEwNDM4NzE1NTEyZTFiOWYzZWI1NzJhOTFkNTQyNmUwYzQwMzMxIn0sIm5hbWUiOiJwYXRjaC1zYW5kYm94LXJ1bi5qc29uIn0seyJieXRlcyI6NTM3MCwiZGlnZXN0Ijp7InNoYTI1NiI6IjU3YmNjZWYyNTA3YWVkM2E4ZDMyMDM1MzE4NjZhMWJhMzdkOWVlOWQ0NzdlMzI4ZTAwZDliODcxNjNjMmNhYjgifSwibmFtZSI6ImxvY2FsLWNvbnRyb2xsZXItZXZpZGVuY2UuanNvbiJ9XX0=",
+    "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiYm91bmRhcmllcyI6eyJjbGFpbSI6IkRTU0Ugc2lnbmF0dXJlIGFuZCBzdWJqZWN0IGludGVncml0eSBhcmUgdmVyaWZpZWQ7IGV4dGVybmFsIGlkZW50aXR5IHRydXN0IGlzIG5vdCBjbGFpbWVkLiIsInNpZ25hdHVyZUlkZW50aXR5IjoibG9jYWwtZXBoZW1lcmFsLWVkMjU1MTkiLCJzaWdzdG9yZUtleWxlc3MiOmZhbHNlLCJ0cnVzdGVkVGltZXN0YW1wIjpmYWxzZX0sImNoYW5nZUNsYXNzIjoiY2F1c2FsLXNvZnR3YXJlLXJlcGFpciIsImdlbmVyYXRlZEF0IjoiMjAyNi0wOC0yOFQwOToxNDo0NC4wMjA5NjgrMDA6MDAiLCJyaXNrR2F0ZSI6ImV2aWRlbmNlLWFuZC1odW1hbi1hcHByb3ZhbC1yZXF1aXJlZCIsInNvdXJjZUNvbW1pdCI6ImM4YjlkMjYzZDU2MWU0ZTgxYWEwYWQ3OGFmNGM4ODEzZDRkYzIyNzgiLCJ2ZXJpZmljYXRpb24iOnt9fSwicHJlZGljYXRlVHlwZSI6Imh0dHBzOi8vYXNvdWwuYWkvY2hyb25vc2ZpeC9Qcm9vZkNhcnJ5aW5nQ2hhbmdlL3YxIiwic3ViamVjdCI6W3siYnl0ZXMiOjkzMjEsImRpZ2VzdCI6eyJzaGEyNTYiOiJjZTU1YzU3M2NhMThlZWY5M2E2MTM3YzY0ZDEwNDM4NzE1NTEyZTFiOWYzZWI1NzJhOTFkNTQyNmUwYzQwMzMxIn0sIm5hbWUiOiJwYXRjaC1zYW5kYm94LXJ1bi5qc29uIn0seyJieXRlcyI6NTM3MCwiZGlnZXN0Ijp7InNoYTI1NiI6IjU3YmNjZWYyNTA3YWVkM2E4ZDMyMDM1MzE4NjZhMWJhMzdkOWVlOWQ0NzdlMzI4ZTAwZDliODcxNjNjMmNhYjgifSwibmFtZSI6ImxvY2FsLWNvbnRyb2xsZXItZXZpZGVuY2UuanNvbiJ9XX0=",
     "signatures": [
       {
-        "keyid": "a5a33481cb1a97d9f8ceab1c9703cc62517c4eaa40b466d269a225885e868fe9",
-        "sig": "7/Gc9lbApGLtrrC4FU21rpZVxqrs49BEJL1LoQBYtau/Ga+SMr/1cL0BvJu+7H5kwQGNOyiU0k03rdm8PfRyBA=="
+        "keyid": "d1d32ec6b775c9f2f29aa8034c0817648792eb7ae406abaeb26066081cff8142",
+        "sig": "Tzi388+H3bY+iKYx0uXigLNkh1ns3j11Fd+hI5QJrALf98ali2mIdeuswWLa6xdTJszDlY/Who8LmI1AAPoDDg=="
       }
     ]
   },
   "public_key": {
-    "keyid": "a5a33481cb1a97d9f8ceab1c9703cc62517c4eaa40b466d269a225885e868fe9",
+    "keyid": "d1d32ec6b775c9f2f29aa8034c0817648792eb7ae406abaeb26066081cff8142",
     "keyType": "ed25519",
-    "publicKeyBase64": "GtTW2M8G9uWWuOkPkoFkrHgrwTskFjmzdviQaYMcMy8="
+    "publicKeyBase64": "jQ6mC+6EIfIoBXbOlF4l5VQ7PYKoo39WMFLmlzwDPXI="
   },
   "verification": {
     "valid": true,
@@ -61,9 +61,9 @@
           "trustedTimestamp": false
         },
         "changeClass": "causal-software-repair",
-        "generatedAt": "2026-08-28T08:51:24.401384+00:00",
+        "generatedAt": "2026-08-28T09:14:44.020968+00:00",
         "riskGate": "evidence-and-human-approval-required",
-        "sourceCommit": "455ac1b54f869c614763a3675c6f5a59ac197f1a",
+        "sourceCommit": "c8b9d263d561e4e81aa0ad78af4c8813d4dc2278",
         "verification": {}
       },
       "predicateType": "https://asoul.ai/chronosfix/ProofCarryingChange/v1",

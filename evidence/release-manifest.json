@@ -1,58 +1,58 @@
 {
   "schema": "chronosfix.release-manifest/v1",
-  "release_id": "acfx-455ac1b54f86",
-  "generated_at": "2026-08-28T08:51:49.705702+00:00",
-  "source_commit": "455ac1b54f869c614763a3675c6f5a59ac197f1a",
-  "source_fingerprint": "26c7a85b70ce0c60a75959a121c2438c225b82830c20569b7d3d75dd1aac94f5",
+  "release_id": "acfx-c8b9d263d561",
+  "generated_at": "2026-08-28T09:15:37.331047+00:00",
+  "source_commit": "c8b9d263d561e4e81aa0ad78af4c8813d4dc2278",
+  "source_fingerprint": "ecda4d2a6a806b3751e5760097497a7a6ccedc9ee243909405daf72c2495e7fb",
   "source_commit_semantics": "Evidence and the online Demo are tied to this reproducible source anchor commit plus the working-tree source fingerprint; a later artifact commit only packages these outputs.",
   "artifacts": {
     "repair-cockpit/data/demo-data.json": {
-      "bytes": 1272041,
-      "sha256": "92140af5cf10e8ea0867ede35d42afb108c509ca581afedd0c8848c8a04584d5",
+      "bytes": 1272038,
+      "sha256": "3db16ea7376c1cf20a49fdf4b8ee40ebd8e77e383f4408d35ba7987650af9f32",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 1305461
+      "materialized_bytes": 1305458
     },
     "evidence/trace.jsonl": {
       "bytes": 29287,
-      "sha256": "201626f3c00fdda8385ec7692726b8138b56cbbabc11e7b24e8971dad6487903",
+      "sha256": "d4e4e6716c831f4e7d07454c072992a8614ed5a75b2f476943d81b3971fbe74c",
       "identity_mode": "canonical-lf-text-or-raw-binary",
       "materialized_bytes": 29305
     },
     "evidence/run-log.jsonl": {
       "bytes": 8352,
-      "sha256": "016910b3c6d4db5bfa5a2afae2c53cf7824a6d546f8d939bc1b22221cfd30454",
+      "sha256": "103ade80b77efa0ded6493018c5559726a338021f65f61bcbf79a8b94c5ef3aa",
       "identity_mode": "canonical-lf-text-or-raw-binary",
       "materialized_bytes": 8370
     },
     "evidence/run-manifest.json": {
-      "bytes": 4753,
-      "sha256": "351b9f38f210347a8b4c444e44c5a02a1419b6bf2b47803f8e392569c561e57d",
+      "bytes": 4778,
+      "sha256": "a2999927f658a50e52938b494aa87ef4da779dc1093cfd4cb6531104df2c0c1c",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 4895
+      "materialized_bytes": 4920
     },
     "evidence/coordination.json": {
-      "bytes": 28677,
-      "sha256": "20f521e47f5d6b0aaf99915c26ee48d9fe84f71f07e66afcebeb26010f8982c1",
+      "bytes": 28678,
+      "sha256": "a976ec858368fa480181deec4278626dda8aafee568e21c7958ccc47726275cf",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 29598
+      "materialized_bytes": 29599
     },
     "evidence/engineering-metrics.json": {
       "bytes": 3375,
-      "sha256": "2aef376ded7198569ae8af6ebdc5eb92e91066506281c4f841ce4cf0f5de2b6e",
+      "sha256": "bfa373b75d02eb3abe0ad0baa2e73b42c97fe0e53cba13abb7e25c88f9ca48d1",
       "identity_mode": "canonical-lf-text-or-raw-binary",
       "materialized_bytes": 3487
     },
     "evidence/proof-bundle.json": {
-      "bytes": 53440,
-      "sha256": "71a87c03f826dd0c366a9bd5609db88853f2e3ae6926806711d9e56c3642068e",
+      "bytes": 53466,
+      "sha256": "2fcfb3890d7f7f017b7956fb62b37b6f69cc4d19a3acbbee95e7800be4a4db56",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 55176
+      "materialized_bytes": 55202
     },
     "evidence/agentteams-run.json": {
-      "bytes": 7591,
-      "sha256": "6a2cd5c6100d003fe5b95080d878d3263f3b96d75e7f481eb483244198d00392",
+      "bytes": 7616,
+      "sha256": "653d56667ec7d3a57b79447be7442747a5ef3b7fc3655278e92dc3605a2f37cb",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 7896
+      "materialized_bytes": 7921
     },
     "evidence/local-controller-evidence.json": {
       "bytes": 5215,
@@ -74,7 +74,7 @@
     },
     "evidence/change-attestation-verification.json": {
       "bytes": 4213,
-      "sha256": "d1e17fef91170110de9c6425d6e46e7a0f1f236f3c6aa0ee04bcc57707cfb959",
+      "sha256": "bdfd99e87e80c0d37e42e61aec98b9ac2679a5f0da2a1a64731da66326463c8d",
       "identity_mode": "canonical-lf-text-or-raw-binary",
       "materialized_bytes": 4307
     },
@@ -98,7 +98,7 @@
     },
     "evidence/evaluation-report.md": {
       "bytes": 2100,
-      "sha256": "5ac607591da04decedef904f96d9b41bb9f2a881944aa5ce8811b30149bf1bb1",
+      "sha256": "a4dfe8eb25f49ca5e958d4e13ad00af0fedd0c1253b2288aa5370c7e0022e4ea",
       "identity_mode": "canonical-lf-text-or-raw-binary",
       "materialized_bytes": 2139
     },

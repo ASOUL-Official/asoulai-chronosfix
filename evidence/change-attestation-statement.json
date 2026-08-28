@@ -18,8 +18,8 @@
   ],
   "predicateType": "https://asoul.ai/chronosfix/ProofCarryingChange/v1",
   "predicate": {
-    "generatedAt": "2026-08-28T08:51:24.401384+00:00",
-    "sourceCommit": "455ac1b54f869c614763a3675c6f5a59ac197f1a",
+    "generatedAt": "2026-08-28T09:14:44.020968+00:00",
+    "sourceCommit": "c8b9d263d561e4e81aa0ad78af4c8813d4dc2278",
     "changeClass": "causal-software-repair",
     "riskGate": "evidence-and-human-approval-required",
     "verification": {},

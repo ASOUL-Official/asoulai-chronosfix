@@ -1,8 +1,8 @@
 {
-  "run_id": "run-f509492109e848089d1f0741cbe2ac77",
-  "trace_id": "d9d1549527d34b2094ceac8be14002f0",
+  "run_id": "run-1955e5f9a6ad460d8a26c16771a71b11",
+  "trace_id": "179ed7d3c53b4325910864f73a89e355",
   "scenario_path": "scenarios/checkout-timeout/scenario.json",
-  "git_commit": "455ac1b54f869c614763a3675c6f5a59ac197f1a",
+  "git_commit": "c8b9d263d561e4e81aa0ad78af4c8813d4dc2278",
   "baseline_failure_rate": 0.4872,
   "baseline_p99_ms": 606.96,
   "hypotheses_tested": 3,
@@ -30,7 +30,7 @@
       "executed": true,
       "conclusion": "success",
       "exit_code": 0,
-      "run_id": "run-f509492109e848089d1f0741cbe2ac77",
+      "run_id": "run-1955e5f9a6ad460d8a26c16771a71b11",
       "evidence": "experiment results persisted in proof-bundle.json",
       "summary": "1 primary cause(s) reached the intervention threshold."
     },
@@ -40,7 +40,7 @@
       "executed": true,
       "conclusion": "success",
       "exit_code": 0,
-      "run_id": "run-f509492109e848089d1f0741cbe2ac77",
+      "run_id": "run-1955e5f9a6ad460d8a26c16771a71b11",
       "evidence": "selected_patch.results in proof-bundle.json",
       "summary": "8 mandatory variants evaluated; worst failure rate 6.2%."
     },
@@ -50,7 +50,7 @@
       "executed": true,
       "conclusion": "success",
       "exit_code": 0,
-      "run_id": "run-f509492109e848089d1f0741cbe2ac77",
+      "run_id": "run-1955e5f9a6ad460d8a26c16771a71b11",
       "evidence": "patch changes followed by rollback_changes compared with baseline",
       "summary": "Rollback restores the complete baseline state."
     }
@@ -58,7 +58,7 @@
   "quality_gate": "passed",
   "release_decision": "approved",
   "trace_spans": 18,
-  "elapsed_ms": 153.172,
+  "elapsed_ms": 147.975,
   "elapsed_ms_kind": "measured",
   "pipeline_step_completion_rate": 1.0,
   "coordination_revision": 36,

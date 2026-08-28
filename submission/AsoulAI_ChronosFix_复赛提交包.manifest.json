@@ -307,28 +307,28 @@
     },
     {
       "path": "evidence/agentteams-run.json",
-      "size": 7896,
-      "sha256": "6b1417b6fc90d518762b33e5fee0afb083ed5a04f859f6744d9973e57943f665"
+      "size": 7921,
+      "sha256": "267e814c6c4f2c4929fa7344de30684f0a15f2b28f18a859e5fe174f1efec7ff"
     },
     {
       "path": "evidence/change-attestation-public-key.json",
       "size": 180,
-      "sha256": "420a6512dbd5ff73dbc09a9eebe3b7461f22c6c46f7d227ae2034687850ed1a0"
+      "sha256": "0cda080b5ada9b06b0aa6c46f036a6af7a9bd0b78a0d3f67c7894b4078b585b4"
     },
     {
       "path": "evidence/change-attestation-statement.json",
       "size": 1071,
-      "sha256": "aa60a5bdd2938513ece79c738fb2a8169a7c0e93d07dd6632a97601f57e665e5"
+      "sha256": "9b6c6a348eddd3a3350f838f5e13d4da8ad55655294831e95ee1ff01908e04ee"
     },
     {
       "path": "evidence/change-attestation-verification.json",
       "size": 4307,
-      "sha256": "59a7e620f0c5c39c6b9a3f3f31267a4d18718a2e342c903f7b4fdd6207742801"
+      "sha256": "58faa8206a06a4861b0cac438974c7c6669d33ebb0faa8c067df4decac660197"
     },
     {
       "path": "evidence/change-attestation.dsse.json",
       "size": 1421,
-      "sha256": "3eb76339f8c31ba1357f415c7386579b28d9624e9b86f0cb5864aefd8f6eaaad"
+      "sha256": "facef0be54e9e96cd9da3eb8510a8a5a9eb8638e6cc76f7eb349877de7e6ff70"
     },
     {
       "path": "evidence/cloud-skill-sls-dry-run.json",
@@ -337,13 +337,13 @@
     },
     {
       "path": "evidence/coordination.json",
-      "size": 29598,
-      "sha256": "8e1466f0bb0ac074633763bcda135aa33274ac72e48894bdaf831c515d9dfc4e"
+      "size": 29599,
+      "sha256": "11e625159d9f38fbacf8f5d73d082150d30434270b9c65d622f698f6a59e86c1"
     },
     {
       "path": "evidence/engineering-metrics.json",
       "size": 3487,
-      "sha256": "5bcd8bdde2e95ed03a9c0d04ee350a8ae97a050d566476b2ca1d5a336873f321"
+      "sha256": "5b23bb39976bc32d881d48be9d37543f55ed69e2e288829d358bb1d1581346bb"
     },
     {
       "path": "evidence/evaluation-corpus/evaluation-cases.csv",
@@ -363,12 +363,12 @@
     {
       "path": "evidence/evaluation-report.md",
       "size": 2139,
-      "sha256": "aad70d5c549053e055b62fa949110913333b9082fa2b5b9efe43ec145eda343d"
+      "sha256": "85fdbd3b76684df1c4397eefc91d951dfbf4fc16bdfab2d23b2d1e090b2cbc43"
     },
     {
       "path": "evidence/github-issue.json",
       "size": 2561,
-      "sha256": "05f8a9cb1676edfb5694716dba6dbb725d05a2e91b6ce788829a15f6bc89ab7c"
+      "sha256": "5b6abca3b5efd1095db87abbd2cb56bc65f1754bea1b9fd01382a62c2f9d3086"
     },
     {
       "path": "evidence/github-issue.md",
@@ -377,18 +377,18 @@
     },
     {
       "path": "evidence/github-pr-checks.json",
-      "size": 2400,
-      "sha256": "214908249f80739852f8d5210b5b04fd4811e15d606855906c2386d1eff879f6"
+      "size": 2425,
+      "sha256": "6e7c6a6bd25ee7685daa80425821bd5f9f54f3a553bb38de462da97ff8ca4366"
     },
     {
       "path": "evidence/github-pr-diff.patch",
-      "size": 2492,
-      "sha256": "dd886352afbbdd2720b46262295801a7ab5654d74240292cf3cc78f2c5e5430a"
+      "size": 2517,
+      "sha256": "a9f6fabf4689012adcb72cb7f0da200fb16b76aec3238f3cc315f9964c722d7e"
     },
     {
       "path": "evidence/github-pr.json",
-      "size": 8229,
-      "sha256": "a98082680c0f9423bd8894b997a1800d48de50d19bac5c2921ecec79f747360f"
+      "size": 8254,
+      "sha256": "38331cda2af42a5f883e11d02777952bf34d0d0cf5e07c7d2a54087fc0effc21"
     },
     {
       "path": "evidence/github-pr.md",
@@ -397,8 +397,8 @@
     },
     {
       "path": "evidence/github-review-audit.jsonl",
-      "size": 3492,
-      "sha256": "9c5a390fa1393a8dc420f8251e61c212b9ead82c27f05ce3cf56a7646420212c"
+      "size": 3517,
+      "sha256": "10734f7acbae6d4a804d2955cf3f7cb8a64f2d2e0e255aa471ddf5b5105c2387"
     },
     {
       "path": "evidence/human-baseline-summary.json",
@@ -427,13 +427,13 @@
     },
     {
       "path": "evidence/proof-bundle.json",
-      "size": 55176,
-      "sha256": "c93d21682af4c2d5c5efb81513c2240d9b881f633334e502646d0e33a47e3b38"
+      "size": 55202,
+      "sha256": "1e1237bc5a54c9b11aa0ab45ae91be4ebf6ca2d7bb14d9721ed026af33b4a92b"
     },
     {
       "path": "evidence/proof-report.md",
       "size": 7375,
-      "sha256": "bc198f992e6e5dba408632bf141fddf674b88d7b69232698557499a88c1a3d7a"
+      "sha256": "de16abd726006678e22edb6dc56b6e64f7ca41a863dd50eea8bd5b4dd9fb2ea1"
     },
     {
       "path": "evidence/public-incident-validation.json",
@@ -443,22 +443,22 @@
     {
       "path": "evidence/release-manifest.json",
       "size": 6144,
-      "sha256": "d46b613f965bc6289257b1298f313ecaf13fae6cdaa5cd21ed0533b6775e7817"
+      "sha256": "1d5fdeb173a12b468d4431cbb3114262026f7bb6f58241d4cd696d53570760c4"
     },
     {
       "path": "evidence/run-log.jsonl",
       "size": 8370,
-      "sha256": "411edeaafc29bb88e91cd3d5a30be1f272fafa0297c7c01c0126a25c5724f61e"
+      "sha256": "6f80ce21ebeb3a18da0e2aa31f926a733015f9e4ea922b8a4d9d3e69569fdbe5"
     },
     {
       "path": "evidence/run-manifest.json",
-      "size": 4895,
-      "sha256": "bf17d91a6861e5dfa03eb2af7a02236feb021ba41381905486dce428b8af08da"
+      "size": 4920,
+      "sha256": "c5f17c1a148eaaa9bdb1a77cc05aa9df134d9241caa7baac440dbcd6c9362deb"
     },
     {
       "path": "evidence/trace.jsonl",
       "size": 29305,
-      "sha256": "f5539e4d96e6528b3851793d194e9a87bed31f4388d7404b0d0f702b71c3890f"
+      "sha256": "0825ffc5393ce26ab1f0e02c8278fb1cfad011c4f75d7aaaab022f642d58e1aa"
     },
     {
       "path": "public-incidents/cloudflare-2019-waf-regex/incident.json",
@@ -487,8 +487,8 @@
     },
     {
       "path": "repair-cockpit/data/demo-data.json",
-      "size": 1305461,
-      "sha256": "173dd25004d323a9a3ca4a55ee24332cf11c46e8a79b177930a05b6eb384e399"
+      "size": 1305458,
+      "sha256": "14e1d57e0d22873622266c1fb76fb8247be505467e5a814d0863022612550744"
     },
     {
       "path": "repair-cockpit/index.html",
@@ -582,8 +582,8 @@
     },
     {
       "path": "scripts/build_release_manifest.py",
-      "size": 5047,
-      "sha256": "4b0cb3c5a8830842e5551f821b3f11d9a7fbecbe146356005cac1325ff38d35c"
+      "size": 5158,
+      "sha256": "6109069ff5ad648c423758e4f21da09da22e1d1dc69b5e4dd957d223122ede60"
     },
     {
       "path": "scripts/build_submission_package.py",
@@ -632,8 +632,8 @@
     },
     {
       "path": "scripts/validate_release_manifest.py",
-      "size": 4966,
-      "sha256": "c7af3da439f5716cb2b61c9abfeab27235a9b36cee7355790410803e5347d0bd"
+      "size": 5077,
+      "sha256": "e6ffa505ef23c0b77e700f7b0383985500c938ffaec4c15af77f3e6c52ad7409"
     },
     {
       "path": "scripts/validate_scenario_schema.py",
@@ -927,6 +927,6 @@
     }
   ],
   "archive": "AsoulAI_ChronosFix_复赛提交包.zip",
-  "archive_size": 1645984,
-  "archive_sha256": "1f49300b0a2d5ad29a2ae495f39395ef01adc2ccf303f442d72485939a73d005"
+  "archive_size": 1646211,
+  "archive_sha256": "c61eae233988607ffea8540af767f9b44a8ebb7bcf9e5baabf95a8d889cbaffd"
 }
