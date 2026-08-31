@@ -1,56 +1,56 @@
 {
   "schema": "chronosfix.release-manifest/v1",
-  "release_id": "acfx-553522870e47",
-  "generated_at": "2026-08-31T03:50:14.458176+00:00",
-  "source_commit": "553522870e4794fe906e161e3eb22082fe8bdcac",
-  "source_fingerprint": "2c5ebf035529f32581a71cdf6aab9f629badb43f1118af4ae7fc66fac3a7b50d",
+  "release_id": "acfx-4dfd2f96dcba",
+  "generated_at": "2026-08-31T05:23:17.340312+00:00",
+  "source_commit": "4dfd2f96dcba8ecc7505a339aaae332a5bea0540",
+  "source_fingerprint": "d3482263b600fb75b51eaf64bb4894f58e74d86e89e94adbe1ec31a28ec8e612",
   "source_commit_semantics": "Evidence and the online Demo are tied to this reproducible source anchor commit plus the working-tree source fingerprint; a later artifact commit only packages these outputs.",
   "artifacts": {
     "repair-cockpit/data/demo-data.json": {
-      "bytes": 1314559,
-      "sha256": "2fd5a97ec283383dd7a4a2807437368618707f5de7ea942304dd1f0768ff274c",
+      "bytes": 1314573,
+      "sha256": "8025a117486f88115fee2091937a907c8cae941bbcad39f8026e2b6b0bac4a89",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 1349082
+      "materialized_bytes": 1349096
     },
     "evidence/trace.jsonl": {
-      "bytes": 29280,
-      "sha256": "082b3e70a1f91bfbe4e0a7d319bc9f45d786c277cafd4b0df71052dae758ba58",
+      "bytes": 29286,
+      "sha256": "a63738de78cd66e247206b2933365db6bc6fca218f949b17382a3064810295cf",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 29298
+      "materialized_bytes": 29304
     },
     "evidence/run-log.jsonl": {
-      "bytes": 8348,
-      "sha256": "3877a063fd0c8fe20e9afbab7b729b300162dfaa097c21d8eeb853d4d3597878",
+      "bytes": 8354,
+      "sha256": "a44e7d3a8577c82e68a7c7e2091e13c2640058f7ce4982aa96c992e38f9f854e",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 8366
+      "materialized_bytes": 8372
     },
     "evidence/run-manifest.json": {
-      "bytes": 4735,
-      "sha256": "22e401113b615189cacfdbf61da07ab09f0dd1ec10d0099cb57890208862ce27",
+      "bytes": 4734,
+      "sha256": "558f2d6006b3688efc3b562d0a1c0c8a38f3974c37f7647b6f29ff57a329e0b3",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 4877
+      "materialized_bytes": 4876
     },
     "evidence/coordination.json": {
-      "bytes": 28671,
-      "sha256": "d84f04064715fefa473e5b80acbd51bf18d54d0262dca0f0b5b844aad8d244df",
+      "bytes": 28672,
+      "sha256": "714e34155f5516dcf9aa758b4e0f82c2fc587bb9af51c701bfca757bce5030b8",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 29592
+      "materialized_bytes": 29593
     },
     "evidence/engineering-metrics.json": {
       "bytes": 3375,
-      "sha256": "b3b4f3cfd3fa48cc2ba2733c719fc7e9e454f0b7d930b2030318ed654c1c1794",
+      "sha256": "d3dac0942e7a43a4f8a1207a6ac50d58cf69ba9d5c38a978048b67d496089aac",
       "identity_mode": "canonical-lf-text-or-raw-binary",
       "materialized_bytes": 3487
     },
     "evidence/proof-bundle.json": {
-      "bytes": 53415,
-      "sha256": "b01043537fbe9c94c747f042252b05fb201578da6ddde15d50b6e495ea13fa9d",
+      "bytes": 53416,
+      "sha256": "cce773802278ebb0ec599e16eb302008ae6613f0df4b32eb3ece445be7662864",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 55151
+      "materialized_bytes": 55152
     },
     "evidence/agentteams-run.json": {
       "bytes": 7572,
-      "sha256": "3237d1db8f7f46e2c84e0e9d03248d6e9fa77b6815dcc426e63ba035694e73ed",
+      "sha256": "ec23ed263212f8e8948210f1c38de17ab22cd0fdbe5998ac11ea51bd0c7947e9",
       "identity_mode": "canonical-lf-text-or-raw-binary",
       "materialized_bytes": 7877
     },
@@ -98,7 +98,7 @@
     },
     "evidence/evaluation-report.md": {
       "bytes": 2100,
-      "sha256": "4d1873db394677edec5f7789d17032481413c8cecf0b7eb2b70c486c9918e4a0",
+      "sha256": "69fad7f90c0f2ab9a3357c2fdfc1a5a5639359a51013e2acfd84c453c5be3cdc",
       "identity_mode": "canonical-lf-text-or-raw-binary",
       "materialized_bytes": 2139
     },
@@ -133,7 +133,7 @@
     "evidence_passport_claims": 14,
     "trace_spans": 18,
     "agentteams_resources": 11,
-    "unit_and_contract_tests": 57
+    "unit_and_contract_tests": 61
   },
   "truth_boundary": {
     "agentteams_controller_executed": false,

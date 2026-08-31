@@ -3,8 +3,8 @@
   "mode": "local-draft",
   "pull_request": "#43",
   "commit_sha": null,
-  "base_commit_sha": "553522870e4794fe906e161e3eb22082fe8bdcac",
-  "run_id": "run-d639b10b1b9a426a99feecdd18b190c3",
+  "base_commit_sha": "4dfd2f96dcba8ecc7505a339aaae332a5bea0540",
+  "run_id": "run-3746c2ff03c9461cb96e1ecd16f62315",
   "status": "completed",
   "checks": [
     {
@@ -13,7 +13,7 @@
       "executed": true,
       "conclusion": "success",
       "exit_code": 0,
-      "run_id": "run-d639b10b1b9a426a99feecdd18b190c3",
+      "run_id": "run-3746c2ff03c9461cb96e1ecd16f62315",
       "evidence": "experiment results persisted in proof-bundle.json",
       "summary": "1 primary cause(s) reached the intervention threshold.",
       "source": "metrics.validation_checks"
@@ -24,7 +24,7 @@
       "executed": true,
       "conclusion": "success",
       "exit_code": 0,
-      "run_id": "run-d639b10b1b9a426a99feecdd18b190c3",
+      "run_id": "run-3746c2ff03c9461cb96e1ecd16f62315",
       "evidence": "selected_patch.results in proof-bundle.json",
       "summary": "8 mandatory variants evaluated; worst failure rate 6.2%.",
       "source": "metrics.validation_checks"
@@ -35,7 +35,7 @@
       "executed": true,
       "conclusion": "success",
       "exit_code": 0,
-      "run_id": "run-d639b10b1b9a426a99feecdd18b190c3",
+      "run_id": "run-3746c2ff03c9461cb96e1ecd16f62315",
       "evidence": "patch changes followed by rollback_changes compared with baseline",
       "summary": "Rollback restores the complete baseline state.",
       "source": "metrics.validation_checks"
@@ -57,7 +57,7 @@
       "executed": true,
       "conclusion": "success",
       "approver": "AsoulAI Release Owner",
-      "approved_at": "2026-08-31T02:23:19.390851+00:00",
+      "approved_at": "2026-08-31T05:20:38.187004+00:00",
       "reason": "Semifinal evidence review",
       "policy_version": "chronosfix-riskgate/v1",
       "input_digest": "cfd6506285827bf2cbdb5052a34584fe287c9bcbd3dca5f164427f73c16b2027",

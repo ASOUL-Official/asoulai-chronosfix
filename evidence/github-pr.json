@@ -41,7 +41,7 @@
     "status": "approved",
     "approver": "AsoulAI Release Owner",
     "reason": "Semifinal evidence review",
-    "timestamp": "2026-08-31T02:23:19.390851+00:00",
+    "timestamp": "2026-08-31T05:20:38.187004+00:00",
     "policy_version": "chronosfix-riskgate/v1",
     "is_human": true,
     "state_revision": 36,
@@ -148,7 +148,7 @@
         "executed": true,
         "conclusion": "success",
         "exit_code": 0,
-        "run_id": "run-d639b10b1b9a426a99feecdd18b190c3",
+        "run_id": "run-3746c2ff03c9461cb96e1ecd16f62315",
         "evidence": "experiment results persisted in proof-bundle.json",
         "summary": "1 primary cause(s) reached the intervention threshold.",
         "source": "metrics.validation_checks"
@@ -159,7 +159,7 @@
         "executed": true,
         "conclusion": "success",
         "exit_code": 0,
-        "run_id": "run-d639b10b1b9a426a99feecdd18b190c3",
+        "run_id": "run-3746c2ff03c9461cb96e1ecd16f62315",
         "evidence": "selected_patch.results in proof-bundle.json",
         "summary": "8 mandatory variants evaluated; worst failure rate 6.2%.",
         "source": "metrics.validation_checks"
@@ -170,7 +170,7 @@
         "executed": true,
         "conclusion": "success",
         "exit_code": 0,
-        "run_id": "run-d639b10b1b9a426a99feecdd18b190c3",
+        "run_id": "run-3746c2ff03c9461cb96e1ecd16f62315",
         "evidence": "patch changes followed by rollback_changes compared with baseline",
         "summary": "Rollback restores the complete baseline state.",
         "source": "metrics.validation_checks"
@@ -210,8 +210,8 @@
     "missing_claims": [],
     "integrity": {
       "schema_version": "chronosfix.evidence-integrity/v1",
-      "run_id": "run-d639b10b1b9a426a99feecdd18b190c3",
-      "trace_id": "4c80e40712664365a76c163a0f03ff91",
+      "run_id": "run-3746c2ff03c9461cb96e1ecd16f62315",
+      "trace_id": "939d0a7bae394fd29957eaf0871c84c8",
       "scenario_sha256": "f287e45a9a2e5804892cbd402649aa1e0a1ae6a02bbd42fb72b717239e543867",
       "patch_changes_sha256": "58f3873074175c6dec959b17d7f8a93f6ab723e6c0574435a0bded0c18012d9b",
       "rollback_changes_sha256": "ac7b4fde845a552d4b2ecf3f91112c3187d0c036e78dd27b1355f495a77892ed",
