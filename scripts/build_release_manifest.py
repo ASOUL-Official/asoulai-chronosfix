@@ -3,7 +3,9 @@ from __future__ import annotations
 import hashlib
 import json
 from datetime import datetime, timezone
+import os
 from pathlib import Path
+import re
 import subprocess
 
 
@@ -50,6 +52,13 @@ SOURCE_INPUTS = [
 
 
 def git_head() -> str:
+    # Release artifacts can be regenerated after a source-only commit while
+    # preserving the commit that actually generated the evidence payloads.
+    anchored = os.environ.get("CHRONOSFIX_SOURCE_COMMIT", "").strip()
+    if anchored:
+        if not re.fullmatch(r"[0-9a-f]{40}", anchored):
+            raise ValueError("CHRONOSFIX_SOURCE_COMMIT must be a 40-character git commit")
+        return anchored
     completed = subprocess.run(
         ["git", "rev-parse", "HEAD"],
         cwd=ROOT,

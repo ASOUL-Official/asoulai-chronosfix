@@ -73,6 +73,15 @@ bash agentteams/runtime/verify_official_runtime.sh
 
 真实运行仍需要：模型 API key、可拉取官方镜像的网络，以及（若启用 SLS Skill）本机 Aliyun CLI Profile 和精确 Project/Logstore。执行成功后，才可以把 `evidence/agentteams-official-runtime/` 作为 Controller 证据加入发布清单；在此之前，发布清单的 truth boundary 仍保持 `agentteams_controller_executed: false`。
 
+若只更新安装入口或文档而不重跑本地证据，重建发布包时保留原证据锚点，例如：
+
+```bash
+CHRONOSFIX_SOURCE_COMMIT=553522870e4794fe906e161e3eb22082fe8bdcac \
+  python scripts/build_release_manifest.py
+python scripts/build_submission_package.py
+python scripts/validate_release_manifest.py evidence/release-manifest.json
+```
+
 ## 答辩口径
 
 可说：
