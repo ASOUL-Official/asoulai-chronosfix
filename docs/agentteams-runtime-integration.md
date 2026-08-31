@@ -59,7 +59,19 @@ python agentteams/run_chronosfix_team.py --approve --approver "AsoulAI Release O
 5. 保存 Team Active 状态、Worker 状态、协作记录、Controller 日志和最终产物。
 6. 对照本地 run manifest，验证相同门禁边界没有被 Runtime 改写。
 
-仓库已提供 `agentteams/runtime/apply_resources.sh` 作为后续入口；它在 Controller 不可用时会失败退出，不会伪造成功。
+仓库提供两个真实运行入口：
+
+```bash
+# WSL2 / Linux；默认使用官方 v1.2.3、Qwen、隔离端口和本地数据目录
+export AGENTTEAMS_LLM_API_KEY='在本机 shell 设置，不要提交到仓库'
+bash agentteams/runtime/install_official_local.sh
+bash agentteams/runtime/apply_resources.sh
+bash agentteams/runtime/verify_official_runtime.sh
+```
+
+`install_official_local.sh` 从固定 commit 的官方安装器启动 embedded Controller/Matrix，默认使用 `28080/28001/28088/28888/23000` 端口，避免覆盖其他部署。它在缺少模型 key、Docker 不可用或下载失败时退出，不会伪造成功。`verify_official_runtime.sh` 只保存 Controller 状态和 `agt get` 资源 JSON，不保存模型 key、管理员密码或云凭据。
+
+真实运行仍需要：模型 API key、可拉取官方镜像的网络，以及（若启用 SLS Skill）本机 Aliyun CLI Profile 和精确 Project/Logstore。执行成功后，才可以把 `evidence/agentteams-official-runtime/` 作为 Controller 证据加入发布清单；在此之前，发布清单的 truth boundary 仍保持 `agentteams_controller_executed: false`。
 
 ## 答辩口径
 
