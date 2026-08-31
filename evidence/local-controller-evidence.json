@@ -1,6 +1,6 @@
 {
   "schema": "chronosfix.local-controller-evidence/v1",
-  "generated_at": "2026-08-28T10:24:16.401374+00:00",
+  "generated_at": "2026-08-31T02:24:37.184177+00:00",
   "passed": true,
   "boundaries": {
     "local_controller_executed": true,
@@ -10,8 +10,8 @@
     "matrix_protocol_executed": false
   },
   "golden_run": {
-    "run_id": "acfx-local-20260828T102411-fb2d731895",
-    "trace_id": "b8435432a62546dab3c97926013d4aa8",
+    "run_id": "acfx-local-20260831T022427-9888e36210",
+    "trace_id": "4414a73bc9d04c89841ac4c69631d0f3",
     "initial_release_decision": "approved",
     "after_evidence_release_decision": "blocked-awaiting-human",
     "matrix_database": "D:\\1\\全球AI大赛\\chronosfix\\output\\local-controller-evidence\\matrix.sqlite3",
@@ -122,35 +122,35 @@
     }
   },
   "worker_failover": {
-    "task_id": "live-timeout-668d87bd",
+    "task_id": "live-timeout-41d8f892",
     "attempts": [
       {
-        "task_id": "live-timeout-668d87bd",
+        "task_id": "live-timeout-41d8f892",
         "attempt": 1,
         "logical_worker": "chronosfix-timeline-analyst",
         "instance_id": "chronosfix-timeline-analyst#01",
-        "pid": 5852,
+        "pid": 43416,
         "status": "FAILED",
-        "started_at": "2026-08-28T10:24:12.740318+00:00",
-        "ended_at": "2026-08-28T10:24:14.077550+00:00",
-        "duration_ms": 1337.236,
+        "started_at": "2026-08-31T02:24:31.619421+00:00",
+        "ended_at": "2026-08-31T02:24:32.926040+00:00",
+        "duration_ms": 1307.601,
         "exit_code": 1,
         "error": "lease expired after 0.250s",
         "result_digest": null
       },
       {
-        "task_id": "live-timeout-668d87bd",
+        "task_id": "live-timeout-41d8f892",
         "attempt": 2,
         "logical_worker": "chronosfix-timeline-analyst",
         "instance_id": "chronosfix-timeline-analyst#02",
-        "pid": 6648,
+        "pid": 40128,
         "status": "COMPLETED",
-        "started_at": "2026-08-28T10:24:14.093921+00:00",
-        "ended_at": "2026-08-28T10:24:14.542117+00:00",
-        "duration_ms": 448.2,
+        "started_at": "2026-08-31T02:24:32.946955+00:00",
+        "ended_at": "2026-08-31T02:24:34.266470+00:00",
+        "duration_ms": 1321.157,
         "exit_code": 0,
         "error": null,
-        "result_digest": "bb182e6df210ca3c21e03a6838cf36a8806365aaf9ed71e01e1116c869a00eac"
+        "result_digest": "b1893e9c33f48b31ea873b9a855321bf4a62700883c6b3b4f27e21afb7c252e9"
       }
     ],
     "different_pid": true,
@@ -176,32 +176,32 @@
     "events": [
       {
         "sequence": 4,
-        "event_id": "task-completed-68fa9fe5512a475d",
+        "event_id": "task-completed-4097a2334ac84ec2",
         "event_type": "task_completed",
         "revision": 4,
         "task_id": "incident-pipeline",
         "worker": "chronosfix-incident-commander#01",
-        "timestamp": "2026-08-28T10:24:12.685107+00:00",
+        "timestamp": "2026-08-31T02:24:31.552602+00:00",
         "payload": {
           "attempt": 1,
-          "duration_ms": 1053.557,
-          "pid": 37116,
-          "result_digest": "8819a1ffdf6a07266ed7499c40151ddaf3ca4d846fe98f1ef77047b635a75a74"
+          "duration_ms": 3891.514,
+          "pid": 46092,
+          "result_digest": "d91ce3b7bb34be83e768ba22429f348e43e737e4c350dad4a2bee0b805f712da"
         }
       },
       {
         "sequence": 13,
-        "event_id": "task-completed-05f6b5f0867747dc",
+        "event_id": "task-completed-304fe3d9d54845a7",
         "event_type": "task_completed",
         "revision": 13,
-        "task_id": "live-timeout-668d87bd",
+        "task_id": "live-timeout-41d8f892",
         "worker": "chronosfix-timeline-analyst#02",
-        "timestamp": "2026-08-28T10:24:14.551228+00:00",
+        "timestamp": "2026-08-31T02:24:34.278624+00:00",
         "payload": {
           "attempt": 2,
-          "duration_ms": 448.2,
-          "pid": 6648,
-          "result_digest": "bb182e6df210ca3c21e03a6838cf36a8806365aaf9ed71e01e1116c869a00eac"
+          "duration_ms": 1321.157,
+          "pid": 40128,
+          "result_digest": "b1893e9c33f48b31ea873b9a855321bf4a62700883c6b3b4f27e21afb7c252e9"
         }
       },
       {
@@ -211,7 +211,7 @@
         "revision": 14,
         "task_id": null,
         "worker": null,
-        "timestamp": "2026-08-28T10:24:14.562554+00:00",
+        "timestamp": "2026-08-31T02:24:34.293365+00:00",
         "payload": {
           "digest": "3c11e4a79bdb0d8bc9da587739011a3c7549fca0b8d46970750c1d8fe30ab3cb",
           "kind": "configuration",
@@ -220,12 +220,12 @@
       },
       {
         "sequence": 15,
-        "event_id": "approval-invalidated-8d9d6155881940e6",
+        "event_id": "approval-invalidated-ba69448004294267",
         "event_type": "approval_invalidated",
         "revision": 15,
         "task_id": "risk-gate",
         "worker": "chronosfix-release-auditor#01",
-        "timestamp": "2026-08-28T10:24:14.570060+00:00",
+        "timestamp": "2026-08-31T02:24:34.299494+00:00",
         "payload": {
           "current_revision": 14,
           "source_event_id": "acceptance-live-evidence-001",
@@ -234,23 +234,23 @@
       },
       {
         "sequence": 18,
-        "event_id": "task-completed-da83e83310414b2f",
+        "event_id": "task-completed-1095cc4321ca47c0",
         "event_type": "task_completed",
         "revision": 18,
         "task_id": "dynamic-evidence-audit-ence-001",
         "worker": "chronosfix-timeline-analyst#01",
-        "timestamp": "2026-08-28T10:24:15.889475+00:00",
+        "timestamp": "2026-08-31T02:24:35.773152+00:00",
         "payload": {
           "attempt": 1,
-          "duration_ms": 1293.47,
-          "pid": 47732,
+          "duration_ms": 1441.01,
+          "pid": 43408,
           "result_digest": "c00c8bdfc131139b67a68808ac002a2c2262d4ab436b6560265217e15be9410c"
         }
       }
     ]
   },
   "badcase_refusal": {
-    "run_id": "acfx-local-20260828T102415-d82b3da017",
+    "run_id": "acfx-local-20260831T022435-f31ff7cac6",
     "status": "ABSTAINED",
     "release_decision": "blocked-insufficient-evidence",
     "registered_tasks": [

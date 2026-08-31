@@ -1,8 +1,8 @@
 {
   "schema_version": "chronosfix.run-manifest/v1",
-  "generated_at": "2026-08-28T10:23:55.431765+00:00",
-  "run_id": "run-144187310e8e4d54a91d873f53355a18",
-  "trace_id": "33a2b674dfed4968921df4a926db41f3",
+  "generated_at": "2026-08-31T02:23:20.154781+00:00",
+  "run_id": "run-d639b10b1b9a426a99feecdd18b190c3",
+  "trace_id": "4c80e40712664365a76c163a0f03ff91",
   "incident_id": "INC-2026-0816-001",
   "scenario": {
     "path": "scenarios/checkout-timeout/scenario.json",
@@ -46,7 +46,7 @@
       "status": "approved",
       "approver": "AsoulAI Release Owner",
       "reason": "Semifinal evidence review",
-      "timestamp": "2026-08-28T10:23:55.312381+00:00",
+      "timestamp": "2026-08-31T02:23:19.390851+00:00",
       "policy_version": "chronosfix-riskgate/v1",
       "is_human": true,
       "state_revision": 36,
@@ -54,7 +54,7 @@
     }
   },
   "measurements": {
-    "elapsed_ms": 105.451,
+    "elapsed_ms": 752.416,
     "elapsed_ms_kind": "measured",
     "evidence_coverage": 1.0,
     "evidence_coverage_kind": "derived",
@@ -74,41 +74,41 @@
     "event_count": 38
   },
   "environment": {
-    "python": "3.13.9",
+    "python": "3.12.13",
     "platform": "Windows-11-10.0.26200-SP0",
-    "git_commit": "cd43a4f43e5a5ed8e4082d37b108adff9ba76bee"
+    "git_commit": "553522870e4794fe906e161e3eb22082fe8bdcac"
   },
   "artifacts": {
     "trace.jsonl": {
-      "sha256": "6d380945c268681d0f798bd663884a1ae09049b5a0bdc6bb3d5121382157bbbe",
-      "bytes": 29303
+      "sha256": "8429e06a7d8762c8b34ec30c08058db885cdabb5791f7a4567158000321b9ac4",
+      "bytes": 29298
     },
     "run-log.jsonl": {
-      "sha256": "42fa4c3a8e9d54e659724eec478c04114082c3d0ed5caf546366e66fc655fe3b",
-      "bytes": 8371
+      "sha256": "e935c5abb7f3f4d6c87e8fbbe558f9f6ac043a4d5a00b435c94ae04e8a78c9b1",
+      "bytes": 8366
     },
     "proof-bundle.json": {
-      "sha256": "76710444255baee1f57eb49a05dd8a90280bac4f32e5015d9a6955ddce7d8fc5",
+      "sha256": "f2d23852719b0bc69fa0ddfedbdd4544a23cc37b25e65efdfca9677a10b4e7af",
       "bytes": 55151
     },
     "proof-report.md": {
-      "sha256": "877fde4af5615e89ab6f99af7cf46020133713bcf85deaafb7102d623cf83ad1",
+      "sha256": "2eba876e9ac5b13eaee2f865a2185f7e1bc8caedf0cf297e590a0256eab4eee7",
       "bytes": 7372
     },
     "engineering-metrics.json": {
-      "sha256": "a66b4ae63fbd7a896bb6418c0f17b32ea31f9f01f96260055a030a555a3e4930",
+      "sha256": "447c42f26a8053d73f9151cf07ae9a5efc834ced1d1deb644b0e48bd13e67e41",
       "bytes": 3487
     },
     "agentteams-run.json": {
-      "sha256": "ea8f1bdcee59cda0d5d37ffecc4e8e1a5464687012bdbc232abd62f08ef99869",
+      "sha256": "cf97a73a6a63742eef5360435030abbd7d5f119334508b8a6f6863a47985b53c",
       "bytes": 7877
     },
     "evaluation-report.md": {
-      "sha256": "503c5ac1f1d585456234c2ad7a89ce0c47a52761d5d4be48ccf95e31e3c884ac",
+      "sha256": "6641d784c40a67ad60f329cbace5209b18b18f091c859091bf8803d2283a666f",
       "bytes": 2139
     },
     "github-issue.json": {
-      "sha256": "e502945569f24075a696fc23462aa7576497dc2386aad91995227f84e7e5639c",
+      "sha256": "ae5952a533d91bcc3465c4bd20e61786fcfb8d19a3a7c25bfecaf3f8de9a6d79",
       "bytes": 2561
     },
     "github-issue.md": {
@@ -116,7 +116,7 @@
       "bytes": 1395
     },
     "github-pr.json": {
-      "sha256": "a1f09673dfba24a4158241e55de5bf94e210ab4e78e033b1dee1f537afaa7578",
+      "sha256": "7407bbd58a32064d27ee2d45b13515e2ca9e766b71bc5e361b7de7ec5bba3483",
       "bytes": 8210
     },
     "github-pr.md": {
@@ -124,19 +124,19 @@
       "bytes": 1804
     },
     "github-pr-diff.patch": {
-      "sha256": "b50ba1e8d2f7aa67f7858f9db158e9519024fab9fd87f2cb05bd9db37d0f0e0b",
+      "sha256": "841f5da2f276fea7d4cba7f0b0d50a2c217db68bc79e911ec75d65a02015774e",
       "bytes": 2476
     },
     "github-pr-checks.json": {
-      "sha256": "39495435c66a018e884c1a662c1db6bb1e75579ee7e029fa740eed37383cbeae",
+      "sha256": "66c2ccd4989ed5abb7f3007a144ad71e8eb545c997eef303acbe47310ae9de54",
       "bytes": 2381
     },
     "github-review-audit.jsonl": {
-      "sha256": "a6e7bdb4734004d76d59158f0e6599e43016c0d84b6e9226487be26b1f3e13e0",
+      "sha256": "f44db57712fb4e192a38ccc6e4b0948126accc4c20eaebf5291bde3c0eea9766",
       "bytes": 3476
     },
     "coordination.json": {
-      "sha256": "a93f08734d1da778f4358417993ef5e25252219cde9ccfb4d3e3ba2c834239df",
+      "sha256": "0212d9b2c26bb62a2adaeb08cf51b2dd2a0bafc487639facf1a0ed5c1da92240",
       "bytes": 29592
     }
   }
