@@ -10,7 +10,7 @@
       name="description"
       content="AsoulAI ChronosFix 复赛评委模式：连接本地 Controller 时真实执行 Worker、失败重派、动态证据与审批失效；静态托管时明确回退到证据包。"
     />
-    <link rel="stylesheet" href="./styles.css?v=semifinal-final-20260828" />
+    <link rel="stylesheet" href="./styles.css?v=semifinal-final-20260831" />
   </head>
   <body>
     <div class="loading-screen" id="loading-screen" role="status" aria-live="polite">
@@ -41,6 +41,31 @@
           <p class="hero-note" id="runtime-boundary-note">
             页面数据来自 <code>data/demo-data.json</code>；绿色只代表离线合成验证通过，不代表已经连接真实 AgentTeams Controller、云资源或生产发布系统。
           </p>
+          <div class="hero-proof-grid" aria-label="可验证闭环摘要">
+            <article class="hero-proof-stat">
+              <strong>14</strong>
+              <span>证据声明</span>
+              <small>同一 release identity</small>
+            </article>
+            <article class="hero-proof-stat">
+              <strong>7/8</strong>
+              <span>Agent 组合</span>
+              <small>Manager 按证据选择</small>
+            </article>
+            <article class="hero-proof-stat">
+              <strong>2</strong>
+              <span>独立门禁</span>
+              <small>质量 + 人类审批</small>
+            </article>
+          </div>
+          <div class="hero-chain" aria-label="证明链路">
+            <span>Evidence</span><i aria-hidden="true">→</i><span>Counterfactual</span><i aria-hidden="true">→</i><span>Sandbox</span><i aria-hidden="true">→</i><span>RiskGate</span><i aria-hidden="true">→</i><span>PR</span>
+          </div>
+          <div class="hero-proof-list" aria-label="闭环关键事实">
+            <div><strong>证据基线</strong><span>14 条声明由同一 release manifest 绑定</span></div>
+            <div><strong>Agent 协作</strong><span>Manager 从 8 个能力角色中选择最小充分组合</span></div>
+            <div><strong>变更闸门</strong><span>Sandbox → RiskGate → PR，质量失败即阻断</span></div>
+          </div>
         </div>
 
         <div class="control-deck" aria-label="演示控制台">
