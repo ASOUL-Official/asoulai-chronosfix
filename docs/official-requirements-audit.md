@@ -32,9 +32,10 @@
 
 ### 1. AgentTeams 多 Agent 协同（必选）
 
-- 角色编排：1 Manager、8 Worker、1 Team、1 Human，正式声明位于 `agentteams/runtime/chronosfix-resources.yaml`。
+- 角色编排：1 Manager、8 Worker、1 Team、1 Human，正式声明位于 `agentteams/runtime/chronosfix-resources.yaml`。8 个 Worker 是可治理能力池，不是每次运行都强制全量启动；Manager 会按当前证据选择最小充分子集。
 - 任务拆解与上下文：`IncidentState` 的状态分区、`run_id` / `trace_id` / `parent_span_id` 和 Worker 写入边界见 `docs/agent-identity.md`、`docs/interface-schema.md`。
 - 协同执行与状态追踪：本地入口 `agentteams/run_chronosfix_team.py` 生成兼容 transcript、Trace、日志和证据护照。
+- 自主组合证据：`src/chronosfix/runtime/recommender.py` 依据事件、假设、候选补丁和证据缺口生成 `agent_plan_recommended`；Golden 运行选择 7 个 Worker，冲突 / 证据不足运行只选择 3 个并在 `PatchTournament / RiskGate` 前停止，结果落在 `evidence/local-controller-evidence.json`。
 - 证据等级：`evidence/agentteams-manifest-validation.json` 是离线资源校验；`evidence/agentteams-run.json` 明确 `agentteams_runtime_executed=false`。
 - 状态：部分完成。可以证明资源设计、状态契约和本地闭环，不能把它表述为真实 Runtime 已运行。
 

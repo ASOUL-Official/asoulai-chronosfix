@@ -48,13 +48,15 @@ GitHub Pages 会直接按静态资源方式加载，无需后端，并显示 `ST
 
 ## 90 秒评委动线
 
-1. 选择 `checkout-timeout`，说明页面读取的是离线运行证据而非前端写死数字。
+1. 选择 `checkout-timeout`，先点击“Agent 判断并组合”，展示 Manager 根据证据选择 7 个 Worker；切换到 Badcase / 证据不足样例时只保留 3 个 Worker 并在补丁前拒答。
 2. 点击“动态协同”，展示新证据插入任务、Worker 超时重派、去重和 revision 暂停/恢复。
 3. 点击“因果证明”，展示主因、放大因素和证伪假设的反事实差异。
 4. 点击“故障族验证”，展示补丁竞赛、真实变更字段和强制变体结果。
 5. 在“三态门禁”切换“含具名审批 / 无人审批”，观察 `human_approval`、`quality_gate`、`release_decision` 独立变化。
 6. 点击“证据护照”，展示 SHA-256、回滚契约以及真实仓库、Issue、PR、评测链接。
 7. 点击“评测与沉淀”，展示 9 个 Golden 和 3 个边界样例；再选择 Badcase，说明失败不会进入补丁或发布流程。
+
+页面中的 8 个 Worker 是能力池，运行时组合由 Manager 决定；GitHub Pages 展示可交互的静态证据回退，本地 Controller 模式才会写入 SQLite Matrix 事件流。
 
 ### 现场异常注入
 

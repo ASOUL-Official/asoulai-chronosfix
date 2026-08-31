@@ -55,6 +55,7 @@
 - [x] 结构化日志：`evidence/run-log.jsonl`
 - [x] 工程 Metrics：`evidence/engineering-metrics.json`
 - [x] AgentTeams 运行转录：`evidence/agentteams-run.json`
+- [x] Agent Manager 证据驱动自由组合：Golden 7/8 Worker，冲突 / 证据不足 3/8 Worker，并记录 `agent_plan_recommended`
 - [x] 复赛评测报告：`evidence/evaluation-report.md`
 - [x] GitHub Issue：`evidence/github-issue.md`
 - [x] GitHub PR 草案：`evidence/github-pr.md`
@@ -68,7 +69,7 @@
 
 ## 当前 Demo 已覆盖
 
-- [x] 1 Manager、8 Worker、1 Team、1 Human 的 AgentTeams v1beta1 声明。
+- [x] 1 Manager、8 Worker、1 Team、1 Human 的 AgentTeams v1beta1 声明；8 Worker 作为可治理能力池，由 Manager 按证据选择运行时子集。
 - [x] 10 个核心 / 云操作 Skill 契约。
 - [x] 3 个根因假设。
 - [x] 3 组反事实平行实验。

@@ -103,6 +103,8 @@ RiskGate 输出两个独立维度：
 1. [`agentteams/run_chronosfix_team.py`](agentteams/run_chronosfix_team.py) 调用动态确定性内核并输出 AgentTeams-compatible transcript。核心计算由 task graph 驱动，包含证据触发插入、capability dispatch、失败重派、幂等去重和 revision checkpoint；输出仍明确标记 `agentteams_runtime_executed: false`。
 2. [`agentteams/runtime/chronosfix-resources.yaml`](agentteams/runtime/chronosfix-resources.yaml) 使用 `agentteams.io/v1beta1`，包含 1 Manager、8 Worker、1 Team、1 Human；9 个业务 Skill 已拆为运行时可发现的 `agentteams/skills/*/SKILL.md`。离线校验结果见 [`evidence/agentteams-manifest-validation.json`](evidence/agentteams-manifest-validation.json)。
 
+8 个 Worker 是可治理能力池，不是每次运行都强制同时启动。`chronosfix-manager` 读取证据后生成可回放的 Agent / Skill 组合：当前 Golden 主场景选择 7/8 个 Worker，冲突 / 证据不足场景选择 3/8 个并在补丁前拒答；`agent_plan_recommended` 事件、`decision_id` 和停止边界见 `evidence/local-controller-evidence.json`。这证明的是本地 Manager 的证据驱动控制面，不是官方 AgentTeams Controller 已执行。
+
 AgentTeams Controller 尚未安装，因此仓库当前没有 Controller、Matrix 房间或真实 Manager/Worker 推理协作记录。本地控制面证据见 `coordination.json`；评委反馈闭环与剩余门槛见 [`docs/semifinal-reviewer-response.md`](docs/semifinal-reviewer-response.md)。
 
 ## 官方云 Skill

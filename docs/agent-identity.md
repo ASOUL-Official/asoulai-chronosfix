@@ -2,6 +2,8 @@
 
 ChronosFix 的正式 AgentTeams 资源包含 **1 个 Manager、8 个 Worker、1 个 Team、1 个 Human**。其中 Incident Commander 是 Team Leader，其余 7 个 Worker 负责专业任务。
 
+8 个 Worker 构成可治理能力池，而不是固定的全量执行队列。Manager 会读取当前证据和目标，在每次运行生成最小充分的 Agent / Skill 组合；例如 Golden 主场景选择 7 个 Worker，证据冲突或不足场景只选择 Incident Commander、Timeline Analyst、Hypothesis Scientist 三个 Worker，并在补丁前拒答。组合决策以 `agent_plan_recommended` 事件和 `decision_id` 固化，便于复盘和审计。
+
 > 当前证据边界：以下身份已经写入 `agentteams.io/v1beta1` 资源并通过离线结构校验；本地确定性流水线也按相同职责生成 AgentTeams-compatible transcript。AgentTeams Controller / Matrix 尚未执行，因此不能把本地 transcript 称为真实 Worker 对话。
 
 | 身份 | AgentTeams 资源 | 职责 | 关键输出 | 决策边界 |

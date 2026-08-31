@@ -7,6 +7,12 @@
 
 ## 1. 评委建议与当前闭环
 
+### 复赛新增：Manager 按证据自由组合 Agent
+
+复赛版把“固定角色清单”升级为“可治理能力池 + 运行时选择”。AgentTeams 资源层声明 8 个 Worker，保证身份、权限和 Skill 边界完整；本地 Manager 每次读取事件、假设、候选补丁和证据缺口后，选择最小充分组合，并把 `decision_id`、理由、依赖和停止边界写入 `agent_plan_recommended` 事件。主场景选择 7 个 Worker 完成闭环；证据冲突 / 不足场景只选择 3 个 Worker，并在 `PatchTournament / RiskGate` 前拒答。证据见 `src/chronosfix/runtime/recommender.py`、`evidence/local-controller-evidence.json` 和 `coordination.json`。
+
+这意味着 8 个 Worker 不是每次都强制同时启动，而是 AgentTeams 的可复用能力池；不同证据输入会产生不同 Agent / Skill 组合。当前证据仍是本地 Controller 的可回放实现，不冒充官方 AgentTeams Controller / Matrix 运行轨迹。
+
 | 评委建议 | 状态 | 本轮证据 | 下一道门槛 |
 |---|---|---|---|
 | 新证据动态调整任务 | implemented | `src/chronosfix/dynamic.py`、`coordination.json` 的 `task_registered/evidence_observed` | AgentTeams Matrix 实际消息记录 |
