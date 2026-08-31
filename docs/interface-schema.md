@@ -145,15 +145,15 @@ OpenTelemetry 迁移映射：
 
 | 本地产物 | 候选 GitHub API | 当前状态 |
 |---|---|---|
-| `github-issue.json` | Issues API | local-draft |
-| `github-pr.json` | Pulls API | local-draft |
-| `github-pr-diff.patch` | Git Data/Contents | local-draft |
+| `github-issue.json` | Issues API | local-draft（可作为 PR 描述输入） |
+| `github-pr.json` | Pulls API | local-draft；受控适配器输出 external-evidence-draft |
+| `github-pr-diff.patch` | Git Data/Contents | local-draft；只作为证据合同提交 |
 | `github-pr-checks.json` | Checks API | 本地检查汇总，不是真实 Check Run |
 | `github-review-audit.jsonl` | Audit/SIEM | 本地审计事件 |
 
 草案必须从实际 scenario、selected patch、changes、rollback changes、执行检查和审批记录派生。输入不足时 PR 保持 draft/pending，不能伪造 commit SHA 或成功检查。
 
-公开 Issue #1 / PR #2 为 documentation-only，不是上述 Adapter 的在线执行结果。
+公开 Issue #1 / PR #2 为 documentation-only，不是上述 Adapter 的在线执行结果。适配器结果写入 `github-write-result.json`，并在 `run-manifest.json` 的 `github_external_write` 字段中绑定同一 `run_id`。
 
 ## 8. Evidence Passport 与完整性
 

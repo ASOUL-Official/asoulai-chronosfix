@@ -145,7 +145,7 @@ def build() -> dict:
             "evidence_passport_claims": 14,
             "trace_spans": 18,
             "agentteams_resources": 11,
-            "unit_and_contract_tests": 57,
+            "unit_and_contract_tests": 61,
         },
         "truth_boundary": {
             "agentteams_controller_executed": False,

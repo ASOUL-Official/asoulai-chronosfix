@@ -36,6 +36,7 @@ Demo = "https://asoul-official.github.io/asoulai-chronosfix/"
 chronosfix = "chronosfix.cli:main"
 chronosfix-evaluate = "chronosfix.evaluation:main"
 chronosfix-controller = "chronosfix.runtime.server:main"
+chronosfix-github-write = "chronosfix.github_adapter:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

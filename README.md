@@ -40,7 +40,7 @@ AsoulAI ChronosFix（A-CFX）面向 GOAI 新智基座 Agent Infra「方向三：
 python -m pip install -e ".[validation]"
 ```
 
-只运行 `demo.py`、`evaluate.py` 或 57 项单元测试时无需安装这些可选依赖。
+只运行 `demo.py`、`evaluate.py` 或 61 项单元测试时无需安装这些可选依赖。
 
 ```powershell
 git clone https://github.com/ASOUL-Official/asoulai-chronosfix.git
@@ -129,7 +129,7 @@ AgentTeams Controller 尚未安装，因此仓库当前没有 Controller、Matri
 - `github-pr-checks.json`；
 - `github-review-audit.jsonl`。
 
-这些文件是可复现的 **local-draft**，不会自动调用 GitHub API。公开 [Issue #1](https://github.com/ASOUL-Official/asoulai-chronosfix/issues/1) 与 [PR #2](https://github.com/ASOUL-Official/asoulai-chronosfix/pull/2) 是 documentation-only 迁移证据，只证明仓库协作路径和证据护照表达，不证明自动代码修复、真实 CI Check Run 或生产发布。
+这些文件默认是可复现的 **local-draft**，不会联网。通过 `python scripts/github_draft_pr.py --output evidence` 可以只生成外部写入计划；只有显式增加 `--write-github` 并提供最小权限令牌时，才会把证据文件提交到隔离分支并创建 `draft=true` 的 external-evidence-draft PR。该适配器不写 `main`、不修改业务源码、不创建 Check Run、不合并 PR。公开 [Issue #1](https://github.com/ASOUL-Official/asoulai-chronosfix/issues/1) 与 [PR #2](https://github.com/ASOUL-Official/asoulai-chronosfix/pull/2) 仍是 documentation-only 迁移证据。
 
 ## 评审建议路径
 

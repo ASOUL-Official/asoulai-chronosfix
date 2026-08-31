@@ -4,6 +4,8 @@ import argparse
 import json
 from pathlib import Path
 
+from .github_adapter import GitHubWriteError, write_external_evidence_draft
+from .github_flow import REPO
 from .orchestrator import run_pipeline
 
 
@@ -37,6 +39,21 @@ def build_parser() -> argparse.ArgumentParser:
         "--approval-reason",
         help="Human-readable reason recorded in the approval audit trail.",
     )
+    parser.add_argument(
+        "--write-github",
+        action="store_true",
+        help="Opt in to publishing evidence artifacts as a guarded GitHub Draft PR.",
+    )
+    parser.add_argument(
+        "--github-token-env",
+        default="GITHUB_TOKEN",
+        help="Environment variable containing a fine-grained GitHub token or App token.",
+    )
+    parser.add_argument(
+        "--github-repo",
+        default=REPO,
+        help="GitHub repository in OWNER/REPOSITORY form.",
+    )
     return parser
 
 
@@ -52,6 +69,16 @@ def main(argv: list[str] | None = None) -> int:
         approval_reason=args.approval_reason,
     )
     state = result["state"]
+    external_write = None
+    if args.write_github:
+        try:
+            external_write = write_external_evidence_draft(
+                args.output,
+                repository=args.github_repo,
+                token_env=args.github_token_env,
+            )
+        except GitHubWriteError as exc:
+            raise SystemExit(f"GitHub write blocked: {exc}") from exc
     primary = next((item for item in state.experiments if item.classification == "primary-cause"), None)
     summary = {
         "incident_id": state.incident_id,
@@ -64,5 +91,7 @@ def main(argv: list[str] | None = None) -> int:
         "release_decision": state.approval,
         "proof_report": str(args.output / "proof-report.md"),
     }
+    if external_write is not None:
+        summary["github_external_write"] = external_write
     print(json.dumps(summary, ensure_ascii=False, indent=2))
     return 0 if state.approval == "approved" else 2

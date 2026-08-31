@@ -118,7 +118,7 @@ python cloud_skill_demo.py --output evidence/cloud-skill-sls-dry-run.json
 
 在线 Demo：<https://asoul-official.github.io/asoulai-chronosfix/>。
 
-核心流水线生成的 `github-*` 文件是 local-draft，不写 GitHub API。公开 Issue #1 / PR #2 是 documentation-only 迁移证据，不证明自动修复 PR 或真实 Check Run。另有真实工程验收 PR #3：它运行三版本 Python CI 并上传验收 Artifact，但不代表真实 AgentTeams Controller 或云 Skill 已执行。Pages 页面是静态演示，事实以可重放 evidence 为准。
+核心流水线生成的 `github-*` 文件默认是 local-draft，不联网。通过 `scripts/github_draft_pr.py --write-github` 可在 RiskGate 通过且令牌由本机环境变量提供时，发布只包含证据文件的 external-evidence-draft；该适配器不写 `main`、不修改业务源码、不创建 Check Run、不合并 PR。公开 Issue #1 / PR #2 是 documentation-only 迁移证据，不证明自动修复 PR 或真实 Check Run。另有真实工程验收 PR #3：它运行三版本 Python CI 并上传验收 Artifact，但不代表真实 AgentTeams Controller 或云 Skill 已执行。Pages 页面是静态演示，事实以可重放 evidence 为准。
 
 真实 PR #3：<https://github.com/ASOUL-Official/asoulai-chronosfix/pull/3>。
 
@@ -128,7 +128,7 @@ python cloud_skill_demo.py --output evidence/cloud-skill-sls-dry-run.json
 python scripts/run_semifinal_acceptance.py --output output/semifinal-acceptance
 ```
 
-验收器在隔离临时目录执行 14 项检查，并将最终 JSON/Markdown 写入指定目录：57 项测试、严格 JSON/JSONL、公开 Draft 2020-12 Schema、AgentTeams v1beta1 清单、已审批通过分支、无人审批阻断分支、12 场景评测、Repair Cockpit JavaScript 语法、真实本地 Controller/Worker、隔离补丁沙箱、DSSE 变更证明、公开事故来源校验和本地基础设施契约。通过分支应为 `quality_gate=passed` + `release_decision=approved`；未审批分支应为 `quality_gate=passed` + `release_decision=blocked-awaiting-human`。
+验收器在隔离临时目录执行 14 项检查，并将最终 JSON/Markdown 写入指定目录：61 项测试、严格 JSON/JSONL、公开 Draft 2020-12 Schema、AgentTeams v1beta1 清单、已审批通过分支、无人审批阻断分支、12 场景评测、Repair Cockpit JavaScript 语法、真实本地 Controller/Worker、隔离补丁沙箱、DSSE 变更证明、公开事故来源校验和本地基础设施契约。通过分支应为 `quality_gate=passed` + `release_decision=approved`；未审批分支应为 `quality_gate=passed` + `release_decision=blocked-awaiting-human`。
 
 ## 9. 建议验收顺序
 

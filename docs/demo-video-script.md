@@ -62,7 +62,7 @@ python demo.py --approve --approver "AsoulAI Release Owner" --approval-reason "S
 
 讲法：
 
-> 流水线根据本次 scenario、selected changes、rollback 和本地执行检查生成 PR local-draft；不会自动写 GitHub。公开 Issue #1 和 PR #2 是 documentation-only，只证明协作形式，不证明自动代码修复或真实 GitHub Check Run。
+> 核心流水线根据本次 scenario、selected changes、rollback 和本地执行检查生成 PR local-draft，默认不会联网。仓库另有显式开启的受控适配器，可把证据文件发布为 external-evidence-draft；公开 Issue #1 和 PR #2 仍是 documentation-only，不证明自动代码修复或真实 GitHub Check Run。
 
 > 另外，我们创建了真实的工程验收 PR #3：它触发 Python 3.10、3.11、3.12 三个 GitHub Actions 作业，并上传一键验收 JSON/Markdown Artifact。PR #3 证明的是工程验证链路，不冒充 AgentTeams Runtime 或云端执行。
 
