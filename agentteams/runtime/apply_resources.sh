@@ -5,6 +5,13 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MANIFEST="${SCRIPT_DIR}/chronosfix-resources.yaml"
 AGENTTEAMS_SOURCE_DIR="${AGENTTEAMS_SOURCE_DIR:-/root/agentteams-src}"
 
+# Reuse the isolated workspace selected by install_official_local.sh.
+RUNTIME_ENV_FILE="${AGENTTEAMS_RUNTIME_ENV_FILE:-${AGENTTEAMS_DATA_DIR:-$HOME/chronosfix-agentteams-data}/chronosfix-runtime.env}"
+if [[ -f "$RUNTIME_ENV_FILE" ]]; then
+  # shellcheck disable=SC1090
+  source "$RUNTIME_ENV_FILE"
+fi
+
 python3 "${SCRIPT_DIR}/validate_resources.py" "${MANIFEST}"
 "${SCRIPT_DIR}/install_worker_skills.sh"
 

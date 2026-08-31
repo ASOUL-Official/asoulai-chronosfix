@@ -30,6 +30,20 @@ export AGENTTEAMS_ELEMENT_PORT="${AGENTTEAMS_ELEMENT_PORT:-28088}"
 export AGENTTEAMS_MANAGER_PORT="${AGENTTEAMS_MANAGER_PORT:-28888}"
 export AGENTTEAMS_DASHBOARD_PORT="${AGENTTEAMS_DASHBOARD_PORT:-23000}"
 
+# Persist only non-sensitive paths/ports so the separate apply step uses the
+# same isolated workspace. The model key is intentionally never written.
+install -d "$AGENTTEAMS_DATA_DIR"
+RUNTIME_ENV_FILE="${AGENTTEAMS_RUNTIME_ENV_FILE:-${AGENTTEAMS_DATA_DIR}/chronosfix-runtime.env}"
+cat > "$RUNTIME_ENV_FILE" <<EOF
+export AGENTTEAMS_DATA_DIR=$(printf '%q' "$AGENTTEAMS_DATA_DIR")
+export AGENTTEAMS_WORKSPACE_DIR=$(printf '%q' "$AGENTTEAMS_WORKSPACE_DIR")
+export AGENTTEAMS_GATEWAY_PORT=$(printf '%q' "$AGENTTEAMS_GATEWAY_PORT")
+export AGENTTEAMS_CONSOLE_PORT=$(printf '%q' "$AGENTTEAMS_CONSOLE_PORT")
+export AGENTTEAMS_ELEMENT_PORT=$(printf '%q' "$AGENTTEAMS_ELEMENT_PORT")
+export AGENTTEAMS_MANAGER_PORT=$(printf '%q' "$AGENTTEAMS_MANAGER_PORT")
+export AGENTTEAMS_DASHBOARD_PORT=$(printf '%q' "$AGENTTEAMS_DASHBOARD_PORT")
+EOF
+
 installer="$(mktemp "${TMPDIR:-/tmp}/agentteams-install.XXXXXX.sh")"
 trap 'rm -f "$installer"' EXIT
 curl --fail --location --retry 3 --silent --show-error "$INSTALLER_URL" -o "$installer"
@@ -39,5 +53,6 @@ bash "$installer"
 printf 'AgentTeams v1.2.3 installed from commit %s\n' "$SOURCE_COMMIT"
 printf 'Data directory: %s\n' "$AGENTTEAMS_DATA_DIR"
 printf 'Workspace directory: %s\n' "$AGENTTEAMS_WORKSPACE_DIR"
+printf 'Runtime environment: %s\n' "$RUNTIME_ENV_FILE"
 printf 'Element URL: http://127.0.0.1:%s/#/login\n' "$AGENTTEAMS_ELEMENT_PORT"
 printf 'Next step: bash "%s/apply_resources.sh"\n' "$SCRIPT_DIR"
