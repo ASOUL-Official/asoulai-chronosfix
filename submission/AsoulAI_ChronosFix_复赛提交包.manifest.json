@@ -57,8 +57,8 @@
     },
     {
       "path": "agentteams/runtime/apply_resources.sh",
-      "size": 746,
-      "sha256": "a3da96084a0280f9952069c2ddaf4d8a1a218e004fd3b88fe979bfeed4b1ab84"
+      "size": 1048,
+      "sha256": "f3b9628f6ce453adc70f21a7b891402595c6860ab1012aa327c054fa3f651026"
     },
     {
       "path": "agentteams/runtime/chronosfix-resources.yaml",
@@ -72,8 +72,8 @@
     },
     {
       "path": "agentteams/runtime/install_official_local.sh",
-      "size": 2354,
-      "sha256": "3e6a58d647419c355f15231b5529147ff6950fbde707920de9b0570827ea4881"
+      "size": 3236,
+      "sha256": "3f2649185a9a8f4b5626ac35264c267b5b4cc46caa16aea64e4dcd8e20807d81"
     },
     {
       "path": "agentteams/runtime/install_worker_skills.sh",
@@ -453,7 +453,7 @@
     {
       "path": "evidence/release-manifest.json",
       "size": 6146,
-      "sha256": "aff8f7b13eb259aeed4afc7e6f58ab8cd7e89876ff3c18d496aeff38a766ad40"
+      "sha256": "5ac2c2d68408ffc7327009a991ebfbb5188f291a712a8707f0f4e3693e6033c8"
     },
     {
       "path": "evidence/run-log.jsonl",
@@ -947,6 +947,6 @@
     }
   ],
   "archive": "AsoulAI_ChronosFix_复赛提交包.zip",
-  "archive_size": 1668794,
-  "archive_sha256": "6077477a5683ad29805f5a0bdbe121c8079414403f75f41c590b465104e3eb3b"
+  "archive_size": 1669156,
+  "archive_sha256": "170af9f0eddb7b58255f46ac29254e88dbb41e4814aa1bee8b0e49ad5b7d16b1"
 }
