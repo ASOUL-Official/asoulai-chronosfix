@@ -453,7 +453,7 @@
     {
       "path": "evidence/release-manifest.json",
       "size": 6146,
-      "sha256": "5ac2c2d68408ffc7327009a991ebfbb5188f291a712a8707f0f4e3693e6033c8"
+      "sha256": "06c6cb8555e89642097d887aa72b9d736e363e55cde76a2b2ec501a1c1955312"
     },
     {
       "path": "evidence/run-log.jsonl",
@@ -502,8 +502,8 @@
     },
     {
       "path": "repair-cockpit/index.html",
-      "size": 7683,
-      "sha256": "d49839b385b5dbb655e91b3daab5aff5cdb5951f5405a38f3d7a60bbe6ab286d"
+      "size": 9111,
+      "sha256": "410fd817a7ec626613d41669b14809ea349874f9d94bb07e6ea4eb1943236757"
     },
     {
       "path": "repair-cockpit/scripts/build_demo_data.py",
@@ -512,8 +512,8 @@
     },
     {
       "path": "repair-cockpit/styles.css",
-      "size": 35207,
-      "sha256": "179c0f8313da29cd8bfd45504331cc9d8422f345fd2454decf5d69c5a8704c02"
+      "size": 37349,
+      "sha256": "519c1b81fd22f864391e90f3b0dd32b49ade8853b01b35835dc69ee47cef69cc"
     },
     {
       "path": "scenarios/api-timeout-amplifier/scenario.json",
@@ -942,11 +942,11 @@
     },
     {
       "path": "提交入口说明.md",
-      "size": 7695,
-      "sha256": "a0ca04097270d81ec2f6a79b09ce8753d0bb0f89fcabbd90019f87887c0ce15f"
+      "size": 7793,
+      "sha256": "9cd5c9be06826bcdfe577dcd8c27db720c45414473b2d2473ff7c2a16daeea2f"
     }
   ],
   "archive": "AsoulAI_ChronosFix_复赛提交包.zip",
-  "archive_size": 1669156,
-  "archive_sha256": "170af9f0eddb7b58255f46ac29254e88dbb41e4814aa1bee8b0e49ad5b7d16b1"
+  "archive_size": 1669864,
+  "archive_sha256": "f6e493fd2a5485293778ee7f9e66047c3729adfcb7b78bc1c4803d5d1a622d9d"
 }

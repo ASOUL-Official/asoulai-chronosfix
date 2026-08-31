@@ -1,9 +1,9 @@
 {
   "schema": "chronosfix.release-manifest/v1",
   "release_id": "acfx-553522870e47",
-  "generated_at": "2026-08-31T03:11:04.516290+00:00",
+  "generated_at": "2026-08-31T03:50:14.458176+00:00",
   "source_commit": "553522870e4794fe906e161e3eb22082fe8bdcac",
-  "source_fingerprint": "126b87fceaebc54c7f2c7437372d54edfe47f25bd4325b9718e6ac3000fe54cf",
+  "source_fingerprint": "2c5ebf035529f32581a71cdf6aab9f629badb43f1118af4ae7fc66fac3a7b50d",
   "source_commit_semantics": "Evidence and the online Demo are tied to this reproducible source anchor commit plus the working-tree source fingerprint; a later artifact commit only packages these outputs.",
   "artifacts": {
     "repair-cockpit/data/demo-data.json": {
