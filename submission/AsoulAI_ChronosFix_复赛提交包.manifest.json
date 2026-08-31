@@ -3,7 +3,7 @@
   "team": "AsoulAI",
   "work": "ChronosFix",
   "direction": "新智基座方向三：软件研发全流程协同",
-  "file_count": 186,
+  "file_count": 188,
   "files": [
     {
       "path": ".gitattributes",
@@ -71,6 +71,11 @@
       "sha256": "adca0ee7073df07ac5c245b73dc22ce8d54499bb631855aee9da68248f33b1d3"
     },
     {
+      "path": "agentteams/runtime/install_official_local.sh",
+      "size": 2354,
+      "sha256": "3e6a58d647419c355f15231b5529147ff6950fbde707920de9b0570827ea4881"
+    },
+    {
       "path": "agentteams/runtime/install_worker_skills.sh",
       "size": 1254,
       "sha256": "afbd27d3f59eba73a3da08d7a08e15134790efb5b7c44d8a803ce848b13ffe8c"
@@ -84,6 +89,11 @@
       "path": "agentteams/runtime/validate_resources.py",
       "size": 4014,
       "sha256": "9db05d743a201c77680b4f465218c19b737914c6ce295c7f88b044e034d957ea"
+    },
+    {
+      "path": "agentteams/runtime/verify_official_runtime.sh",
+      "size": 1750,
+      "sha256": "c1afab17c48ff709698448c17bc82b4e41d781083609f48c50288898c8d797e7"
     },
     {
       "path": "agentteams/skills/change-timeline/SKILL.md",
@@ -177,8 +187,8 @@
     },
     {
       "path": "docs/agentteams-runtime-integration.md",
-      "size": 3753,
-      "sha256": "e7edbf154bf2c6d8e07a3d7cbb2cea629d7d4c98efc5d85f0d32326077c2d3bf"
+      "size": 5106,
+      "sha256": "a60829dac0baa3728b49e5c63e331d9893c8d2dce82674a26fd60a7aa1d93832"
     },
     {
       "path": "docs/architecture.md",
@@ -443,7 +453,7 @@
     {
       "path": "evidence/release-manifest.json",
       "size": 6146,
-      "sha256": "1e021109d43e313a79d9026cb943a8550a7162d58f3ebdbb1fcfa3a96a4f70a6"
+      "sha256": "aff8f7b13eb259aeed4afc7e6f58ab8cd7e89876ff3c18d496aeff38a766ad40"
     },
     {
       "path": "evidence/run-log.jsonl",
@@ -582,8 +592,8 @@
     },
     {
       "path": "scripts/build_release_manifest.py",
-      "size": 5158,
-      "sha256": "9d1dbf3b7189c33917f3461a231b0a3598c754cf76d5f4bb30bb2e35d9400dc4"
+      "size": 5587,
+      "sha256": "afbed5443ffe357abcef09ab3194136dff083adb490e168200f640b2c0165148"
     },
     {
       "path": "scripts/build_submission_package.py",
@@ -937,6 +947,6 @@
     }
   ],
   "archive": "AsoulAI_ChronosFix_复赛提交包.zip",
-  "archive_size": 1665475,
-  "archive_sha256": "7ac1dfbcc4b677651fc8aa931a4efe8ecd9be535dee3bedfcf56dc550aaa8338"
+  "archive_size": 1668794,
+  "archive_sha256": "6077477a5683ad29805f5a0bdbe121c8079414403f75f41c590b465104e3eb3b"
 }
