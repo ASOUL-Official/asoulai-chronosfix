@@ -34,7 +34,7 @@ const edits = {
   1: {
     "sh/547294r6": "GOAI 世界人工智能开源大赛 · Agent Infra · 方向三",
     "sh/k3yl0zql": "AsoulAI ChronosFix",
-    "sh/7qp4be9c": "带证据的软件修复引擎",
+    "sh/7qp4be9c": "A-CFX：软件故障时间机器",
     "sh/65g3298r": "90 秒：从事故到可验证补丁",
     "sh/e94v2hon": "真实本地执行 · 现场按钮 · 明确边界",
   },

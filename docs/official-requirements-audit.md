@@ -99,7 +99,7 @@ PolarDB/pgvector 历史事故 RAG 是生产化路线，不是当前运行证据�
 
 ## 提交前最后检查
 
-- [x] README、PPT/PDF、Demo 和提交入口的作品名称统一为“带证明的软件变更基础设施”；
+- [x] README、PPT/PDF、Demo 和提交入口的正式作品名称统一为“AsoulAI ChronosFix（A-CFX）：软件故障时间机器”；“带证明的软件变更基础设施”作为定位副标题使用；
 - [x] 不把 dry-run、offline-validated、compatible mapping 或 local-draft 写成真实生产执行；
 - [x] 通过分支、无人审批阻断分支、质量门禁失败分支、Badcase 和证据不足分支均可验证；
 - [x] 重新生成提交 ZIP 与 SHA-256 manifest 后，再运行一键复赛验收器；
