@@ -71,6 +71,31 @@
   font-size: 10px;
 }
 
+.task-row {
+  grid-template-areas:
+    "task status"
+    "skill status"
+    "dependency status";
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.task-row > span {
+  grid-area: task;
+}
+
+.task-row .task-skill {
+  grid-area: skill;
+}
+
+.task-row .task-dependency {
+  grid-area: dependency;
+  color: #7f95aa;
+}
+
+.task-row > b {
+  grid-area: status;
+}
+
 .event-row > span {
   color: var(--cyan);
   font-family: "Cascadia Code", Consolas, monospace;

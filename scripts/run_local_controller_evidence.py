@@ -24,14 +24,14 @@ def build(output: Path) -> dict:
     evidence = controller.ingest_evidence(
         run_id,
         "acceptance-live-evidence-001",
-        {"kind": "configuration", "summary": "pool size drift confirmed during acceptance"},
+        {"kind": "runtime-topology", "summary": "new runtime topology evidence confirmed during acceptance"},
     )
     badcase = controller.create_run("conflicting-counterfactuals", auto_approve=False)
     badcase_plan = controller.recommend(badcase["run"]["run_id"], objective="judge-and-compose")
 
     failover_task = next(item for item in failover["tasks"] if item["task_id"].startswith("live-timeout-"))
     attempts = [item for item in failover["attempts"] if item["task_id"] == failover_task["task_id"]]
-    dynamic_task = next(item for item in evidence["tasks"] if item["task_id"].startswith("dynamic-evidence-audit-"))
+    dynamic_task = next(item for item in evidence["tasks"] if item["task_id"] == "agent-08-skill-curator")
     badcase_task_ids = [item["task_id"] for item in badcase["tasks"]]
     report = {
         "schema": "chronosfix.local-controller-evidence/v1",
@@ -45,7 +45,12 @@ def build(output: Path) -> dict:
             and dynamic_task["status"] == "COMPLETED"
             and any(item["status"] == "STALE" for item in evidence["approvals"])
             and badcase["run"]["status"] == "ABSTAINED"
-            and badcase_task_ids == ["counterfactual-evaluation"]
+            and badcase_task_ids == [
+                "agent-01-incident-commander",
+                "agent-02-timeline-analyst",
+                "agent-03-hypothesis-scientist",
+                "counterfactual-evaluation",
+            ]
             and len(golden_plan["recommendation"]["composition"]) > len(badcase_plan["recommendation"]["composition"])
             and golden_plan["recommendation"]["stop_before"] == "无"
             and badcase_plan["recommendation"]["stop_before"] == "PatchTournament / RiskGate"

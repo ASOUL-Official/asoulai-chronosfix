@@ -10,7 +10,7 @@
 python -m chronosfix.runtime.server --host 127.0.0.1 --port 8000
 ```
 
-然后访问 `http://127.0.0.1:8000/`。页面会显示 `LIVE LOCAL CONTROLLER`：异常注入按钮通过 HTTP API 调用真实 Controller，Worker 在独立子进程中执行，PID、实测时长、失败重派、证据、审批和事件持久化到 SQLite Matrix 房间。
+然后访问 `http://127.0.0.1:8000/`。页面会显示 `LIVE LOCAL CONTROLLER`：Manager 先基于可观测证据生成推荐，再将其编译为带依赖的任务 DAG；每个节点由具名 Worker 在独立 `agent-step` 子进程中执行对应 Skill。任务依赖、PID、实测时长、失败重派、证据、审批和结果摘要都会持久化到 SQLite Matrix 房间。
 
 本地模式的真实边界是：`local_controller_executed=true`、`local_worker_processes_executed=true`；它不冒充官方环境，仍明确保持 `agentteams_official_controller_executed=false`、`matrix_protocol_executed=false`。
 
@@ -48,11 +48,11 @@ GitHub Pages 会直接按静态资源方式加载，无需后端，并显示 `ST
 
 ## 90 秒评委动线
 
-1. 选择 `checkout-timeout`，先点击“Agent 判断并组合”，展示 Manager 根据证据选择 7 个 Worker；切换到 Badcase / 证据不足样例时只保留 3 个 Worker 并在补丁前拒答。
+1. 选择 `checkout-timeout`，展示 Manager 根据证据选择 7 个 Worker，并在“动态协同”任务图查看已编译的 DAG 依赖、Skill、Worker 与完成状态；切换到 Badcase / 证据不足样例时只保留 3 个 Worker 并在补丁前拒答。
 2. 点击“动态协同”，展示新证据插入任务、Worker 超时重派、去重和 revision 暂停/恢复。
 3. 点击“因果证明”，展示主因、放大因素和证伪假设的反事实差异。
 4. 点击“故障族验证”，展示补丁竞赛、真实变更字段和强制变体结果。
-5. 在“三态门禁”切换“含具名审批 / 无人审批”，观察 `human_approval`、`quality_gate`、`release_decision` 独立变化。
+5. 在“三态门禁”切换“含具名审批 / 无人审批”：本地模式会创建一条新的真实运行。无人审批分支会停在 `PAUSED_AWAITING_HUMAN`，保持 `quality_gate=passed` 且 `release_decision=blocked-awaiting-human`。
 6. 点击“证据护照”，展示 SHA-256、回滚契约以及真实仓库、Issue、PR、评测链接。
 7. 点击“评测与沉淀”，展示 9 个 Golden 和 3 个边界样例；再选择 Badcase，说明失败不会进入补丁或发布流程。
 

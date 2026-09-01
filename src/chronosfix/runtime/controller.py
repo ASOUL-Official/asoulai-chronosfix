@@ -12,7 +12,7 @@ from typing import Any
 import uuid
 
 from .catalog import LOGICAL_WORKERS, WorkerInstance, capable_instances
-from .recommender import recommend_agent_composition
+from .recommender import compile_agent_dag, recommend_agent_composition
 from .store import RuntimeStore, utc_now
 
 
@@ -92,7 +92,7 @@ class LocalController:
     def create_run(self, scenario_id: str, *, auto_approve: bool = True) -> dict[str, Any]:
         scenario = self.scenario_path(scenario_id)
         raw = json.loads(scenario.read_text(encoding="utf-8"))
-        ground_truth = raw["ground_truth"]
+        ground_truth = raw.get("ground_truth") or {}
         suffix = uuid.uuid4().hex[:10]
         run_id = f"acfx-local-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S')}-{suffix}"
         trace_id = uuid.uuid4().hex
@@ -119,7 +119,10 @@ class LocalController:
             payload={"scenario_id": scenario_id, "trace_id": trace_id, "boundary": boundary},
         )
 
-        if ground_truth["fixture_scope"] == "evaluation-only-counterfactual":
+        recommendation, dag = self._plan_agent_dag(run_id, raw)
+        results = self._execute_agent_dag(run_id, scenario, dag, approved=False)
+
+        if ground_truth.get("fixture_scope") == "evaluation-only-counterfactual":
             result = self.execute_task(
                 run_id,
                 task_id="counterfactual-evaluation",
@@ -127,6 +130,7 @@ class LocalController:
                 capability="hypothesis",
                 job="evaluate",
                 scenario=scenario,
+                depends_on=[item["task_id"] for item in dag["tasks"][-1:]],
                 timeout_seconds=10,
             )
             status = result["evaluation"]["status"]
@@ -152,28 +156,120 @@ class LocalController:
                 )
             return self.snapshot(run_id)
 
-        result = self.execute_task(
-            run_id,
-            task_id="incident-pipeline",
-            skill="ChronosFixPipeline",
-            capability="incident-control",
-            job="pipeline",
-            scenario=scenario,
-            output=output_dir / "engine",
-            approved=True,
-            timeout_seconds=45,
-            accepted_exit_codes=(0,),
+        release_task = next(
+            (item["task_id"] for item in dag["tasks"] if item["agent"] == "release-auditor"),
+            None,
         )
+        gate = ((results.get(release_task) or {}).get("result") or {}).get("gate") if release_task else None
+        if not gate:
+            self.store.update_run(
+                run_id,
+                status="BLOCKED_INSUFFICIENT_EVIDENCE",
+                quality_gate="not-run",
+                release_decision="blocked-insufficient-evidence",
+            )
+            return self.snapshot(run_id)
         self.store.update_run(
             run_id,
-            trace_id=result["trace_id"],
             status="PAUSED_AWAITING_HUMAN",
-            quality_gate=result["quality_gate"],
-            release_decision="blocked-awaiting-human",
+            quality_gate=gate["quality_gate"],
+            release_decision=gate["decision"],
         )
-        if auto_approve:
+        if auto_approve and gate["quality_gate"] == "passed":
             self.approve(run_id, "AsoulAI Release Owner", expected_revision=self.store.get_run(run_id)["revision"])
         return self.snapshot(run_id)
+
+    def _plan_agent_dag(
+        self,
+        run_id: str,
+        scenario: dict[str, Any],
+        *,
+        evidence: list[dict[str, Any]] | None = None,
+        objective: str = "prove-and-repair",
+    ) -> tuple[dict[str, Any], dict[str, Any]]:
+        recommendation = recommend_agent_composition(
+            scenario,
+            evidence=evidence or [],
+            objective=objective,
+        )
+        dag = compile_agent_dag(recommendation)
+        self.store.append_event(
+            run_id,
+            "agent_plan_recommended",
+            event_id=self._event_id("agent-plan"),
+            task_id="agent-manager",
+            worker="chronosfix-manager",
+            payload={"recommendation": recommendation},
+        )
+        self.store.append_event(
+            run_id,
+            "agent_dag_compiled",
+            event_id=self._event_id("agent-dag"),
+            task_id="agent-manager",
+            worker="chronosfix-manager",
+            payload={
+                "decision_id": dag["decision_id"],
+                "task_count": len(dag["tasks"]),
+                "tasks": dag["tasks"],
+            },
+        )
+        return recommendation, dag
+
+    def _execute_agent_dag(
+        self,
+        run_id: str,
+        scenario: Path,
+        dag: dict[str, Any],
+        *,
+        approved: bool,
+    ) -> dict[str, dict[str, Any]]:
+        """Dispatch compiled DAG nodes only after every declared parent completed."""
+
+        existing = {item["task_id"]: item for item in self.snapshot(run_id)["tasks"]}
+        results: dict[str, dict[str, Any]] = {
+            task_id: item["result"]
+            for task_id, item in existing.items()
+            if item["status"] == "COMPLETED" and isinstance(item.get("result"), dict)
+        }
+        for task in dag["tasks"]:
+            task_id = task["task_id"]
+            previous = existing.get(task_id)
+            if previous and previous["status"] == "COMPLETED":
+                self.store.append_event(
+                    run_id,
+                    "agent_dag_task_reused",
+                    event_id=self._event_id("agent-dag-reused"),
+                    task_id=task_id,
+                    worker=task["worker"],
+                    payload={"decision_id": dag["decision_id"], "reason": "completed-node-reused"},
+                )
+                continue
+            unmet = [dependency for dependency in task["depends_on"] if dependency not in results]
+            if unmet:
+                raise RuntimeError(f"DAG dependency not completed for {task_id}: {unmet}")
+            result = self.execute_task(
+                run_id,
+                task_id=task_id,
+                skill=task["skill"],
+                capability=task["capability"],
+                job="agent-step",
+                scenario=scenario,
+                payload={
+                    "run_id": run_id,
+                    "agent": task["agent"],
+                    "skill": task["skill"],
+                    "depends_on": task["depends_on"],
+                    "upstream_result_digests": {
+                        dependency: digest(results[dependency])
+                        for dependency in task["depends_on"]
+                    },
+                },
+                depends_on=task["depends_on"],
+                approved=approved,
+                timeout_seconds=15,
+            )
+            results[task_id] = result
+        return results
 
     def _command(
         self,
@@ -212,17 +308,23 @@ class LocalController:
         timeout_seconds: float = 10,
         approved: bool = False,
         accepted_exit_codes: tuple[int, ...] = (0,),
+        depends_on: list[str] | tuple[str, ...] = (),
     ) -> dict[str, Any]:
         instances = capable_instances(capability)
         if not instances:
             raise RuntimeError(f"no local worker instance for capability {capability}")
-        self.store.register_task(run_id, task_id, skill, capability)
+        self.store.register_task(run_id, task_id, skill, capability, depends_on=depends_on)
         self.store.append_event(
             run_id,
             "task_registered",
             event_id=self._event_id("task-registered"),
             task_id=task_id,
-            payload={"skill": skill, "capability": capability, "max_attempts": min(2, len(instances))},
+            payload={
+                "skill": skill,
+                "capability": capability,
+                "depends_on": list(depends_on),
+                "max_attempts": min(2, len(instances)),
+            },
         )
         modes = (first_mode, retry_mode)
         last_error = "unknown worker failure"
@@ -424,18 +526,10 @@ class LocalController:
                 worker="chronosfix-release-auditor#01",
                 payload={"source_event_id": event_id, "current_revision": event["revision"], "stale_approvals": stale_count},
             )
-        task_id = f"dynamic-evidence-audit-{event_id[-8:]}"
-        self.execute_task(
-            run_id,
-            task_id=task_id,
-            skill="ConfigEvidenceAudit",
-            capability="evidence",
-            job="evidence-audit",
-            scenario=self.scenario_path(self.store.get_run(run_id)["scenario_id"]),
-            payload=payload,
-            timeout_seconds=5,
-        )
-        return self.snapshot(run_id)
+        # Evidence ingestion is a control-plane boundary: re-plan immediately
+        # so any newly required Skill becomes a real Manager-compiled DAG node.
+        # Do not append a legacy fixed audit task beside the DAG.
+        return self.recommend(run_id, objective="evidence-triggered-replan")["snapshot"]
 
     def approve(self, run_id: str, approver: str, *, expected_revision: int) -> dict[str, Any]:
         current = int(self.store.get_run(run_id)["revision"])
@@ -528,29 +622,18 @@ class LocalController:
         return self.snapshot(run_id)
 
     def recommend(self, run_id: str, *, objective: str = "prove-and-repair") -> dict[str, Any]:
-        """Let the local Manager choose a replayable Agent/Skill composition."""
+        """Recompute the Manager plan and execute any newly compiled DAG nodes."""
 
         snapshot = self.snapshot(run_id)
-        scenario = json.loads(self.scenario_path(snapshot["run"]["scenario_id"]).read_text(encoding="utf-8"))
-        recommendation = recommend_agent_composition(
+        scenario_path = self.scenario_path(snapshot["run"]["scenario_id"])
+        scenario = json.loads(scenario_path.read_text(encoding="utf-8"))
+        recommendation, dag = self._plan_agent_dag(
+            run_id,
             scenario,
             evidence=[item["payload"] for item in snapshot["evidence"]],
             objective=objective,
         )
-        self.store.append_event(
-            run_id,
-            "agent_plan_recommended",
-            event_id=self._event_id("agent-plan"),
-            task_id="incident-pipeline",
-            worker="chronosfix-incident-commander#01",
-            payload={
-                "decision_id": recommendation["decision_id"],
-                "strategy": recommendation["strategy"],
-                "confidence": recommendation["confidence"],
-                "composition": recommendation["composition"],
-                "stop_before": recommendation["stop_before"],
-            },
-        )
+        self._execute_agent_dag(run_id, scenario_path, dag, approved=False)
         return {"recommendation": recommendation, "snapshot": self.snapshot(run_id)}
 
     def snapshot(self, run_id: str) -> dict[str, Any]:

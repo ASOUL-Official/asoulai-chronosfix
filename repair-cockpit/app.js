@@ -20,6 +20,7 @@ const view = {
     revisionDelta: 0,
     attemptDelta: 0,
     taskOverrides: {},
+    dynamicTasks: [],
     forcePaused: false,
     staleApproval: false,
     forceQualityFailure: false,
@@ -108,6 +109,10 @@ function runtimeEventMessage(event) {
 function applyRuntimeSnapshot(snapshot) {
   view.runtime.snapshot = snapshot;
   view.runtime.runId = snapshot.run.run_id;
+  const recommendationEvent = [...snapshot.events]
+    .reverse()
+    .find((event) => event.event_type === "agent_plan_recommended" && event.payload?.recommendation);
+  if (recommendationEvent) view.runtime.recommendation = recommendationEvent.payload.recommendation;
   const baseRevision = currentScenario().coordination?.revision ?? 0;
   view.demo.events = snapshot.events.map((event) => ({ ...event, source: "local-controller" }));
   view.demo.revisionDelta = Math.max(0, snapshot.run.revision - baseRevision);
@@ -115,6 +120,7 @@ function applyRuntimeSnapshot(snapshot) {
   view.demo.taskOverrides = Object.fromEntries(
     snapshot.tasks.map((task) => [task.task_id, task.status]),
   );
+  view.demo.dynamicTasks = [];
   view.demo.forcePaused = snapshot.run.status === "PAUSED_AWAITING_HUMAN";
   view.demo.staleApproval = snapshot.approvals.some((approval) => approval.status === "STALE");
   view.demo.forceQualityFailure = snapshot.run.quality_gate === "failed";
@@ -162,7 +168,10 @@ async function startLiveRun(render = true) {
   try {
     const snapshot = await apiRequest("/runs", {
       method: "POST",
-      body: JSON.stringify({ scenario_id: view.scenarioId, auto_approve: true }),
+      body: JSON.stringify({
+        scenario_id: view.scenarioId,
+        auto_approve: view.mode === "approved",
+      }),
     });
     applyRuntimeSnapshot(snapshot);
     if (render) renderScenario();
@@ -178,6 +187,7 @@ function resetDemoState() {
     revisionDelta: 0,
     attemptDelta: 0,
     taskOverrides: {},
+    dynamicTasks: [],
     forcePaused: false,
     staleApproval: false,
     forceQualityFailure: false,
@@ -227,10 +237,11 @@ function effectiveMode() {
   return next;
 }
 
-function effectiveCoordination(coordination) {
+function effectiveCoordination(scenario) {
+  const coordination = scenario.coordination;
   if (!coordination) return null;
   const runtimeSnapshot = view.runtime.snapshot;
-  if (view.runtime.available && runtimeSnapshot?.run?.scenario_id === view.scenarioId) {
+  if (view.runtime.available && runtimeSnapshot?.run?.scenario_id === scenario.id) {
     return {
       ...coordination,
       revision: runtimeSnapshot.run.revision,
@@ -242,10 +253,63 @@ function effectiveCoordination(coordination) {
         "Real local Controller/worker/SQLite execution; official AgentTeams Controller and Matrix protocol are not claimed.",
     };
   }
-  const tasks = (coordination.tasks ?? []).map((task) => ({
+  const composition = scenario.agent_recommendation?.composition ?? [];
+  const taskIdByAgent = Object.fromEntries(
+    composition.map((item) => [item.agent, `agent-${String(item.order).padStart(2, "0")}-${item.agent}`]),
+  );
+  const compiledTasks = composition.map((item) => ({
+    task_id: taskIdByAgent[item.agent],
+    skill: item.skill,
+    capability: item.capability,
+    worker: item.worker,
+    depends_on: (item.depends_on ?? []).map((agent) => taskIdByAgent[agent]).filter(Boolean),
+    status: "OFFLINE-VALIDATED",
+  }));
+  const tasks = [...(compiledTasks.length ? compiledTasks : coordination.tasks ?? []), ...(view.demo.dynamicTasks ?? [])].map((task) => ({
     ...task,
     status: view.demo.taskOverrides[task.task_id] ?? task.status,
   }));
+  const planEvents = compiledTasks.length
+    ? [
+        {
+          event_type: "agent_plan_recommended",
+          revision: 0,
+          task_id: "agent-manager",
+          worker: "chronosfix-manager",
+          payload: { summary: "静态证据：Manager 按可观测证据生成组合" },
+        },
+        {
+          event_type: "agent_dag_compiled",
+          revision: 0,
+          task_id: "agent-manager",
+          worker: "chronosfix-manager",
+          payload: { summary: `静态证据：编译 ${compiledTasks.length} 个 DAG 节点` },
+        },
+        ...compiledTasks.flatMap((task) => [
+          {
+            event_type: "task_registered",
+            revision: 0,
+            task_id: task.task_id,
+            worker: null,
+            payload: { skill: task.skill, capability: task.capability, depends_on: task.depends_on },
+          },
+          {
+            event_type: "task_dispatched",
+            revision: 0,
+            task_id: task.task_id,
+            worker: task.worker,
+            payload: { summary: "静态证据：对应 Worker 派发" },
+          },
+          {
+            event_type: "task_completed",
+            revision: 0,
+            task_id: task.task_id,
+            worker: task.worker,
+            payload: { summary: "静态证据：Skill 执行结果已固化" },
+          },
+        ]),
+      ]
+    : [];
   return {
     ...coordination,
     revision: coordination.revision + view.demo.revisionDelta,
@@ -262,7 +326,7 @@ function effectiveCoordination(coordination) {
       status: "FAILED",
       error: "local simulation",
     }))],
-    events: [...(coordination.events ?? []), ...view.demo.events],
+    events: [...planEvents, ...(coordination.events ?? []), ...view.demo.events],
   };
 }
 
@@ -344,7 +408,7 @@ function renderAgentRecommendation() {
           (item) => `
             <li>
               <b>${escapeHtml(String(item.order).padStart(2, "0"))}</b>
-              <div><strong>${escapeHtml(item.role)} · ${escapeHtml(item.agent)}</strong><small>${escapeHtml(item.skill)} · ${escapeHtml(item.reason)}</small></div>
+              <div><strong>${escapeHtml(item.role)} · ${escapeHtml(item.agent)}</strong><small>${escapeHtml(item.skill)} · ${escapeHtml(item.worker)} · 依赖 ${escapeHtml(item.depends_on?.join(" → ") || "根节点")}</small><small>${escapeHtml(item.reason)}</small></div>
             </li>
           `,
         )
@@ -372,7 +436,7 @@ async function requestAgentRecommendation() {
     addDemoEvent(
       "agent_plan_recommended",
       `Agent 按证据自由组合 ${view.runtime.recommendation.composition.length} 个角色`,
-      { task_id: "incident-pipeline", worker: "chronosfix-manager" },
+      { task_id: "agent-manager", worker: "chronosfix-manager" },
     );
   }
   renderAgentRecommendation();
@@ -408,13 +472,14 @@ async function runLiveInjection(type) {
     case "new-evidence": {
       const eventId = `live-evidence-${Date.now()}`;
       view.runtime.lastEvidenceId = eventId;
-      snapshot = await apiRequest(`/runs/${runId}/evidence`, {
+      const evidenceSnapshot = await apiRequest(`/runs/${runId}/evidence`, {
         method: "POST",
         body: JSON.stringify({
           event_id: eventId,
-          evidence: { kind: "configuration", summary: "现场发现连接池配置漂移证据" },
+          evidence: { kind: "runtime-topology", summary: "现场发现新的运行时拓扑证据，触发 SkillForge 复核" },
         }),
       });
+      snapshot = evidenceSnapshot;
       break;
     }
     case "duplicate-evidence": {
@@ -424,7 +489,7 @@ async function runLiveInjection(type) {
           method: "POST",
           body: JSON.stringify({
             event_id: eventId,
-            evidence: { kind: "configuration", summary: "幂等演示首个 evidence" },
+            evidence: { kind: "runtime-topology", summary: "幂等演示首个运行时拓扑 evidence" },
           }),
         });
         view.runtime.lastEvidenceId = eventId;
@@ -433,7 +498,7 @@ async function runLiveInjection(type) {
         method: "POST",
         body: JSON.stringify({
           event_id: eventId,
-          evidence: { kind: "configuration", summary: "相同 event_id 的重复投递" },
+          evidence: { kind: "runtime-topology", summary: "相同 event_id 的重复投递" },
         }),
       });
       break;
@@ -493,11 +558,18 @@ async function applyInjection(type) {
   }
   switch (type) {
     case "new-evidence":
-      addDemoEvent("evidence_observed", "发现配置漂移证据，动态注册审计任务", {
-        task_id: "dynamic-config-audit",
-        worker: "timeline-analyst-01",
+      addDemoEvent("evidence_observed", "发现新的运行时拓扑证据，动态插入 SkillForge 任务", {
+        task_id: "agent-08-skill-curator",
+        worker: "chronosfix-skill-curator#01",
       });
-      view.demo.taskOverrides["dynamic-config-audit"] = "COMPLETED · EVIDENCE-TRIGGERED";
+      view.demo.dynamicTasks.push({
+        task_id: "agent-08-skill-curator",
+        skill: "SkillForge",
+        capability: "skill",
+        depends_on: ["agent-07-release-auditor"],
+        status: "COMPLETED · EVIDENCE-TRIGGERED",
+      });
+      view.demo.taskOverrides["agent-08-skill-curator"] = "COMPLETED · EVIDENCE-TRIGGERED";
       break;
     case "worker-timeout":
       addDemoEvent("task_failed", "注入 timeline Worker 超时", {
@@ -514,7 +586,7 @@ async function applyInjection(type) {
     case "duplicate-evidence":
       addDemoEvent("evidence_deduplicated", "重复 evidence 被幂等键拦截；revision 不变", {
         revisionDelta: 0,
-        task_id: "dynamic-config-audit",
+        task_id: "agent-08-skill-curator",
       });
       break;
     case "pause":
@@ -825,7 +897,7 @@ function renderCausal(scenario) {
 }
 
 function renderCoordination(scenario) {
-  const coordination = effectiveCoordination(scenario.coordination);
+  const coordination = effectiveCoordination(scenario);
   if (!coordination) {
     return `
       <div class="blocked-stage">
@@ -840,6 +912,12 @@ function renderCoordination(scenario) {
   const tasks = coordination.tasks ?? [];
   const count = (type) => events.filter((event) => event.event_type === type).length;
   const eventLabel = {
+    agent_plan_recommended: "Manager 推荐组合",
+    agent_dag_compiled: "推荐编译为 DAG",
+    agent_dag_task_reused: "DAG 节点复用",
+    task_registered: "DAG 任务注册",
+    task_dispatched: "Worker 派发",
+    task_completed: "Skill 执行完成",
     evidence_observed: "新证据触发",
     task_reassigned: "Worker 重派",
     task_failed: "Worker 失败",
@@ -873,7 +951,8 @@ function renderCoordination(scenario) {
         ${tasks.map((task) => `
           <article class="task-row ${statusClass(task.status)}">
             <span>${escapeHtml(task.task_id)}</span>
-            <small>${escapeHtml(task.skill)} · ${escapeHtml(task.capability)}</small>
+            <small class="task-skill">${escapeHtml(task.skill)} · ${escapeHtml(task.capability)}</small>
+            <small class="task-dependency">依赖：${escapeHtml(task.depends_on?.length ? task.depends_on.join(" → ") : "根节点")}</small>
             <b>${escapeHtml(task.status)}</b>
           </article>
         `).join("")}
@@ -1261,10 +1340,25 @@ function bindControls() {
   });
 
   $("#decision-switch").querySelectorAll("button").forEach((button) => {
-    button.addEventListener("click", () => {
+    button.addEventListener("click", async () => {
       if (button.disabled) return;
       view.mode = button.dataset.mode;
       renderScenario();
+      if (!view.runtime.available) return;
+      setInjectionBusy(true);
+      try {
+        await startLiveRun();
+      } catch (error) {
+        view.demo.log.unshift({
+          eventType: "runtime_error",
+          revision: 0,
+          message: error.message,
+          timestamp: new Date().toLocaleTimeString("zh-CN", { hour12: false }),
+        });
+        renderInjectionLog();
+      } finally {
+        setInjectionBusy(false);
+      }
     });
   });
 

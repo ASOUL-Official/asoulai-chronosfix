@@ -47,7 +47,7 @@
 - [x] 扩展故障回放评测集：`docs/evaluation-corpus.md`、`scenarios/*/scenario.json`
 - [x] 12 场景评测汇总：9 Golden、2 Badcase、1 证据冲突 / 不足
 - [x] 12 个场景通过公开 Draft 2020-12 JSON Schema 校验
-- [x] 自动化测试：`tests/`（61 项）
+- [x] 自动化测试：`tests/`（65 项）
 - [x] AgentTeams v1beta1 离线校验证据：`evidence/agentteams-manifest-validation.json`
 - [x] 官方 SLS Skill dry-run 证据：`evidence/cloud-skill-sls-dry-run.json`
 - [x] 运行清单与 SHA-256：`evidence/run-manifest.json`

@@ -78,6 +78,19 @@ def _signals(scenario: dict[str, Any], evidence: Iterable[dict[str, Any]]) -> li
     return list(dict.fromkeys(signals))
 
 
+def _has_evidence_conflict(
+    scenario: dict[str, Any], evidence: Iterable[dict[str, Any]]
+) -> bool:
+    """Detect an explicit conflict from observable incident evidence only."""
+
+    for item in [*scenario.get("events", []), *evidence]:
+        payload = item.get("payload") if isinstance(item.get("payload"), dict) else {}
+        details = item.get("details") if isinstance(item.get("details"), dict) else {}
+        if item.get("evidence_conflict") or details.get("evidence_conflict") or payload.get("evidence_conflict"):
+            return True
+    return False
+
+
 def _item(agent: str, order: int, reason: str, depends_on: list[str]) -> dict[str, Any]:
     profile = AGENT_PROFILES[agent]
     return {
@@ -100,17 +113,11 @@ def recommend_agent_composition(
 ) -> dict[str, Any]:
     """Return a replayable, evidence-driven Agent/Skill composition."""
 
-    ground_truth = scenario.get("ground_truth") or {}
     signals = _signals(scenario, evidence)
-    expected = ground_truth.get("expected_outcome")
-    fixture_scope = ground_truth.get("fixture_scope")
     hypotheses = scenario.get("hypotheses") or []
     patches = scenario.get("patch_candidates") or []
-    evidence_conflict = any(
-        bool((event.get("details") or {}).get("evidence_conflict"))
-        for event in scenario.get("events", [])
-    )
-    abstain = expected == "abstain" or fixture_scope == "evaluation-only-counterfactual" or evidence_conflict
+    evidence_conflict = _has_evidence_conflict(scenario, evidence)
+    abstain = evidence_conflict
 
     selected: list[dict[str, Any]] = []
 
@@ -136,13 +143,17 @@ def recommend_agent_composition(
             "不生成补丁，不进入 RiskGate。"
         )
     else:
-        add("universe-builder", "已满足可诊断范围，构造反事实与故障族验证空间。", ["hypothesis-scientist"])
+        add(
+            "universe-builder",
+            "已满足可诊断范围，构造反事实与故障族验证空间。",
+            [selected[-1]["agent"]],
+        )
         if patches:
             add("patch-engineer", "已有候选变更，比较修复收益、风险和回滚契约。", ["universe-builder"])
             add("adversarial-verifier", "对候选补丁执行同源故障族和回滚验证，避免只在单一样例上通过。", ["patch-engineer"])
             add("release-auditor", "只有质量门禁通过且审批绑定最新 revision 才允许发布决策。", ["adversarial-verifier"])
         strategy = "按证据动态拼接完整修复链"
-        confidence = 0.93 if ground_truth.get("model_support") == "supported" else 0.58
+        confidence = 0.93 if hypotheses and patches else 0.72
         stop_before = "无"
         rationale = "Agent 根据已观测信号和可用候选补丁选择最小充分队列；每个角色的输入来自上游结果。"
 
@@ -159,8 +170,9 @@ def recommend_agent_composition(
         "scenario_id": scenario.get("incident_id") or scenario.get("title"),
         "objective": objective,
         "signals": signals,
-        "expected_outcome": expected,
-        "fixture_scope": fixture_scope,
+        "evidence_conflict": evidence_conflict,
+        "has_hypotheses": bool(hypotheses),
+        "has_patch_candidates": bool(patches),
         "composition": composition,
     }
     return {
@@ -178,4 +190,53 @@ def recommend_agent_composition(
         "free_combination": True,
         "composition": composition,
         "boundary_note": "本地 Manager 依据证据生成可回放组合；不冒充官方 AgentTeams Controller 推理轨迹。",
+    }
+
+
+def compile_agent_dag(recommendation: dict[str, Any]) -> dict[str, Any]:
+    """Compile a Manager recommendation into an executable, topologically sorted DAG.
+
+    The graph keeps the human-readable Agent dependency names out of the
+    runtime boundary: workers receive concrete task IDs, skills and capability
+    requirements. This makes the recommendation directly auditable against the
+    task/attempt records held by ``RuntimeStore``.
+    """
+
+    composition = list(recommendation.get("composition") or [])
+    by_agent: dict[str, dict[str, Any]] = {}
+    for item in composition:
+        agent = str(item["agent"])
+        if agent in by_agent:
+            raise ValueError(f"duplicate agent in recommendation: {agent}")
+        by_agent[agent] = item
+
+    tasks: list[dict[str, Any]] = []
+    task_id_by_agent: dict[str, str] = {}
+    for item in composition:
+        agent = str(item["agent"])
+        order = int(item["order"])
+        task_id = f"agent-{order:02d}-{agent}"
+        dependency_agents = [str(value) for value in item.get("depends_on") or []]
+        missing = [name for name in dependency_agents if name not in task_id_by_agent]
+        if missing:
+            raise ValueError(f"agent {agent} depends on unresolved upstream role(s): {missing}")
+        task_id_by_agent[agent] = task_id
+        tasks.append(
+            {
+                "task_id": task_id,
+                "order": order,
+                "agent": agent,
+                "worker": item["worker"],
+                "role": item["role"],
+                "skill": item["skill"],
+                "capability": item["capability"],
+                "depends_on": [task_id_by_agent[name] for name in dependency_agents],
+            }
+        )
+
+    return {
+        "schema": "chronosfix.agent-dag/v1",
+        "decision_id": recommendation["decision_id"],
+        "planner": recommendation["planner"],
+        "tasks": tasks,
     }

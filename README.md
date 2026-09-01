@@ -40,7 +40,7 @@ AsoulAI ChronosFix（A-CFX）面向 GOAI 新智基座 Agent Infra「方向三：
 python -m pip install -e ".[validation]"
 ```
 
-只运行 `demo.py`、`evaluate.py` 或 61 项单元测试时无需安装这些可选依赖。
+只运行 `demo.py`、`evaluate.py` 或 65 项单元测试时无需安装这些可选依赖。
 
 ```powershell
 git clone https://github.com/ASOUL-Official/asoulai-chronosfix.git
@@ -73,7 +73,7 @@ python demo.py --output output/no-approval
 - 质量门禁 `passed`，具名人工审批后发布决策 `approved`；
 - 回滚字段已恢复到场景基线并通过机器校验；
 - 18 个 Trace Span，带 `run_id`、`trace_id`、父子关系和实测 duration；
-- 6 个动态任务、8 次 Worker attempt、2 次失败重派、2 条去重证据，以及 revision 绑定的人工暂停/恢复；
+- 真实本地 Controller 会把 Manager 推荐编译为带依赖的 Agent DAG，并记录 Worker attempt、失败重派、去重证据，以及 revision 绑定的人工暂停/恢复；离线证据包保留原有确定性协同回放；
 - 端到端 `elapsed_ms` 为本地 wall-clock 实测；证据覆盖率与步骤完成率明确标记为派生指标；
 - `run-manifest.json` 使用 SHA-256 绑定输入场景、补丁、回滚、审批摘要和输出文件。
 
@@ -103,7 +103,7 @@ RiskGate 输出两个独立维度：
 1. [`agentteams/run_chronosfix_team.py`](agentteams/run_chronosfix_team.py) 调用动态确定性内核并输出 AgentTeams-compatible transcript。核心计算由 task graph 驱动，包含证据触发插入、capability dispatch、失败重派、幂等去重和 revision checkpoint；输出仍明确标记 `agentteams_runtime_executed: false`。
 2. [`agentteams/runtime/chronosfix-resources.yaml`](agentteams/runtime/chronosfix-resources.yaml) 使用 `agentteams.io/v1beta1`，包含 1 Manager、8 Worker、1 Team、1 Human；9 个业务 Skill 已拆为运行时可发现的 `agentteams/skills/*/SKILL.md`。离线校验结果见 [`evidence/agentteams-manifest-validation.json`](evidence/agentteams-manifest-validation.json)。
 
-8 个 Worker 是可治理能力池，不是每次运行都强制同时启动。`chronosfix-manager` 读取证据后生成可回放的 Agent / Skill 组合：当前 Golden 主场景选择 7/8 个 Worker，冲突 / 证据不足场景选择 3/8 个并在补丁前拒答；`agent_plan_recommended` 事件、`decision_id` 和停止边界见 `evidence/local-controller-evidence.json`。这证明的是本地 Manager 的证据驱动控制面，不是官方 AgentTeams Controller 已执行。
+8 个 Worker 是可治理能力池，不是每次运行都强制同时启动。`chronosfix-manager` 读取可观测证据后生成可回放的 Agent / Skill 组合：当前 Golden 主场景选择 7/8 个 Worker，冲突 / 证据不足场景选择 3/8 个并在补丁前拒答。该推荐会被编译为 `chronosfix.agent-dag/v1`：每个节点带具体 `task_id`、依赖、Skill、capability 和目标 Worker；本地 Controller 只在依赖完成后派发独立 `agent-step` Worker 进程，并将结果、PID、时长和依赖写入 SQLite 事件流。`agent_plan_recommended`、`agent_dag_compiled`、`task_dispatched`、`task_completed` 事件共同构成可回放证据。Manager 不读取 `ground_truth`、`fixture_scope` 或 `expected_outcome`；评测夹具标签只由外层评测边界使用。这证明的是本地 Manager 的可执行证据驱动控制面，不是官方 AgentTeams Controller 已执行。
 
 AgentTeams Controller 尚未安装，因此仓库当前没有 Controller、Matrix 房间或真实 Manager/Worker 推理协作记录。本地控制面证据见 `coordination.json`；评委反馈闭环与剩余门槛见 [`docs/semifinal-reviewer-response.md`](docs/semifinal-reviewer-response.md)。
 

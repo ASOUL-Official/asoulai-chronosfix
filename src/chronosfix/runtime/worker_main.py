@@ -10,6 +10,7 @@ import time
 
 from chronosfix.evaluation import evaluate_scenario
 from chronosfix.orchestrator import run_pipeline
+from chronosfix.runtime.agent_steps import run_agent_step
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -21,7 +22,11 @@ def emit(value: dict) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="ChronosFix isolated local worker process")
-    parser.add_argument("--job", choices=("pipeline", "evaluate", "evidence-audit", "probe"), required=True)
+    parser.add_argument(
+        "--job",
+        choices=("pipeline", "evaluate", "evidence-audit", "agent-step", "probe"),
+        required=True,
+    )
     parser.add_argument("--scenario", type=Path)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--payload-json", default="{}")
@@ -63,6 +68,27 @@ def main(argv: list[str] | None = None) -> int:
                 "kind": payload.get("kind", "unknown"),
                 "result_digest": hashlib.sha256(canonical.encode("utf-8")).hexdigest(),
             }
+        )
+        return 0
+
+    if args.job == "agent-step":
+        payload = json.loads(args.payload_json)
+        agent = str(payload.get("agent") or "")
+        skill = str(payload.get("skill") or "")
+        run_id = str(payload.get("run_id") or "local-agent-run")
+        upstream_result_digests = payload.get("upstream_result_digests") or {}
+        if not agent or not skill:
+            raise SystemExit("agent-step requires payload.agent and payload.skill")
+        emit(
+            run_agent_step(
+                scenario,
+                agent=agent,
+                skill=skill,
+                run_id=run_id,
+                approved=args.approve,
+                approver=args.approver,
+                upstream_result_digests=upstream_result_digests,
+            )
         )
         return 0
 

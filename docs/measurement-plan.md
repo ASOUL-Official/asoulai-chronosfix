@@ -66,7 +66,7 @@
 
 ## 5.1 复赛一键验收证据
 
-`scripts/run_semifinal_acceptance.py` 在隔离临时目录中顺序执行：61 项测试、严格 JSON/JSONL 校验、公开 Draft 2020-12 Schema、AgentTeams v1beta1 资源校验、人工已审批通过分支、无人审批 fail-closed 分支、12 场景评测、Demo JavaScript 语法检查、真实本地 Controller/Worker、隔离补丁沙箱、DSSE 变更证明、公开事故来源校验和本地基础设施契约。脚本会分别断言 `approved`、`blocked-awaiting-human`、9/9 支持范围诊断、1/1 正确拒答和 8 个 Worker。
+`scripts/run_semifinal_acceptance.py` 在隔离临时目录中顺序执行：65 项测试、严格 JSON/JSONL 校验、公开 Draft 2020-12 Schema、AgentTeams v1beta1 资源校验、人工已审批通过分支、无人审批 fail-closed 分支、12 场景评测、Demo JavaScript 语法检查、真实本地 Controller/Worker、隔离补丁沙箱、DSSE 变更证明、公开事故来源校验和本地基础设施契约。脚本会分别断言 `approved`、`blocked-awaiting-human`、9/9 支持范围诊断、1/1 正确拒答和 8 个 Worker。
 
 GitHub Actions 将上传该验收器生成的 JSON/Markdown 作为构建产物。它证明的是可复现工程闭环，不替代真实 AgentTeams Controller、云端 Skill 或生产事故数据。
 

@@ -79,6 +79,7 @@ class RuntimeStore:
                     task_id TEXT NOT NULL,
                     skill TEXT NOT NULL,
                     capability TEXT NOT NULL,
+                    depends_on_json TEXT NOT NULL DEFAULT '[]',
                     status TEXT NOT NULL,
                     result_json TEXT,
                     created_revision INTEGER NOT NULL,
@@ -127,6 +128,14 @@ class RuntimeStore:
                 );
                 """
             )
+            task_columns = {
+                str(item["name"])
+                for item in connection.execute("PRAGMA table_info(tasks)")
+            }
+            if "depends_on_json" not in task_columns:
+                connection.execute(
+                    "ALTER TABLE tasks ADD COLUMN depends_on_json TEXT NOT NULL DEFAULT '[]'"
+                )
 
     def create_run(self, run: dict[str, Any]) -> None:
         now = utc_now()
@@ -220,14 +229,24 @@ class RuntimeStore:
             )
         return event, stale_count
 
-    def register_task(self, run_id: str, task_id: str, skill: str, capability: str) -> None:
+    def register_task(
+        self,
+        run_id: str,
+        task_id: str,
+        skill: str,
+        capability: str,
+        *,
+        depends_on: list[str] | tuple[str, ...] = (),
+    ) -> None:
         revision = self.get_run(run_id)["revision"]
         with self.connection() as connection:
             connection.execute(
-                """INSERT INTO tasks (run_id, task_id, skill, capability, status, result_json, created_revision)
-                VALUES (?, ?, ?, ?, 'PENDING', NULL, ?)
-                ON CONFLICT(run_id, task_id) DO UPDATE SET skill=excluded.skill, capability=excluded.capability""",
-                (run_id, task_id, skill, capability, revision),
+                """INSERT INTO tasks
+                (run_id, task_id, skill, capability, depends_on_json, status, result_json, created_revision)
+                VALUES (?, ?, ?, ?, ?, 'PENDING', NULL, ?)
+                ON CONFLICT(run_id, task_id) DO UPDATE SET
+                skill=excluded.skill, capability=excluded.capability, depends_on_json=excluded.depends_on_json""",
+                (run_id, task_id, skill, capability, encode(list(depends_on)), revision),
             )
 
     def update_task(self, run_id: str, task_id: str, status: str, result: Any = None) -> None:
@@ -303,6 +322,7 @@ class RuntimeStore:
             item.pop("run_id", None)
         for item in tasks:
             item["result"] = decode(item.pop("result_json"), None)
+            item["depends_on"] = decode(item.pop("depends_on_json"), [])
             item.pop("run_id", None)
         for item in evidence:
             item["payload"] = decode(item.pop("payload_json"), {})
