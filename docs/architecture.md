@@ -17,7 +17,7 @@ Issue / Alert / Git / Config / Trace
 
 | 层 | 当前实现 | 生产化映射 |
 |---|---|---|
-| 协同层 | 本地确定性 orchestrator；AgentTeams-compatible transcript | AgentTeams Manager/Worker/Team/Human/Matrix |
+| 协同层 | 本地确定性 orchestrator；AgentTeams-compatible transcript；增量因果重计算 | AgentTeams Manager/Worker/Team/Human/Matrix |
 | Skill 层 | 9 个核心本地 Skill + 官方 SLS 只读 Adapter；完整性/评测为辅助模块 | AgentTeams Worker Skill / 企业 Skill Registry |
 | 工具层 | 本地场景文件、GitHub local-draft、官方 SLS Skill dry-run | 云 Skills、MCP、Git/CI/Log/Config/Ticket Adapter |
 | 治理与网关 | 契约和策略说明 | Nacos、Higress |
@@ -26,6 +26,8 @@ Issue / Alert / Git / Config / Trace
 | 可观测层 | 18 Span Trace、结构化日志、实测 duration、派生指标 | LoongSuite、AgentScope Studio、AgentLoop |
 
 其他官方组件目前是接口映射，不是部署证据。
+
+新证据到达时，Controller 按证据信号计算 DAG 影响闭包：只让时间线、假设、反事实、补丁验证和 RiskGate 等相关节点失效并重算，复用未受影响的事故上下文；新能力节点单独记录为 `new_task_ids`。
 
 ## AgentTeams 正式资源
 

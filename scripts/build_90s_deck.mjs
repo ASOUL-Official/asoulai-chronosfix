@@ -56,7 +56,7 @@ const edits = {
     "sh/oz29krqh": "强制故障变体",
     "sh/2xkrih8b": "14",
     "sh/1wbapc7q": "证据护照声明",
-    "sh/fu9sn2p0": "65",
+    "sh/fu9sn2p0": "66",
     "sh/et0reh8f": "自动化测试",
     "sh/tsrqlc7u": "一句话：每个发布决定都能回答“谁做的、凭什么、失败怎么办”。",
   },
@@ -148,7 +148,7 @@ const edits = {
 
 const notes = {
   1: "0:00–0:12 开门见山：ChronosFix 不承诺替研发做判断，而是让每个修复决定携带证据。\n[Sources]\n- Internal: docs/semifinal-reviewer-response.md\n- Internal: evidence/release-manifest.json",
-  2: "0:12–0:27 先讲结果：48.72% 到 6.25% 的既有评测口径、8 个强制故障变体、14 条证据声明；Manager 会按证据自由组合 Agent/Skill 并编译为任务 DAG，当前 65 项测试全绿。\n[Sources]\n- Internal: docs/evaluation-corpus-results.md\n- Internal: tests/ (unittest collection: 65)",
+  2: "0:12–0:27 先讲结果：48.72% 到 6.25% 的既有评测口径、8 个强制故障变体、14 条证据声明；Manager 会按证据自由组合 Agent/Skill 并编译为任务 DAG，当前 66 项测试全绿。\n[Sources]\n- Internal: docs/evaluation-corpus-results.md\n- Internal: tests/ (unittest collection: 66)",
   3: "0:27–0:43 现场重点：Controller 用 Popen 启动真实 Worker 子进程。点击失败后，#01 的 PID 结束，#02 接管；事件落 SQLite Matrix。官方 AgentTeams/Matrix 仍写 pending。\n[Sources]\n- Internal: src/chronosfix/runtime/controller.py\n- Internal: src/chronosfix/runtime/store.py\n- Internal: deploy/infra-boundaries.json",
   4: "0:43–0:58 证据重点：补丁先在临时 checkout 中反复验证，再进入 RiskGate；最后用 DSSE + Ed25519 把输入、结果、边界绑定成可验签声明。\n[Sources]\n- Internal: scripts/run_patch_sandbox.py\n- Internal: src/chronosfix/attestation.py\n- Internal: evidence/release-manifest.json",
   5: "0:58–1:13 三个现场动作：重派、动态插证据、旧审批失效。再点 Badcase：系统必须 abstain/indeterminate，而不是生成一个看似完整的 PR。Cloudflare 事故只作为公开只读事实来源。\n[Sources]\n- Internal: repair-cockpit/index.html\n- Internal: src/chronosfix/runtime/controller.py\n- External: https://blog.cloudflare.com/cloudflare-outage/",

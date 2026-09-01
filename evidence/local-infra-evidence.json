@@ -1,6 +1,6 @@
 {
   "schema": "chronosfix.local-infra-evidence/v1",
-  "generated_at": "2026-08-28T06:12:07.628424+00:00",
+  "generated_at": "2026-09-01T09:19:19.166426+00:00",
   "passed": true,
   "boundaries": {
     "local_sqlite_unified_model_executed": true,
@@ -26,69 +26,69 @@
   },
   "event_bus": {
     "published": {
-      "message_id": "msg-ac262c3c33424a31",
+      "message_id": "msg-192998955d374065",
       "topic": "experiment.done",
       "idempotency_key": "experiment-001",
       "status": "READY",
       "attempts": 0,
       "max_attempts": 2,
-      "created_at": "2026-08-28T06:12:07.587916+00:00",
-      "updated_at": "2026-08-28T06:12:07.587916+00:00",
+      "created_at": "2026-09-01T09:19:19.125544+00:00",
+      "updated_at": "2026-09-01T09:19:19.125544+00:00",
       "payload": {
         "healthy": true
       },
       "deduplicated": false
     },
     "duplicate": {
-      "message_id": "msg-ac262c3c33424a31",
+      "message_id": "msg-192998955d374065",
       "topic": "experiment.done",
       "idempotency_key": "experiment-001",
       "payload_json": "{\"healthy\":true}",
       "status": "READY",
       "attempts": 0,
       "max_attempts": 2,
-      "created_at": "2026-08-28T06:12:07.587916+00:00",
-      "updated_at": "2026-08-28T06:12:07.587916+00:00",
+      "created_at": "2026-09-01T09:19:19.125544+00:00",
+      "updated_at": "2026-09-01T09:19:19.125544+00:00",
       "payload": {
         "healthy": true
       },
       "deduplicated": true
     },
     "retry": {
-      "message_id": "msg-ac262c3c33424a31",
+      "message_id": "msg-192998955d374065",
       "topic": "experiment.done",
       "idempotency_key": "experiment-001",
       "status": "READY",
       "attempts": 1,
       "max_attempts": 2,
-      "created_at": "2026-08-28T06:12:07.587916+00:00",
-      "updated_at": "2026-08-28T06:12:07.596483+00:00",
+      "created_at": "2026-09-01T09:19:19.125544+00:00",
+      "updated_at": "2026-09-01T09:19:19.133468+00:00",
       "payload": {
         "healthy": true
       }
     },
     "acked": {
-      "message_id": "msg-ac262c3c33424a31",
+      "message_id": "msg-192998955d374065",
       "topic": "experiment.done",
       "idempotency_key": "experiment-001",
       "status": "ACKED",
       "attempts": 1,
       "max_attempts": 2,
-      "created_at": "2026-08-28T06:12:07.587916+00:00",
-      "updated_at": "2026-08-28T06:12:07.602959+00:00",
+      "created_at": "2026-09-01T09:19:19.125544+00:00",
+      "updated_at": "2026-09-01T09:19:19.139768+00:00",
       "payload": {
         "healthy": true
       }
     },
     "dlq": {
-      "message_id": "msg-18ba1cc90e824b20",
+      "message_id": "msg-827afbc459d34f8e",
       "topic": "riskgate.waiting",
       "idempotency_key": "riskgate-001",
       "status": "DLQ",
       "attempts": 1,
       "max_attempts": 1,
-      "created_at": "2026-08-28T06:12:07.605572+00:00",
-      "updated_at": "2026-08-28T06:12:07.612498+00:00",
+      "created_at": "2026-09-01T09:19:19.142729+00:00",
+      "updated_at": "2026-09-01T09:19:19.150088+00:00",
       "payload": {
         "approval": "missing"
       }
@@ -142,7 +142,7 @@
     }
   },
   "otlp": {
-    "trace_id": "68e1ddebd0634d00ae98a2befb0ed02d",
+    "trace_id": "e0544840d1fc4ae09f8a5c1335fe40f6",
     "span_count": 18,
     "payload": {
       "resourceSpans": [
@@ -164,18 +164,18 @@
               },
               "spans": [
                 {
-                  "traceId": "68e1ddebd0634d00ae98a2befb0ed02d",
+                  "traceId": "e0544840d1fc4ae09f8a5c1335fe40f6",
                   "spanId": "0000000000000001",
                   "parentSpanId": "",
                   "name": "incident-commander.EvidenceFusion",
                   "kind": 1,
                   "startTimeUnixNano": "0",
-                  "endTimeUnixNano": "395000",
+                  "endTimeUnixNano": "317000",
                   "attributes": [
                     {
                       "key": "chronosfix.run_id",
                       "value": {
-                        "stringValue": "run-cd233db619aa4b7fa4f6248727b0f874"
+                        "stringValue": "run-4860134828d64dd585cb196e8b0d19b8"
                       }
                     },
                     {
@@ -187,18 +187,18 @@
                   ]
                 },
                 {
-                  "traceId": "68e1ddebd0634d00ae98a2befb0ed02d",
+                  "traceId": "e0544840d1fc4ae09f8a5c1335fe40f6",
                   "spanId": "0000000000000002",
                   "parentSpanId": "0000000000000001",
                   "name": "timeline-analyst.ChangeTimeline",
                   "kind": 1,
                   "startTimeUnixNano": "0",
-                  "endTimeUnixNano": "25000",
+                  "endTimeUnixNano": "20000",
                   "attributes": [
                     {
                       "key": "chronosfix.run_id",
                       "value": {
-                        "stringValue": "run-cd233db619aa4b7fa4f6248727b0f874"
+                        "stringValue": "run-4860134828d64dd585cb196e8b0d19b8"
                       }
                     },
                     {
@@ -210,7 +210,7 @@
                   ]
                 },
                 {
-                  "traceId": "68e1ddebd0634d00ae98a2befb0ed02d",
+                  "traceId": "e0544840d1fc4ae09f8a5c1335fe40f6",
                   "spanId": "0000000000000003",
                   "parentSpanId": "0000000000000002",
                   "name": "incident-commander.BaselineReplay",
@@ -221,7 +221,7 @@
                     {
                       "key": "chronosfix.run_id",
                       "value": {
-                        "stringValue": "run-cd233db619aa4b7fa4f6248727b0f874"
+                        "stringValue": "run-4860134828d64dd585cb196e8b0d19b8"
                       }
                     },
                     {
@@ -233,7 +233,7 @@
                   ]
                 },
                 {
-                  "traceId": "68e1ddebd0634d00ae98a2befb0ed02d",
+                  "traceId": "e0544840d1fc4ae09f8a5c1335fe40f6",
                   "spanId": "0000000000000004",
                   "parentSpanId": "0000000000000003",
                   "name": "hypothesis-scientist.HypothesisContract",
@@ -244,7 +244,7 @@
                     {
                       "key": "chronosfix.run_id",
                       "value": {
-                        "stringValue": "run-cd233db619aa4b7fa4f6248727b0f874"
+                        "stringValue": "run-4860134828d64dd585cb196e8b0d19b8"
                       }
                     },
                     {
@@ -256,7 +256,7 @@
                   ]
                 },
                 {
-                  "traceId": "68e1ddebd0634d00ae98a2befb0ed02d",
+                  "traceId": "e0544840d1fc4ae09f8a5c1335fe40f6",
                   "spanId": "0000000000000005",
                   "parentSpanId": "0000000000000004",
                   "name": "universe-builder.CounterfactualReplay",
@@ -267,7 +267,7 @@
                     {
                       "key": "chronosfix.run_id",
                       "value": {
-                        "stringValue": "run-cd233db619aa4b7fa4f6248727b0f874"
+                        "stringValue": "run-4860134828d64dd585cb196e8b0d19b8"
                       }
                     },
                     {
@@ -279,7 +279,7 @@
                   ]
                 },
                 {
-                  "traceId": "68e1ddebd0634d00ae98a2befb0ed02d",
+                  "traceId": "e0544840d1fc4ae09f8a5c1335fe40f6",
                   "spanId": "0000000000000006",
                   "parentSpanId": "0000000000000005",
                   "name": "hypothesis-scientist.HypothesisContract",
@@ -290,7 +290,7 @@
                     {
                       "key": "chronosfix.run_id",
                       "value": {
-                        "stringValue": "run-cd233db619aa4b7fa4f6248727b0f874"
+                        "stringValue": "run-4860134828d64dd585cb196e8b0d19b8"
                       }
                     },
                     {
@@ -302,7 +302,7 @@
                   ]
                 },
                 {
-                  "traceId": "68e1ddebd0634d00ae98a2befb0ed02d",
+                  "traceId": "e0544840d1fc4ae09f8a5c1335fe40f6",
                   "spanId": "0000000000000007",
                   "parentSpanId": "0000000000000006",
                   "name": "universe-builder.CounterfactualReplay",
@@ -313,7 +313,7 @@
                     {
                       "key": "chronosfix.run_id",
                       "value": {
-                        "stringValue": "run-cd233db619aa4b7fa4f6248727b0f874"
+                        "stringValue": "run-4860134828d64dd585cb196e8b0d19b8"
                       }
                     },
                     {
@@ -325,7 +325,7 @@
                   ]
                 },
                 {
-                  "traceId": "68e1ddebd0634d00ae98a2befb0ed02d",
+                  "traceId": "e0544840d1fc4ae09f8a5c1335fe40f6",
                   "spanId": "0000000000000008",
                   "parentSpanId": "0000000000000007",
                   "name": "hypothesis-scientist.HypothesisContract",
@@ -336,7 +336,7 @@
                     {
                       "key": "chronosfix.run_id",
                       "value": {
-                        "stringValue": "run-cd233db619aa4b7fa4f6248727b0f874"
+                        "stringValue": "run-4860134828d64dd585cb196e8b0d19b8"
                       }
                     },
                     {
@@ -348,7 +348,7 @@
                   ]
                 },
                 {
-                  "traceId": "68e1ddebd0634d00ae98a2befb0ed02d",
+                  "traceId": "e0544840d1fc4ae09f8a5c1335fe40f6",
                   "spanId": "0000000000000009",
                   "parentSpanId": "0000000000000008",
                   "name": "universe-builder.CounterfactualReplay",
@@ -359,7 +359,7 @@
                     {
                       "key": "chronosfix.run_id",
                       "value": {
-                        "stringValue": "run-cd233db619aa4b7fa4f6248727b0f874"
+                        "stringValue": "run-4860134828d64dd585cb196e8b0d19b8"
                       }
                     },
                     {
@@ -371,7 +371,7 @@
                   ]
                 },
                 {
-                  "traceId": "68e1ddebd0634d00ae98a2befb0ed02d",
+                  "traceId": "e0544840d1fc4ae09f8a5c1335fe40f6",
                   "spanId": "000000000000000a",
                   "parentSpanId": "0000000000000009",
                   "name": "hypothesis-scientist.CausalIdentifiabilityArbitration",
@@ -382,7 +382,7 @@
                     {
                       "key": "chronosfix.run_id",
                       "value": {
-                        "stringValue": "run-cd233db619aa4b7fa4f6248727b0f874"
+                        "stringValue": "run-4860134828d64dd585cb196e8b0d19b8"
                       }
                     },
                     {
@@ -394,18 +394,18 @@
                   ]
                 },
                 {
-                  "traceId": "68e1ddebd0634d00ae98a2befb0ed02d",
+                  "traceId": "e0544840d1fc4ae09f8a5c1335fe40f6",
                   "spanId": "000000000000000b",
                   "parentSpanId": "000000000000000a",
                   "name": "universe-builder.FaultGenome",
                   "kind": 1,
                   "startTimeUnixNano": "0",
-                  "endTimeUnixNano": "30000",
+                  "endTimeUnixNano": "28000",
                   "attributes": [
                     {
                       "key": "chronosfix.run_id",
                       "value": {
-                        "stringValue": "run-cd233db619aa4b7fa4f6248727b0f874"
+                        "stringValue": "run-4860134828d64dd585cb196e8b0d19b8"
                       }
                     },
                     {
@@ -417,7 +417,7 @@
                   ]
                 },
                 {
-                  "traceId": "68e1ddebd0634d00ae98a2befb0ed02d",
+                  "traceId": "e0544840d1fc4ae09f8a5c1335fe40f6",
                   "spanId": "000000000000000c",
                   "parentSpanId": "000000000000000b",
                   "name": "patch-engineer.PatchCandidateContract",
@@ -428,7 +428,7 @@
                     {
                       "key": "chronosfix.run_id",
                       "value": {
-                        "stringValue": "run-cd233db619aa4b7fa4f6248727b0f874"
+                        "stringValue": "run-4860134828d64dd585cb196e8b0d19b8"
                       }
                     },
                     {
@@ -440,18 +440,18 @@
                   ]
                 },
                 {
-                  "traceId": "68e1ddebd0634d00ae98a2befb0ed02d",
+                  "traceId": "e0544840d1fc4ae09f8a5c1335fe40f6",
                   "spanId": "000000000000000d",
                   "parentSpanId": "000000000000000c",
                   "name": "adversarial-verifier.PatchTournament",
                   "kind": 1,
                   "startTimeUnixNano": "0",
-                  "endTimeUnixNano": "72000",
+                  "endTimeUnixNano": "66000",
                   "attributes": [
                     {
                       "key": "chronosfix.run_id",
                       "value": {
-                        "stringValue": "run-cd233db619aa4b7fa4f6248727b0f874"
+                        "stringValue": "run-4860134828d64dd585cb196e8b0d19b8"
                       }
                     },
                     {
@@ -463,18 +463,18 @@
                   ]
                 },
                 {
-                  "traceId": "68e1ddebd0634d00ae98a2befb0ed02d",
+                  "traceId": "e0544840d1fc4ae09f8a5c1335fe40f6",
                   "spanId": "000000000000000e",
                   "parentSpanId": "000000000000000d",
                   "name": "release-auditor.RiskGate",
                   "kind": 1,
                   "startTimeUnixNano": "0",
-                  "endTimeUnixNano": "56000",
+                  "endTimeUnixNano": "41000",
                   "attributes": [
                     {
                       "key": "chronosfix.run_id",
                       "value": {
-                        "stringValue": "run-cd233db619aa4b7fa4f6248727b0f874"
+                        "stringValue": "run-4860134828d64dd585cb196e8b0d19b8"
                       }
                     },
                     {
@@ -486,18 +486,18 @@
                   ]
                 },
                 {
-                  "traceId": "68e1ddebd0634d00ae98a2befb0ed02d",
+                  "traceId": "e0544840d1fc4ae09f8a5c1335fe40f6",
                   "spanId": "000000000000000f",
                   "parentSpanId": "000000000000000e",
                   "name": "release-auditor.EvidencePassport",
                   "kind": 1,
                   "startTimeUnixNano": "0",
-                  "endTimeUnixNano": "25000",
+                  "endTimeUnixNano": "24000",
                   "attributes": [
                     {
                       "key": "chronosfix.run_id",
                       "value": {
-                        "stringValue": "run-cd233db619aa4b7fa4f6248727b0f874"
+                        "stringValue": "run-4860134828d64dd585cb196e8b0d19b8"
                       }
                     },
                     {
@@ -509,7 +509,7 @@
                   ]
                 },
                 {
-                  "traceId": "68e1ddebd0634d00ae98a2befb0ed02d",
+                  "traceId": "e0544840d1fc4ae09f8a5c1335fe40f6",
                   "spanId": "0000000000000010",
                   "parentSpanId": "000000000000000f",
                   "name": "patch-engineer.GitHubIssuePrFlow",
@@ -520,7 +520,7 @@
                     {
                       "key": "chronosfix.run_id",
                       "value": {
-                        "stringValue": "run-cd233db619aa4b7fa4f6248727b0f874"
+                        "stringValue": "run-4860134828d64dd585cb196e8b0d19b8"
                       }
                     },
                     {
@@ -532,18 +532,18 @@
                   ]
                 },
                 {
-                  "traceId": "68e1ddebd0634d00ae98a2befb0ed02d",
+                  "traceId": "e0544840d1fc4ae09f8a5c1335fe40f6",
                   "spanId": "0000000000000011",
                   "parentSpanId": "0000000000000010",
                   "name": "skill-curator.SkillForge",
                   "kind": 1,
                   "startTimeUnixNano": "0",
-                  "endTimeUnixNano": "44000",
+                  "endTimeUnixNano": "37000",
                   "attributes": [
                     {
                       "key": "chronosfix.run_id",
                       "value": {
-                        "stringValue": "run-cd233db619aa4b7fa4f6248727b0f874"
+                        "stringValue": "run-4860134828d64dd585cb196e8b0d19b8"
                       }
                     },
                     {
@@ -555,18 +555,18 @@
                   ]
                 },
                 {
-                  "traceId": "68e1ddebd0634d00ae98a2befb0ed02d",
+                  "traceId": "e0544840d1fc4ae09f8a5c1335fe40f6",
                   "spanId": "0000000000000012",
                   "parentSpanId": "0000000000000011",
                   "name": "incident-commander.ProofReport",
                   "kind": 1,
                   "startTimeUnixNano": "0",
-                  "endTimeUnixNano": "202548000",
+                  "endTimeUnixNano": "140467000",
                   "attributes": [
                     {
                       "key": "chronosfix.run_id",
                       "value": {
-                        "stringValue": "run-cd233db619aa4b7fa4f6248727b0f874"
+                        "stringValue": "run-4860134828d64dd585cb196e8b0d19b8"
                       }
                     },
                     {

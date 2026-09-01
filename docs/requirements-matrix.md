@@ -8,7 +8,7 @@
 | 底层逻辑清晰 | 以带证明的软件变更链统一事故证据、反事实根因、缺陷基因、RiskGate、GitHub PR、证据护照和 Skill 沉淀 | `docs/proof-carrying-change.md` |
 | 至少 3 个不同职能 Agent | 8 个 Worker 能力池：Commander、Timeline、Hypothesis、Universe、Patch、Verifier、Auditor、Curator；Manager 按证据选择运行时子集 | `docs/agent-identity.md`、`evidence/local-controller-evidence.json` |
 | AgentTeams 为协同基座 | 1 Manager、8 Worker、1 Team、1 Human；共享 Incident State、人类审批与 Worker Skill 分工，8 个 Worker 不等于每次全量启动 | `agentteams/runtime/chronosfix-resources.yaml`、`src/chronosfix/runtime/recommender.py` |
-| 多 Agent 闭环 | Manager 依据证据自由组合 Agent/Skill；支持动态任务插入、capability 调度、Worker 重派、revision 共享状态、人工暂停/恢复、反事实实验、补丁竞赛、风险审批和 Skill 沉淀 | `evidence/coordination.json`、`evidence/local-controller-evidence.json`、`evidence/trace.jsonl` |
+| 多 Agent 闭环 | Manager 依据证据自由组合 Agent/Skill；支持增量因果重计算（只失效受影响 DAG 节点）、动态任务插入、capability 调度、Worker 重派、revision 共享状态、人工暂停/恢复、反事实实验、补丁竞赛、风险审批和 Skill 沉淀 | `evidence/coordination.json`、`evidence/local-controller-evidence.json`、`evidence/trace.jsonl` |
 | Skill 必选 | 9 个业务 Skill + 1 个官方 SLS 只读 Skill Adapter，共 10 个稳定契约 | `docs/skill-specs.md` |
 | MCP 或等价契约 | 当前使用本地适配器；生产迁移为 Git/CI/日志/配置中心/工单 MCP Server | `docs/architecture.md` |
 | RAG/上下文增强 | 当前实现 Incident State、证据索引、Trace 回放；后续接入历史事故、Runbook 与代码知识库检索 | `evidence/proof-bundle.json` |

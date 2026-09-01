@@ -1,39 +1,53 @@
-# ChronosFix 复赛评测报告
+# ChronosFix Golden / Badcase 评测报告
 
-## 1. 自动化验证摘要
+> 口径：本报告由 `python -m chronosfix.evaluation` 从场景 Ground Truth 自动生成；
+> 数据为确定性合成回放，不代表真实生产环境准确率。
 
-- 事故样例：INC-2026-0816-001 / 订单创建接口在午间流量下出现高失败率与长尾延迟
-- Run ID：run-25c804450921431187b1c98fb1dbf77e
-- Agent/Skill Trace Span：18
-- 流水线步骤完成率（由 Trace 推导）：100.0%
-- 根因假设数：3
-- 反事实实验数：3
-- 故障基因变体数：8
-- 补丁候选数：4
-- 选中补丁最差失败率：6.2%
-- 质量门禁：passed
-- 发布决策：approved
-- 回滚验证：通过
+## 汇总
 
-## 2. 复赛验收点覆盖
+- 总样例：12。
+- 样例构成：Golden 9，Badcase 2，Insufficient Evidence 1；其中评测专用夹具 3。
+- 当前模拟器可支持的诊断样例：9，正确 9，限定口径准确率 100.0%。
+- 预期拒答样例：1，正确拒答 1，拒答成功率 100.0%。
+- 当前模型不支持样例：2；未达到理想预期 2，错误强行归因 0。
+- 应拒答却仍给出主因的样例：0；这些样例按失败保留，不计入成功数。
+- 状态分布：correct=9，incorrect=0，abstain=3。
 
-| 验收点 | 证据 |
-|---|---|
-| AgentTeams 等价编排证据 | `agentteams/chronosfix-team.yaml`、`agentteams-run.json`（非 Controller Runtime 证据） |
-| 样例输入输出 | `scenarios/checkout-timeout/scenario.json`、`proof-bundle.json` |
-| 日志与 Trace | `run-log.jsonl`、`trace.jsonl` |
-| Metrics | `engineering-metrics.json` |
-| 风险审批 | `RiskGate` Span 与 evidence passport 风险声明 |
-| 回滚审计 | machine-readable rollback_changes、回滚验证结果与 proof-report |
-| GitHub Issue/PR 本地草案链路 | `github-issue.md`、`github-pr.md`、`github-pr-diff.patch`、`github-pr-checks.json`、`github-review-audit.jsonl` |
-| 完整性绑定 | `run-manifest.json` 与 Evidence Passport SHA-256 摘要 |
-| Skill 复用 | `SkillForge` 输出 3 个 Skill Candidate |
-| 动态协同控制面 | `coordination.json`：任务图、state revision、证据驱动插入、Worker 重派、幂等去重、暂停/恢复 |
+## 逐例结果
 
-## 3. 失败处理分支
+| 场景 | 类型 | 执行范围 | 模型边界 | 期望 | 观测主因 | 状态 | 达成期望 |
+|---|---|---|---|---|---|---|---|
+| `api-timeout-amplifier` | golden | pipeline-and-evaluation | supported | H-POOL | H-POOL | correct | yes |
+| `cache-warmup-burst` | golden | pipeline-and-evaluation | supported | H-POOL | H-POOL | correct | yes |
+| `checkout-timeout` | golden | pipeline-and-evaluation | supported | H-POOL | H-POOL | correct | yes |
+| `code-latency-regression-primary` | golden | pipeline-and-evaluation | supported | H-CODE | H-CODE | correct | yes |
+| `config-drift-before-peak` | golden | pipeline-and-evaluation | supported | H-POOL | H-POOL | correct | yes |
+| `dependency-regression-primary` | golden | pipeline-and-evaluation | supported | H-DEPENDENCY | H-DEPENDENCY | correct | yes |
+| `downstream-jitter` | golden | pipeline-and-evaluation | supported | H-POOL | H-POOL | correct | yes |
+| `code-regression-unmodeled` | badcase | evaluation-only-counterfactual | unsupported | H-CODE | - | abstain | no |
+| `conflicting-counterfactuals` | insufficient-evidence | evaluation-only-counterfactual | supported | abstain | - | abstain | yes |
+| `queue-backlog-unmodeled` | badcase | evaluation-only-counterfactual | unsupported | H-QUEUE | - | abstain | no |
+| `payment-client-slowdown` | golden | pipeline-and-evaluation | supported | H-POOL | H-POOL | correct | yes |
+| `recovery-spike` | golden | pipeline-and-evaluation | supported | H-POOL | H-POOL | correct | yes |
 
-运行 `python demo.py --output output/no-approval` 时不传 `--approve`，健康但中风险的补丁会返回 `blocked-awaiting-human`。若任一强制变体、回滚或执行检查失败，则优先返回 `blocked-quality-gate`，人工不能覆盖质量失败。动态控制面会在同一次运行中注入一次 Worker 超时并重派，重复 evidence 事件去重，并记录 revision 绑定的暂停/恢复。
+## 结果解释
 
-## 4. 开放 / 开源复现
+- `correct`：系统给出的主因集合与 Ground Truth 完全一致。
+- `incorrect`：系统给出了主因，但与 Ground Truth 不一致，或在应拒答时强行归因。
+- `abstain`：没有可辨识的假设达到主因阈值；相同干预对应多个来源假设时会安全拒答。
+- `supported_diagnosis_accuracy` 只覆盖模拟器实际建模的容量与依赖延迟变量。
+- `evaluation-only-counterfactual` 夹具只运行反事实分类，不进入补丁、RiskGate 或 PR 流水线。
+- `code_version`、队列深度当前不进入容量方程；相关 Badcase 会如实显示为已知漏诊，并排除在受支持口径准确率之外。
+- 证据冲突夹具要求拒答；相同干预无法区分来源时由可辨识性仲裁降级为 `indeterminate`。
 
-项目使用 Python 标准库实现核心闭环，Apache-2.0 协议开放，评委可用 README 中的一键命令复现实验。
+## 已知边界
+
+- `code-regression-unmodeled`：status=abstain，expectation_met=no；仅运行反事实分类评测，不进入补丁竞赛、RiskGate 或 PR 流水线；结果不得表述为已支持代码根因诊断。
+- `conflicting-counterfactuals`：status=abstain，expectation_met=yes；本夹具验证可辨识性仲裁：两个来源假设映射到相同干预时降级为 indeterminate；未加入来源级证据前不得自动放行补丁。
+- `queue-backlog-unmodeled`：status=abstain，expectation_met=no；code_version 仅作为不影响容量方程的评测哨兵；本夹具不声称已实现 RocketMQ 队列根因回放。
+
+## 机器可读证据
+
+- `evaluation-summary.json`：完整口径、汇总和逐例结果。
+- `evaluation-cases.csv`：可导入表格或评测平台的逐例记录。
+- 本文件：由同一次运行生成的可读摘要。

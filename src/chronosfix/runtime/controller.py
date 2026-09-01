@@ -271,6 +271,111 @@ class LocalController:
             results[task_id] = result
         return results
 
+    @staticmethod
+    def _impact_agents(evidence_kind: str | None) -> set[str]:
+        """Return the smallest set of Agent roles whose conclusions depend on a signal.
+
+        The mapping is intentionally explicit: an incremental recompute must be
+        explainable in the event log, and should never silently turn into a full
+        pipeline replay. Descendants are added by ``_affected_task_ids`` below.
+        """
+
+        if evidence_kind in {"commit", "dependency", "configuration", "traffic", "incident", "slo"}:
+            return {
+                "timeline-analyst",
+                "hypothesis-scientist",
+                "universe-builder",
+                "patch-engineer",
+                "adversarial-verifier",
+                "release-auditor",
+            }
+        if evidence_kind == "policy":
+            return {"release-auditor"}
+        if evidence_kind:
+            return {"skill-curator"}
+        return set()
+
+    def _incremental_recompute(
+        self,
+        run_id: str,
+        dag: dict[str, Any],
+        *,
+        evidence_kind: str | None,
+    ) -> dict[str, Any]:
+        """Invalidate and recompute only the affected DAG closure.
+
+        The Manager recommendation is still regenerated so a newly observed
+        capability can be inserted. Existing completed nodes outside the
+        affected closure remain reusable and are recorded as such.
+        """
+
+        if not evidence_kind:
+            return {"affected_task_ids": [], "reused_task_ids": [], "evidence_kind": None}
+        snapshot = self.snapshot(run_id)
+        tasks = {item["task_id"]: item for item in snapshot["tasks"]}
+        dag_tasks = {item["task_id"]: item for item in dag["tasks"]}
+        impacted_agents = self._impact_agents(evidence_kind)
+        candidate_affected = {
+            task["task_id"]
+            for task in dag["tasks"]
+            if task["agent"] in impacted_agents
+        }
+        changed = True
+        while changed:
+            changed = False
+            for task in dag["tasks"]:
+                if task["task_id"] in candidate_affected:
+                    continue
+                if any(dependency in candidate_affected for dependency in task["depends_on"]):
+                    candidate_affected.add(task["task_id"])
+                    changed = True
+        affected = {task_id for task_id in candidate_affected if task_id in tasks}
+        new_task_ids = sorted(candidate_affected - affected)
+        dag_task_ids = {task["task_id"] for task in dag["tasks"]}
+        reused = {
+            task_id
+            for task_id, task in tasks.items()
+            if task_id in dag_task_ids and task["status"] == "COMPLETED" and task_id not in affected
+        }
+        self.store.append_event(
+            run_id,
+            "incremental_recompute_started",
+            event_id=self._event_id("incremental-recompute"),
+            task_id="agent-manager",
+            worker="chronosfix-manager",
+            payload={
+                "evidence_kind": evidence_kind,
+                "impacted_agents": sorted(impacted_agents),
+                "affected_task_ids": sorted(affected),
+                "new_task_ids": new_task_ids,
+                "reused_task_ids": sorted(reused),
+                "mode": "incremental-causal-recompute",
+            },
+        )
+        for task_id in sorted(affected):
+            task = tasks.get(task_id)
+            if not task or task["status"] != "COMPLETED":
+                continue
+            self.store.update_task(run_id, task_id, "INVALIDATED")
+            self.store.append_event(
+                run_id,
+                "task_invalidated",
+                event_id=self._event_id("task-invalidated"),
+                task_id=task_id,
+                worker=dag_tasks.get(task_id, {}).get("worker"),
+                payload={
+                    "reason": "new-evidence-affects-upstream-causal-input",
+                    "evidence_kind": evidence_kind,
+                    "recompute_scope": "incremental",
+                },
+            )
+        return {
+            "affected_task_ids": sorted(affected),
+            "new_task_ids": new_task_ids,
+            "reused_task_ids": sorted(reused),
+            "evidence_kind": evidence_kind,
+        }
+
     def _command(
         self,
         *,
@@ -328,8 +433,10 @@ class LocalController:
         )
         modes = (first_mode, retry_mode)
         last_error = "unknown worker failure"
-        for attempt_number, instance in enumerate(instances[:2], start=1):
-            mode = modes[min(attempt_number - 1, len(modes) - 1)]
+        attempt_base = self.store.next_attempt_number(run_id, task_id)
+        for attempt_offset, instance in enumerate(instances[:2]):
+            attempt_number = attempt_base + attempt_offset
+            mode = modes[min(attempt_offset, len(modes) - 1)]
             command = self._command(
                 job=job,
                 scenario=scenario,
@@ -460,8 +567,8 @@ class LocalController:
                 worker=instance.instance_id,
                 payload={"attempt": attempt_number, "error": last_error},
             )
-            if attempt_number < min(2, len(instances)):
-                next_instance = instances[attempt_number]
+            if attempt_offset + 1 < min(2, len(instances)):
+                next_instance = instances[attempt_offset + 1]
                 self.store.append_event(
                     run_id,
                     "task_reassigned",
@@ -529,7 +636,11 @@ class LocalController:
         # Evidence ingestion is a control-plane boundary: re-plan immediately
         # so any newly required Skill becomes a real Manager-compiled DAG node.
         # Do not append a legacy fixed audit task beside the DAG.
-        return self.recommend(run_id, objective="evidence-triggered-replan")["snapshot"]
+        return self.recommend(
+            run_id,
+            objective="evidence-triggered-replan",
+            changed_evidence_kind=str(payload.get("kind", "unknown")),
+        )["snapshot"]
 
     def approve(self, run_id: str, approver: str, *, expected_revision: int) -> dict[str, Any]:
         current = int(self.store.get_run(run_id)["revision"])
@@ -621,7 +732,13 @@ class LocalController:
             pass
         return self.snapshot(run_id)
 
-    def recommend(self, run_id: str, *, objective: str = "prove-and-repair") -> dict[str, Any]:
+    def recommend(
+        self,
+        run_id: str,
+        *,
+        objective: str = "prove-and-repair",
+        changed_evidence_kind: str | None = None,
+    ) -> dict[str, Any]:
         """Recompute the Manager plan and execute any newly compiled DAG nodes."""
 
         snapshot = self.snapshot(run_id)
@@ -633,8 +750,13 @@ class LocalController:
             evidence=[item["payload"] for item in snapshot["evidence"]],
             objective=objective,
         )
+        recompute = self._incremental_recompute(
+            run_id,
+            dag,
+            evidence_kind=changed_evidence_kind,
+        )
         self._execute_agent_dag(run_id, scenario_path, dag, approved=False)
-        return {"recommendation": recommendation, "snapshot": self.snapshot(run_id)}
+        return {"recommendation": recommendation, "recompute": recompute, "snapshot": self.snapshot(run_id)}
 
     def snapshot(self, run_id: str) -> dict[str, Any]:
         return self.store.snapshot(run_id)

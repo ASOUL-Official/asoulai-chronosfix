@@ -17,9 +17,9 @@
 | 场景与方案更新 | 从“事故修复 Demo”升级为“带证明的软件变更基础设施”：故障时间机器、缺陷基因、证据护照、GitHub PR、Skill 飞轮 | `README.md`、`docs/proof-carrying-change.md`、`docs/business-value.md` |
 | 完整场景链路 | Issue/日志/Trace/Git/配置 → AgentTeams 拆解 → 反事实实验 → 缺陷基因验证 → RiskGate → GitHub PR / Evidence Passport → SkillForge | `demo.py`、`evidence/proof-report.md`、`evidence/github-pr.md` |
 | 样例输入输出 | 样例输入为订单接口超时事故，输出为 proof-bundle、proof-report、trace、metrics、AgentTeams transcript | `scenarios/checkout-timeout/scenario.json`、`evidence/` |
-| 日志 / Trace / 指标 | 18 段业务 Trace 记录 Agent/Skill 调用；`coordination.json` 记录动态任务、revision、attempt、重派、去重、暂停/恢复；Metrics 区分 measured / derived | `evidence/trace.jsonl`、`evidence/coordination.json`、`evidence/engineering-metrics.json` |
+| 日志 / Trace / 指标 | 18 段业务 Trace 记录 Agent/Skill 调用；`coordination.json` 记录增量因果重计算的 affected/reused DAG 节点、动态任务、revision、attempt、重派、去重、暂停/恢复；Metrics 区分 measured / derived | `evidence/trace.jsonl`、`evidence/coordination.json`、`evidence/engineering-metrics.json` |
 | GitHub Issue / PR 链路 | 事故进入本地 Issue/PR 草案，并附 diff、checks、RiskGate 与审计；公开 Issue #1 / PR #2 明确为 documentation-only | `docs/github-issue-pr-flow.md`、`docs/live-github-collaboration-evidence.md`、`evidence/github-issue.md`、`evidence/github-pr.md` |
-| 评测结果 | 65 项自动化测试；12 场景为 9/9 受支持诊断、1/1 冲突拒答、整体 10/12 | `tests/`、`evidence/evaluation-corpus/` |
+| 评测结果 | 66 项自动化测试；12 场景为 9/9 受支持诊断、1/1 冲突拒答、整体 10/12 | `tests/`、`evidence/evaluation-corpus/` |
 | 扩展评测集 | 9 Golden、2 Badcase、1 证据冲突 / 不足样例；失败样例不从分母删除 | `docs/evaluation-corpus.md`、`docs/evaluation-corpus-results.md`、`scenarios/` |
 | 自动化验证证据 | 一键运行测试、严格 JSON/JSONL 校验、AgentTeams 资源校验与 Demo | `.github/workflows/verify.yml`、`docs/deployment-and-verification.md` |
 | Skill 工程实现 | 9 个业务 Skill 已拆成可发现 `SKILL.md`；另有本地兼容聚合 Skill 与官方 SLS 只读 Adapter，具备权限、版本和加载证据 | `agentteams/skills/`、`docs/skill-specs.md` |
@@ -36,7 +36,7 @@
 | 闭环环节 | A-CFX 实现 |
 |---|---|
 | 任务输入 | `scenario.json` 输入 Issue、Git、依赖、配置、流量与告警证据 |
-| 任务拆解 | DynamicScheduler 注册依赖图；新配置证据可在运行时插入审计任务，Worker 失败按 capability 重派 |
+| 任务拆解 | DynamicScheduler 注册依赖图；新证据先计算受影响 DAG 闭包，只重算相关因果/补丁/门禁节点，再按 capability 插入新 Skill 任务；Worker 失败按 capability 重派 |
 | 上下文传递 | revision 化 Incident State 承载 timeline、hypotheses、experiments、variants、patch scores、approval、passport；事件日志可回放 |
 | 工具调用 | 本地等价工具契约模拟 Git/CI/Log/Trace/Config/Ticket；新增 GitHub Issue/PR API 等价输出；后续迁移 MCP |
 | 结果验证 | CounterfactualReplay 与 PatchTournament 形成可复验数值 |

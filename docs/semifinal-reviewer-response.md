@@ -36,12 +36,13 @@
 
 1. Incident Commander 注册任务和依赖，不直接执行所有能力。
 2. Scheduler 根据 dependency 和 capability 选择 Worker，并发语义由可运行任务集合表示。
-3. Timeline 新证据会动态插入 `dynamic-config-audit`，不在初始固定任务图中。
+3. 新证据先按 evidence kind 计算受影响 DAG 闭包：因果、补丁和 RiskGate 相关节点进入增量重算，未受影响的事故上下文节点复用；若出现未映射信号，再动态插入 `agent-08-skill-curator`。
 4. Worker 首次超时产生 `task_failed`，随后产生 `task_reassigned` 并转给备用 Worker。
 5. 重复 evidence event 产生 `evidence_deduplicated`，不会修改 state revision。
 6. lost-ack task replay 使用相同 idempotency key，产生 `task_deduplicated`，不再调用 handler。
 7. 中风险补丁产生 `human_pause`；暂停后若有新证据，旧 revision 的审批产生 `approval_invalidated`。
 8. 只有绑定最新 revision 的审批产生 `human_resume`，才允许后续 RiskGate 继续。
+9. `incremental_recompute_started` 明确写出 `affected_task_ids`、`reused_task_ids` 和 `new_task_ids`；`task_invalidated` 逐节点记录失效原因，证明没有整条流水线重跑。
 
 这套证据是 AgentTeams Matrix 的本地兼容控制面，不声称 Controller 已执行。
 

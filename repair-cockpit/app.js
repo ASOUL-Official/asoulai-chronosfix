@@ -57,7 +57,7 @@ const blockerLabel = (blocker) => {
 
 function statusClass(value) {
   const normalized = String(value ?? "").toLowerCase();
-  if (["approved", "passed", "success", "correct", "completed", "executed", "offline-validated"].includes(normalized)) {
+  if (["approved", "passed", "success", "correct", "completed", "executed", "offline-validated"].includes(normalized) || normalized.includes("completed")) {
     return "is-pass";
   }
   if (
@@ -66,7 +66,7 @@ function statusClass(value) {
   ) {
     return "is-block";
   }
-  if (["pending", "paused_awaiting_human", "dry-run", "abstain"].includes(normalized)) return "is-pending";
+  if (["pending", "paused_awaiting_human", "dry-run", "abstain"].includes(normalized) || normalized.includes("invalidated")) return "is-pending";
   return "is-neutral";
 }
 
@@ -340,6 +340,7 @@ function addDemoEvent(eventType, message, options = {}) {
     revision,
     task_id: options.task_id,
     worker: options.worker,
+    payload: options.payload ?? {},
     source: "demo-injector",
     message,
     idempotency_key: `demo-${eventType}-${Date.now()}-${view.demo.events.length}`,
@@ -474,9 +475,13 @@ async function runLiveInjection(type) {
       view.runtime.lastEvidenceId = eventId;
       const evidenceSnapshot = await apiRequest(`/runs/${runId}/evidence`, {
         method: "POST",
-        body: JSON.stringify({
-          event_id: eventId,
-          evidence: { kind: "runtime-topology", summary: "现场发现新的运行时拓扑证据，触发 SkillForge 复核" },
+          body: JSON.stringify({
+            event_id: eventId,
+            evidence: {
+              kind: "slo",
+              signal: "runtime-topology",
+              summary: "现场发现新的 SLO / 运行时拓扑证据，触发增量因果重计算与 SkillForge 复核",
+            },
         }),
       });
       snapshot = evidenceSnapshot;
@@ -487,18 +492,18 @@ async function runLiveInjection(type) {
       if (!view.runtime.lastEvidenceId) {
         await apiRequest(`/runs/${runId}/evidence`, {
           method: "POST",
-          body: JSON.stringify({
-            event_id: eventId,
-            evidence: { kind: "runtime-topology", summary: "幂等演示首个运行时拓扑 evidence" },
+            body: JSON.stringify({
+              event_id: eventId,
+              evidence: { kind: "slo", signal: "runtime-topology", summary: "幂等演示首个 SLO / 运行时拓扑 evidence" },
           }),
         });
         view.runtime.lastEvidenceId = eventId;
       }
       snapshot = await apiRequest(`/runs/${runId}/evidence`, {
         method: "POST",
-        body: JSON.stringify({
-          event_id: eventId,
-          evidence: { kind: "runtime-topology", summary: "相同 event_id 的重复投递" },
+            body: JSON.stringify({
+              event_id: eventId,
+              evidence: { kind: "slo", signal: "runtime-topology", summary: "相同 event_id 的重复投递" },
         }),
       });
       break;
@@ -558,10 +563,39 @@ async function applyInjection(type) {
   }
   switch (type) {
     case "new-evidence":
-      addDemoEvent("evidence_observed", "发现新的运行时拓扑证据，动态插入 SkillForge 任务", {
+      addDemoEvent("evidence_observed", "发现新的 SLO / 运行时拓扑证据，触发增量因果重计算", {
         task_id: "agent-08-skill-curator",
         worker: "chronosfix-skill-curator#01",
+        payload: { kind: "slo", signal: "runtime-topology" },
       });
+      const affected = [
+        "agent-02-timeline-analyst",
+        "agent-03-hypothesis-scientist",
+        "agent-04-universe-builder",
+        "agent-05-patch-engineer",
+        "agent-06-adversarial-verifier",
+        "agent-07-release-auditor",
+      ];
+      addDemoEvent("incremental_recompute_started", "只失效受影响的因果、补丁和审批节点，其余节点复用", {
+        task_id: "agent-manager",
+        worker: "chronosfix-manager",
+        payload: {
+          evidence_kind: "slo",
+          affected_task_ids: affected,
+          new_task_ids: ["agent-08-skill-curator"],
+          reused_task_ids: ["agent-01-incident-commander"],
+          mode: "incremental-causal-recompute",
+        },
+      });
+      addDemoEvent("task_invalidated", "上游证据变化：因果结论、补丁验证和 RiskGate 结果失效", {
+        task_id: "agent-02-timeline-analyst",
+        worker: "chronosfix-timeline-analyst#01",
+        payload: { affected_task_ids: affected, reason: "new-evidence-affects-upstream-causal-input" },
+      });
+      affected.forEach((taskId) => {
+        view.demo.taskOverrides[taskId] = "COMPLETED · INCREMENTAL RECOMPUTE";
+      });
+      view.demo.taskOverrides["agent-01-incident-commander"] = "OFFLINE-VALIDATED · REUSED";
       view.demo.dynamicTasks.push({
         task_id: "agent-08-skill-curator",
         skill: "SkillForge",
@@ -911,6 +945,28 @@ function renderCoordination(scenario) {
   const attempts = coordination.attempts ?? [];
   const tasks = coordination.tasks ?? [];
   const count = (type) => events.filter((event) => event.event_type === type).length;
+  const invalidatedTaskIds = new Set();
+  events
+    .filter((event) => event.event_type === "task_invalidated")
+    .forEach((event) => {
+      const ids = event.payload?.affected_task_ids;
+      if (Array.isArray(ids) && ids.length) {
+        ids.forEach((taskId) => invalidatedTaskIds.add(taskId));
+      } else if (event.task_id) {
+        invalidatedTaskIds.add(event.task_id);
+      }
+    });
+  const invalidatedCount = invalidatedTaskIds.size;
+  const eventDetail = (event) => {
+    const payload = event.payload ?? {};
+    if (event.event_type === "incremental_recompute_started") {
+      return `${payload.affected_task_ids?.length ?? 0} affected · ${payload.reused_task_ids?.length ?? 0} reused · ${payload.new_task_ids?.length ?? 0} new`;
+    }
+    if (event.event_type === "task_invalidated") {
+      return payload.reason ?? "incremental scope";
+    }
+    return event.worker ?? event.task_id ?? "control-plane";
+  };
   const eventLabel = {
     agent_plan_recommended: "Manager 推荐组合",
     agent_dag_compiled: "推荐编译为 DAG",
@@ -918,6 +974,8 @@ function renderCoordination(scenario) {
     task_registered: "DAG 任务注册",
     task_dispatched: "Worker 派发",
     task_completed: "Skill 执行完成",
+    incremental_recompute_started: "增量因果重算",
+    task_invalidated: "相关结论失效",
     evidence_observed: "新证据触发",
     task_reassigned: "Worker 重派",
     task_failed: "Worker 失败",
@@ -944,6 +1002,7 @@ function renderCoordination(scenario) {
       ${metricCard("任务 / attempts", `${tasks.length} / ${attempts.length}`, "含失败重派")}
       ${metricCard("Worker 重派", count("task_reassigned"), "timeout -> backup")}
       ${metricCard("去重事件", count("evidence_deduplicated") + count("task_deduplicated"), "幂等保护")}
+      ${metricCard("增量失效节点", invalidatedCount, "只重算受影响 DAG")}
     </div>
     <div class="coordination-grid">
       <section class="task-board">
@@ -962,14 +1021,14 @@ function renderCoordination(scenario) {
         ${events.filter((event) => eventLabel[event.event_type]).map((event) => `
           <article class="event-row">
             <span>r${escapeHtml(event.revision)}</span>
-            <div><strong>${escapeHtml(eventLabel[event.event_type])}</strong><small>${escapeHtml(event.worker ?? event.task_id ?? "control-plane")}</small></div>
+            <div><strong>${escapeHtml(eventLabel[event.event_type])}</strong><small>${escapeHtml(eventDetail(event))}</small></div>
             <code>${escapeHtml(event.event_type)}</code>
           </article>
         `).join("")}
       </section>
     </div>
     <div class="scope-note">
-      <strong>演示证据：</strong>timeline 首次超时后重派备用 Worker；配置 evidence 重复投递被去重；补丁完成后进入人工 checkpoint，新增 SLO 证据使旧 approval revision 失效，绑定最新 revision 后恢复。${view.demo.events.length ? "当前状态已叠加浏览器本地注入事件。" : ""}${escapeHtml(coordination.boundary_note ?? "")}
+      <strong>演示证据：</strong>新 SLO / 运行时拓扑证据到达后，Manager 只失效受影响的因果、补丁和 RiskGate 节点，复用未受影响的事故上下文；随后动态插入 SkillForge。Worker 超时会重派，重复 evidence 会去重，旧 approval revision 会失效并要求重新绑定。${view.demo.events.length ? "当前状态已叠加浏览器本地注入事件。" : ""}${escapeHtml(coordination.boundary_note ?? "")}
     </div>
   `;
 }
@@ -1249,7 +1308,7 @@ function renderLearning(scenario) {
 
 const stepCopy = {
   incident: "把 Issue、Git、依赖、配置、流量与告警合并到同一个可追踪事故窗口。",
-  coordination: "根据新证据动态插入任务，按 capability 选择 Worker；失败重派、重复去重、人工暂停和恢复都留下可回放事件。",
+  coordination: "新证据触发增量因果重计算：只失效受影响 DAG 节点，复用其余结论；再按 capability 插入 Skill、重派 Worker，并记录审批失效。",
   causal: "逐一撤销可疑变量并重放，区分主因、放大因素与已证伪假设。",
   patch: "候选补丁必须通过同源故障族；健康失败就停，不靠人工强行放行。",
   gate: "把人类授权、自动质量门禁和最终发布决策明确拆成三个状态。",

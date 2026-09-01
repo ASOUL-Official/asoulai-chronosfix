@@ -1,8 +1,8 @@
 {
   "schema": "chronosfix.patch-sandbox/v1",
-  "generated_at": "2026-08-28T10:25:46.511642+00:00",
+  "generated_at": "2026-09-01T09:18:34.689020+00:00",
   "passed": true,
-  "base_commit": "a0058000ffc024a8afaff281d9e4848474cd88ef",
+  "base_commit": "217b9fdca240e7d2f584a3ef7ea3b54541f626ab",
   "patch": {
     "paths": [
       "checkout_service.py"
@@ -45,9 +45,9 @@
       1
     ],
     "passed": true,
-    "duration_ms": 351.786,
+    "duration_ms": 484.215,
     "stdout": "",
-    "stderr": "test_normal_traffic_remains_healthy (test_checkout_service.CheckoutPeakTests.test_normal_traffic_remains_healthy) ... ok\ntest_peak_traffic_stays_below_risk_gate_threshold (test_checkout_service.CheckoutPeakTests.test_peak_traffic_stays_below_risk_gate_threshold) ... FAIL\n\n======================================================================\nFAIL: test_peak_traffic_stays_below_risk_gate_threshold (test_checkout_service.CheckoutPeakTests.test_peak_traffic_stays_below_risk_gate_threshold)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"C:\\Users\\LIUZHA~1\\AppData\\Local\\Temp\\chronosfix-patch-sandbox-izuydkq1\\checkout\\test_checkout_service.py\", line 11, in test_peak_traffic_stays_below_risk_gate_threshold\n    self.assertGreaterEqual(DEFAULT_POOL_SIZE, 48)\n    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 20 not greater than or equal to 48\n\n----------------------------------------------------------------------\nRan 2 tests in 0.001s\n\nFAILED (failures=1)\n"
+    "stderr": "test_normal_traffic_remains_healthy (test_checkout_service.CheckoutPeakTests.test_normal_traffic_remains_healthy) ... ok\ntest_peak_traffic_stays_below_risk_gate_threshold (test_checkout_service.CheckoutPeakTests.test_peak_traffic_stays_below_risk_gate_threshold) ... FAIL\n\n======================================================================\nFAIL: test_peak_traffic_stays_below_risk_gate_threshold (test_checkout_service.CheckoutPeakTests.test_peak_traffic_stays_below_risk_gate_threshold)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"C:\\Users\\LIUZHA~1\\AppData\\Local\\Temp\\chronosfix-patch-sandbox-1rxi6_o0\\checkout\\test_checkout_service.py\", line 11, in test_peak_traffic_stays_below_risk_gate_threshold\n    self.assertGreaterEqual(DEFAULT_POOL_SIZE, 48)\n    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 20 not greater than or equal to 48\n\n----------------------------------------------------------------------\nRan 2 tests in 0.001s\n\nFAILED (failures=1)\n"
   },
   "after_tests": {
     "command": [
@@ -68,7 +68,7 @@
       0
     ],
     "passed": true,
-    "duration_ms": 341.628,
+    "duration_ms": 473.914,
     "stdout": "",
     "stderr": "test_normal_traffic_remains_healthy (test_checkout_service.CheckoutPeakTests.test_normal_traffic_remains_healthy) ... ok\ntest_peak_traffic_stays_below_risk_gate_threshold (test_checkout_service.CheckoutPeakTests.test_peak_traffic_stays_below_risk_gate_threshold) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n"
   },
@@ -86,7 +86,7 @@
         0
       ],
       "passed": true,
-      "duration_ms": 187.943,
+      "duration_ms": 228.979,
       "stdout": "",
       "stderr": ""
     },
@@ -102,7 +102,7 @@
         0
       ],
       "passed": true,
-      "duration_ms": 202.889,
+      "duration_ms": 158.133,
       "stdout": "",
       "stderr": ""
     },
@@ -118,7 +118,7 @@
         0
       ],
       "passed": true,
-      "duration_ms": 128.704,
+      "duration_ms": 159.626,
       "stdout": "",
       "stderr": ""
     },
@@ -134,7 +134,7 @@
         0
       ],
       "passed": true,
-      "duration_ms": 127.992,
+      "duration_ms": 158.52,
       "stdout": "",
       "stderr": ""
     },
@@ -149,7 +149,7 @@
         0
       ],
       "passed": true,
-      "duration_ms": 320.715,
+      "duration_ms": 172.407,
       "stdout": "",
       "stderr": ""
     },
@@ -165,7 +165,7 @@
         0
       ],
       "passed": true,
-      "duration_ms": 226.152,
+      "duration_ms": 285.776,
       "stdout": "",
       "stderr": ""
     },
@@ -180,8 +180,8 @@
         0
       ],
       "passed": true,
-      "duration_ms": 131.038,
-      "stdout": "a0058000ffc024a8afaff281d9e4848474cd88ef\n",
+      "duration_ms": 165.324,
+      "stdout": "217b9fdca240e7d2f584a3ef7ea3b54541f626ab\n",
       "stderr": ""
     },
     {
@@ -203,9 +203,9 @@
         1
       ],
       "passed": true,
-      "duration_ms": 351.786,
+      "duration_ms": 484.215,
       "stdout": "",
-      "stderr": "test_normal_traffic_remains_healthy (test_checkout_service.CheckoutPeakTests.test_normal_traffic_remains_healthy) ... ok\ntest_peak_traffic_stays_below_risk_gate_threshold (test_checkout_service.CheckoutPeakTests.test_peak_traffic_stays_below_risk_gate_threshold) ... FAIL\n\n======================================================================\nFAIL: test_peak_traffic_stays_below_risk_gate_threshold (test_checkout_service.CheckoutPeakTests.test_peak_traffic_stays_below_risk_gate_threshold)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"C:\\Users\\LIUZHA~1\\AppData\\Local\\Temp\\chronosfix-patch-sandbox-izuydkq1\\checkout\\test_checkout_service.py\", line 11, in test_peak_traffic_stays_below_risk_gate_threshold\n    self.assertGreaterEqual(DEFAULT_POOL_SIZE, 48)\n    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 20 not greater than or equal to 48\n\n----------------------------------------------------------------------\nRan 2 tests in 0.001s\n\nFAILED (failures=1)\n"
+      "stderr": "test_normal_traffic_remains_healthy (test_checkout_service.CheckoutPeakTests.test_normal_traffic_remains_healthy) ... ok\ntest_peak_traffic_stays_below_risk_gate_threshold (test_checkout_service.CheckoutPeakTests.test_peak_traffic_stays_below_risk_gate_threshold) ... FAIL\n\n======================================================================\nFAIL: test_peak_traffic_stays_below_risk_gate_threshold (test_checkout_service.CheckoutPeakTests.test_peak_traffic_stays_below_risk_gate_threshold)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"C:\\Users\\LIUZHA~1\\AppData\\Local\\Temp\\chronosfix-patch-sandbox-1rxi6_o0\\checkout\\test_checkout_service.py\", line 11, in test_peak_traffic_stays_below_risk_gate_threshold\n    self.assertGreaterEqual(DEFAULT_POOL_SIZE, 48)\n    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 20 not greater than or equal to 48\n\n----------------------------------------------------------------------\nRan 2 tests in 0.001s\n\nFAILED (failures=1)\n"
     },
     {
       "command": [
@@ -219,7 +219,7 @@
         0
       ],
       "passed": true,
-      "duration_ms": 1154.703,
+      "duration_ms": 1141.135,
       "stdout": "",
       "stderr": ""
     },
@@ -234,7 +234,7 @@
         0
       ],
       "passed": true,
-      "duration_ms": 132.843,
+      "duration_ms": 171.542,
       "stdout": "",
       "stderr": ""
     },
@@ -250,7 +250,7 @@
         0
       ],
       "passed": true,
-      "duration_ms": 135.66,
+      "duration_ms": 165.724,
       "stdout": "diff --git a/checkout_service.py b/checkout_service.py\nindex 58b5c7c..a9f5178 100644\n--- a/checkout_service.py\n+++ b/checkout_service.py\n@@ -3,7 +3,7 @@ from __future__ import annotations\n from dataclasses import dataclass\n \n \n-DEFAULT_POOL_SIZE = 20\n+DEFAULT_POOL_SIZE = 64\n \n \n @dataclass(frozen=True)\n",
       "stderr": ""
     },
@@ -273,7 +273,7 @@
         0
       ],
       "passed": true,
-      "duration_ms": 341.628,
+      "duration_ms": 473.914,
       "stdout": "",
       "stderr": "test_normal_traffic_remains_healthy (test_checkout_service.CheckoutPeakTests.test_normal_traffic_remains_healthy) ... ok\ntest_peak_traffic_stays_below_risk_gate_threshold (test_checkout_service.CheckoutPeakTests.test_peak_traffic_stays_below_risk_gate_threshold) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n"
     },
@@ -289,7 +289,7 @@
         0
       ],
       "passed": true,
-      "duration_ms": 1121.517,
+      "duration_ms": 1134.083,
       "stdout": "",
       "stderr": ""
     },
@@ -304,7 +304,7 @@
         0
       ],
       "passed": true,
-      "duration_ms": 140.873,
+      "duration_ms": 176.093,
       "stdout": "",
       "stderr": ""
     }

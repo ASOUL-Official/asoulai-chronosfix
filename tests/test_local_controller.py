@@ -96,6 +96,70 @@ class LocalControllerTests(unittest.TestCase):
             item["event_type"] == "agent_dag_compiled" and item["payload"]["task_count"] == 8
             for item in result["snapshot"]["events"]
         ))
+        recompute = [
+            item for item in result["snapshot"]["events"]
+            if item["event_type"] == "incremental_recompute_started"
+        ]
+        self.assertEqual(recompute[-1]["payload"]["affected_task_ids"], [])
+        self.assertEqual(recompute[-1]["payload"]["new_task_ids"], ["agent-08-skill-curator"])
+        self.assertEqual(
+            recompute[-1]["payload"]["reused_task_ids"],
+            [
+                "agent-01-incident-commander",
+                "agent-02-timeline-analyst",
+                "agent-03-hypothesis-scientist",
+                "agent-04-universe-builder",
+                "agent-05-patch-engineer",
+                "agent-06-adversarial-verifier",
+                "agent-07-release-auditor",
+            ],
+        )
+
+    def test_slo_evidence_incrementally_invalidates_causal_patch_and_gate_nodes(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            controller = self.make_controller(temp_dir)
+            created = controller.create_run("checkout-timeout", auto_approve=False)
+            run_id = created["run"]["run_id"]
+            result = controller.ingest_evidence(
+                run_id,
+                "live-evidence-slo-001",
+                {
+                    "kind": "slo",
+                    "signal": "runtime-topology",
+                    "summary": "SLO window changed and a new runtime topology was observed",
+                },
+            )
+
+        events = result["events"]
+        recompute = [item for item in events if item["event_type"] == "incremental_recompute_started"][-1]
+        affected = recompute["payload"]["affected_task_ids"]
+        self.assertEqual(
+            affected,
+            [
+                "agent-02-timeline-analyst",
+                "agent-03-hypothesis-scientist",
+                "agent-04-universe-builder",
+                "agent-05-patch-engineer",
+                "agent-06-adversarial-verifier",
+                "agent-07-release-auditor",
+            ],
+        )
+        self.assertEqual(recompute["payload"]["reused_task_ids"], ["agent-01-incident-commander"])
+        self.assertEqual(recompute["payload"]["new_task_ids"], ["agent-08-skill-curator"])
+        invalidations = [item for item in events if item["event_type"] == "task_invalidated"]
+        self.assertEqual({item["task_id"] for item in invalidations}, set(affected))
+        self.assertTrue(any(item["event_type"] == "agent_dag_task_reused" and item["task_id"] == "agent-01-incident-commander" for item in events))
+        tasks = {item["task_id"]: item for item in result["tasks"]}
+        self.assertTrue(all(tasks[item]["status"] == "COMPLETED" for item in affected))
+        self.assertEqual(tasks["agent-08-skill-curator"]["status"], "COMPLETED")
+        attempts = {
+            task_id: [item for item in result["attempts"] if item["task_id"] == task_id]
+            for task_id in affected + ["agent-01-incident-commander", "agent-08-skill-curator"]
+        }
+        self.assertEqual([item["attempt"] for item in attempts["agent-02-timeline-analyst"]], [1, 2])
+        self.assertEqual([item["attempt"] for item in attempts["agent-07-release-auditor"]], [1, 2])
+        self.assertEqual([item["attempt"] for item in attempts["agent-01-incident-commander"]], [1])
+        self.assertEqual([item["attempt"] for item in attempts["agent-08-skill-curator"]], [1])
 
     def test_timeout_reassignment_uses_different_process_and_instance(self):
         with tempfile.TemporaryDirectory() as temp_dir:

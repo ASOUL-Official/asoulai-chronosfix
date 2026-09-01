@@ -49,7 +49,7 @@ GitHub Pages 会直接按静态资源方式加载，无需后端，并显示 `ST
 ## 90 秒评委动线
 
 1. 选择 `checkout-timeout`，展示 Manager 根据证据选择 7 个 Worker，并在“动态协同”任务图查看已编译的 DAG 依赖、Skill、Worker 与完成状态；切换到 Badcase / 证据不足样例时只保留 3 个 Worker 并在补丁前拒答。
-2. 点击“动态协同”，展示新证据插入任务、Worker 超时重派、去重和 revision 暂停/恢复。
+2. 点击“动态协同”，展示新 SLO / 运行时拓扑证据触发增量因果重计算：只失效受影响的因果、补丁和 RiskGate 节点，复用事故上下文，再动态插入 SkillForge；同时展示 Worker 超时重派、去重和 revision 暂停/恢复。
 3. 点击“因果证明”，展示主因、放大因素和证伪假设的反事实差异。
 4. 点击“故障族验证”，展示补丁竞赛、真实变更字段和强制变体结果。
 5. 在“三态门禁”切换“含具名审批 / 无人审批”：本地模式会创建一条新的真实运行。无人审批分支会停在 `PAUSED_AWAITING_HUMAN`，保持 `quality_gate=passed` 且 `release_decision=blocked-awaiting-human`。
@@ -62,7 +62,7 @@ GitHub Pages 会直接按静态资源方式加载，无需后端，并显示 `ST
 
 右侧“运行时异常注入”控制台在本地 Controller 在线时执行真实进程与持久化状态，可连续点击并观察 revision、任务图、事件流和三态门禁变化：
 
-- 新证据、重复 evidence：验证动态任务注册与幂等去重；
+- 新证据、重复 evidence：验证受影响 DAG 节点增量失效、动态任务注册与幂等去重；
 - Worker 超时、Worker 崩溃：验证 capability 重派与失败 attempt；
 - 人工暂停、旧审批失效、人工恢复：验证 checkpoint 和最新 revision 绑定；
 - 工具权限拒绝、重试耗尽：验证最小权限与 fail-closed。

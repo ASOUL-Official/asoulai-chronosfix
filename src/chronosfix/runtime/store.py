@@ -272,6 +272,21 @@ class RuntimeStore:
                 values,
             )
 
+    def next_attempt_number(self, run_id: str, task_id: str) -> int:
+        """Return the next durable attempt number for a task.
+
+        Recomputed DAG nodes must retain their prior attempt history; reusing
+        attempt=1 would overwrite the evidence that the node was actually
+        invalidated and executed again.
+        """
+
+        with self.connection() as connection:
+            row = connection.execute(
+                "SELECT COALESCE(MAX(attempt), 0) + 1 AS next_attempt FROM attempts WHERE run_id = ? AND task_id = ?",
+                (run_id, task_id),
+            ).fetchone()
+        return int(row["next_attempt"])
+
     def add_evidence(self, run_id: str, event_id: str, kind: str, payload: dict[str, Any], digest: str) -> bool:
         try:
             with self.connection() as connection:

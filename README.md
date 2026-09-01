@@ -20,7 +20,7 @@ AsoulAI ChronosFix（A-CFX）面向 GOAI 新智基座 Agent Infra「方向三：
 | 能力 | 当前状态 | 不应误解为 |
 |---|---|---|
 | ChronosFix 核心流水线 | Python 标准库本地可运行，自动生成 Trace、日志、指标、PR 草案和证据包 | 真实生产环境修复结果 |
-| 动态协同控制面 | 新证据插入任务、capability 调度、Worker 超时重派、事件/任务幂等、revision checkpoint 和人工暂停/恢复均有 `coordination.json` 证据 | AgentTeams Controller / Matrix 已执行 |
+| 动态协同控制面 | 新证据插入任务；增量因果重计算只失效受影响 DAG 节点并复用其余结论；capability 调度、Worker 超时重派、事件/任务幂等、revision checkpoint 和人工暂停/恢复均有 `coordination.json` 证据 | 本地 Controller 已执行；官方 AgentTeams Controller / Matrix 待接入 |
 | RiskGate | 质量门禁与人工审批分离；中高风险要求具名审批，人工不能覆盖失败质量检查 | 已接企业发布审批系统 |
 | 评测集 | 12 个合成样例：9 Golden、2 Badcase、1 Insufficient Evidence | 真实企业事故准确率 |
 | AgentTeams | `agentteams.io/v1beta1` Manager/Worker/Team/Human 正式资源已离线校验 | AgentTeams Controller / Matrix 已执行 |
@@ -40,7 +40,7 @@ AsoulAI ChronosFix（A-CFX）面向 GOAI 新智基座 Agent Infra「方向三：
 python -m pip install -e ".[validation]"
 ```
 
-只运行 `demo.py`、`evaluate.py` 或 65 项单元测试时无需安装这些可选依赖。
+只运行 `demo.py`、`evaluate.py` 或 66 项单元测试时无需安装这些可选依赖。
 
 ```powershell
 git clone https://github.com/ASOUL-Official/asoulai-chronosfix.git
@@ -73,7 +73,7 @@ python demo.py --output output/no-approval
 - 质量门禁 `passed`，具名人工审批后发布决策 `approved`；
 - 回滚字段已恢复到场景基线并通过机器校验；
 - 18 个 Trace Span，带 `run_id`、`trace_id`、父子关系和实测 duration；
-- 真实本地 Controller 会把 Manager 推荐编译为带依赖的 Agent DAG，并记录 Worker attempt、失败重派、去重证据，以及 revision 绑定的人工暂停/恢复；离线证据包保留原有确定性协同回放；
+- 真实本地 Controller 会把 Manager 推荐编译为带依赖的 Agent DAG；新证据到达后按 evidence kind 计算受影响节点，只重算因果、补丁和 RiskGate 的相关闭包，复用未受影响节点，并记录失效原因、Worker attempt、失败重派、去重证据，以及 revision 绑定的人工暂停/恢复；离线证据包保留原有确定性协同回放；
 - 端到端 `elapsed_ms` 为本地 wall-clock 实测；证据覆盖率与步骤完成率明确标记为派生指标；
 - `run-manifest.json` 使用 SHA-256 绑定输入场景、补丁、回滚、审批摘要和输出文件。
 

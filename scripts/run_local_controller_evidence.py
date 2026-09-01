@@ -24,7 +24,11 @@ def build(output: Path) -> dict:
     evidence = controller.ingest_evidence(
         run_id,
         "acceptance-live-evidence-001",
-        {"kind": "runtime-topology", "summary": "new runtime topology evidence confirmed during acceptance"},
+        {
+            "kind": "slo",
+            "signal": "runtime-topology",
+            "summary": "new SLO and runtime topology evidence confirmed during acceptance",
+        },
     )
     badcase = controller.create_run("conflicting-counterfactuals", auto_approve=False)
     badcase_plan = controller.recommend(badcase["run"]["run_id"], objective="judge-and-compose")
@@ -32,6 +36,10 @@ def build(output: Path) -> dict:
     failover_task = next(item for item in failover["tasks"] if item["task_id"].startswith("live-timeout-"))
     attempts = [item for item in failover["attempts"] if item["task_id"] == failover_task["task_id"]]
     dynamic_task = next(item for item in evidence["tasks"] if item["task_id"] == "agent-08-skill-curator")
+    recompute_event = next(
+        item for item in reversed(evidence["events"])
+        if item["event_type"] == "incremental_recompute_started"
+    )
     badcase_task_ids = [item["task_id"] for item in badcase["tasks"]]
     report = {
         "schema": "chronosfix.local-controller-evidence/v1",
@@ -43,6 +51,9 @@ def build(output: Path) -> dict:
             and attempts[0]["pid"] != attempts[1]["pid"]
             and attempts[0]["instance_id"] != attempts[1]["instance_id"]
             and dynamic_task["status"] == "COMPLETED"
+            and len(recompute_event["payload"]["affected_task_ids"]) == 6
+            and recompute_event["payload"]["new_task_ids"] == ["agent-08-skill-curator"]
+            and recompute_event["payload"]["reused_task_ids"] == ["agent-01-incident-commander"]
             and any(item["status"] == "STALE" for item in evidence["approvals"])
             and badcase["run"]["status"] == "ABSTAINED"
             and badcase_task_ids == [
@@ -74,10 +85,17 @@ def build(output: Path) -> dict:
             "event_id": "acceptance-live-evidence-001",
             "task": dynamic_task,
             "approval_statuses": [item["status"] for item in evidence["approvals"]],
+            "incremental_recompute": recompute_event["payload"],
             "events": [
                 item
                 for item in evidence["events"]
-                if item["event_type"] in {"evidence_observed", "approval_invalidated", "task_completed"}
+                if item["event_type"] in {
+                    "evidence_observed",
+                    "approval_invalidated",
+                    "incremental_recompute_started",
+                    "task_invalidated",
+                    "task_completed",
+                }
             ],
         },
         "badcase_refusal": {

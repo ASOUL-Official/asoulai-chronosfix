@@ -47,7 +47,7 @@
 - [x] 扩展故障回放评测集：`docs/evaluation-corpus.md`、`scenarios/*/scenario.json`
 - [x] 12 场景评测汇总：9 Golden、2 Badcase、1 证据冲突 / 不足
 - [x] 12 个场景通过公开 Draft 2020-12 JSON Schema 校验
-- [x] 自动化测试：`tests/`（65 项）
+- [x] 自动化测试：`tests/`（66 项）
 - [x] AgentTeams v1beta1 离线校验证据：`evidence/agentteams-manifest-validation.json`
 - [x] 官方 SLS Skill dry-run 证据：`evidence/cloud-skill-sls-dry-run.json`
 - [x] 运行清单与 SHA-256：`evidence/run-manifest.json`
@@ -56,6 +56,8 @@
 - [x] 工程 Metrics：`evidence/engineering-metrics.json`
 - [x] AgentTeams 运行转录：`evidence/agentteams-run.json`
 - [x] Agent Manager 证据驱动自由组合：Golden 7/8 Worker，冲突 / 证据不足 3/8 Worker，并记录 `agent_plan_recommended`
+- [x] 增量因果重计算：新证据按影响闭包只失效相关 DAG 节点，复用未受影响节点，并记录 `incremental_recompute_started` / `task_invalidated`
+- [x] 增量因果重计算说明：`docs/incremental-causal-recompute.md`
 - [x] 复赛评测报告：`evidence/evaluation-report.md`
 - [x] GitHub Issue：`evidence/github-issue.md`
 - [x] GitHub PR 草案：`evidence/github-pr.md`
@@ -84,6 +86,8 @@
 - [x] 1 条 Proof-Carrying Software Change Chain。
 - [x] 1 条研发质量资产商业飞轮。
 - [x] 中风险补丁人工审批门禁。
+- [x] 新证据只让相关因果结论、补丁验证和 RiskGate 结果失效，不整条流水线重跑；新增增量重算契约测试后共 66 项自动化测试。
+- [x] 新证据只让相关因果结论、补丁验证和 RiskGate 结果失效，不整条流水线重跑。
 
 ## 复赛增强路线
 

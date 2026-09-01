@@ -74,7 +74,11 @@ def _decision_id(value: Any) -> str:
 
 def _signals(scenario: dict[str, Any], evidence: Iterable[dict[str, Any]]) -> list[str]:
     signals = [str(item.get("kind")) for item in scenario.get("events", []) if item.get("kind")]
-    signals.extend(str(item.get("kind")) for item in evidence if item.get("kind"))
+    for item in evidence:
+        if item.get("kind"):
+            signals.append(str(item["kind"]))
+        if item.get("signal"):
+            signals.append(str(item["signal"]))
     return list(dict.fromkeys(signals))
 
 

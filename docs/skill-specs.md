@@ -45,7 +45,7 @@ Skill 规定：
 - 不绕过 RiskGate；
 - 生成 run manifest。
 
-动态任务执行由 `src/chronosfix/dynamic.py` 记录 task graph、attempt、lease、idempotency key、state revision、重派和人工 checkpoint。当前记录仍是本地兼容证据，真实 Controller/Matrix 加载证据尚待部署。
+动态任务执行由 `src/chronosfix/runtime/controller.py` 与 `store.py` 记录 task graph、attempt、lease、idempotency key、state revision、重派和人工 checkpoint。新 evidence kind 会先计算受影响节点闭包，记录 `incremental_recompute_started` / `task_invalidated`，只重算相关结论、补丁和审批；当前记录仍是本地兼容证据，真实 Controller/Matrix 加载证据尚待部署。
 
 AgentTeams v1beta1 正式资源已经离线校验，但 Worker 尚未在真实 Controller 中执行。
 

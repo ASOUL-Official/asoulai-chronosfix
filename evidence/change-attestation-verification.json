@@ -7,22 +7,22 @@
       {
         "name": "patch-sandbox-run.json",
         "digest": {
-          "sha256": "0e1f90b142a8412ca9ccbed9842f8da67b1f11cb440efdfbfede52cc9dbe835a"
+          "sha256": "d50f2bf6c90a43e6fdcd2dbd60d3ea9a91a54da0d243a7f65bd7199cd70ec223"
         },
         "bytes": 9327
       },
       {
         "name": "local-controller-evidence.json",
         "digest": {
-          "sha256": "f129c14df88c1f4e304be21303048b2391ac01ff095240d7fba0449772a696fe"
+          "sha256": "5139e9a14ad4055fa843e76009662cb73a71b1744adf5ac4762b8dab96cb97a4"
         },
-        "bytes": 11434
+        "bytes": 18384
       }
     ],
     "predicateType": "https://asoul.ai/chronosfix/ProofCarryingChange/v1",
     "predicate": {
-      "generatedAt": "2026-08-28T10:26:03.266300+00:00",
-      "sourceCommit": "cd43a4f43e5a5ed8e4082d37b108adff9ba76bee",
+      "generatedAt": "2026-09-01T09:20:45.441648+00:00",
+      "sourceCommit": "0421ab5ea76bae9b660c0125594ec6c2a22d29bf",
       "changeClass": "causal-software-repair",
       "riskGate": "evidence-and-human-approval-required",
       "verification": {},
@@ -36,18 +36,18 @@
   },
   "envelope": {
     "payloadType": "application/vnd.in-toto+json",
-    "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiYm91bmRhcmllcyI6eyJjbGFpbSI6IkRTU0Ugc2lnbmF0dXJlIGFuZCBzdWJqZWN0IGludGVncml0eSBhcmUgdmVyaWZpZWQ7IGV4dGVybmFsIGlkZW50aXR5IHRydXN0IGlzIG5vdCBjbGFpbWVkLiIsInNpZ25hdHVyZUlkZW50aXR5IjoibG9jYWwtZXBoZW1lcmFsLWVkMjU1MTkiLCJzaWdzdG9yZUtleWxlc3MiOmZhbHNlLCJ0cnVzdGVkVGltZXN0YW1wIjpmYWxzZX0sImNoYW5nZUNsYXNzIjoiY2F1c2FsLXNvZnR3YXJlLXJlcGFpciIsImdlbmVyYXRlZEF0IjoiMjAyNi0wOC0yOFQxMDoyNjowMy4yNjYzMDArMDA6MDAiLCJyaXNrR2F0ZSI6ImV2aWRlbmNlLWFuZC1odW1hbi1hcHByb3ZhbC1yZXF1aXJlZCIsInNvdXJjZUNvbW1pdCI6ImNkNDNhNGY0M2U1YTVlZDhlNDA4MmQzN2IxMDhhZGZmOWJhNzZiZWUiLCJ2ZXJpZmljYXRpb24iOnt9fSwicHJlZGljYXRlVHlwZSI6Imh0dHBzOi8vYXNvdWwuYWkvY2hyb25vc2ZpeC9Qcm9vZkNhcnJ5aW5nQ2hhbmdlL3YxIiwic3ViamVjdCI6W3siYnl0ZXMiOjkzMjcsImRpZ2VzdCI6eyJzaGEyNTYiOiIwZTFmOTBiMTQyYTg0MTJjYTljY2JlZDk4NDJmOGRhNjdiMWYxMWNiNDQwZWZkZmJmZWRlNTJjYzlkYmU4MzVhIn0sIm5hbWUiOiJwYXRjaC1zYW5kYm94LXJ1bi5qc29uIn0seyJieXRlcyI6MTE0MzQsImRpZ2VzdCI6eyJzaGEyNTYiOiJmMTI5YzE0ZGY4OGMxZjRlMzA0YmUyMTMwMzA0OGIyMzkxYWMwMWZmMDk1MjQwZDdmYmEwNDQ5NzcyYTY5NmZlIn0sIm5hbWUiOiJsb2NhbC1jb250cm9sbGVyLWV2aWRlbmNlLmpzb24ifV19",
+    "payload": "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJwcmVkaWNhdGUiOnsiYm91bmRhcmllcyI6eyJjbGFpbSI6IkRTU0Ugc2lnbmF0dXJlIGFuZCBzdWJqZWN0IGludGVncml0eSBhcmUgdmVyaWZpZWQ7IGV4dGVybmFsIGlkZW50aXR5IHRydXN0IGlzIG5vdCBjbGFpbWVkLiIsInNpZ25hdHVyZUlkZW50aXR5IjoibG9jYWwtZXBoZW1lcmFsLWVkMjU1MTkiLCJzaWdzdG9yZUtleWxlc3MiOmZhbHNlLCJ0cnVzdGVkVGltZXN0YW1wIjpmYWxzZX0sImNoYW5nZUNsYXNzIjoiY2F1c2FsLXNvZnR3YXJlLXJlcGFpciIsImdlbmVyYXRlZEF0IjoiMjAyNi0wOS0wMVQwOToyMDo0NS40NDE2NDgrMDA6MDAiLCJyaXNrR2F0ZSI6ImV2aWRlbmNlLWFuZC1odW1hbi1hcHByb3ZhbC1yZXF1aXJlZCIsInNvdXJjZUNvbW1pdCI6IjA0MjFhYjVlYTc2YmFlOWI2NjBjMDEyNTU5NGVjNmMyYTIyZDI5YmYiLCJ2ZXJpZmljYXRpb24iOnt9fSwicHJlZGljYXRlVHlwZSI6Imh0dHBzOi8vYXNvdWwuYWkvY2hyb25vc2ZpeC9Qcm9vZkNhcnJ5aW5nQ2hhbmdlL3YxIiwic3ViamVjdCI6W3siYnl0ZXMiOjkzMjcsImRpZ2VzdCI6eyJzaGEyNTYiOiJkNTBmMmJmNmM5MGE0M2U2ZmRjZDJkYmQ2MGQzZWE5YTkxYTU0ZGEwZDI0M2E3ZjY1YmQ3MTk5Y2Q3MGVjMjIzIn0sIm5hbWUiOiJwYXRjaC1zYW5kYm94LXJ1bi5qc29uIn0seyJieXRlcyI6MTgzODQsImRpZ2VzdCI6eyJzaGEyNTYiOiI1MTM5ZTlhMTRhZDQwNTVmYTg0M2U3NjAwOTY2MmNiNzNhNzFiMTc0NGFkZjVhYzQ3NjJiOGRhYjk2Y2I5N2E0In0sIm5hbWUiOiJsb2NhbC1jb250cm9sbGVyLWV2aWRlbmNlLmpzb24ifV19",
     "signatures": [
       {
-        "keyid": "c073c11f934c321bb97cfd35360e49916cdeb4a615e0c47e29a33a2de514c383",
-        "sig": "n68wD2qA2XIxD3+a6Ou4qrBPLyU6TzA/dDKsQeYWTPPqzhasLC24ZvrvGGZ0YSykVp+9EPnLqrjb2Vwze14fCA=="
+        "keyid": "25bd78cd7f8a2d1bca94005923b3b514207c900979f65528037ddd9e99039ecd",
+        "sig": "YbgMxPBYze5opjBprJGUyPxVL4lyHN+45G502EpRAAV0XsjRR6GTCr2HHR0eMWJ99gHnSXm0vK5sxwWE5g4ZCg=="
       }
     ]
   },
   "public_key": {
-    "keyid": "c073c11f934c321bb97cfd35360e49916cdeb4a615e0c47e29a33a2de514c383",
+    "keyid": "25bd78cd7f8a2d1bca94005923b3b514207c900979f65528037ddd9e99039ecd",
     "keyType": "ed25519",
-    "publicKeyBase64": "J1Mp1hiVareyKzY/bDPjDD9Z4+TSMulAKrOiUdbDWKs="
+    "publicKeyBase64": "3/0xkFyn7rdb5dAOv5i4lzgEYJy2OPn6hxsRv+XaoV8="
   },
   "verification": {
     "valid": true,
@@ -61,9 +61,9 @@
           "trustedTimestamp": false
         },
         "changeClass": "causal-software-repair",
-        "generatedAt": "2026-08-28T10:26:03.266300+00:00",
+        "generatedAt": "2026-09-01T09:20:45.441648+00:00",
         "riskGate": "evidence-and-human-approval-required",
-        "sourceCommit": "cd43a4f43e5a5ed8e4082d37b108adff9ba76bee",
+        "sourceCommit": "0421ab5ea76bae9b660c0125594ec6c2a22d29bf",
         "verification": {}
       },
       "predicateType": "https://asoul.ai/chronosfix/ProofCarryingChange/v1",
@@ -71,14 +71,14 @@
         {
           "bytes": 9327,
           "digest": {
-            "sha256": "0e1f90b142a8412ca9ccbed9842f8da67b1f11cb440efdfbfede52cc9dbe835a"
+            "sha256": "d50f2bf6c90a43e6fdcd2dbd60d3ea9a91a54da0d243a7f65bd7199cd70ec223"
           },
           "name": "patch-sandbox-run.json"
         },
         {
-          "bytes": 11434,
+          "bytes": 18384,
           "digest": {
-            "sha256": "f129c14df88c1f4e304be21303048b2391ac01ff095240d7fba0449772a696fe"
+            "sha256": "5139e9a14ad4055fa843e76009662cb73a71b1744adf5ac4762b8dab96cb97a4"
           },
           "name": "local-controller-evidence.json"
         }
