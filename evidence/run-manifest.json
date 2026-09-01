@@ -1,8 +1,8 @@
 {
   "schema_version": "chronosfix.run-manifest/v1",
-  "generated_at": "2026-09-01T09:17:37.551836+00:00",
-  "run_id": "run-4860134828d64dd585cb196e8b0d19b8",
-  "trace_id": "e0544840d1fc4ae09f8a5c1335fe40f6",
+  "generated_at": "2026-09-01T11:18:13.986284+00:00",
+  "run_id": "run-9aa3e27a48f74962a6e618779bee212f",
+  "trace_id": "0fdafeec5e6a46d1b53b5ce4675cbdbd",
   "incident_id": "INC-2026-0816-001",
   "scenario": {
     "path": "scenarios/checkout-timeout/scenario.json",
@@ -46,7 +46,7 @@
       "status": "approved",
       "approver": "AsoulAI Release Owner",
       "reason": "Semifinal evidence review",
-      "timestamp": "2026-09-01T09:17:37.396453+00:00",
+      "timestamp": "2026-09-01T11:18:13.882843+00:00",
       "policy_version": "chronosfix-riskgate/v1",
       "is_human": true,
       "state_revision": 36,
@@ -54,7 +54,7 @@
     }
   },
   "measurements": {
-    "elapsed_ms": 140.432,
+    "elapsed_ms": 88.692,
     "elapsed_ms_kind": "measured",
     "evidence_coverage": 1.0,
     "evidence_coverage_kind": "derived",
@@ -76,39 +76,39 @@
   "environment": {
     "python": "3.13.9",
     "platform": "Windows-11-10.0.26200-SP0",
-    "git_commit": "0421ab5ea76bae9b660c0125594ec6c2a22d29bf"
+    "git_commit": "d7c6bae3c2ce30e00079ce6b139d9c0f72ad967c"
   },
   "artifacts": {
     "trace.jsonl": {
-      "sha256": "abd0ec44d9b368572bb740a576627a211ff5af2204cc4745a5f6451d35d48cd1",
-      "bytes": 29302
+      "sha256": "84af975e3055c69e60d4a2749474ddc7c0c27bad2969caaecb3ded0a940485e5",
+      "bytes": 29299
     },
     "run-log.jsonl": {
-      "sha256": "7c7d034fbd7328a009d97079fa32b087f19d4032951a9c4378b4dd860b10fb79",
-      "bytes": 8370
+      "sha256": "e1192ee104f665d792ad2df90ef5af56106e84fd2e00f5e8d2659e91acbfa464",
+      "bytes": 8368
     },
     "proof-bundle.json": {
-      "sha256": "613ef4dd41dcf12461cd6e6d4f1c61afaf03e3f03981b15d6032b3e7e0e46d26",
-      "bytes": 55152
+      "sha256": "034b55844b8f21efdde935b503c3898f7f0c8053f78562130beec9803918a2bd",
+      "bytes": 55149
     },
     "proof-report.md": {
-      "sha256": "80d78beb147af0af361d462b3330fe34b1c358fbee3e176d839980cea6ecb186",
+      "sha256": "32494487ec3d74436a34e6573ec7ce164fe9476ec4d5530c03c21c9bd8792337",
       "bytes": 7372
     },
     "engineering-metrics.json": {
-      "sha256": "e85af80efd688ff9d2787d7ceee1fd05e032a597016223ea2a7ee0d9b06144ba",
-      "bytes": 3487
+      "sha256": "33d1ab4262c98f1f0b3445f86096751a6aeae0c83a2735a0b3d24fa3a2a0a45c",
+      "bytes": 3486
     },
     "agentteams-run.json": {
-      "sha256": "361a8cf336d4ec9ed50298acef0fa559d42f316495d5fa092c3dfe12c6e29f5a",
+      "sha256": "974e54b1fb6b62b1abe3195c60e253c68dde7c4dafeb7e1fdf4c2ad4a53ea0e7",
       "bytes": 7877
     },
     "evaluation-report.md": {
-      "sha256": "4d52839ae4c3b9fe09965348a78b5b49455e0e45b95ef86909b0dbc31f377b10",
+      "sha256": "beed73f0cdf357148124f2227d99231f0d0bad8d2587b80ddfb715984a2f937b",
       "bytes": 2139
     },
     "github-issue.json": {
-      "sha256": "3e9d9b7e87212038f6fa98d155d598a795ed7583dda823673cfe62c9bba295c3",
+      "sha256": "51a73d4656731e21c9b8a3b084d78d5916edaad036aeddd6c4eb5912fd8487f6",
       "bytes": 2561
     },
     "github-issue.md": {
@@ -116,7 +116,7 @@
       "bytes": 1395
     },
     "github-pr.json": {
-      "sha256": "0a1942de684926b83e1f50ce6b3c190ba7527c5b59e3fdd348912d7a3a834b95",
+      "sha256": "febc57eae219f4e12ca703603b6973781fce5a75aebdb41918ae464452049fd9",
       "bytes": 8210
     },
     "github-pr.md": {
@@ -124,20 +124,20 @@
       "bytes": 1804
     },
     "github-pr-diff.patch": {
-      "sha256": "694bef7373023166a228757dbc10818a5fb73fe74df0c84ffb417a584fa8405f",
+      "sha256": "be4694b43f1f46f98621053489c43ca063e829b732e5d5008586fbd758746871",
       "bytes": 2476
     },
     "github-pr-checks.json": {
-      "sha256": "4f676d6507043dfb06bfb1d4bd88ffa8b0a17f49803fb02df7e84ebffbfac044",
+      "sha256": "8693dca9e53c5d364e42207d81b6c8a5e6df0cea34cab577cd2ebc13110c77da",
       "bytes": 2381
     },
     "github-review-audit.jsonl": {
-      "sha256": "e35dc193e50cc00255b08ba81a72d115953ca60e472cbaaf9d3e7a0aeaf3d482",
+      "sha256": "fb17194342a640db5d0a193047dc5c69a251c63d47d9a16fee15287dc1d3462c",
       "bytes": 3476
     },
     "coordination.json": {
-      "sha256": "7db82bf9091c71721567d070853cd880001def859bbee84fabbbfabebc1c3655",
-      "bytes": 29593
+      "sha256": "5d96509d1bded55fc8ab85d31f948e15c93d885523da76352fac4b413b92b23f",
+      "bytes": 29591
     }
   }
 }

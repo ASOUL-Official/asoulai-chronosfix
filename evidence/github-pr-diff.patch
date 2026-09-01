@@ -12,7 +12,7 @@ new file mode 100644
 +    "reason": "Semifinal evidence review",
 +    "state_revision": 36,
 +    "status": "approved",
-+    "timestamp": "2026-09-01T09:17:37.396453+00:00"
++    "timestamp": "2026-09-01T11:18:13.882843+00:00"
 +  },
 +  "decision": {
 +    "quality_gate": "passed",
@@ -37,7 +37,7 @@ new file mode 100644
 +    "rollback_contract": "恢复 db.pool.maxSize=8 配置快照",
 +    "title": "恢复连接池 24 并增加容量验证门禁"
 +  },
-+  "run_id": "run-4860134828d64dd585cb196e8b0d19b8",
++  "run_id": "run-9aa3e27a48f74962a6e618779bee212f",
 +  "scenario_path": "scenarios/checkout-timeout/scenario.json",
 +  "schema_version": "chronosfix.change-contract/v1",
 +  "validation_checks": [
@@ -46,21 +46,21 @@ new file mode 100644
 +      "evidence": "experiment results persisted in proof-bundle.json",
 +      "executed": true,
 +      "name": "counterfactual-replay",
-+      "run_id": "run-4860134828d64dd585cb196e8b0d19b8"
++      "run_id": "run-9aa3e27a48f74962a6e618779bee212f"
 +    },
 +    {
 +      "conclusion": "success",
 +      "evidence": "selected_patch.results in proof-bundle.json",
 +      "executed": true,
 +      "name": "fault-gene-suite",
-+      "run_id": "run-4860134828d64dd585cb196e8b0d19b8"
++      "run_id": "run-9aa3e27a48f74962a6e618779bee212f"
 +    },
 +    {
 +      "conclusion": "success",
 +      "evidence": "patch changes followed by rollback_changes compared with baseline",
 +      "executed": true,
 +      "name": "rollback-contract",
-+      "run_id": "run-4860134828d64dd585cb196e8b0d19b8"
++      "run_id": "run-9aa3e27a48f74962a6e618779bee212f"
 +    },
 +    {
 +      "conclusion": "success",

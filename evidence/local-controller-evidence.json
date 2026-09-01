@@ -1,6 +1,6 @@
 {
   "schema": "chronosfix.local-controller-evidence/v1",
-  "generated_at": "2026-09-01T10:13:58.943030+00:00",
+  "generated_at": "2026-09-01T11:11:22.585750+00:00",
   "passed": true,
   "boundaries": {
     "local_controller_executed": true,
@@ -10,11 +10,11 @@
     "matrix_protocol_executed": false
   },
   "golden_run": {
-    "run_id": "acfx-local-20260901T101340-b12781f866",
-    "trace_id": "bbedef85894d4b33b9dabde3510c58bc",
+    "run_id": "acfx-local-20260901T111102-cff0ed0249",
+    "trace_id": "1a558ba5d08d4d39a02302de4867a72a",
     "initial_release_decision": "approved",
     "after_evidence_release_decision": "blocked-awaiting-human",
-    "matrix_database": "D:\\1\\全球AI大赛\\chronosfix\\output\\local-controller-evidence-incremental-final\\matrix.sqlite3",
+    "matrix_database": "C:\\Users\\liuzhanxian\\AppData\\Local\\Temp\\chronosfix-local-controller-release\\matrix.sqlite3",
     "agent_recommendation": {
       "schema": "chronosfix.agent-recommendation/v1",
       "decision_id": "d58a0a220410f3da",
@@ -122,35 +122,35 @@
     }
   },
   "worker_failover": {
-    "task_id": "live-timeout-43c22310",
+    "task_id": "live-timeout-c3dbe7f2",
     "attempts": [
       {
-        "task_id": "live-timeout-43c22310",
+        "task_id": "live-timeout-c3dbe7f2",
         "attempt": 1,
         "logical_worker": "chronosfix-timeline-analyst",
         "instance_id": "chronosfix-timeline-analyst#01",
-        "pid": 92808,
+        "pid": 57676,
         "status": "FAILED",
-        "started_at": "2026-09-01T10:13:46.550977+00:00",
-        "ended_at": "2026-09-01T10:13:47.848852+00:00",
-        "duration_ms": 1297.88,
+        "started_at": "2026-09-01T11:11:09.821897+00:00",
+        "ended_at": "2026-09-01T11:11:10.383303+00:00",
+        "duration_ms": 561.401,
         "exit_code": 1,
         "error": "lease expired after 0.250s",
         "result_digest": null
       },
       {
-        "task_id": "live-timeout-43c22310",
+        "task_id": "live-timeout-c3dbe7f2",
         "attempt": 2,
         "logical_worker": "chronosfix-timeline-analyst",
         "instance_id": "chronosfix-timeline-analyst#02",
-        "pid": 21524,
+        "pid": 72716,
         "status": "COMPLETED",
-        "started_at": "2026-09-01T10:13:47.865888+00:00",
-        "ended_at": "2026-09-01T10:13:48.429399+00:00",
-        "duration_ms": 563.513,
+        "started_at": "2026-09-01T11:11:10.419735+00:00",
+        "ended_at": "2026-09-01T11:11:11.764070+00:00",
+        "duration_ms": 1344.334,
         "exit_code": 0,
         "error": null,
-        "result_digest": "72968d87a6bd65842d4dd6c8a07439165b141276b67ddf6013406ee6e38cf0cf"
+        "result_digest": "97e8688989dd353ae8c511cbb559a949187478ba7c2fa0791396d2afe661b9f6"
       }
     ],
     "different_pid": true,
@@ -298,122 +298,122 @@
     "events": [
       {
         "sequence": 6,
-        "event_id": "task-completed-9537dd7cf2bf415f",
+        "event_id": "task-completed-2598277a4ecd4509",
         "event_type": "task_completed",
         "revision": 6,
         "task_id": "agent-01-incident-commander",
         "worker": "chronosfix-incident-commander#01",
-        "timestamp": "2026-09-01T10:13:40.666720+00:00",
+        "timestamp": "2026-09-01T11:11:03.540384+00:00",
         "payload": {
           "attempt": 1,
-          "duration_ms": 538.214,
-          "pid": 93280,
+          "duration_ms": 573.556,
+          "pid": 78852,
           "result_digest": "3d9e10f6d9f92b80fd1312bbf277f929f18b678238fd5bed270fbaba77d9713f"
         }
       },
       {
         "sequence": 9,
-        "event_id": "task-completed-a49be5731adf4506",
+        "event_id": "task-completed-51d3d67c833f4b73",
         "event_type": "task_completed",
         "revision": 9,
         "task_id": "agent-02-timeline-analyst",
         "worker": "chronosfix-timeline-analyst#01",
-        "timestamp": "2026-09-01T10:13:42.033691+00:00",
+        "timestamp": "2026-09-01T11:11:04.954028+00:00",
         "payload": {
           "attempt": 1,
-          "duration_ms": 1343.285,
-          "pid": 93672,
+          "duration_ms": 1351.23,
+          "pid": 95640,
           "result_digest": "b3d50708d9fcde7ca41c5a93ba8bca24990cdd79b685f36f3a0c7ec185192c0b"
         }
       },
       {
         "sequence": 12,
-        "event_id": "task-completed-0431d890f78f4ec9",
+        "event_id": "task-completed-dfd43303f5aa41e7",
         "event_type": "task_completed",
         "revision": 12,
         "task_id": "agent-03-hypothesis-scientist",
         "worker": "chronosfix-hypothesis-scientist#01",
-        "timestamp": "2026-09-01T10:13:42.598226+00:00",
+        "timestamp": "2026-09-01T11:11:05.606369+00:00",
         "payload": {
           "attempt": 1,
-          "duration_ms": 539.688,
-          "pid": 86256,
+          "duration_ms": 592.262,
+          "pid": 50700,
           "result_digest": "1b9f525229dbe2f58ce04187b2c73eb399042d07a2363be56ed44d1ff090e2e7"
         }
       },
       {
         "sequence": 15,
-        "event_id": "task-completed-9627a6ffde55409b",
+        "event_id": "task-completed-7fda90cf8236482f",
         "event_type": "task_completed",
         "revision": 15,
         "task_id": "agent-04-universe-builder",
         "worker": "chronosfix-universe-builder#01",
-        "timestamp": "2026-09-01T10:13:43.967061+00:00",
+        "timestamp": "2026-09-01T11:11:07.015919+00:00",
         "payload": {
           "attempt": 1,
-          "duration_ms": 1344.413,
-          "pid": 84796,
+          "duration_ms": 1352.528,
+          "pid": 77320,
           "result_digest": "0d0ec3f4630012cb712a20248d541b0f85fd60c732a5dc2def3b4770510ce8e3"
         }
       },
       {
         "sequence": 18,
-        "event_id": "task-completed-dfef95c4f2b24613",
+        "event_id": "task-completed-7caf42586d3649f3",
         "event_type": "task_completed",
         "revision": 18,
         "task_id": "agent-05-patch-engineer",
         "worker": "chronosfix-patch-engineer#01",
-        "timestamp": "2026-09-01T10:13:44.516883+00:00",
+        "timestamp": "2026-09-01T11:11:07.568771+00:00",
         "payload": {
           "attempt": 1,
-          "duration_ms": 525.702,
-          "pid": 95744,
+          "duration_ms": 494.247,
+          "pid": 91276,
           "result_digest": "2678d83a9bf4bfc74730dffe3ee0d5ceb189bb749b2d720b1c08ee3f0701d26f"
         }
       },
       {
         "sequence": 21,
-        "event_id": "task-completed-db541eaa979c4f93",
+        "event_id": "task-completed-78ddb9be8dce4aa2",
         "event_type": "task_completed",
         "revision": 21,
         "task_id": "agent-06-adversarial-verifier",
         "worker": "chronosfix-adversarial-verifier#01",
-        "timestamp": "2026-09-01T10:13:45.891514+00:00",
+        "timestamp": "2026-09-01T11:11:08.962228+00:00",
         "payload": {
           "attempt": 1,
-          "duration_ms": 1350.645,
-          "pid": 89628,
+          "duration_ms": 1335.863,
+          "pid": 92892,
           "result_digest": "d4b4a3209cfcccf734488a0780439e5612e5281aea6015fb7dc1f550c7c0d964"
         }
       },
       {
         "sequence": 24,
-        "event_id": "task-completed-29115a9c80494ac4",
+        "event_id": "task-completed-df2b2c4edf2a4e20",
         "event_type": "task_completed",
         "revision": 24,
         "task_id": "agent-07-release-auditor",
         "worker": "chronosfix-release-auditor#01",
-        "timestamp": "2026-09-01T10:13:46.453987+00:00",
+        "timestamp": "2026-09-01T11:11:09.576198+00:00",
         "payload": {
           "attempt": 1,
-          "duration_ms": 538.083,
-          "pid": 94388,
+          "duration_ms": 557.703,
+          "pid": 90208,
           "result_digest": "252d4dbdbbdefc1bebe5ef0da0e3c067ad6e2d19750c32ff02f1084d56e5a244"
         }
       },
       {
         "sequence": 41,
-        "event_id": "task-completed-a0d0603e07724703",
+        "event_id": "task-completed-c59f9d37f4ca439d",
         "event_type": "task_completed",
         "revision": 41,
-        "task_id": "live-timeout-43c22310",
+        "task_id": "live-timeout-c3dbe7f2",
         "worker": "chronosfix-timeline-analyst#02",
-        "timestamp": "2026-09-01T10:13:48.440323+00:00",
+        "timestamp": "2026-09-01T11:11:11.785577+00:00",
         "payload": {
           "attempt": 2,
-          "duration_ms": 563.513,
-          "pid": 21524,
-          "result_digest": "72968d87a6bd65842d4dd6c8a07439165b141276b67ddf6013406ee6e38cf0cf"
+          "duration_ms": 1344.334,
+          "pid": 72716,
+          "result_digest": "97e8688989dd353ae8c511cbb559a949187478ba7c2fa0791396d2afe661b9f6"
         }
       },
       {
@@ -423,7 +423,7 @@
         "revision": 42,
         "task_id": null,
         "worker": null,
-        "timestamp": "2026-09-01T10:13:48.452751+00:00",
+        "timestamp": "2026-09-01T11:11:11.814349+00:00",
         "payload": {
           "digest": "3edfadcd6b71f11f53299c63633fb24a4717cefdcfca640afaf71a24430cdc07",
           "kind": "slo",
@@ -433,12 +433,12 @@
       },
       {
         "sequence": 43,
-        "event_id": "approval-invalidated-62c20b67bbec405f",
+        "event_id": "approval-invalidated-c4b5e39379ea4d29",
         "event_type": "approval_invalidated",
         "revision": 43,
         "task_id": "risk-gate",
         "worker": "chronosfix-release-auditor#01",
-        "timestamp": "2026-09-01T10:13:48.460643+00:00",
+        "timestamp": "2026-09-01T11:11:11.830679+00:00",
         "payload": {
           "current_revision": 42,
           "source_event_id": "acceptance-live-evidence-001",
@@ -447,12 +447,12 @@
       },
       {
         "sequence": 46,
-        "event_id": "incremental-recompute-879c33a157174570",
+        "event_id": "incremental-recompute-688d47622996466f",
         "event_type": "incremental_recompute_started",
         "revision": 46,
         "task_id": "agent-manager",
         "worker": "chronosfix-manager",
-        "timestamp": "2026-09-01T10:13:48.485663+00:00",
+        "timestamp": "2026-09-01T11:11:11.886683+00:00",
         "payload": {
           "affected_task_ids": [
             "agent-02-timeline-analyst",
@@ -482,12 +482,12 @@
       },
       {
         "sequence": 47,
-        "event_id": "task-invalidated-d0dc8d20a2904bcc",
+        "event_id": "task-invalidated-32610a4b40bd430b",
         "event_type": "task_invalidated",
         "revision": 47,
         "task_id": "agent-02-timeline-analyst",
         "worker": "chronosfix-timeline-analyst#01",
-        "timestamp": "2026-09-01T10:13:48.493104+00:00",
+        "timestamp": "2026-09-01T11:11:11.902575+00:00",
         "payload": {
           "evidence_kind": "slo",
           "reason": "new-evidence-affects-upstream-causal-input",
@@ -496,12 +496,12 @@
       },
       {
         "sequence": 48,
-        "event_id": "task-invalidated-cb3e2239b31e452a",
+        "event_id": "task-invalidated-889927a109d14ee5",
         "event_type": "task_invalidated",
         "revision": 48,
         "task_id": "agent-03-hypothesis-scientist",
         "worker": "chronosfix-hypothesis-scientist#01",
-        "timestamp": "2026-09-01T10:13:48.500453+00:00",
+        "timestamp": "2026-09-01T11:11:11.919299+00:00",
         "payload": {
           "evidence_kind": "slo",
           "reason": "new-evidence-affects-upstream-causal-input",
@@ -510,12 +510,12 @@
       },
       {
         "sequence": 49,
-        "event_id": "task-invalidated-0d46027b40c74044",
+        "event_id": "task-invalidated-f90f2c317d5e4c65",
         "event_type": "task_invalidated",
         "revision": 49,
         "task_id": "agent-04-universe-builder",
         "worker": "chronosfix-universe-builder#01",
-        "timestamp": "2026-09-01T10:13:48.507697+00:00",
+        "timestamp": "2026-09-01T11:11:11.935769+00:00",
         "payload": {
           "evidence_kind": "slo",
           "reason": "new-evidence-affects-upstream-causal-input",
@@ -524,12 +524,12 @@
       },
       {
         "sequence": 50,
-        "event_id": "task-invalidated-329bdbaa6b79431b",
+        "event_id": "task-invalidated-78d59f8a63a544d6",
         "event_type": "task_invalidated",
         "revision": 50,
         "task_id": "agent-05-patch-engineer",
         "worker": "chronosfix-patch-engineer#01",
-        "timestamp": "2026-09-01T10:13:48.515435+00:00",
+        "timestamp": "2026-09-01T11:11:11.952980+00:00",
         "payload": {
           "evidence_kind": "slo",
           "reason": "new-evidence-affects-upstream-causal-input",
@@ -538,12 +538,12 @@
       },
       {
         "sequence": 51,
-        "event_id": "task-invalidated-3995751fc16e4215",
+        "event_id": "task-invalidated-51627698dcef44d7",
         "event_type": "task_invalidated",
         "revision": 51,
         "task_id": "agent-06-adversarial-verifier",
         "worker": "chronosfix-adversarial-verifier#01",
-        "timestamp": "2026-09-01T10:13:48.523313+00:00",
+        "timestamp": "2026-09-01T11:11:11.973196+00:00",
         "payload": {
           "evidence_kind": "slo",
           "reason": "new-evidence-affects-upstream-causal-input",
@@ -552,12 +552,12 @@
       },
       {
         "sequence": 52,
-        "event_id": "task-invalidated-2b396b38a1e14435",
+        "event_id": "task-invalidated-e3474a6c83454959",
         "event_type": "task_invalidated",
         "revision": 52,
         "task_id": "agent-07-release-auditor",
         "worker": "chronosfix-release-auditor#01",
-        "timestamp": "2026-09-01T10:13:48.531366+00:00",
+        "timestamp": "2026-09-01T11:11:11.991063+00:00",
         "payload": {
           "evidence_kind": "slo",
           "reason": "new-evidence-affects-upstream-causal-input",
@@ -566,113 +566,113 @@
       },
       {
         "sequence": 56,
-        "event_id": "task-completed-6bfd94723644403b",
+        "event_id": "task-completed-2650053d419b4ca3",
         "event_type": "task_completed",
         "revision": 56,
         "task_id": "agent-02-timeline-analyst",
         "worker": "chronosfix-timeline-analyst#01",
-        "timestamp": "2026-09-01T10:13:49.100013+00:00",
+        "timestamp": "2026-09-01T11:11:12.607040+00:00",
         "payload": {
           "attempt": 2,
-          "duration_ms": 535.804,
-          "pid": 43648,
+          "duration_ms": 537.813,
+          "pid": 88684,
           "result_digest": "b3d50708d9fcde7ca41c5a93ba8bca24990cdd79b685f36f3a0c7ec185192c0b"
         }
       },
       {
         "sequence": 59,
-        "event_id": "task-completed-920c5ce355304b13",
+        "event_id": "task-completed-8a94a509061648bb",
         "event_type": "task_completed",
         "revision": 59,
         "task_id": "agent-03-hypothesis-scientist",
         "worker": "chronosfix-hypothesis-scientist#01",
-        "timestamp": "2026-09-01T10:13:50.457942+00:00",
+        "timestamp": "2026-09-01T11:11:13.981464+00:00",
         "payload": {
           "attempt": 2,
-          "duration_ms": 1333.478,
-          "pid": 96196,
+          "duration_ms": 1318.313,
+          "pid": 93500,
           "result_digest": "1b9f525229dbe2f58ce04187b2c73eb399042d07a2363be56ed44d1ff090e2e7"
         }
       },
       {
         "sequence": 62,
-        "event_id": "task-completed-ba103996319a4bf2",
+        "event_id": "task-completed-1e8227d828844910",
         "event_type": "task_completed",
         "revision": 62,
         "task_id": "agent-04-universe-builder",
         "worker": "chronosfix-universe-builder#01",
-        "timestamp": "2026-09-01T10:13:51.015187+00:00",
+        "timestamp": "2026-09-01T11:11:14.557744+00:00",
         "payload": {
           "attempt": 2,
-          "duration_ms": 533.476,
-          "pid": 78292,
+          "duration_ms": 524.145,
+          "pid": 93676,
           "result_digest": "0d0ec3f4630012cb712a20248d541b0f85fd60c732a5dc2def3b4770510ce8e3"
         }
       },
       {
         "sequence": 65,
-        "event_id": "task-completed-911677928e7940fa",
+        "event_id": "task-completed-d14d40ed63954668",
         "event_type": "task_completed",
         "revision": 65,
         "task_id": "agent-05-patch-engineer",
         "worker": "chronosfix-patch-engineer#01",
-        "timestamp": "2026-09-01T10:13:52.379824+00:00",
+        "timestamp": "2026-09-01T11:11:15.954610+00:00",
         "payload": {
           "attempt": 2,
-          "duration_ms": 1341.817,
-          "pid": 76960,
+          "duration_ms": 1340.214,
+          "pid": 63464,
           "result_digest": "2678d83a9bf4bfc74730dffe3ee0d5ceb189bb749b2d720b1c08ee3f0701d26f"
         }
       },
       {
         "sequence": 68,
-        "event_id": "task-completed-eea7847686ec41db",
+        "event_id": "task-completed-361e8c5234b04b86",
         "event_type": "task_completed",
         "revision": 68,
         "task_id": "agent-06-adversarial-verifier",
         "worker": "chronosfix-adversarial-verifier#01",
-        "timestamp": "2026-09-01T10:13:52.935451+00:00",
+        "timestamp": "2026-09-01T11:11:16.534656+00:00",
         "payload": {
           "attempt": 2,
-          "duration_ms": 533.554,
-          "pid": 91944,
+          "duration_ms": 522.968,
+          "pid": 60168,
           "result_digest": "d4b4a3209cfcccf734488a0780439e5612e5281aea6015fb7dc1f550c7c0d964"
         }
       },
       {
         "sequence": 71,
-        "event_id": "task-completed-08e9684d490043cc",
+        "event_id": "task-completed-f3f3ee2059274308",
         "event_type": "task_completed",
         "revision": 71,
         "task_id": "agent-07-release-auditor",
         "worker": "chronosfix-release-auditor#01",
-        "timestamp": "2026-09-01T10:13:54.305066+00:00",
+        "timestamp": "2026-09-01T11:11:17.920858+00:00",
         "payload": {
           "attempt": 2,
-          "duration_ms": 1346.857,
-          "pid": 54312,
+          "duration_ms": 1328.141,
+          "pid": 93196,
           "result_digest": "252d4dbdbbdefc1bebe5ef0da0e3c067ad6e2d19750c32ff02f1084d56e5a244"
         }
       },
       {
         "sequence": 74,
-        "event_id": "task-completed-dc0900145ba045ce",
+        "event_id": "task-completed-1c90162ed5784a56",
         "event_type": "task_completed",
         "revision": 74,
         "task_id": "agent-08-skill-curator",
         "worker": "chronosfix-skill-curator#01",
-        "timestamp": "2026-09-01T10:13:54.861424+00:00",
+        "timestamp": "2026-09-01T11:11:18.480524+00:00",
         "payload": {
           "attempt": 1,
-          "duration_ms": 532.012,
-          "pid": 94872,
+          "duration_ms": 502.087,
+          "pid": 53400,
           "result_digest": "89a7a14baf6d8619538c81d69b7c6ee99743978ee79797c2d6bd9b7327365a50"
         }
       }
     ]
   },
   "badcase_refusal": {
-    "run_id": "acfx-local-20260901T101354-580215e296",
+    "run_id": "acfx-local-20260901T111118-f5a497af08",
     "status": "ABSTAINED",
     "release_decision": "blocked-insufficient-evidence",
     "registered_tasks": [

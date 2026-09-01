@@ -16,8 +16,8 @@
   "assignees": [],
   "created_from": {
     "incident_id": "INC-2026-0816-001",
-    "run_id": "run-4860134828d64dd585cb196e8b0d19b8",
-    "trace_id": "e0544840d1fc4ae09f8a5c1335fe40f6",
+    "run_id": "run-9aa3e27a48f74962a6e618779bee212f",
+    "trace_id": "0fdafeec5e6a46d1b53b5ce4675cbdbd",
     "scenario": "scenarios/checkout-timeout/scenario.json"
   },
   "impact": {
