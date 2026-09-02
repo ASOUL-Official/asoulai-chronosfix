@@ -269,6 +269,44 @@ class LocalController:
                 timeout_seconds=15,
             )
             results[task_id] = result
+            if task["agent"] == "patch-engineer":
+                # Persist the tournament summary as a first-class coordination
+                # event.  The task result remains the complete replay payload;
+                # this compact event makes candidate competition visible in the
+                # Matrix feed without requiring consumers to unpack a Worker
+                # result blob.
+                ranking = ((result.get("result") or {}).get("ranking") or [])
+                self.store.append_event(
+                    run_id,
+                    "patch_tournament_completed",
+                    event_id=self._event_id("patch-tournament"),
+                    task_id=task_id,
+                    worker=task["worker"],
+                    payload={
+                        "candidate_count": len(ranking),
+                        "selected_patch": ((result.get("result") or {}).get("selected_patch") or {}).get("candidate_id"),
+                        "competition": "same-fault-genome-suite",
+                        "ranking": [
+                            {
+                                "candidate_id": item.get("candidate_id"),
+                                "title": item.get("title"),
+                                "total_score": item.get("total_score"),
+                                "mean_failure_rate": item.get("mean_failure_rate"),
+                                "worst_failure_rate": item.get("worst_failure_rate"),
+                                "release_eligible": any(
+                                    result_item.get("mandatory", True)
+                                    for result_item in item.get("results", [])
+                                )
+                                and all(
+                                    result_item.get("healthy") is True
+                                    for result_item in item.get("results", [])
+                                    if result_item.get("mandatory", True)
+                                ),
+                            }
+                            for item in ranking
+                        ],
+                    },
+                )
         return results
 
     @staticmethod

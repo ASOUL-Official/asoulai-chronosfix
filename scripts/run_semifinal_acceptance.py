@@ -312,6 +312,21 @@ def run(output_dir: Path) -> dict[str, Any]:
                 True,
             ),
             assertion(
+                "local_controller.patch_competition.candidate_count",
+                nested(local_controller, "patch_competition", "candidate_count"),
+                4,
+            ),
+            assertion(
+                "local_controller.patch_competition.selected_patch",
+                nested(local_controller, "patch_competition", "selected_patch"),
+                "P-RESTORE-POOL",
+            ),
+            assertion(
+                "local_controller.patch_competition.same_suite",
+                nested(local_controller, "patch_competition", "competition"),
+                "same-fault-genome-suite",
+            ),
+            assertion(
                 "local_controller.badcase",
                 nested(local_controller, "badcase_refusal", "status"),
                 "ABSTAINED",

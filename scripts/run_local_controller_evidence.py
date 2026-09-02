@@ -40,6 +40,11 @@ def build(output: Path) -> dict:
         item for item in reversed(evidence["events"])
         if item["event_type"] == "incremental_recompute_started"
     )
+    tournament_event = next(
+        item for item in golden["events"]
+        if item["event_type"] == "patch_tournament_completed"
+    )
+    tournament = tournament_event["payload"]
     badcase_task_ids = [item["task_id"] for item in badcase["tasks"]]
     report = {
         "schema": "chronosfix.local-controller-evidence/v1",
@@ -50,6 +55,11 @@ def build(output: Path) -> dict:
             and attempts[1]["status"] == "COMPLETED"
             and attempts[0]["pid"] != attempts[1]["pid"]
             and attempts[0]["instance_id"] != attempts[1]["instance_id"]
+            and tournament["candidate_count"] == 4
+            and tournament["selected_patch"] == "P-RESTORE-POOL"
+            and len(tournament["ranking"]) == 4
+            and tournament["competition"] == "same-fault-genome-suite"
+            and tournament["ranking"][0]["release_eligible"]
             and dynamic_task["status"] == "COMPLETED"
             and len(recompute_event["payload"]["affected_task_ids"]) == 6
             and recompute_event["payload"]["new_task_ids"] == ["agent-08-skill-curator"]
@@ -74,6 +84,11 @@ def build(output: Path) -> dict:
             "after_evidence_release_decision": evidence["run"]["release_decision"],
             "matrix_database": str(controller.database),
             "agent_recommendation": golden_plan["recommendation"],
+        },
+        "patch_competition": {
+            "event_id": tournament_event["event_id"],
+            "task_id": tournament_event["task_id"],
+            **tournament,
         },
         "worker_failover": {
             "task_id": failover_task["task_id"],

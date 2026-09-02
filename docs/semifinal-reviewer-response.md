@@ -15,8 +15,8 @@
 
 | 评委建议 | 状态 | 本轮证据 | 下一道门槛 |
 |---|---|---|---|
-| 新证据动态调整任务 | implemented | `src/chronosfix/dynamic.py`、`coordination.json` 的 `task_registered/evidence_observed` | AgentTeams Matrix 实际消息记录 |
-| 多个修复方案竞争 | implemented | PatchTournament 对所有候选运行相同强制故障族并排名 | 接真实 CI/沙箱运行候选补丁 |
+| 新证据动态调整任务 | implemented | 本地 Controller 计算受影响 DAG 闭包并记录 `incremental_recompute_started` / `task_invalidated` | AgentTeams Matrix 实际消息记录 |
+| 多个修复方案竞争 | implemented | `patch_tournament_completed` 事件写入 4 个候选在同一故障族上的评分、失败率、可发布资格和胜者；Cockpit 在线时直接展示该 Worker 结果 | 接真实 CI/沙箱运行候选补丁 |
 | 共享状态更新 | implemented | 单调 `revision`、event log、task graph、attempts | PolarDB/RocketMQ 持久化与并发冲突测试 |
 | 人工暂停/恢复 | implemented | `human_pause`、revision checkpoint、`approval_invalidated`、`human_resume` | 对接企业审批或 AgentTeams Human |
 | Worker 失败重派 | implemented | Timeline/Verifier 首次 timeout 注入，按 capability 重派备用 Worker | Controller lease/heartbeat 实测 |
@@ -43,6 +43,7 @@
 7. 中风险补丁产生 `human_pause`；暂停后若有新证据，旧 revision 的审批产生 `approval_invalidated`。
 8. 只有绑定最新 revision 的审批产生 `human_resume`，才允许后续 RiskGate 继续。
 9. `incremental_recompute_started` 明确写出 `affected_task_ids`、`reused_task_ids` 和 `new_task_ids`；`task_invalidated` 逐节点记录失效原因，证明没有整条流水线重跑。
+10. Patch Engineer 执行 `PatchTournament` 后写入 `patch_tournament_completed`：四个候选补丁在同一组 mandatory 故障族上竞争，优先淘汰不满足门禁者，再以收益、风险和成本排序；结果由 Adversarial Verifier 与 RiskGate 继续消费，不能由页面自行选胜者。
 
 这套证据是 AgentTeams Matrix 的本地兼容控制面，不声称 Controller 已执行。
 

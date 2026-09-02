@@ -149,7 +149,9 @@ class UnifiedModelStore:
                     "SELECT * FROM messages WHERE idempotency_key = ?", (idempotency_key,)
                 ).fetchone()
             return {**dict(row), "payload": decode(row["payload_json"]), "deduplicated": True}
-        return self.message(message_id) | {"deduplicated": False}
+        # Keep the runtime compatible with the bundled Python 3.8 as well as
+        # newer interpreters; dict union (``|``) only arrived in Python 3.9.
+        return {**self.message(message_id), "deduplicated": False}
 
     def message(self, message_id: str) -> dict[str, Any]:
         with self.connection() as connection:

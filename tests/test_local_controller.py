@@ -74,6 +74,19 @@ class LocalControllerTests(unittest.TestCase):
             self.assertEqual(len(attempts), 1)
             self.assertEqual(attempts[0]["instance_id"], AGENT_PROFILES[task["result"]["agent"]]["worker"])
 
+        tournament_events = [
+            item for item in snapshot["events"]
+            if item["event_type"] == "patch_tournament_completed"
+        ]
+        self.assertEqual(len(tournament_events), 1)
+        tournament = tournament_events[0]["payload"]
+        self.assertEqual(tournament["candidate_count"], 4)
+        self.assertEqual(len(tournament["ranking"]), 4)
+        self.assertEqual(tournament["selected_patch"], "P-RESTORE-POOL")
+        self.assertEqual(tournament["competition"], "same-fault-genome-suite")
+        self.assertTrue(tournament["ranking"][0]["release_eligible"])
+        self.assertGreater(tournament["ranking"][0]["total_score"], tournament["ranking"][-1]["total_score"])
+
     def test_unknown_evidence_inserts_and_executes_skill_curator_dag_node(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             controller = self.make_controller(temp_dir)

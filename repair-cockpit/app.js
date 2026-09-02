@@ -330,6 +330,23 @@ function effectiveCoordination(scenario) {
   };
 }
 
+function effectivePatchScenario(scenario) {
+  const runtimeSnapshot = view.runtime.snapshot;
+  if (!view.runtime.available || runtimeSnapshot?.run?.scenario_id !== scenario.id) {
+    return scenario;
+  }
+  const patchTask = runtimeSnapshot.tasks.find(
+    (task) => task.result?.agent === "patch-engineer" && task.result?.result,
+  );
+  const result = patchTask?.result?.result;
+  if (!result?.ranking?.length) return scenario;
+  return {
+    ...scenario,
+    selected_patch: result.selected_patch,
+    patches: result.ranking,
+  };
+}
+
 function addDemoEvent(eventType, message, options = {}) {
   const revisionDelta = options.revisionDelta ?? 1;
   view.demo.revisionDelta += revisionDelta;
@@ -965,6 +982,9 @@ function renderCoordination(scenario) {
     if (event.event_type === "task_invalidated") {
       return payload.reason ?? "incremental scope";
     }
+    if (event.event_type === "patch_tournament_completed") {
+      return `${payload.candidate_count ?? 0} candidates · winner ${payload.selected_patch ?? "pending"} · ${payload.competition ?? "mandatory-suite"}`;
+    }
     return event.worker ?? event.task_id ?? "control-plane";
   };
   const eventLabel = {
@@ -974,6 +994,7 @@ function renderCoordination(scenario) {
     task_registered: "DAG 任务注册",
     task_dispatched: "Worker 派发",
     task_completed: "Skill 执行完成",
+    patch_tournament_completed: "多个修复方案竞争完成",
     incremental_recompute_started: "增量因果重算",
     task_invalidated: "相关结论失效",
     evidence_observed: "新证据触发",
@@ -1003,6 +1024,7 @@ function renderCoordination(scenario) {
       ${metricCard("Worker 重派", count("task_reassigned"), "timeout -> backup")}
       ${metricCard("去重事件", count("evidence_deduplicated") + count("task_deduplicated"), "幂等保护")}
       ${metricCard("增量失效节点", invalidatedCount, "只重算受影响 DAG")}
+      ${metricCard("方案竞争", count("patch_tournament_completed"), "候选同场验证")}
     </div>
     <div class="coordination-grid">
       <section class="task-board">
@@ -1034,6 +1056,9 @@ function renderCoordination(scenario) {
 }
 
 function renderPatch(scenario) {
+  const hasLiveTournament = view.runtime.available
+    && view.runtime.snapshot?.run?.scenario_id === scenario.id;
+  scenario = effectivePatchScenario(scenario);
   if (!scenario.selected_patch) {
     return `
       <div class="blocked-stage">
@@ -1048,9 +1073,10 @@ function renderPatch(scenario) {
   return `
     <div class="patch-layout">
       <article class="winner-card">
-        <span>SELECTED PATCH · ${escapeHtml(selected.candidate_id)}</span>
+        <span>${hasLiveTournament ? "LIVE PATCH TOURNAMENT · " : "SELECTED PATCH · "}${escapeHtml(selected.candidate_id)}</span>
         <h3>${escapeHtml(selected.title)}</h3>
         <div class="winner-score">${selected.total_score.toFixed(4)}</div>
+        <p class="competition-note">${scenario.patches.length} 个候选方案在同一组强制故障族上竞争，先满足 mandatory 门禁，再按收益、风险和成本排序。</p>
         <p>变更：<code>${escapeHtml(JSON.stringify(selected.changes))}</code></p>
         <p>回滚：<code>${escapeHtml(JSON.stringify(selected.rollback_changes))}</code></p>
         <div class="health-bar"><i style="width:${(healthy / selected.results.length) * 100}%"></i></div>
@@ -1061,18 +1087,21 @@ function renderPatch(scenario) {
       </article>
       <div class="ranking-list">
         ${scenario.patches
-          .map(
-            (patch, index) => `
+          .map((patch, index) => {
+            const mandatory = patch.results.filter((item) => item.mandatory !== false);
+            const releaseEligible = mandatory.length > 0 && mandatory.every((item) => item.healthy);
+            return `
               <article class="${patch.candidate_id === selected.candidate_id ? "selected" : ""}">
                 <span>#${index + 1}</span>
                 <div>
                   <strong>${escapeHtml(patch.candidate_id)}</strong>
                   <small>${escapeHtml(patch.title)}</small>
+                  <small>${releaseEligible ? "门禁通过" : "门禁阻断"} · 平均失败率 ${percent(patch.mean_failure_rate, 2)} · 最差 ${percent(patch.worst_failure_rate, 2)}</small>
                 </div>
                 <b>${patch.total_score.toFixed(4)}</b>
               </article>
-            `,
-          )
+            `;
+          })
           .join("")}
       </div>
     </div>

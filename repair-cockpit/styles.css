@@ -1404,6 +1404,15 @@ select:focus-visible {
   font-size: 10px;
 }
 
+.winner-card .competition-note {
+  max-width: 560px;
+  padding: 9px 10px;
+  border-left: 2px solid var(--green);
+  background: rgba(88, 230, 169, 0.06);
+  color: #c8e8dc;
+  line-height: 1.55;
+}
+
 .winner-card code {
   color: #d8e8f8;
 }
