@@ -1,8 +1,8 @@
 {
   "schema_version": "chronosfix.run-manifest/v1",
-  "generated_at": "2026-09-02T02:20:15.134955+00:00",
-  "run_id": "run-10b3f0c330f440118d900cc7eaef26cf",
-  "trace_id": "92abc5366ba549bdab583336fe6537cc",
+  "generated_at": "2026-09-02T05:15:15.063916+00:00",
+  "run_id": "run-a1dcac2b03d44285bf4614a6fdae8a4f",
+  "trace_id": "cfee5038febc4b308f9fc0db7b1c6257",
   "incident_id": "INC-2026-0816-001",
   "scenario": {
     "path": "scenarios/checkout-timeout/scenario.json",
@@ -45,8 +45,8 @@
     "approval_record": {
       "status": "approved",
       "approver": "AsoulAI Release Reviewer",
-      "reason": "Refresh release evidence for live patch tournament",
-      "timestamp": "2026-09-02T02:20:14.899478+00:00",
+      "reason": "Refresh release evidence for defense deck alignment",
+      "timestamp": "2026-09-02T05:15:14.753018+00:00",
       "policy_version": "chronosfix-riskgate/v1",
       "is_human": true,
       "state_revision": 36,
@@ -54,7 +54,7 @@
     }
   },
   "measurements": {
-    "elapsed_ms": 220.05,
+    "elapsed_ms": 295.228,
     "elapsed_ms_kind": "measured",
     "evidence_coverage": 1.0,
     "evidence_coverage_kind": "derived",
@@ -76,39 +76,39 @@
   "environment": {
     "python": "3.8.6",
     "platform": "Windows-10-10.0.26100-SP0",
-    "git_commit": "bef347fc314b3e1c079798cc06e79d4f2e845ffc"
+    "git_commit": "5be047a48f0338ab28d342191c0976f0047185ac"
   },
   "artifacts": {
     "trace.jsonl": {
-      "sha256": "7c213af5c95fbbaa87416f7681c36bc3ebdd3fc7ba8d5f6ed90021ed17b92acc",
-      "bytes": 29303
+      "sha256": "038e0d6656d2479559ddc81c1d47d542c36fd4c562e864e44c820823448bec3e",
+      "bytes": 29306
     },
     "run-log.jsonl": {
-      "sha256": "e149c3415a00ab7317e8f69924b9d51bdaa76df2d639806df8ca9d45c1abf88a",
-      "bytes": 8369
+      "sha256": "9f33cc6c67187bbf28b0f800b74a866b126561c2136f48092e9e631760267584",
+      "bytes": 8371
     },
     "proof-bundle.json": {
-      "sha256": "158bc00fcb37401c3acca93f1dc44d0b3f5f56c65546b30a345de0bd50da6eb5",
-      "bytes": 55187
+      "sha256": "d99613c3daec0fbb60a0b5941c68c09331c2d086a647f16eb859c4d406889e76",
+      "bytes": 55190
     },
     "proof-report.md": {
-      "sha256": "b5ab7be081c44492df60150d12f1d9b4e626d1a2d59fff5211476cd5e1bb5292",
+      "sha256": "8e173bb9810a0e8a1160540c294b56df04a8da1cf1a1f9bd9737f846b20ee872",
       "bytes": 7375
     },
     "engineering-metrics.json": {
-      "sha256": "61ed4c2879f6578536574596c25c5fd34741c8bee6d56daabbcb8013de63d27f",
-      "bytes": 3486
+      "sha256": "6f667173ea73c35cb151ae63b7034af8e23476ff4a56923eb963655373fe2890",
+      "bytes": 3487
     },
     "agentteams-run.json": {
-      "sha256": "ad5cccb6d858d87df934d0a122e6c8170f4c7bebcb83843c1040d60d13c3edc3",
-      "bytes": 7908
+      "sha256": "659d3dbd80482a2e10a547c95ce5663e3728db786a3127e79adbf2312c3a0bcd",
+      "bytes": 7909
     },
     "evaluation-report.md": {
-      "sha256": "44ac7b6b9c30f4c06cb2c157b97a8a344eeb783b94742a1913c4548aabdd517b",
+      "sha256": "f5d539cbd12ccce73bbedb4668cf00ffe308a2efbe7be965ea85426ce44cb484",
       "bytes": 2139
     },
     "github-issue.json": {
-      "sha256": "64cbc8a038eb791cad0ee2962a1292083098b1d1f8612125aabfe808f7c60487",
+      "sha256": "d619b802861926b4be70ea7a90109f9c28ba254b251e56de4eec0674eda7c532",
       "bytes": 2561
     },
     "github-issue.md": {
@@ -116,28 +116,28 @@
       "bytes": 1395
     },
     "github-pr.json": {
-      "sha256": "17b63f9267b1606265e065be4a396b2d35dbed723bb66d99939a224ed626600a",
-      "bytes": 8241
+      "sha256": "8e71d091849083d7ae48684193b8752ea8051aabadc0826085068a3c3254d736",
+      "bytes": 8242
     },
     "github-pr.md": {
       "sha256": "9a143d376e32a6726850c473b3587c9108be756f59c3d7b81ea853b1b57f15c8",
       "bytes": 1804
     },
     "github-pr-diff.patch": {
-      "sha256": "9019b710de3216fcb14fd887d26f4f7143b0687347aaafb5a0f729233c43b89a",
-      "bytes": 2504
+      "sha256": "1a83381f99d6d700581986b8a9bab841fbb7ced7a5376e1536325dfb57ec7ec2",
+      "bytes": 2505
     },
     "github-pr-checks.json": {
-      "sha256": "d572ffc9087ba48dffc0537dae7cff614038d5504093d15753b4b08a2143c868",
-      "bytes": 2412
+      "sha256": "ffa61740e71bf1e1daf93b8098fdb7a3532cb4c2c5c49d1753eb4af23ea83f2d",
+      "bytes": 2413
     },
     "github-review-audit.jsonl": {
-      "sha256": "08309ccbeb39a8c837d80d6eed92c478068a9f17239edd81607b7b7388d1ce57",
-      "bytes": 3504
+      "sha256": "f520aeab273b5221eb35f35ab8e88814c363f7558adad10c754bd53881a8bbee",
+      "bytes": 3505
     },
     "coordination.json": {
-      "sha256": "6104dc6aa974c42c66b76c204e26ba9a0398ed55a5012a929bca4f738cfba90b",
-      "bytes": 29598
+      "sha256": "713b51ee2c3d245c8fe3f9c7d69d736387eaaae9a601e2e0001a86dad85f5e5b",
+      "bytes": 29599
     }
   }
 }

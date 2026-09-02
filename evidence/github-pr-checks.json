@@ -3,8 +3,8 @@
   "mode": "local-draft",
   "pull_request": "#43",
   "commit_sha": null,
-  "base_commit_sha": "bef347fc314b3e1c079798cc06e79d4f2e845ffc",
-  "run_id": "run-10b3f0c330f440118d900cc7eaef26cf",
+  "base_commit_sha": "5be047a48f0338ab28d342191c0976f0047185ac",
+  "run_id": "run-a1dcac2b03d44285bf4614a6fdae8a4f",
   "status": "completed",
   "checks": [
     {
@@ -13,7 +13,7 @@
       "executed": true,
       "conclusion": "success",
       "exit_code": 0,
-      "run_id": "run-10b3f0c330f440118d900cc7eaef26cf",
+      "run_id": "run-a1dcac2b03d44285bf4614a6fdae8a4f",
       "evidence": "experiment results persisted in proof-bundle.json",
       "summary": "1 primary cause(s) reached the intervention threshold.",
       "source": "metrics.validation_checks"
@@ -24,7 +24,7 @@
       "executed": true,
       "conclusion": "success",
       "exit_code": 0,
-      "run_id": "run-10b3f0c330f440118d900cc7eaef26cf",
+      "run_id": "run-a1dcac2b03d44285bf4614a6fdae8a4f",
       "evidence": "selected_patch.results in proof-bundle.json",
       "summary": "8 mandatory variants evaluated; worst failure rate 6.2%.",
       "source": "metrics.validation_checks"
@@ -35,7 +35,7 @@
       "executed": true,
       "conclusion": "success",
       "exit_code": 0,
-      "run_id": "run-10b3f0c330f440118d900cc7eaef26cf",
+      "run_id": "run-a1dcac2b03d44285bf4614a6fdae8a4f",
       "evidence": "patch changes followed by rollback_changes compared with baseline",
       "summary": "Rollback restores the complete baseline state.",
       "source": "metrics.validation_checks"
@@ -57,8 +57,8 @@
       "executed": true,
       "conclusion": "success",
       "approver": "AsoulAI Release Reviewer",
-      "approved_at": "2026-09-02T02:20:14.899478+00:00",
-      "reason": "Refresh release evidence for live patch tournament",
+      "approved_at": "2026-09-02T05:15:14.753018+00:00",
+      "reason": "Refresh release evidence for defense deck alignment",
       "policy_version": "chronosfix-riskgate/v1",
       "input_digest": "cfd6506285827bf2cbdb5052a34584fe287c9bcbd3dca5f164427f73c16b2027",
       "summary": "Named human approval recorded for AsoulAI Release Reviewer.",
