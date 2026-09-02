@@ -1,70 +1,70 @@
 {
   "schema": "chronosfix.release-manifest/v1",
-  "release_id": "acfx-d7c6bae3c2ce",
-  "generated_at": "2026-09-01T11:19:05.543740+00:00",
-  "source_commit": "d7c6bae3c2ce30e00079ce6b139d9c0f72ad967c",
-  "source_fingerprint": "ccc0baf78e5a4b04fe5b5271df8c32354c6c84d3cdb6dea018905ec0fd1a1c8c",
+  "release_id": "acfx-bef347fc314b",
+  "generated_at": "2026-09-02T02:20:31.641752+00:00",
+  "source_commit": "bef347fc314b3e1c079798cc06e79d4f2e845ffc",
+  "source_fingerprint": "e199da7a7b34638843115e0a03b9e26c33228150a6bfb29ff650eaae42f77d93",
   "source_commit_semantics": "Evidence and the online Demo are tied to this reproducible source anchor commit plus the working-tree source fingerprint; a later artifact commit only packages these outputs.",
   "artifacts": {
     "repair-cockpit/data/demo-data.json": {
-      "bytes": 1315778,
-      "sha256": "07600ab6ec9c2e8b0422e60ad9d9848179c3fbfd85a7694486cda8aeef6ed8a4",
+      "bytes": 1315776,
+      "sha256": "b1b438c382a8c244046dd596a2618c0a5668e64f5e1957de69f9c3693e15e261",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 1350337
+      "materialized_bytes": 1350335
     },
     "evidence/trace.jsonl": {
-      "bytes": 29281,
-      "sha256": "9d1048f5e65aa6c51b687e2b2780fa4f8cc5628b39d17afc68eee11d727224c7",
+      "bytes": 29285,
+      "sha256": "6f57ad4c1c43be449a349668b3957a623ff1fa387aa9600ed590c935587dab67",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 29299
+      "materialized_bytes": 29303
     },
     "evidence/run-log.jsonl": {
-      "bytes": 8350,
-      "sha256": "6ae94e87a0838365a146343972676c215da4e0373560977d9ef9dc8df315af40",
+      "bytes": 8351,
+      "sha256": "226e57fd680c3e674da6e2ebc5b2112efc51c6e45841ff949495a084a032f68e",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 8368
+      "materialized_bytes": 8369
     },
     "evidence/run-manifest.json": {
-      "bytes": 4733,
-      "sha256": "8e3ef20d3b9411769a63ab8a03c2192c625197ded7ecfdc4089543db3e9baa40",
+      "bytes": 4763,
+      "sha256": "13b53f581e0e4a267fbbaa49783fbc6d9324e56ceb4ecdbac8d4e4edb39edb0d",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 4875
+      "materialized_bytes": 4905
     },
     "evidence/coordination.json": {
-      "bytes": 28670,
-      "sha256": "fe2ac190bba84058e98067811f491c632da945042b7fb7f9ca3ef5766dcd0d74",
+      "bytes": 28677,
+      "sha256": "75581ee2978ab67b48132b325b4d26ee92682ac767b15e32fd3d97cfbcdb2cc5",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 29591
+      "materialized_bytes": 29598
     },
     "evidence/engineering-metrics.json": {
       "bytes": 3374,
-      "sha256": "4b53673dd8ce27ff71c53be4ff896cdec6292e03a21da81ac90090ffe5151477",
+      "sha256": "05654de9f699b45f363d4e28a594f31077349894397a62469dfc1a22a56129a0",
       "identity_mode": "canonical-lf-text-or-raw-binary",
       "materialized_bytes": 3486
     },
     "evidence/proof-bundle.json": {
-      "bytes": 53413,
-      "sha256": "3dfe59c5ebb0cb2fe2c8a662456cb7810b5cefa88482afaf55704027825f1cba",
+      "bytes": 53451,
+      "sha256": "85c29c5e0cbca122bb8b9c5d15f69ad6d6cabf902a9e4e39e39a2d24e84404ed",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 55149
+      "materialized_bytes": 55187
     },
     "evidence/agentteams-run.json": {
-      "bytes": 7572,
-      "sha256": "b67bad9269a44da5f6dea4f88f860ab03f006b1c3d63fb6ff29b68d9677844bd",
+      "bytes": 7603,
+      "sha256": "1d44d7cb7a8e803c132d47a6de8b282397390346f01679b84d75d9029879f5de",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 7877
+      "materialized_bytes": 7908
     },
     "evidence/local-controller-evidence.json": {
-      "bytes": 25918,
-      "sha256": "83687aa869ea025ed11e6a08e9f5484bad8db42902d770e2e01c4164dd1c0795",
+      "bytes": 27176,
+      "sha256": "ee3c4712aa6ee88c7f14846bdfd4b153934277b77f4ae47f2e5d6f1345601256",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 26657
+      "materialized_bytes": 27956
     },
     "evidence/local-infra-evidence.json": {
-      "bytes": 20070,
-      "sha256": "8a9d2f1226d4c404958c8c2543a534ff07b1997f5f31cc9b893913c60f7e65ce",
+      "bytes": 20069,
+      "sha256": "e4ca59291f62bc133300543b0dc6601d7556f39863a778888c1ddb5c23f6d07f",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 20657
+      "materialized_bytes": 20656
     },
     "evidence/patch-sandbox-run.json": {
       "bytes": 9014,
@@ -98,7 +98,7 @@
     },
     "evidence/evaluation-report.md": {
       "bytes": 2100,
-      "sha256": "3d2ee230ed0cb1a1a8b5bac2a9be8eccf3cd7f87aff874392e193c0507cfd2a9",
+      "sha256": "4055ae19b75440ca0fdaa92f94217dafdbaa139ab6b7eff991655c202223c3b0",
       "identity_mode": "canonical-lf-text-or-raw-binary",
       "materialized_bytes": 2139
     },

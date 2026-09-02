@@ -3,7 +3,7 @@
 ## 1. 自动化验证摘要
 
 - 事故样例：INC-2026-0816-001 / 订单创建接口在午间流量下出现高失败率与长尾延迟
-- Run ID：run-9aa3e27a48f74962a6e618779bee212f
+- Run ID：run-10b3f0c330f440118d900cc7eaef26cf
 - Agent/Skill Trace Span：18
 - 流水线步骤完成率（由 Trace 推导）：100.0%
 - 根因假设数：3
