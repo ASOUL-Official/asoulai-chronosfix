@@ -43,7 +43,7 @@ const edits = {
     "sh/1cj2d8b6": "我们交付的不是答案，而是敢合并的证据",
     "sh/0ba143al": "同一 run_id 绑定事故、因果、补丁、门禁与审计材料。",
     "sh/ql8jytsj": "真实执行",
-    "sh/doj29oba": "本地 Controller 拉起真实子进程，失败后切换到不同 Worker 实例。",
+    "sh/doj29oba": "本地 Controller 拉起真实子进程；4 个候选在同一故障族上竞争。",
     "sh/3ihk3et8": "可审计",
     "sh/ih8ju9sn": "SQLite Matrix 事件日志 + measured duration + DSSE 签名。",
     "sh/5cva1cfq": "可拒答",
@@ -63,7 +63,7 @@ const edits = {
   3: {
     "sh/pwjqho7u": "现场 · AgentTeams 多 Agent 协同",
     "sh/18byd4zy": "本地 Controller：真的启动 Worker，不读取静态 JSON",
-    "sh/g72x4zyd": "Manager 根据证据自由组合 Agent/Skill；本地 Controller 记录 PID、duration_ms、SQLite Matrix，官方 AgentTeams 仍明确标 pending。",
+    "sh/g72x4zyd": "Manager 根据证据自由组合并编译 DAG；本地 Controller 记录 PID、duration_ms、SQLite Matrix 与 patch_tournament_completed，官方 AgentTeams 仍明确标 pending。",
     "sh/6h0fypgb": "Manager",
     "sh/tkby9kzm": "入口路由 | run 状态",
     "sh/id0fu50z": "Commander",
@@ -88,7 +88,7 @@ const edits = {
   4: {
     "sh/ylwj2987": "证据链 · 补丁先过隔离 CI",
     "sh/8z2h8bq1": "每次运行不是截图，而是可验证的变更证明",
-    "sh/9kby1g7m": "Trace、checks、RiskGate、run-manifest 与 DSSE 共同绑定同一 run_id。",
+    "sh/9kby1g7m": "Trace、checks、RiskGate、patch_tournament_completed、run-manifest 与 DSSE 共同绑定同一 run_id。",
     "sh/zutgvm94": "Trace",
     "sh/kv2h4rqp": "真实 PID、起止时间、duration_ms、parent span；可导出 OTLP JSON。",
     "sh/ip4zel83": "隔离 CI",
@@ -104,7 +104,7 @@ const edits = {
   5: {
     "sh/w7698ju9": "现场按钮 · 失败就停，证据才继续",
     "sh/wrelszu9": "三次点击把复杂边界变成可观察状态",
-    "sh/hsn2l4bu": "Worker 失败重派｜新证据插入｜旧审批失效｜Badcase 拒答",
+    "sh/hsn2l4bu": "Worker 重派｜增量重算｜4 方案竞赛｜旧审批失效｜Badcase 拒答",
     "sh/je5knut0": "按钮 1",
     "sh/4felwzu5": "timeout/crash → 备份实例；记录两个 PID 与 attempt",
     "sh/6hw3y9sb": "按钮 2",
@@ -133,7 +133,7 @@ const edits = {
     "sh/43u9snu5": "证据包",
     "sh/p43q1sva": "14 条声明；release identity 由同一 manifest 绑定",
     "sh/436507qx": "现场 Demo",
-    "sh/3ixor29c": "repair-cockpit/ · 三个动作按钮 + Badcase 拒答",
+    "sh/3ixor29c": "repair-cockpit/ · 现场按钮 + 4 方案竞赛 + Badcase 拒答",
     "sh/hgf6pcr6": "真实边界",
     "sh/gf65w7ql": "AgentTeams/Matrix、RocketMQ、PolarDB、Nacos、Higress、Trace 平台待接入",
     "sh/udonux8v": "复赛材料",
@@ -148,8 +148,8 @@ const edits = {
 
 const notes = {
   1: "0:00–0:12 开门见山：ChronosFix 不承诺替研发做判断，而是让每个修复决定携带证据。\n[Sources]\n- Internal: docs/semifinal-reviewer-response.md\n- Internal: evidence/release-manifest.json",
-  2: "0:12–0:27 先讲结果：48.72% 到 6.25% 的既有评测口径、8 个强制故障变体、14 条证据声明；Manager 会按证据自由组合 Agent/Skill 并编译为任务 DAG，当前 66 项测试全绿。\n[Sources]\n- Internal: docs/evaluation-corpus-results.md\n- Internal: tests/ (unittest collection: 66)",
-  3: "0:27–0:43 现场重点：Controller 用 Popen 启动真实 Worker 子进程。点击失败后，#01 的 PID 结束，#02 接管；事件落 SQLite Matrix。官方 AgentTeams/Matrix 仍写 pending。\n[Sources]\n- Internal: src/chronosfix/runtime/controller.py\n- Internal: src/chronosfix/runtime/store.py\n- Internal: deploy/infra-boundaries.json",
+  2: "0:12–0:27 先讲结果：48.72% 到 6.25% 的既有评测口径、8 个强制故障变体、14 条证据声明；Manager 会按证据自由组合 Agent/Skill 并编译为任务 DAG，当前 66 项测试全绿。\n[Sources]\n- Internal: docs/evaluation-corpus-results.md\n- Internal: tests/ (unittest collection: 66)\n- Internal: evidence/local-controller-evidence.json",
+  3: "0:27–0:43 现场重点：Controller 用 Popen 启动真实 Worker 子进程；PatchTournament 让 4 个候选在同一故障族上竞争，胜者由 Worker 结果写入 SQLite Matrix。官方 AgentTeams/Matrix 仍写 pending。\n[Sources]\n- Internal: src/chronosfix/runtime/controller.py\n- Internal: src/chronosfix/runtime/store.py\n- Internal: evidence/local-controller-evidence.json",
   4: "0:43–0:58 证据重点：补丁先在临时 checkout 中反复验证，再进入 RiskGate；最后用 DSSE + Ed25519 把输入、结果、边界绑定成可验签声明。\n[Sources]\n- Internal: scripts/run_patch_sandbox.py\n- Internal: src/chronosfix/attestation.py\n- Internal: evidence/release-manifest.json",
   5: "0:58–1:13 三个现场动作：重派、动态插证据、旧审批失效。再点 Badcase：系统必须 abstain/indeterminate，而不是生成一个看似完整的 PR。Cloudflare 事故只作为公开只读事实来源。\n[Sources]\n- Internal: repair-cockpit/index.html\n- Internal: src/chronosfix/runtime/controller.py\n- External: https://blog.cloudflare.com/cloudflare-outage/",
   6: "1:13–1:30 收束：本地执行闭环已可复核，官方产品与真实云服务仍明确列为迁移边界；人工 baseline 等真实观察完成后再更新。\n[Sources]\n- Internal: docs/requirements-matrix.md\n- Internal: baseline/human-study-protocol.json\n- Internal: deploy/infra-boundaries.json",
