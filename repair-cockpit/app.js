@@ -621,6 +621,13 @@ async function applyInjection(type) {
         status: "COMPLETED · EVIDENCE-TRIGGERED",
       });
       view.demo.taskOverrides["agent-08-skill-curator"] = "COMPLETED · EVIDENCE-TRIGGERED";
+      view.demo.staleApproval = true;
+      view.demo.forcePaused = true;
+      addDemoEvent("approval_invalidated", "新证据使旧 approval revision 自动失效，等待人工重新确认", {
+        task_id: "risk-gate",
+        worker: "chronosfix-release-auditor#01",
+        payload: { reason: "evidence_changed", requires_human_resume: true },
+      });
       break;
     case "worker-timeout":
       addDemoEvent("task_failed", "注入 timeline Worker 超时", {

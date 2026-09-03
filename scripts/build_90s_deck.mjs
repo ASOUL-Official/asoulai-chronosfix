@@ -112,7 +112,7 @@ const edits = {
     "sh/upg3i18r": "按钮 3",
     "sh/1cr2tg72": "stale-approval → 拒绝旧 revision；必须重新审批",
     "sh/7mpknmp0": "Badcase",
-    "sh/to72pw76": "不支持根因 / 来源冲突 → abstain 或 indeterminate",
+    "sh/to72pw76": "不可归因 / 来源冲突",
     "sh/bi94zqp4": "发布结果",
     "sh/md4nipsr": "阻断，不生成 patch / PR",
     "sh/8zm5kzax": "code-regression → abstain",

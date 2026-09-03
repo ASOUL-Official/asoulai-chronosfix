@@ -1,9 +1,9 @@
 {
   "schema": "chronosfix.release-manifest/v1",
   "release_id": "acfx-5be047a48f03",
-  "generated_at": "2026-09-02T05:28:37.358030+00:00",
+  "generated_at": "2026-09-03T03:45:50.315640+00:00",
   "source_commit": "5be047a48f0338ab28d342191c0976f0047185ac",
-  "source_fingerprint": "95ec730a9df0427342c163ade7810ad979bbd348d2eb678dbc95b416d5bb84cc",
+  "source_fingerprint": "3d57a229a7f99db7e47fb0a75cc0349dca84257c4777a8dd8051427d89fd8507",
   "source_commit_semantics": "Evidence and the online Demo are tied to this reproducible source anchor commit plus the working-tree source fingerprint; a later artifact commit only packages these outputs.",
   "artifacts": {
     "repair-cockpit/data/demo-data.json": {
@@ -115,16 +115,16 @@
       "materialized_bytes": 722140
     },
     "submission/ChronosFix_90秒答辩版.pptx": {
-      "bytes": 39022,
-      "sha256": "688538c28769e1f21c6363467b343a46d842f5d2b80d1a41029270f94f6d4b06",
+      "bytes": 39020,
+      "sha256": "874adea65aa28aaa2748206724e5c44f6e514365f3a7215c146ce3fd2ce49ec1",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 39022
+      "materialized_bytes": 39020
     },
     "submission/ChronosFix_90秒答辩版.pdf": {
-      "bytes": 435073,
-      "sha256": "0b5788f7cb25c75ba7b3239b041ecd8be9b12154fac13cf223ab4674eca2cbb9",
+      "bytes": 132720,
+      "sha256": "8ef2e52b3f89ef375d0147d32124c79cd8f5fc923164af0520a08ef65e7cfe31",
       "identity_mode": "canonical-lf-text-or-raw-binary",
-      "materialized_bytes": 435073
+      "materialized_bytes": 132720
     }
   },
   "counts": {

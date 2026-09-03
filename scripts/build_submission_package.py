@@ -35,6 +35,10 @@ def source_files() -> list[Path]:
             raise RuntimeError(f"Refusing to package symlink: {relative.as_posix()}")
         if not path.is_file():
             continue
+        # Office creates these transient lock files next to an open document.
+        # They are local session state, never submission material.
+        if path.name.startswith("~$"):
+            continue
         if path.name in EXCLUDED_NAMES or path.name.endswith(".inspect.ndjson") or path.suffix.lower() in EXCLUDED_SUFFIXES:
             continue
         files.append(path)

@@ -458,7 +458,7 @@
     {
       "path": "evidence/release-manifest.json",
       "size": 6146,
-      "sha256": "546347d59c82fa25965023bea3add60ce4f43cc38f4bb0c9f9f5889a6bdff0fd"
+      "sha256": "748e81a1d07761a1865c1e64d311051938873e83e75a2fe7bf4f1b3da444440c"
     },
     {
       "path": "evidence/run-log.jsonl",
@@ -492,8 +492,8 @@
     },
     {
       "path": "repair-cockpit/app.js",
-      "size": 57347,
-      "sha256": "aacf998ae65ba2c50277b3264b4f4e346f104902623c79054ecd10f45fb6a9dc"
+      "size": 57710,
+      "sha256": "5c7b35aefc181831641f84c9ed5a7721dee417ae7120dff458b4c8679334f7c3"
     },
     {
       "path": "repair-cockpit/data/.gitkeep",
@@ -508,7 +508,7 @@
     {
       "path": "repair-cockpit/index.html",
       "size": 9111,
-      "sha256": "410fd817a7ec626613d41669b14809ea349874f9d94bb07e6ea4eb1943236757"
+      "sha256": "153834f0aaa4bafbca65f7c6c90a779bc4e930b596a5148300c10a91803eded8"
     },
     {
       "path": "repair-cockpit/scripts/build_demo_data.py",
@@ -587,8 +587,8 @@
     },
     {
       "path": "scripts/build_90s_deck.mjs",
-      "size": 11265,
-      "sha256": "6be4410e5d7f5db62458765cfa0a2882cbac4b47c3a14d8f27be1c90c89388c2"
+      "size": 11232,
+      "sha256": "e5662a1d247f79727bc7abbb960aaf5c5c64143d87055b241c6be5e3d3043369"
     },
     {
       "path": "scripts/build_change_attestation.py",
@@ -602,8 +602,8 @@
     },
     {
       "path": "scripts/build_submission_package.py",
-      "size": 3407,
-      "sha256": "93769e6820bd96527c06a1e417c9c9e33a2707ae594c637dbdb00a790140b868"
+      "size": 3612,
+      "sha256": "f7821b4bf35eca86434d964f05e7903cd9413ee5fa47bd874d07a58e46942515"
     },
     {
       "path": "scripts/export_pdf_vector.ps1",
@@ -842,13 +842,13 @@
     },
     {
       "path": "submission/ChronosFix_90秒答辩版.pdf",
-      "size": 435073,
-      "sha256": "0b5788f7cb25c75ba7b3239b041ecd8be9b12154fac13cf223ab4674eca2cbb9"
+      "size": 132720,
+      "sha256": "8ef2e52b3f89ef375d0147d32124c79cd8f5fc923164af0520a08ef65e7cfe31"
     },
     {
       "path": "submission/ChronosFix_90秒答辩版.pptx",
-      "size": 39022,
-      "sha256": "688538c28769e1f21c6363467b343a46d842f5d2b80d1a41029270f94f6d4b06"
+      "size": 39020,
+      "sha256": "874adea65aa28aaa2748206724e5c44f6e514365f3a7215c146ce3fd2ce49ec1"
     },
     {
       "path": "submission/ChronosFix_复赛方案.pdf",
@@ -972,6 +972,6 @@
     }
   ],
   "archive": "AsoulAI_ChronosFix_复赛提交包.zip",
-  "archive_size": 1697262,
-  "archive_sha256": "3aa175515f655efe63de5c4f9deb60f987c2fcb9522fba69af4a231c13536ad1"
+  "archive_size": 1427857,
+  "archive_sha256": "6dbb69de482fda96820a9ffab0c1b29af750a242cc57e1d6a10667545f0a1972"
 }
